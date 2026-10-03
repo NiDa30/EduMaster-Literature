@@ -1,0 +1,6 @@
+{
+  "name": "EduMaster VN - Không gian Giảng dạy Ngữ văn THPT & Khảo thí 5512 - 7991",
+  "description": "Teaching Workspace chuyên sâu cho giáo viên Ngữ văn: Đọc hiểu văn bản, Phân tích thể loại (Thơ, Truyện, Nghị luận), Visual KHBD 5512, Đề thi & Ma trận 7991, Rubric và Storytelling Slide.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
