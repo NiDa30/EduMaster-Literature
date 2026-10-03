@@ -64,7 +64,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <Feather className="w-4 h-4" strokeWidth={1.75} />
           </div>
           <div>
-            <span className="font-semibold text-[15px] tracking-tight text-[#292524]">
+            <span className="font-semibold text-[15px] tracking-normal text-[#292524]">
               EduMaster Văn
             </span>
           </div>
@@ -73,7 +73,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {/* Mobile close button */}
         <button 
           onClick={() => setIsSidebarOpen(false)}
-          className="lg:hidden p-1 text-[#78716C] hover:text-[#292524] rounded-md transition-colors"
+          className="lg:hidden p-1.5 text-[#78716C] hover:text-[#292524] rounded-md transition-colors"
           aria-label="Đóng thanh điều hướng"
         >
           <X className="w-4 h-4" strokeWidth={1.75} />
@@ -81,7 +81,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* Main Navigation (7 items) */}
-      <nav className="flex-1 py-3 px-2 space-y-0.5 overflow-y-auto">
+      <nav className="flex-1 py-3 px-2 space-y-1 overflow-y-auto">
         {mainNavItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeModule === item.id;
@@ -92,14 +92,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 setActiveModule(item.id);
                 setIsSidebarOpen(false);
               }}
-              className={`w-full text-left px-3 py-2 rounded-lg text-[14px] transition-colors flex items-center gap-3 ${
+              className={`w-full text-left px-3 py-2 rounded-lg text-body-ui min-h-[40px] transition-colors flex items-center gap-3 ${
                 isActive
                   ? 'bg-[#FBF4F5] text-[#7C2D37] font-medium border-l-[3px] border-[#7C2D37] pl-[9px]'
                   : 'text-[#57534E] hover:text-[#292524] hover:bg-stone-50 font-normal'
               }`}
             >
               <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-[#7C2D37]' : 'text-[#78716C]'}`} strokeWidth={1.75} />
-              <span className="truncate">{item.label}</span>
+              <span className="truncate-safe">{item.label}</span>
             </button>
           );
         })}
@@ -115,14 +115,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
             onOpenHandover();
             setIsSidebarOpen(false);
           }}
-          className={`w-full text-left px-3 py-2 rounded-lg text-[14px] transition-colors flex items-center gap-3 ${
+          className={`w-full text-left px-3 py-2 rounded-lg text-body-ui min-h-[40px] transition-colors flex items-center gap-3 ${
             activeModule === 'export_handover'
               ? 'bg-[#FBF4F5] text-[#7C2D37] font-medium border-l-[3px] border-[#7C2D37] pl-[9px]'
               : 'text-[#57534E] hover:text-[#292524] hover:bg-stone-50 font-normal'
           }`}
         >
           <Share2 className="w-4 h-4 text-[#78716C] shrink-0" strokeWidth={1.75} />
-          <span className="truncate">Xuất bản</span>
+          <span className="truncate-safe">Xuất bản</span>
         </button>
 
         <button
@@ -130,17 +130,33 @@ export const Sidebar: React.FC<SidebarProps> = ({
             if (onOpenSettings) onOpenSettings();
             setIsSidebarOpen(false);
           }}
-          className="w-full text-left px-3 py-2 rounded-lg text-[14px] text-[#57534E] hover:text-[#292524] hover:bg-stone-50 transition-colors flex items-center gap-3 font-normal"
+          className="w-full text-left px-3 py-2 rounded-lg text-body-ui min-h-[40px] text-[#57534E] hover:text-[#292524] hover:bg-stone-50 transition-colors flex items-center gap-3 font-normal"
         >
           <Settings className="w-4 h-4 text-[#78716C] shrink-0" strokeWidth={1.75} />
-          <span className="truncate">Cài đặt</span>
+          <span className="truncate-safe">Cài đặt</span>
+        </button>
+
+        <button
+          onClick={() => {
+            setActiveModule('typography_test');
+            setIsSidebarOpen(false);
+          }}
+          className={`w-full text-left px-3 py-2 rounded-lg text-body-ui min-h-[40px] transition-colors flex items-center gap-3 ${
+            activeModule === 'typography_test'
+              ? 'bg-[#FBF4F5] text-[#7C2D37] font-medium border-l-[3px] border-[#7C2D37] pl-[9px]'
+              : 'text-[#57534E] hover:text-[#292524] hover:bg-stone-50 font-normal'
+          }`}
+          title="Màn hình kiểm thử Typography"
+        >
+          <HelpCircle className="w-4 h-4 text-[#78716C] shrink-0" strokeWidth={1.75} />
+          <span className="truncate-safe">Typography Test</span>
         </button>
       </nav>
 
       {/* Subtle Bottom Status */}
-      <div className="p-3 border-t border-[#E7E5E4] text-[12px] text-[#78716C] flex items-center justify-between">
+      <div className="p-3 border-t border-[#E7E5E4] text-metadata flex items-center justify-between">
         <span>THPT · GDPT 2018</span>
-        <span className="text-[#57534E]">5512 & 7991</span>
+        <span className="text-[#57534E] tabular-nums">5512 & 7991</span>
       </div>
     </aside>
   );

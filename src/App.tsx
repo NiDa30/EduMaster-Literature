@@ -22,10 +22,27 @@ import { SlidesView } from './components/SlidesView';
 import { Exam7991View } from './components/Exam7991View';
 import { MatrixView } from './components/MatrixView';
 import { ExportHandoverView } from './components/ExportHandoverView';
+import { TypographyTestView } from './components/TypographyTestView';
+import { normalizeDeepNFC, normalizeVietnamese } from './utils/unicode';
 import { X } from 'lucide-react';
 
+const getInitialModule = (): ActiveModule => {
+  if (typeof window !== 'undefined') {
+    const path = window.location.pathname.toLowerCase();
+    const hash = window.location.hash.toLowerCase();
+    const search = window.location.search.toLowerCase();
+    if (path.includes('typographytest') || hash.includes('typographytest') || search.includes('typography_test')) {
+      return 'typography_test';
+    }
+  }
+  return initialAppState.activeModule;
+};
+
 export default function App() {
-  const [appState, setAppState] = useState<AppState>(initialAppState);
+  const [appState, setAppState] = useState<AppState>(() => ({
+    ...initialAppState,
+    activeModule: getInitialModule()
+  }));
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isFocusMode, setIsFocusMode] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -101,7 +118,7 @@ export default function App() {
         ...prev.khbd,
         info: {
           ...prev.khbd.info,
-          lessonTitle: `${target.title.toUpperCase()} (${target.author.toUpperCase()})`
+          lessonTitle: `${target.title} (${target.author})`
         }
       },
       lastUpdated: new Date().toISOString()
@@ -112,12 +129,12 @@ export default function App() {
   const handleAddSlideFromQuote = (quote: string, author: string) => {
     const newSlide: SlideItem = {
       id: `slide-${Date.now()}`,
-      title: 'TRÍCH ĐOẠN KHÁM PHÁ & THẢO LUẬN',
+      title: 'Trích đoạn Khám phá & Thảo luận',
       phaseTag: 'Kiến thức mới',
       layout: 'quote',
       contentLeft: 'Phân tích vẻ đẹp ngôn từ và cảm hứng nghệ thuật trong đoạn trích.',
-      quoteText: quote,
-      quoteAuthor: author,
+      quoteText: normalizeVietnamese(quote),
+      quoteAuthor: normalizeVietnamese(author),
       discussionQuestion: 'Cảm nhận của em về chi tiết nghệ thuật hoặc hình tượng trong câu thơ/đoạn trích trên?',
       speakerNotes: 'Cho học sinh 2 phút thảo luận nhóm đôi và nhận xét biện pháp tu từ.'
     };
@@ -125,26 +142,27 @@ export default function App() {
   };
 
   const handleAddQuestionFromPassage = (passage: string) => {
-    setPrefilledPassage(passage);
+    setPrefilledPassage(normalizeVietnamese(passage));
     setActiveModule('question_builder');
   };
 
   const handleSetExamPassage = (passage: string) => {
     setExam(prev => ({
       ...prev,
-      passageRef: passage
+      passageRef: normalizeVietnamese(passage)
     }));
   };
 
   const handleRestoreState = (newState: AppState) => {
+    const normalized = normalizeDeepNFC(newState);
     setAppState({
-      ...newState,
+      ...normalized,
       lastUpdated: new Date().toISOString()
     });
   };
 
   return (
-    <div className="min-h-screen flex bg-[#FAF8F5] text-[#292524] antialiased">
+    <div className="h-screen w-screen overflow-hidden flex bg-[#FAF8F5] text-[#292524] antialiased app-shell">
       {/* Mobile Backdrop */}
       {isSidebarOpen && (
         <div 
@@ -174,9 +192,9 @@ export default function App() {
         />
       )}
 
-      {/* Flexible Literary Workspace Area */}
-      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto">
-        {/* Editorial TopBar */}
+      {/* Flexible Literary Workspace Area (calc(100vh - 56px)) */}
+      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden workspace-viewport">
+        {/* Editorial TopBar (56px) */}
         <TopBar
           currentLesson={currentLesson}
           lessons={appState.lessons}
@@ -192,9 +210,7 @@ export default function App() {
         />
 
         {/* Workspace Body */}
-        <main className={`p-4 md:p-6 lg:p-8 flex-1 w-full mx-auto pb-16 ${
-          appState.activeModule === 'workspace' ? 'max-w-7xl' : 'max-w-6xl'
-        }`}>
+        <main className="flex-1 min-h-0 overflow-hidden flex flex-col w-full relative">
           {appState.activeModule === 'dashboard' && (
             <TeacherDashboard
               lessons={appState.lessons}
@@ -282,6 +298,10 @@ export default function App() {
               onRestoreState={handleRestoreState}
             />
           )}
+
+          {appState.activeModule === 'typography_test' && (
+            <TypographyTestView />
+          )}
         </main>
       </div>
 
@@ -290,28 +310,32 @@ export default function App() {
         <div className="fixed inset-0 z-50 bg-stone-900/40 backdrop-blur-2xs flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl border border-[#E7E5E4] max-w-md w-full p-6 shadow-xl space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-[#E7E5E4]">
-              <h3 className="font-semibold text-[16px] text-[#292524]">
+              <h3 className="text-card-title text-[#292524]">
                 Cài đặt & Thông tin Giáo viên
               </h3>
               <button
                 onClick={() => setIsSettingsOpen(false)}
-                className="text-[#78716C] hover:text-[#292524] p-1"
+                className="text-[#78716C] hover:text-[#292524] p-1.5 rounded-lg transition-colors"
+                aria-label="Đóng cài đặt"
               >
                 <X className="w-4 h-4" strokeWidth={1.75} />
               </button>
             </div>
 
-            <div className="space-y-3 text-[13px]">
+            <div className="space-y-3 text-meta">
               <div>
                 <label className="block font-medium text-[#57534E] mb-1">Sở Giáo dục & Đào tạo</label>
                 <input
                   type="text"
                   value={appState.khbd.info.department}
-                  onChange={(e) => setKhbd(prev => ({
-                    ...prev,
-                    info: { ...prev.info, department: e.target.value }
-                  }))}
-                  className="w-full px-3 py-1.5 border border-[#E7E5E4] rounded-lg text-[#292524] focus:outline-none focus:border-[#7C2D37]"
+                  onChange={(e) => {
+                    const val = normalizeVietnamese(e.target.value);
+                    setKhbd(prev => ({
+                      ...prev,
+                      info: { ...prev.info, department: val }
+                    }));
+                  }}
+                  className="w-full px-3 py-2 border border-[#E7E5E4] rounded-lg text-body-ui text-[#292524] focus:outline-none focus:border-[#7C2D37]"
                 />
               </div>
 
@@ -320,11 +344,14 @@ export default function App() {
                 <input
                   type="text"
                   value={appState.khbd.info.school}
-                  onChange={(e) => setKhbd(prev => ({
-                    ...prev,
-                    info: { ...prev.info, school: e.target.value }
-                  }))}
-                  className="w-full px-3 py-1.5 border border-[#E7E5E4] rounded-lg text-[#292524] focus:outline-none focus:border-[#7C2D37]"
+                  onChange={(e) => {
+                    const val = normalizeVietnamese(e.target.value);
+                    setKhbd(prev => ({
+                      ...prev,
+                      info: { ...prev.info, school: val }
+                    }));
+                  }}
+                  className="w-full px-3 py-2 border border-[#E7E5E4] rounded-lg text-body-ui text-[#292524] focus:outline-none focus:border-[#7C2D37]"
                 />
               </div>
 
@@ -334,11 +361,14 @@ export default function App() {
                   <input
                     type="text"
                     value={appState.khbd.info.teacherName}
-                    onChange={(e) => setKhbd(prev => ({
-                      ...prev,
-                      info: { ...prev.info, teacherName: e.target.value }
-                    }))}
-                    className="w-full px-3 py-1.5 border border-[#E7E5E4] rounded-lg text-[#292524] focus:outline-none focus:border-[#7C2D37]"
+                    onChange={(e) => {
+                      const val = normalizeVietnamese(e.target.value);
+                      setKhbd(prev => ({
+                        ...prev,
+                        info: { ...prev.info, teacherName: val }
+                      }));
+                    }}
+                    className="w-full px-3 py-2 border border-[#E7E5E4] rounded-lg text-body-ui text-[#292524] focus:outline-none focus:border-[#7C2D37]"
                   />
                 </div>
                 <div>
@@ -346,11 +376,14 @@ export default function App() {
                   <input
                     type="text"
                     value={appState.khbd.info.subjectGroup}
-                    onChange={(e) => setKhbd(prev => ({
-                      ...prev,
-                      info: { ...prev.info, subjectGroup: e.target.value }
-                    }))}
-                    className="w-full px-3 py-1.5 border border-[#E7E5E4] rounded-lg text-[#292524] focus:outline-none focus:border-[#7C2D37]"
+                    onChange={(e) => {
+                      const val = normalizeVietnamese(e.target.value);
+                      setKhbd(prev => ({
+                        ...prev,
+                        info: { ...prev.info, subjectGroup: val }
+                      }));
+                    }}
+                    className="w-full px-3 py-2 border border-[#E7E5E4] rounded-lg text-body-ui text-[#292524] focus:outline-none focus:border-[#7C2D37]"
                   />
                 </div>
               </div>
@@ -359,7 +392,7 @@ export default function App() {
             <div className="flex justify-end pt-2">
               <button
                 onClick={() => setIsSettingsOpen(false)}
-                className="btn-primary text-[13px] py-1.5 px-4"
+                className="btn-primary"
               >
                 Lưu và đóng
               </button>

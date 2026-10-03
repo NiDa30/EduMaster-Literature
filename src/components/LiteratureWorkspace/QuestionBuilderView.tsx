@@ -23,6 +23,7 @@ import {
   Exam7991Data, 
   ActiveModule 
 } from '../../types';
+import { normalizeVietnamese } from '../../utils/unicode';
 
 interface QuestionBuilderViewProps {
   questions: LiteratureQuestionItem[];
@@ -42,8 +43,18 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
   defaultPassage = ''
 }) => {
   const [filterType, setFilterType] = useState<string>('all');
-  const [filterLevel, setFilterLevel] = useState<string>('all');
-  const [showAddForm, setShowAddForm] = useState(false);
+  const [selectedQuestionId, setSelectedQuestionId] = useState<string | null>(questions[0]?.id || null);
+  const [isCreatingNew, setIsCreatingNew] = useState(false);
+
+  const selectedQuestion = questions.find(q => q.id === selectedQuestionId) || questions[0];
+
+  const handleStartCreate = () => {
+    setIsCreatingNew(true);
+    setNewQuestion('');
+    setNewAnswer('');
+    setNewGuide('');
+    setNewPassage(defaultPassage || '');
+  };
 
   // New question form state
   const [newType, setNewType] = useState<QuestionType>('doc_hieu');
@@ -72,16 +83,17 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
       type: newType,
       level: newLevel,
       skill: newSkill,
-      passageSnippet: newPassage,
-      question: newQuestion,
-      answer: newAnswer,
-      guide: newGuide,
+      passageSnippet: normalizeVietnamese(newPassage),
+      question: normalizeVietnamese(newQuestion),
+      answer: normalizeVietnamese(newAnswer),
+      guide: normalizeVietnamese(newGuide),
       points: Number(newPoints),
       linkedPart: linkedPart
     };
 
     setQuestions([item, ...questions]);
-    setShowAddForm(false);
+    setIsCreatingNew(false);
+    setSelectedQuestionId(item.id);
     setNewQuestion('');
     setNewAnswer('');
     setNewGuide('');
@@ -163,36 +175,33 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="h-full min-h-0 flex flex-col p-4 md:p-6 space-y-3 overflow-hidden max-w-7xl w-full mx-auto">
       {/* Header Bar */}
-      <div className="bg-white p-5 rounded-2xl border border-stone-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-white p-4 rounded-2xl border border-stone-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0">
         <div>
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1">
+            <span className="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1">
               <Sparkles className="w-3.5 h-3.5" />
               Ngân hàng Câu hỏi Ngữ văn
             </span>
-            <span className="text-xs text-stone-500 font-medium">Theo chuẩn Ma trận Đánh giá Năng lực</span>
+            <span className="text-metadata text-stone-500 font-medium">Theo chuẩn Ma trận Đánh giá Năng lực</span>
           </div>
-          <h1 className="text-xl md:text-2xl font-bold font-serif text-stone-900 mt-1">
-            Question Builder Chuyên sâu cho Ngữ văn
+          <h1 className="text-card-title md:text-section-title font-semibold text-stone-900 mt-1">
+            Question Builder Chuyên sâu: Ngữ liệu · Câu hỏi · Barem
           </h1>
-          <p className="text-sm text-stone-600">
-            Quy trình chuẩn hóa: NGỮ LIỆU → CÂU HỎI → ĐÁP ÁN → HƯỚNG DẪN CHẤM, liên kết trực tiếp với Ma trận và Đề thi 7991.
-          </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2 shrink-0">
           <button
-            onClick={() => setShowAddForm(!showAddForm)}
-            className="px-4 py-2 bg-[#7C2D37] hover:bg-[#68232D] text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-sm transition"
+            onClick={handleStartCreate}
+            className="btn-primary min-h-[38px] px-3.5 py-1.5 bg-[#7C2D37] hover:bg-[#68232D] text-white rounded-xl text-metadata font-semibold flex items-center gap-1.5 shadow-sm transition"
           >
             <Plus className="w-4 h-4" />
-            <span>Tạo câu hỏi mới</span>
+            <span>Tạo câu hỏi</span>
           </button>
           <button
             onClick={() => setActiveModule('matrix')}
-            className="px-3.5 py-2 bg-stone-100 hover:bg-stone-200 text-stone-800 rounded-xl text-xs font-semibold flex items-center gap-1.5 border border-stone-300 transition"
+            className="btn-secondary min-h-[38px] px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-800 rounded-xl text-metadata font-semibold flex items-center gap-1.5 border border-stone-300 transition"
           >
             <Grid3X3 className="w-4 h-4 text-purple-700" />
             <span>Xem Ma trận</span>
@@ -200,270 +209,339 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
         </div>
       </div>
 
-      {/* FILTER BAR */}
-      <div className="bg-white p-4 rounded-2xl border border-stone-200 shadow-xs flex flex-wrap items-center justify-between gap-3 text-xs">
-        <div className="flex items-center gap-2">
-          <Filter className="w-4 h-4 text-stone-400" />
-          <span className="font-semibold text-stone-700">Bộ lọc:</span>
-
-          <select
-            value={filterType}
-            onChange={(e) => setFilterType(e.target.value)}
-            className="px-2.5 py-1.5 bg-stone-50 border border-stone-300 rounded-lg text-xs"
-          >
-            <option value="all">Tất cả dạng câu hỏi</option>
-            <option value="doc_hieu">Đọc hiểu</option>
-            <option value="tieng_viet">Tiếng Việt</option>
-            <option value="nl_xa_hoi">Nghị luận xã hội</option>
-            <option value="nl_van_hoc">Nghị luận văn học</option>
-          </select>
-
-          <select
-            value={filterLevel}
-            onChange={(e) => setFilterLevel(e.target.value)}
-            className="px-2.5 py-1.5 bg-stone-50 border border-stone-300 rounded-lg text-xs"
-          >
-            <option value="all">Tất cả mức độ nhận thức</option>
-            <option value="NB">Nhận biết</option>
-            <option value="TH">Thông hiểu</option>
-            <option value="VD">Vận dụng</option>
-          </select>
-        </div>
-
-        <div className="text-stone-500 font-mono">
-          Hiển thị: <strong>{filteredQuestions.length}</strong> / {questions.length} câu hỏi
-        </div>
-      </div>
-
-      {/* CREATE NEW QUESTION FORM */}
-      {showAddForm && (
-        <form onSubmit={handleCreateQuestion} className="bg-white p-6 rounded-3xl border-2 border-[#7C2D37]/30 shadow-md space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-stone-100">
-            <h3 className="font-serif font-bold text-base text-stone-900 flex items-center gap-2">
-              <Plus className="w-4 h-4 text-[#7C2D37]" />
-              Thêm câu hỏi mới vào ngân hàng
-            </h3>
-            <span className="text-xs text-stone-500">Chuẩn hóa cấu trúc 4 bước Ngữ văn</span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
-            <div>
-              <label className="block font-semibold text-stone-700 mb-1">Dạng câu hỏi:</label>
-              <select
-                value={newType}
-                onChange={(e) => setNewType(e.target.value as QuestionType)}
-                className="w-full p-2 bg-stone-50 border border-stone-300 rounded-xl"
+      {/* 2-Column Split Workspace (Rule 29.14) */}
+      <div className="flex-1 min-h-0 flex flex-col lg:flex-row gap-4 overflow-hidden">
+        {/* LEFT COLUMN: Questions List + Search/Filter */}
+        <aside className="w-full lg:w-[380px] xl:w-[420px] shrink-0 h-full min-h-0 flex flex-col card-surface p-3 overflow-hidden">
+          {/* Filters Bar */}
+          <div className="space-y-2 pb-3 border-b border-[#E7E5E4] shrink-0">
+            <div className="flex items-center justify-between text-metadata">
+              <span className="font-semibold text-stone-700 flex items-center gap-1.5">
+                <Filter className="w-3.5 h-3.5 text-stone-400" />
+                Danh sách ({filteredQuestions.length})
+              </span>
+              <button
+                onClick={handleStartCreate}
+                className="text-[#7C2D37] hover:underline font-medium text-[12px]"
               >
+                + Thêm mới
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2 text-metadata">
+              <select
+                value={filterType}
+                onChange={(e) => setFilterType(e.target.value)}
+                className="min-h-[34px] px-2 py-1 bg-stone-50 border border-stone-300 rounded-lg text-[12px]"
+              >
+                <option value="all">Tất cả dạng</option>
                 <option value="doc_hieu">Đọc hiểu</option>
-                <option value="tieng_viet">Tiếng Việt / Tu từ</option>
-                <option value="nl_xa_hoi">Nghị luận xã hội</option>
-                <option value="nl_van_hoc">Nghị luận văn học</option>
+                <option value="tieng_viet">Tiếng Việt</option>
+                <option value="nl_xa_hoi">NL Xã hội</option>
+                <option value="nl_van_hoc">NL Văn học</option>
               </select>
-            </div>
 
-            <div>
-              <label className="block font-semibold text-stone-700 mb-1">Mức độ nhận thức:</label>
               <select
-                value={newLevel}
-                onChange={(e) => setNewLevel(e.target.value as CognitiveLevel)}
-                className="w-full p-2 bg-stone-50 border border-stone-300 rounded-xl"
+                value={filterLevel}
+                onChange={(e) => setFilterLevel(e.target.value)}
+                className="min-h-[34px] px-2 py-1 bg-stone-50 border border-stone-300 rounded-lg text-[12px]"
               >
-                <option value="NB">Nhận biết (NB)</option>
-                <option value="TH">Thông hiểu (TH)</option>
-                <option value="VD">Vận dụng (VD)</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block font-semibold text-stone-700 mb-1">Kỹ năng đặc thù:</label>
-              <select
-                value={newSkill}
-                onChange={(e) => setNewSkill(e.target.value as SkillType)}
-                className="w-full p-2 bg-stone-50 border border-stone-300 rounded-xl"
-              >
-                <option value="Nhận diện">Nhận diện</option>
-                <option value="Giải thích">Giải thích</option>
-                <option value="Phân tích">Phân tích</option>
-                <option value="So sánh">So sánh</option>
-                <option value="Đánh giá">Đánh giá</option>
-                <option value="Liên hệ">Liên hệ</option>
-                <option value="Sáng tạo">Sáng tạo</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block font-semibold text-stone-700 mb-1">Liên kết Phần Đề thi 7991:</label>
-              <select
-                value={linkedPart}
-                onChange={(e) => setLinkedPart(e.target.value as any)}
-                className="w-full p-2 bg-stone-50 border border-stone-300 rounded-xl font-medium text-emerald-800"
-              >
-                <option value="partI">Phần I (Trắc nghiệm nhiều lựa chọn)</option>
-                <option value="partII">Phần II (Trắc nghiệm Đúng/Sai)</option>
-                <option value="partIII">Phần III (Trả lời ngắn)</option>
-                <option value="partIV">Phần IV (Tự luận nghị luận)</option>
+                <option value="all">Tất cả mức</option>
+                <option value="NB">Nhận biết</option>
+                <option value="TH">Thông hiểu</option>
+                <option value="VD">Vận dụng</option>
               </select>
             </div>
           </div>
 
-          <div>
-            <label className="block text-xs font-bold text-stone-800 mb-1">
-              1. NGỮ LIỆU ĐỌC HIỂU (Trích đoạn tác phẩm / thơ):
-            </label>
-            <textarea
-              rows={2}
-              placeholder="Dán hoặc nhập đoạn văn bản làm ngữ liệu..."
-              value={newPassage}
-              onChange={(e) => setNewPassage(e.target.value)}
-              className="w-full text-xs font-serif p-2.5 bg-stone-50 border border-stone-300 rounded-xl"
-            />
-          </div>
+          {/* Questions Scrollable List */}
+          <div className="flex-1 min-h-0 overflow-y-auto space-y-2 pt-2 pr-1">
+            {filteredQuestions.length === 0 ? (
+              <p className="text-metadata text-stone-400 text-center py-6">
+                Không tìm thấy câu hỏi phù hợp bộ lọc.
+              </p>
+            ) : (
+              filteredQuestions.map((q, idx) => {
+                const isSelected = !isCreatingNew && (q.id === selectedQuestionId || (!selectedQuestionId && idx === 0));
+                return (
+                  <div
+                    key={q.id}
+                    onClick={() => {
+                      setSelectedQuestionId(q.id);
+                      setIsCreatingNew(false);
+                    }}
+                    className={`p-3 rounded-xl border cursor-pointer transition-all ${
+                      isSelected
+                        ? 'bg-[#FBF4F5] border-[#7C2D37] shadow-xs'
+                        : 'bg-white border-stone-200 hover:border-stone-300 hover:bg-stone-50/60'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between gap-1 mb-1">
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-semibold text-metadata text-stone-900 bg-stone-100 px-2 py-0.5 rounded text-[11px] tabular-nums">
+                          {q.code || `Câu ${idx + 1}`}
+                        </span>
+                        <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded border ${getTypeBadge(q.type)}`}>
+                          {getTypeLabel(q.type)}
+                        </span>
+                      </div>
+                      <span className="text-[11px] font-semibold text-[#7C2D37] tabular-nums">
+                        {q.points}đ
+                      </span>
+                    </div>
 
-          <div>
-            <label className="block text-xs font-bold text-stone-800 mb-1">
-              2. LỆNH CÂU HỎI:
-            </label>
-            <textarea
-              rows={2}
-              required
-              placeholder="Nhập câu hỏi đọc hiểu hoặc yêu cầu bài viết nghị luận..."
-              value={newQuestion}
-              onChange={(e) => setNewQuestion(e.target.value)}
-              className="w-full text-xs p-2.5 border border-stone-300 rounded-xl"
-            />
-          </div>
+                    <p className="text-metadata text-stone-800 line-clamp-2 leading-snug">
+                      {q.question}
+                    </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div>
-              <label className="block text-xs font-bold text-stone-800 mb-1">
-                3. ĐÁP ÁN GỢI Ý / Ý TRẢ LỜI:
-              </label>
-              <textarea
-                rows={3}
-                placeholder="Nội dung câu trả lời chuẩn..."
-                value={newAnswer}
-                onChange={(e) => setNewAnswer(e.target.value)}
-                className="w-full text-xs p-2.5 border border-stone-300 rounded-xl"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-stone-800 mb-1">
-                4. HƯỚNG DẪN CHẤM & BIỂU ĐIỂM:
-              </label>
-              <textarea
-                rows={3}
-                placeholder="Quy tắc cho điểm từng ý (vd: ý 1: 0.25đ, ý 2: 0.5đ)..."
-                value={newGuide}
-                onChange={(e) => setNewGuide(e.target.value)}
-                className="w-full text-xs p-2.5 border border-stone-300 rounded-xl"
-              />
-            </div>
-          </div>
-
-          <div className="flex items-center justify-between pt-2">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold text-stone-600">Thang điểm:</span>
-              <input
-                type="number"
-                step="0.25"
-                min="0.25"
-                max="10"
-                value={newPoints}
-                onChange={(e) => setNewPoints(parseFloat(e.target.value) || 0.5)}
-                className="w-20 px-2 py-1 bg-stone-50 border border-stone-300 rounded-lg text-xs font-mono font-bold"
-              />
-              <span className="text-xs text-stone-500">điểm</span>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setShowAddForm(false)}
-                className="px-4 py-2 text-xs font-medium text-stone-600 hover:bg-stone-100 rounded-xl"
-              >
-                Hủy
-              </button>
-              <button
-                type="submit"
-                className="px-5 py-2 bg-[#7C2D37] hover:bg-[#68232D] text-white font-semibold text-xs rounded-xl shadow"
-              >
-                Lưu vào Ngân hàng
-              </button>
-            </div>
-          </div>
-        </form>
-      )}
-
-      {/* QUESTIONS LIST */}
-      <div className="space-y-4">
-        {filteredQuestions.map((q, idx) => (
-          <div key={q.id} className="p-5 rounded-2xl bg-white border border-stone-200 shadow-xs space-y-3">
-            {/* Header with badges */}
-            <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-stone-100">
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-xs text-stone-900 bg-stone-100 px-2 py-0.5 rounded">
-                  {q.code || `Câu ${idx + 1}`}
-                </span>
-                <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${getTypeBadge(q.type)}`}>
-                  {getTypeLabel(q.type)}
-                </span>
-                <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${getLevelBadge(q.level)}`}>
-                  {getLevelLabel(q.level)}
-                </span>
-                <span className="text-[10px] font-medium px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200">
-                  Kỹ năng: {q.skill}
-                </span>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-mono font-bold text-[#7C2D37] bg-rose-50 px-2 py-0.5 rounded border border-rose-100">
-                  {q.points} điểm
-                </span>
-                <button
-                  onClick={() => handlePushToExam(q)}
-                  className="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-lg text-xs font-semibold flex items-center gap-1 transition"
-                  title="Chuyển câu hỏi này sang Đề 7991"
-                >
-                  <ArrowRight className="w-3.5 h-3.5" />
-                  <span>Vào Đề 7991</span>
-                </button>
-                <button
-                  onClick={() => handleDeleteQuestion(q.id)}
-                  className="p-1 text-stone-400 hover:text-red-600 rounded-md transition"
-                  title="Xóa câu hỏi"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* Passage Snippet */}
-            {q.passageSnippet && (
-              <div className="p-3 bg-[#FAF8F5] rounded-xl border border-stone-200 text-xs font-serif italic text-stone-800 whitespace-pre-line border-l-4 border-l-[#7C2D37]">
-                <strong className="font-sans not-italic text-stone-600 block mb-0.5 text-[10px] uppercase">Ngữ liệu tham chiếu:</strong>
-                {q.passageSnippet}
-              </div>
+                    <div className="flex items-center justify-between text-[11px] text-stone-500 mt-2 pt-1 border-t border-stone-100">
+                      <span>{getLevelLabel(q.level)} · {q.skill}</span>
+                      <ArrowRight className="w-3.5 h-3.5 text-stone-400" />
+                    </div>
+                  </div>
+                );
+              })
             )}
+          </div>
+        </aside>
 
-            {/* Question */}
-            <p className="text-sm font-medium text-stone-900 leading-relaxed">
-              {q.question}
-            </p>
-
-            {/* Answer & Guide (collapsible/visible) */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 text-xs">
-              <div className="p-3 bg-stone-50 rounded-xl border border-stone-200">
-                <span className="font-bold text-stone-800 block mb-1">Đáp án gợi ý:</span>
-                <p className="text-stone-700 whitespace-pre-line leading-relaxed">{q.answer || 'Chưa cập nhật'}</p>
+        {/* RIGHT COLUMN: Question Editor or Detailed Preview */}
+        <section className="flex-1 h-full min-h-0 flex flex-col card-surface p-5 overflow-hidden">
+          {isCreatingNew ? (
+            /* CREATE FORM */
+            <form onSubmit={handleCreateQuestion} className="h-full min-h-0 flex flex-col space-y-3 overflow-hidden">
+              <div className="flex items-center justify-between pb-2 border-b border-[#E7E5E4] shrink-0">
+                <div>
+                  <h3 className="font-semibold text-card-title text-stone-900 flex items-center gap-2">
+                    <Plus className="w-4 h-4 text-[#7C2D37]" />
+                    Soạn câu hỏi mới
+                  </h3>
+                  <span className="text-metadata text-stone-500">Quy trình chuẩn hóa 4 bước Ngữ văn</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsCreatingNew(false)}
+                  className="text-metadata text-stone-500 hover:text-stone-800 px-2 py-1"
+                >
+                  Đóng
+                </button>
               </div>
-              <div className="p-3 bg-stone-50 rounded-xl border border-stone-200">
-                <span className="font-bold text-stone-800 block mb-1">Hướng dẫn chấm:</span>
-                <p className="text-stone-600 whitespace-pre-line leading-relaxed">{q.guide || 'Chấm theo barem chính xác.'}</p>
+
+              <div className="flex-1 min-h-0 overflow-y-auto space-y-3 pr-1 text-metadata">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                  <div>
+                    <label className="block font-medium text-stone-700 mb-1">Dạng câu hỏi:</label>
+                    <select
+                      value={newType}
+                      onChange={(e) => setNewType(e.target.value as QuestionType)}
+                      className="w-full p-2 min-h-[38px] bg-stone-50 border border-stone-300 rounded-xl text-metadata"
+                    >
+                      <option value="doc_hieu">Đọc hiểu</option>
+                      <option value="tieng_viet">Tiếng Việt</option>
+                      <option value="nl_xa_hoi">NL Xã hội</option>
+                      <option value="nl_van_hoc">NL Văn học</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block font-medium text-stone-700 mb-1">Mức độ nhận thức:</label>
+                    <select
+                      value={newLevel}
+                      onChange={(e) => setNewLevel(e.target.value as CognitiveLevel)}
+                      className="w-full p-2 min-h-[38px] bg-stone-50 border border-stone-300 rounded-xl text-metadata"
+                    >
+                      <option value="NB">Nhận biết (NB)</option>
+                      <option value="TH">Thông hiểu (TH)</option>
+                      <option value="VD">Vận dụng (VD)</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block font-medium text-stone-700 mb-1">Kỹ năng đặc thù:</label>
+                    <select
+                      value={newSkill}
+                      onChange={(e) => setNewSkill(e.target.value as SkillType)}
+                      className="w-full p-2 min-h-[38px] bg-stone-50 border border-stone-300 rounded-xl text-metadata"
+                    >
+                      <option value="Nhận diện">Nhận diện</option>
+                      <option value="Giải thích">Giải thích</option>
+                      <option value="Phân tích">Phân tích</option>
+                      <option value="So sánh">So sánh</option>
+                      <option value="Đánh giá">Đánh giá</option>
+                      <option value="Liên hệ">Liên hệ</option>
+                      <option value="Sáng tạo">Sáng tạo</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block font-medium text-stone-700 mb-1">Thang điểm:</label>
+                    <input
+                      type="number"
+                      step="0.25"
+                      min="0.25"
+                      max="10"
+                      value={newPoints}
+                      onChange={(e) => setNewPoints(parseFloat(e.target.value) || 0.5)}
+                      className="w-full p-2 min-h-[38px] bg-stone-50 border border-stone-300 rounded-xl text-metadata tabular-nums font-semibold"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block font-semibold text-stone-800 mb-1">1. Ngữ liệu trích dẫn (Passage):</label>
+                  <textarea
+                    rows={2}
+                    placeholder="Đoạn thơ/văn tham chiếu..."
+                    value={newPassage}
+                    onChange={(e) => setNewPassage(e.target.value)}
+                    className="w-full text-body-ui font-serif p-2.5 border border-stone-300 rounded-xl"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-semibold text-stone-800 mb-1">2. Lệnh hỏi / Yêu cầu câu hỏi:</label>
+                  <textarea
+                    rows={2}
+                    required
+                    placeholder="Nội dung câu hỏi..."
+                    value={newQuestion}
+                    onChange={(e) => setNewQuestion(e.target.value)}
+                    className="w-full text-body-ui p-2.5 border border-stone-300 rounded-xl"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block font-semibold text-stone-800 mb-1">3. Đáp án gợi ý:</label>
+                    <textarea
+                      rows={2}
+                      placeholder="Ý trả lời chuẩn..."
+                      value={newAnswer}
+                      onChange={(e) => setNewAnswer(e.target.value)}
+                      className="w-full text-body-ui p-2.5 border border-stone-300 rounded-xl"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-semibold text-stone-800 mb-1">4. Hướng dẫn chấm & Barem:</label>
+                    <textarea
+                      rows={2}
+                      placeholder="Biểu điểm..."
+                      value={newGuide}
+                      onChange={(e) => setNewGuide(e.target.value)}
+                      className="w-full text-body-ui p-2.5 border border-stone-300 rounded-xl"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#E7E5E4] shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setIsCreatingNew(false)}
+                  className="min-h-[38px] px-4 py-1.5 text-metadata font-medium text-stone-600 hover:bg-stone-100 rounded-xl transition"
+                >
+                  Hủy
+                </button>
+                <button
+                  type="submit"
+                  className="btn-primary min-h-[38px] px-5 py-1.5 bg-[#7C2D37] hover:bg-[#68232D] text-white font-medium text-metadata rounded-xl shadow transition"
+                >
+                  Lưu vào Ngân hàng
+                </button>
+              </div>
+            </form>
+          ) : selectedQuestion ? (
+            /* DETAILED VIEW / EDIT OF SELECTED QUESTION */
+            <div className="h-full min-h-0 flex flex-col space-y-4 overflow-hidden">
+              {/* Header with badges and Action buttons */}
+              <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-[#E7E5E4] shrink-0">
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold text-card-title text-stone-900 bg-stone-100 px-3 py-1 rounded-lg tabular-nums">
+                    {selectedQuestion.code}
+                  </span>
+                  <span className={`text-metadata font-medium px-2.5 py-1 rounded-full border ${getTypeBadge(selectedQuestion.type)}`}>
+                    {getTypeLabel(selectedQuestion.type)}
+                  </span>
+                  <span className={`text-metadata font-medium px-2.5 py-1 rounded ${getLevelBadge(selectedQuestion.level)}`}>
+                    {getLevelLabel(selectedQuestion.level)}
+                  </span>
+                  <span className="text-metadata font-medium px-2.5 py-1 rounded bg-amber-50 text-amber-800 border border-amber-200">
+                    Kỹ năng: {selectedQuestion.skill}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="text-metadata tabular-nums font-semibold text-[#7C2D37] bg-rose-50 px-2.5 py-1 rounded border border-rose-100">
+                    {selectedQuestion.points} điểm
+                  </span>
+                  <button
+                    onClick={() => handlePushToExam(selectedQuestion)}
+                    className="min-h-[36px] px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-lg text-metadata font-medium flex items-center gap-1 transition"
+                    title="Chuyển câu hỏi này sang Đề 7991"
+                  >
+                    <ArrowRight className="w-3.5 h-3.5" />
+                    <span>Vào Đề 7991</span>
+                  </button>
+                  <button
+                    onClick={() => handleDeleteQuestion(selectedQuestion.id)}
+                    className="p-2 text-stone-400 hover:text-red-600 rounded-lg transition"
+                    title="Xóa câu hỏi này"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Body with local scroll */}
+              <div className="flex-1 min-h-0 overflow-y-auto space-y-4 pr-1">
+                {/* Passage Snippet */}
+                {selectedQuestion.passageSnippet && (
+                  <div className="p-4 bg-[#FAF8F5] rounded-xl border border-stone-200 text-body-ui font-serif italic text-stone-800 whitespace-pre-line border-l-4 border-l-[#7C2D37] leading-[1.8]">
+                    <strong className="font-sans not-italic text-stone-600 block mb-1 text-metadata font-semibold">
+                      Ngữ liệu tham chiếu:
+                    </strong>
+                    {selectedQuestion.passageSnippet}
+                  </div>
+                )}
+
+                {/* Question */}
+                <div className="p-4 rounded-xl bg-stone-50 border border-stone-200">
+                  <span className="font-semibold text-stone-700 text-metadata block mb-1">
+                    Lệnh hỏi:
+                  </span>
+                  <p className="text-body-ui font-medium text-stone-900 leading-normal">
+                    {selectedQuestion.question}
+                  </p>
+                </div>
+
+                {/* Answer & Guide */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="p-4 bg-white rounded-xl border border-stone-200 shadow-2xs">
+                    <span className="font-semibold text-stone-800 block mb-1 text-metadata">
+                      Đáp án gợi ý:
+                    </span>
+                    <p className="text-stone-700 whitespace-pre-line leading-relaxed text-body-ui">
+                      {selectedQuestion.answer || 'Chưa cập nhật'}
+                    </p>
+                  </div>
+                  <div className="p-4 bg-white rounded-xl border border-stone-200 shadow-2xs">
+                    <span className="font-semibold text-stone-800 block mb-1 text-metadata">
+                      Hướng dẫn chấm & Barem:
+                    </span>
+                    <p className="text-stone-600 whitespace-pre-line leading-relaxed text-body-ui">
+                      {selectedQuestion.guide || 'Chấm theo barem chính xác.'}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ) : (
+            <div className="h-full flex items-center justify-center text-stone-400 text-metadata">
+              Chọn câu hỏi từ danh sách bên trái hoặc nhấn "+ Tạo câu hỏi"
+            </div>
+          )}
+        </section>
       </div>
     </div>
   );

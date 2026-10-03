@@ -24,7 +24,7 @@ export function exportWordKHBD(khbd: LessonPlan5512) {
   body {
     font-family: 'Times New Roman', serif;
     font-size: 13pt;
-    line-height: 1.35;
+    line-height: 1.45;
     color: #000;
   }
   table {
@@ -191,7 +191,7 @@ export function exportWordExam7991(exam: Exam7991Data, khbd: LessonPlan5512) {
   body {
     font-family: 'Times New Roman', serif;
     font-size: 12.5pt;
-    line-height: 1.3;
+    line-height: 1.4;
     color: #000;
   }
   table {
@@ -394,11 +394,36 @@ export function exportHtmlSlides(slides: SlideItem[], title: string) {
   <meta charset="UTF-8">
   <title>Slide Bài Giảng: ${title}</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Be+Vietnam+Pro:wght@400;500;600;700&subset=vietnamese&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Be Vietnam Pro', sans-serif; background-color: #1A1615; color: #FAF8F5; margin: 0; }
-    .font-serif { font-family: 'Lora', Georgia, serif; }
-    .slide-page { min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; padding: 3.5rem; box-sizing: border-box; border-bottom: 4px solid #2D2422; }
+    html {
+      font-synthesis: none;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    body {
+      font-family: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background-color: #1A1615;
+      color: #FAF8F5;
+      margin: 0;
+      letter-spacing: normal;
+      word-break: normal;
+      overflow-wrap: break-word;
+      hyphens: none;
+      font-feature-settings: 'kern' 1, 'liga' 1;
+    }
+    .font-serif {
+      font-family: 'Lora', 'Times New Roman', Georgia, serif;
+    }
+    .slide-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 3.5rem;
+      box-sizing: border-box;
+      border-bottom: 4px solid #2D2422;
+    }
   </style>
 </head>
 <body class="bg-[#171413] text-stone-100">
@@ -411,31 +436,31 @@ export function exportHtmlSlides(slides: SlideItem[], title: string) {
     <section class="slide-page">
       <div>
         <div class="flex items-center justify-between mb-4">
-          <span class="px-3 py-1 text-xs font-semibold rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 uppercase tracking-wider">
+          <span class="px-3 py-1 text-xs font-semibold rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
             ${s.phaseTag}
           </span>
           <span class="text-sm font-mono text-stone-400">Trang ${idx + 1} / ${slides.length}</span>
         </div>
-        <h1 class="text-3xl lg:text-4xl font-bold font-serif text-white tracking-tight mb-6">${s.title}</h1>
+        <h1 class="text-3xl lg:text-4xl font-semibold font-serif text-white mb-6 leading-normal">${s.title}</h1>
       </div>
 
       <div class="my-auto py-6">
         ${s.layout === 'quote' && s.quoteText ? `
-          <div class="max-w-4xl mx-auto p-10 rounded-2xl bg-stone-900/80 border border-amber-900/40 text-center">
-            <p class="text-2xl md:text-3xl font-serif italic text-amber-100 leading-relaxed mb-6 whitespace-pre-line">
+          <div class="max-w-[760px] mx-auto p-10 rounded-2xl bg-stone-900/80 border border-amber-900/40 text-center">
+            <p class="text-2xl md:text-3xl font-serif italic text-amber-100 leading-[1.8] mb-6 whitespace-pre-line">
               "${s.quoteText}"
             </p>
-            <div class="text-sm uppercase tracking-widest text-amber-400 font-semibold mb-6">— ${s.quoteAuthor || ''}</div>
+            <div class="text-sm text-amber-400 font-medium mb-6">— ${s.quoteAuthor || ''}</div>
             ${s.discussionQuestion ? `
-              <div class="p-4 rounded-xl bg-stone-800/80 border border-stone-700 text-sm text-stone-300">
-                <strong class="text-amber-300">Câu hỏi khám phá:</strong> ${s.discussionQuestion}
+              <div class="p-4 rounded-xl bg-stone-800/80 border border-stone-700 text-sm text-stone-300 leading-relaxed font-sans text-left">
+                <strong class="text-amber-300 block mb-1">Câu hỏi khám phá:</strong> ${s.discussionQuestion}
               </div>
             ` : ''}
           </div>
         ` : s.layout === 'split' ? `
           <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div class="bg-stone-900/70 p-7 rounded-2xl border border-stone-800">
-              <p class="text-base text-stone-200 leading-relaxed mb-4">${s.contentLeft}</p>
+              <p class="text-base text-stone-200 leading-[1.8] mb-4">${s.contentLeft}</p>
               ${s.bullets ? `
                 <ul class="space-y-2 text-stone-300 text-sm">
                   ${s.bullets.map(b => `<li class="flex items-start gap-2"><span class="text-amber-400 mt-1">✦</span> <span>${b}</span></li>`).join('')}
@@ -443,21 +468,21 @@ export function exportHtmlSlides(slides: SlideItem[], title: string) {
               ` : ''}
             </div>
             <div class="bg-stone-900/70 p-7 rounded-2xl border border-stone-800">
-              <p class="text-stone-200 whitespace-pre-line leading-relaxed text-sm md:text-base font-serif">${s.contentRight || ''}</p>
+              <p class="text-stone-200 whitespace-pre-line leading-[1.8] text-sm md:text-base font-serif">${s.contentRight || ''}</p>
             </div>
           </div>
         ` : s.layout === 'cards' && s.cards ? `
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             ${s.cards.map(c => `
               <div class="bg-stone-900/80 p-6 rounded-2xl border border-stone-800 hover:border-amber-600/50 transition">
-                <h3 class="text-base font-bold font-serif text-amber-300 mb-2">${c.title}</h3>
+                <h3 class="text-base font-semibold font-serif text-amber-300 mb-2">${c.title}</h3>
                 <p class="text-sm text-stone-300 leading-relaxed">${c.desc}</p>
               </div>
             `).join('')}
           </div>
         ` : s.layout === 'quiz' && s.quizQuestion ? `
           <div class="bg-stone-900/90 p-8 rounded-2xl border border-stone-800 max-w-4xl mx-auto">
-            <div class="text-xl font-medium text-white mb-6 font-serif">${s.quizQuestion.question}</div>
+            <div class="text-xl font-medium text-white mb-6 font-serif leading-normal">${s.quizQuestion.question}</div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               ${s.quizQuestion.options.map((opt, i) => `
                 <div class="p-4 rounded-xl border border-stone-800 bg-stone-950/70 text-stone-200 ${i === s.quizQuestion?.correctIndex ? 'border-emerald-500/60 bg-emerald-950/30 text-emerald-200' : ''}">
@@ -468,7 +493,7 @@ export function exportHtmlSlides(slides: SlideItem[], title: string) {
           </div>
         ` : `
           <div class="bg-stone-900/70 p-8 rounded-2xl border border-stone-800 max-w-4xl mx-auto">
-            <p class="text-xl text-stone-200 leading-relaxed mb-6 font-serif">${s.contentLeft}</p>
+            <p class="text-xl text-stone-200 leading-[1.8] mb-6 font-serif">${s.contentLeft}</p>
             ${s.bullets ? `
               <ul class="space-y-3 text-base text-stone-300">
                 ${s.bullets.map(b => `<li class="flex items-start gap-3"><span class="text-amber-400 mt-1">✦</span> <span>${b}</span></li>`).join('')}
@@ -496,7 +521,7 @@ export function exportRubricDoc(rubric: RubricData) {
 <meta charset='utf-8'>
 <title>${rubric.title}</title>
 <style>
-  body { font-family: 'Times New Roman', serif; font-size: 12pt; line-height: 1.3; }
+  body { font-family: 'Times New Roman', serif; font-size: 12pt; line-height: 1.4; }
   table { width: 100%; border-collapse: collapse; margin-top: 15px; }
   th, td { border: 1px solid #000; padding: 6px; vertical-align: top; }
   th { background-color: #F1F5F9; font-weight: bold; }

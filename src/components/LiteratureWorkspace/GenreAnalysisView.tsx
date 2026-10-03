@@ -121,33 +121,34 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
     onUpdateLesson({ argumentMap: updated });
   };
 
+  const [poetrySubTab, setPoetrySubTab] = useState<'flow' | 'devices' | 'imagery'>('flow');
+  const [storySubTab, setStorySubTab] = useState<'situation' | 'characters' | 'details'>('situation');
+  const [argSubTab, setArgSubTab] = useState<'diagram' | 'values'>('diagram');
+
   return (
-    <div className="space-y-6">
+    <div className="h-full min-h-0 flex flex-col p-4 md:p-6 space-y-3 overflow-hidden max-w-6xl w-full mx-auto">
       {/* Header Bar */}
-      <div className="bg-white p-5 rounded-2xl border border-stone-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-white p-4 rounded-2xl border border-stone-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0">
         <div>
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#7C2D37]/10 text-[#7C2D37] border border-[#7C2D37]/20">
+            <span className="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-[#7C2D37]/10 text-[#7C2D37] border border-[#7C2D37]/20">
               Thi pháp học theo Thể loại
             </span>
-            <span className="text-xs text-stone-500 font-medium">Chương trình Ngữ văn GDPT 2018</span>
+            <span className="text-metadata text-stone-500 font-medium">Chương trình Ngữ văn GDPT 2018</span>
           </div>
-          <h1 className="text-xl md:text-2xl font-bold font-serif text-stone-900 mt-1">
-            Không gian Phân tích Thể loại Văn học
+          <h1 className="text-card-title md:text-section-title font-semibold font-serif text-stone-900 mt-1">
+            Không gian Phân tích Thể loại Văn học: {lesson.title}
           </h1>
-          <p className="text-sm text-stone-600">
-            Mỗi thể loại văn học sở hữu mã nghệ thuật riêng: Thơ ca giàu hình ảnh & nhạc điệu; Truyện khám phá nhân vật & tình huống; Nghị luận lập bản đồ luận đề logic.
-          </p>
         </div>
 
         {/* Thể loại selector buttons */}
-        <div className="flex items-center gap-1.5 p-1 bg-stone-100 rounded-xl border border-stone-200 self-start md:self-auto">
+        <div className="flex items-center gap-1.5 p-1 bg-stone-100 rounded-xl border border-stone-200 self-start md:self-auto shrink-0">
           <button
             onClick={() => {
               setSelectedGenre('poetry');
               onUpdateLesson({ genre: 'poetry' });
             }}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 min-h-[34px] rounded-lg text-metadata font-medium transition flex items-center gap-1.5 ${
               selectedGenre === 'poetry'
                 ? 'bg-white text-stone-900 shadow-xs'
                 : 'text-stone-600 hover:text-stone-900'
@@ -162,7 +163,7 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
               setSelectedGenre('story');
               onUpdateLesson({ genre: 'story' });
             }}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 min-h-[34px] rounded-lg text-metadata font-medium transition flex items-center gap-1.5 ${
               selectedGenre === 'story'
                 ? 'bg-white text-stone-900 shadow-xs'
                 : 'text-stone-600 hover:text-stone-900'
@@ -177,7 +178,7 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
               setSelectedGenre('argumentative');
               onUpdateLesson({ genre: 'argumentative' });
             }}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 min-h-[34px] rounded-lg text-metadata font-medium transition flex items-center gap-1.5 ${
               selectedGenre === 'argumentative'
                 ? 'bg-white text-stone-900 shadow-xs'
                 : 'text-stone-600 hover:text-stone-900'
@@ -189,254 +190,338 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
         </div>
       </div>
 
-      {/* ========================================================================= */}
-      {/* 1. KHI CHỌN THỂ LOẠI THƠ (POETRY ANALYSIS WORKSPACE) */}
-      {/* ========================================================================= */}
-      {selectedGenre === 'poetry' && (
-        <div className="space-y-6">
-          {/* Top 3 Metric Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-xs">
-              <div className="flex items-center gap-2 text-xs font-bold text-purple-900 uppercase mb-2">
-                <Heart className="w-4 h-4 text-purple-600" />
-                Mạch cảm xúc & Cảm hứng chủ đạo
-              </div>
-              <p className="text-xs text-stone-700 leading-relaxed font-serif">
-                {lesson.poetryAnalysis?.emotionalFlow || 'Vận động từ nỗi nhớ da diết về thiên nhiên và đồng đội đến tượng đài bi tráng và lời thề bất tử.'}
-              </p>
-            </div>
-
-            <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-xs">
-              <div className="flex items-center gap-2 text-xs font-bold text-amber-900 uppercase mb-2">
-                <Sparkles className="w-4 h-4 text-amber-600" />
-                Nhịp điệu, Vần & Giọng điệu
-              </div>
-              <p className="text-xs text-stone-700 leading-relaxed font-serif">
-                {lesson.poetryAnalysis?.rhythmAndRhyme || 'Nhịp 4/3, 2/2/3 linh hoạt; phối thanh bổng trầm trắc bằng gắt gao; giọng thơ hào hùng bi tráng.'}
-              </p>
-            </div>
-
-            <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-xs">
-              <div className="flex items-center gap-2 text-xs font-bold text-blue-900 uppercase mb-2">
-                <Compass className="w-4 h-4 text-blue-600" />
-                Chủ đề & Tư tưởng tác phẩm
-              </div>
-              <p className="text-xs text-stone-700 leading-relaxed font-serif">
-                {lesson.poetryAnalysis?.theme || 'Ca ngợi vẻ đẹp hào hùng, lãng mạn và sự hy sinh quên mình của thế hệ thanh niên kháng chiến.'}
-              </p>
-            </div>
+      {/* Sub-tabs per Genre (Rule 29.10) */}
+      <div className="flex items-center gap-2 border-b border-[#E7E5E4] pb-2 shrink-0">
+        {selectedGenre === 'poetry' && (
+          <div className="flex p-0.5 bg-stone-100 rounded-lg">
+            <button
+              onClick={() => setPoetrySubTab('flow')}
+              className={`px-3 py-1.5 rounded-md text-metadata font-medium transition-colors ${
+                poetrySubTab === 'flow' ? 'bg-white text-[#292524] shadow-2xs font-semibold' : 'text-[#78716C] hover:text-[#292524]'
+              }`}
+            >
+              Mạch cảm xúc & Vần điệu
+            </button>
+            <button
+              onClick={() => setPoetrySubTab('devices')}
+              className={`px-3 py-1.5 rounded-md text-metadata font-medium transition-colors ${
+                poetrySubTab === 'devices' ? 'bg-white text-[#292524] shadow-2xs font-semibold' : 'text-[#78716C] hover:text-[#292524]'
+              }`}
+            >
+              Biện pháp tu từ & Trọng tâm
+            </button>
+            <button
+              onClick={() => setPoetrySubTab('imagery')}
+              className={`px-3 py-1.5 rounded-md text-metadata font-medium transition-colors ${
+                poetrySubTab === 'imagery' ? 'bg-white text-[#292524] shadow-2xs font-semibold' : 'text-[#78716C] hover:text-[#292524]'
+              }`}
+            >
+              Hình tượng & Từ khóa thi pháp
+            </button>
           </div>
+        )}
 
-          {/* Poetry Deep Dives */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Left: Biện pháp tu từ & Câu thơ trọng tâm */}
-            <div className="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-4">
-              <h3 className="font-serif font-bold text-base text-stone-900 flex items-center gap-2">
-                <Feather className="w-4 h-4 text-[#7C2D37]" />
-                Hệ thống Biện pháp tu từ đặc sắc
-              </h3>
+        {selectedGenre === 'story' && (
+          <div className="flex p-0.5 bg-stone-100 rounded-lg">
+            <button
+              onClick={() => setStorySubTab('situation')}
+              className={`px-3 py-1.5 rounded-md text-metadata font-medium transition-colors ${
+                storySubTab === 'situation' ? 'bg-white text-[#292524] shadow-2xs font-semibold' : 'text-[#78716C] hover:text-[#292524]'
+              }`}
+            >
+              Tình huống & Điểm nhìn
+            </button>
+            <button
+              onClick={() => setStorySubTab('characters')}
+              className={`px-3 py-1.5 rounded-md text-metadata font-medium transition-colors ${
+                storySubTab === 'characters' ? 'bg-white text-[#292524] shadow-2xs font-semibold' : 'text-[#78716C] hover:text-[#292524]'
+              }`}
+            >
+              Hệ thống Nhân vật & Tâm lý
+            </button>
+            <button
+              onClick={() => setStorySubTab('details')}
+              className={`px-3 py-1.5 rounded-md text-metadata font-medium transition-colors ${
+                storySubTab === 'details' ? 'bg-white text-[#292524] shadow-2xs font-semibold' : 'text-[#78716C] hover:text-[#292524]'
+              }`}
+            >
+              Chi tiết nghệ thuật & Giá trị
+            </button>
+          </div>
+        )}
 
-              <div className="space-y-2.5">
-                {(lesson.poetryAnalysis?.rhetoricalDevices || [
-                  'Nhân hóa: "súng ngửi trời", "Sông Mã gầm lên khúc độc hành"',
-                  'Nói giảm nói tránh: "anh về đất", "không bước nữa"',
-                  'Tương phản đối lập: "quân xanh màu lá" >< "dữ oai hùm"',
-                  'Điệp từ, điệp cấu trúc nhịp điệu dồn dập'
-                ]).map((dev, i) => (
-                  <div key={i} className="p-3 rounded-xl bg-purple-50/40 border border-purple-100 text-xs text-stone-800 leading-relaxed">
-                    <span className="font-semibold text-purple-900">✦ </span>
-                    {dev}
+        {selectedGenre === 'argumentative' && (
+          <div className="flex p-0.5 bg-stone-100 rounded-lg">
+            <button
+              onClick={() => setArgSubTab('diagram')}
+              className={`px-3 py-1.5 rounded-md text-metadata font-medium transition-colors ${
+                argSubTab === 'diagram' ? 'bg-white text-[#292524] shadow-2xs font-semibold' : 'text-[#78716C] hover:text-[#292524]'
+              }`}
+            >
+              Bản đồ Lập luận (Argument Map)
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Main Tabbed Content Area with local scroll */}
+      <div className="flex-1 min-h-0 overflow-y-auto pr-1">
+        {/* ========================================================================= */}
+        {/* 1. KHI CHỌN THỂ LOẠI THƠ */}
+        {/* ========================================================================= */}
+        {selectedGenre === 'poetry' && (
+          <div className="space-y-4">
+            {poetrySubTab === 'flow' && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-xs">
+                  <div className="flex items-center gap-2 text-card-title font-semibold text-purple-900 mb-2">
+                    <Heart className="w-4 h-4 text-purple-600" />
+                    Mạch cảm xúc & Cảm hứng chủ đạo
                   </div>
-                ))}
-              </div>
-
-              <div className="pt-3 border-t border-stone-100">
-                <h4 className="font-serif font-bold text-sm text-stone-900 mb-2">
-                  Các câu thơ "nhãn tự" / Trọng tâm:
-                </h4>
-                <div className="space-y-1.5 font-serif text-xs italic text-stone-800">
-                  {(lesson.poetryAnalysis?.keyVerses || [
-                    'Heo hút cồn mây, súng ngửi trời',
-                    'Chiến trường đi chẳng tiếc đời xanh',
-                    'Áo bào thay chiếu, anh về đất'
-                  ]).map((verse, i) => (
-                    <div key={i} className="p-2 rounded-lg bg-stone-50 border border-stone-200">
-                      "{verse}"
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Right: Hệ thống hình ảnh & Từ khóa */}
-            <div className="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-4">
-              <h3 className="font-serif font-bold text-base text-stone-900 flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-amber-600" />
-                Hệ thống Hình tượng & Từ khóa cốt lõi
-              </h3>
-
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-stone-700 uppercase">Hình ảnh trung tâm:</label>
-                <div className="space-y-2">
-                  {(lesson.poetryAnalysis?.imagery || [
-                    'Sông Mã gầm lên khúc độc hành',
-                    'Đoàn binh không mọc tóc',
-                    'Đêm hội đuốc hoa'
-                  ]).map((img, i) => (
-                    <div key={i} className="p-2.5 rounded-xl bg-amber-50/40 border border-amber-200/60 text-xs text-stone-800 font-serif">
-                      • {img}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="pt-2">
-                <label className="text-xs font-bold text-stone-700 uppercase mb-1.5 block">Từ khóa thi pháp:</label>
-                <div className="flex flex-wrap gap-2">
-                  {(lesson.poetryAnalysis?.keywords || ['nhớ chơi vơi', 'súng ngửi trời', 'áo bào', 'độc hành']).map((kw, i) => (
-                    <span key={i} className="px-3 py-1 rounded-lg bg-stone-100 border border-stone-200 text-stone-800 font-serif text-xs">
-                      #{kw}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="pt-3 border-t border-stone-100 grid grid-cols-2 gap-3 text-xs">
-                <div className="p-3 rounded-xl bg-stone-50 border border-stone-200">
-                  <span className="font-bold text-stone-800 block mb-1">Giá trị nội dung:</span>
-                  <p className="text-stone-600 leading-relaxed font-serif line-clamp-3">
-                    {lesson.poetryAnalysis?.contentValue || 'Tái hiện sinh động bức tượng đài người lính vệ quốc hào hoa và bi tráng.'}
+                  <p className="text-body-ui text-stone-700 leading-relaxed font-serif">
+                    {lesson.poetryAnalysis?.emotionalFlow || 'Vận động từ nỗi nhớ da diết về thiên nhiên và đồng đội đến tượng đài bi tráng và lời thề bất tử.'}
                   </p>
                 </div>
-                <div className="p-3 rounded-xl bg-stone-50 border border-stone-200">
-                  <span className="font-bold text-stone-800 block mb-1">Giá trị nghệ thuật:</span>
-                  <p className="text-stone-600 leading-relaxed font-serif line-clamp-3">
-                    {lesson.poetryAnalysis?.artisticValue || 'Bút pháp lãng mạn hòa cùng cảm hứng sử thi bi tráng, ngôn ngữ tạo hình tài hoa.'}
+
+                <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-xs">
+                  <div className="flex items-center gap-2 text-card-title font-semibold text-amber-900 mb-2">
+                    <Sparkles className="w-4 h-4 text-amber-600" />
+                    Nhịp điệu, Vần & Giọng điệu
+                  </div>
+                  <p className="text-body-ui text-stone-700 leading-relaxed font-serif">
+                    {lesson.poetryAnalysis?.rhythmAndRhyme || 'Nhịp 4/3, 2/2/3 linh hoạt; phối thanh bổng trầm trắc bằng gắt gao; giọng thơ hào hùng bi tráng.'}
+                  </p>
+                </div>
+
+                <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-xs">
+                  <div className="flex items-center gap-2 text-card-title font-semibold text-blue-900 mb-2">
+                    <Compass className="w-4 h-4 text-blue-600" />
+                    Chủ đề & Tư tưởng tác phẩm
+                  </div>
+                  <p className="text-body-ui text-stone-700 leading-relaxed font-serif">
+                    {lesson.poetryAnalysis?.theme || 'Ca ngợi vẻ đẹp hào hùng, lãng mạn và sự hy sinh quên mình của thế hệ thanh niên kháng chiến.'}
                   </p>
                 </div>
               </div>
-            </div>
+            )}
+
+            {poetrySubTab === 'devices' && (
+              <div className="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-4">
+                <h3 className="font-serif font-semibold text-card-title text-stone-900 flex items-center gap-2">
+                  <Feather className="w-4 h-4 text-[#7C2D37]" />
+                  Hệ thống Biện pháp tu từ đặc sắc
+                </h3>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {(lesson.poetryAnalysis?.rhetoricalDevices || [
+                    'Nhân hóa: "súng ngửi trời", "Sông Mã gầm lên khúc độc hành"',
+                    'Nói giảm nói tránh: "anh về đất", "không bước nữa"',
+                    'Tương phản đối lập: "quân xanh màu lá" >< "dữ oai hùm"',
+                    'Điệp từ, điệp cấu trúc nhịp điệu dồn dập'
+                  ]).map((dev, i) => (
+                    <div key={i} className="p-3 rounded-xl bg-purple-50/40 border border-purple-100 text-body-ui text-stone-800 leading-relaxed">
+                      <span className="font-semibold text-purple-900">✦ </span>
+                      {dev}
+                    </div>
+                  ))}
+                </div>
+
+                <div className="pt-3 border-t border-stone-100">
+                  <h4 className="font-serif font-semibold text-body-ui text-stone-900 mb-2">
+                    Các câu thơ "nhãn tự" / Trọng tâm:
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-2 font-serif text-body-ui italic text-stone-800">
+                    {(lesson.poetryAnalysis?.keyVerses || [
+                      'Heo hút cồn mây, súng ngửi trời',
+                      'Chiến trường đi chẳng tiếc đời xanh',
+                      'Áo bào thay chiếu, anh về đất'
+                    ]).map((verse, i) => (
+                      <div key={i} className="p-2.5 rounded-lg bg-stone-50 border border-stone-200">
+                        "{verse}"
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {poetrySubTab === 'imagery' && (
+              <div className="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs space-y-4">
+                <h3 className="font-serif font-semibold text-card-title text-stone-900 flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-amber-600" />
+                  Hệ thống Hình tượng & Từ khóa cốt lõi
+                </h3>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-metadata font-medium text-stone-700 block">Hình ảnh trung tâm:</label>
+                    <div className="space-y-2">
+                      {(lesson.poetryAnalysis?.imagery || [
+                        'Sông Mã gầm lên khúc độc hành',
+                        'Đoàn binh không mọc tóc',
+                        'Đêm hội đuốc hoa'
+                      ]).map((img, i) => (
+                        <div key={i} className="p-2.5 rounded-xl bg-amber-50/40 border border-amber-200/60 text-body-ui text-stone-800 font-serif">
+                          • {img}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-metadata font-medium text-stone-700 mb-1.5 block">Từ khóa thi pháp:</label>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {(lesson.poetryAnalysis?.keywords || ['nhớ chơi vơi', 'súng ngửi trời', 'áo bào', 'độc hành']).map((kw, i) => (
+                        <span key={i} className="px-3 py-1 rounded-lg bg-stone-100 border border-stone-200 text-stone-800 font-serif text-metadata">
+                          #{kw}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 text-metadata pt-2 border-t border-stone-100">
+                      <div className="p-2.5 rounded-xl bg-stone-50 border border-stone-200">
+                        <span className="font-medium text-stone-800 block mb-1">Giá trị nội dung:</span>
+                        <p className="text-stone-600 leading-relaxed font-serif line-clamp-3">
+                          {lesson.poetryAnalysis?.contentValue || 'Tái hiện sinh động bức tượng đài người lính vệ quốc hào hoa và bi tráng.'}
+                        </p>
+                      </div>
+                      <div className="p-2.5 rounded-xl bg-stone-50 border border-stone-200">
+                        <span className="font-medium text-stone-800 block mb-1">Giá trị nghệ thuật:</span>
+                        <p className="text-stone-600 leading-relaxed font-serif line-clamp-3">
+                          {lesson.poetryAnalysis?.artisticValue || 'Bút pháp lãng mạn hòa cùng cảm hứng sử thi bi tráng, ngôn ngữ tạo hình tài hoa.'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
-        </div>
-      )}
+        )}
 
       {/* ========================================================================= */}
       {/* 2. KHI CHỌN THỂ LOẠI TRUYỆN (STORY ANALYSIS WORKSPACE) */}
       {/* ========================================================================= */}
       {selectedGenre === 'story' && (
-        <div className="space-y-6">
-          {/* Situation & Narrator Bar */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-xs md:col-span-2">
-              <h3 className="text-xs font-bold text-blue-900 uppercase mb-1.5 flex items-center gap-1.5">
-                <Compass className="w-4 h-4 text-blue-600" />
-                Tình huống truyện độc đáo (Story Situation):
-              </h3>
-              <p className="text-xs text-stone-700 leading-relaxed font-serif">
-                {lesson.storyAnalysis?.storySituation || 'Tình huống "nhặt vợ" éo le, lạ lùng giữa nạn đói khủng khiếp năm 1945: người ta lo thân không nổi lại đèo bòng lấy vợ; một bên là cái chết rình rập, một bên là mầm sống và niềm hy vọng được nhen nhóm.'}
-              </p>
-            </div>
-
-            <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-xs">
-              <h3 className="text-xs font-bold text-stone-800 uppercase mb-1.5">
-                Điểm nhìn & Người kể chuyện:
-              </h3>
-              <p className="text-xs text-stone-600 leading-relaxed">
-                {lesson.storyAnalysis?.pointOfView || 'Ngôi kể thứ ba khách quan luân chuyển linh hoạt sang điểm nhìn nội tâm của Tràng và bà cụ Tứ, tạo chiều sâu cảm xúc.'}
-              </p>
-            </div>
-          </div>
-
-          {/* Character Cards */}
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="font-serif font-bold text-base text-stone-900 flex items-center gap-2">
-                <BookOpen className="w-4 h-4 text-[#7C2D37]" />
-                Hệ thống Nhân vật & Diễn biến tâm lý
-              </h3>
-              <span className="text-xs text-stone-500">Phân tích hành vi, phẩm chất và bước ngoặt nội tâm</span>
-            </div>
-
+        <div className="space-y-4">
+          {/* Sub-tab 1: Tình huống & Điểm nhìn */}
+          {storySubTab === 'situation' && (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {(lesson.storyAnalysis?.characters || [
-                {
-                  name: 'Tràng',
-                  role: 'Gã kéo xe bò nghèo xóm ngụ cư',
-                  traits: ['Tốt bụng, nhân hậu', 'Ý thức trách nhiệm mái ấm'],
-                  psychologicalShift: 'Từ vô tâm chuyển sang hạnh phúc, nhận thức trách nhiệm gìn giữ tổ ấm.',
-                  quote: 'Tràng thấy hắn có bổn phận phải lo lắng cho vợ con sau này.'
-                },
-                {
-                  name: 'Thị (Vợ nhặt)',
-                  role: 'Nạn nhân bị nạn đói xô đẩy',
-                  traits: ['Chao chát ngày đói', 'Dịu dàng khi có tổ ấm'],
-                  psychologicalShift: 'Cái đói làm méo mó nhân hình nhưng lòng khao khát sống và thiên tính nữ đã phục sinh kỳ diệu.',
-                  quote: 'Thị ngoan ngoãn, ngượng nghịu bước đi bên Tràng.'
-                },
-                {
-                  name: 'Bà cụ Tứ',
-                  role: 'Người mẹ già nhân từ đôn hậu',
-                  traits: ['Thương con vô hạn', 'Lạc quan, hướng về sự sống'],
-                  psychologicalShift: 'Ngạc nhiên -> Tủi cực, khóc thương con -> Mừng lòng và thắp lên hy vọng đổi đời.',
-                  quote: 'U thương chúng mày quá... Ai giàu ba họ, ai khó ba đời.'
-                }
-              ]).map((char, i) => (
-                <div key={i} className="p-5 rounded-2xl bg-white border border-stone-200 shadow-xs flex flex-col justify-between space-y-3">
-                  <div>
-                    <div className="flex items-center justify-between mb-1">
-                      <h4 className="font-serif font-bold text-base text-stone-900">{char.name}</h4>
-                      <span className="text-[10px] px-2 py-0.5 rounded bg-stone-100 text-stone-600 font-medium">{char.role}</span>
-                    </div>
+              <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-xs md:col-span-2">
+                <h3 className="text-card-title font-semibold text-blue-900 mb-1.5 flex items-center gap-1.5">
+                  <Compass className="w-4 h-4 text-blue-600" />
+                  Tình huống truyện độc đáo:
+                </h3>
+                <p className="text-body-ui text-stone-700 leading-relaxed font-serif">
+                  {lesson.storyAnalysis?.storySituation || 'Tình huống "nhặt vợ" éo le, lạ lùng giữa nạn đói khủng khiếp năm 1945: người ta lo thân không nổi lại đèo bòng lấy vợ; một bên là cái chết rình rập, một bên là mầm sống và niềm hy vọng được nhen nhóm.'}
+                </p>
+              </div>
 
-                    <div className="flex flex-wrap gap-1 my-2">
-                      {char.traits.map((t, idx) => (
-                        <span key={idx} className="text-[10px] px-2 py-0.5 rounded-full bg-blue-50 text-blue-800 border border-blue-100">
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-
-                    <div className="text-xs text-stone-600 leading-relaxed mt-2">
-                      <strong className="text-stone-800 block mb-0.5">Biến chuyển tâm lý:</strong>
-                      {char.psychologicalShift}
-                    </div>
-                  </div>
-
-                  <div className="p-2.5 rounded-xl bg-stone-50 border border-stone-200 text-xs italic font-serif text-stone-700">
-                    "{char.quote}"
-                  </div>
-                </div>
-              ))}
+              <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-xs">
+                <h3 className="text-card-title font-semibold text-stone-800 mb-1.5">
+                  Điểm nhìn & Người kể chuyện:
+                </h3>
+                <p className="text-body-ui text-stone-600 leading-relaxed">
+                  {lesson.storyAnalysis?.pointOfView || 'Ngôi kể thứ ba khách quan luân chuyển linh hoạt sang điểm nhìn nội tâm của Tràng và bà cụ Tứ, tạo chiều sâu cảm xúc.'}
+                </p>
+              </div>
             </div>
-          </div>
+          )}
 
-          {/* Artistic Details & Message */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-xs">
-              <h4 className="font-serif font-bold text-sm text-stone-900 mb-2">
-                Chi tiết nghệ thuật đắt giá:
-              </h4>
-              <ul className="list-disc pl-5 space-y-1.5 text-xs text-stone-700 leading-relaxed">
-                {(lesson.storyAnalysis?.artisticDetails || [
-                  'Bát bánh đúc ngày đói cứu vớt một mạng người',
-                  'Giọt nước mắt rỉ xuống trong kẽ mắt kèm nhèm của bà cụ Tứ',
-                  'Nồi cháo cám chát xít trong bữa cơm đón dâu đầu tiên',
-                  'Lá cờ đỏ sao vàng bay phấp phới báo hiệu cách mạng đổi đời'
-                ]).map((det, i) => (
-                  <li key={i}>{det}</li>
+          {/* Sub-tab 2: Nhân vật & Tâm lý */}
+          {storySubTab === 'characters' && (
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-serif font-semibold text-card-title text-stone-900 flex items-center gap-2">
+                  <BookOpen className="w-4 h-4 text-[#7C2D37]" />
+                  Hệ thống Nhân vật & Diễn biến tâm lý
+                </h3>
+                <span className="text-metadata text-stone-500">Phân tích hành vi, phẩm chất và bước ngoặt nội tâm</span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {(lesson.storyAnalysis?.characters || [
+                  {
+                    name: 'Tràng',
+                    role: 'Gã kéo xe bò nghèo xóm ngụ cư',
+                    traits: ['Tốt bụng, nhân hậu', 'Ý thức trách nhiệm mái ấm'],
+                    psychologicalShift: 'Từ vô tâm chuyển sang hạnh phúc, nhận thức trách nhiệm gìn giữ tổ ấm.',
+                    quote: 'Tràng thấy hắn có bổn phận phải lo lắng cho vợ con sau này.'
+                  },
+                  {
+                    name: 'Thị (Vợ nhặt)',
+                    role: 'Nạn nhân bị nạn đói xô đẩy',
+                    traits: ['Chao chát ngày đói', 'Dịu dàng khi có tổ ấm'],
+                    psychologicalShift: 'Cái đói làm méo mó nhân hình nhưng lòng khao khát sống và thiên tính nữ đã phục sinh kỳ diệu.',
+                    quote: 'Thị ngoan ngoãn, ngượng nghịu bước đi bên Tràng.'
+                  },
+                  {
+                    name: 'Bà cụ Tứ',
+                    role: 'Người mẹ già nhân từ đôn hậu',
+                    traits: ['Thương con vô hạn', 'Lạc quan, hướng về sự sống'],
+                    psychologicalShift: 'Ngạc nhiên -> Tủi cực, khóc thương con -> Mừng lòng và thắp lên hy vọng đổi đời.',
+                    quote: 'U thương chúng mày quá... Ai giàu ba họ, ai khó ba đời.'
+                  }
+                ]).map((char, i) => (
+                  <div key={i} className="p-5 rounded-2xl bg-white border border-stone-200 shadow-xs flex flex-col justify-between space-y-3">
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <h4 className="font-serif font-bold text-base text-stone-900">{char.name}</h4>
+                        <span className="text-[10px] px-2 py-0.5 rounded bg-stone-100 text-stone-600 font-medium">{char.role}</span>
+                      </div>
+
+                      <div className="flex flex-wrap gap-1 my-2">
+                        {char.traits.map((t, idx) => (
+                          <span key={idx} className="text-[10px] px-2 py-0.5 rounded-full bg-blue-50 text-blue-800 border border-blue-100">
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+
+                      <div className="text-xs text-stone-600 leading-relaxed mt-2">
+                        <strong className="text-stone-800 block mb-0.5">Biến chuyển tâm lý:</strong>
+                        {char.psychologicalShift}
+                      </div>
+                    </div>
+
+                    <div className="p-2.5 rounded-xl bg-stone-50 border border-stone-200 text-xs italic font-serif text-stone-700">
+                      "{char.quote}"
+                    </div>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
+          )}
 
-            <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-xs">
-              <h4 className="font-serif font-bold text-sm text-stone-900 mb-2">
-                Thông điệp & Giá trị nhân đạo:
-              </h4>
-              <p className="text-xs text-stone-700 leading-relaxed font-serif">
-                {lesson.storyAnalysis?.message || 'Ở bờ vực của cái chết, con người không nghĩ đến cái chết mà luôn hướng về sự sống, khao khát hạnh phúc tổ ấm và đùm bọc cưu mang lẫn nhau.'}
-              </p>
+          {/* Sub-tab 3: Chi tiết nghệ thuật & Giá trị */}
+          {storySubTab === 'details' && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-xs">
+                <h4 className="font-serif font-bold text-sm text-stone-900 mb-2">
+                  Chi tiết nghệ thuật đắt giá:
+                </h4>
+                <ul className="list-disc pl-5 space-y-1.5 text-xs text-stone-700 leading-relaxed">
+                  {(lesson.storyAnalysis?.artisticDetails || [
+                    'Bát bánh đúc ngày đói cứu vớt một mạng người',
+                    'Giọt nước mắt rỉ xuống trong kẽ mắt kèm nhèm của bà cụ Tứ',
+                    'Nồi cháo cám chát xít trong bữa cơm đón dâu đầu tiên',
+                    'Lá cờ đỏ sao vàng bay phấp phới báo hiệu cách mạng đổi đời'
+                  ]).map((det, i) => (
+                    <li key={i}>{det}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-xs">
+                <h4 className="font-serif font-bold text-sm text-stone-900 mb-2">
+                  Thông điệp & Giá trị nhân đạo:
+                </h4>
+                <p className="text-xs text-stone-700 leading-relaxed font-serif">
+                  {lesson.storyAnalysis?.message || 'Ở bờ vực của cái chết, con người không nghĩ đến cái chết mà luôn hướng về sự sống, khao khát hạnh phúc tổ ấm và đùm bọc cưu mang lẫn nhau.'}
+                </p>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       )}
 
@@ -448,17 +533,17 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
           {/* Argument Map Controls */}
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="font-serif font-bold text-lg text-stone-900 flex items-center gap-2">
+              <h3 className="font-serif font-semibold text-section-title text-stone-900 flex items-center gap-2">
                 <Network className="w-5 h-5 text-amber-600" />
                 Visual Argument Map (Bản đồ Cấu trúc Luận điểm)
               </h3>
-              <p className="text-xs text-stone-500">
+              <p className="text-metadata text-stone-500">
                 Mô hình hóa logic: Luận đề → Hệ thống Luận điểm → Lý lẽ sắc bén → Dẫn chứng thực tiễn → Kết luận
               </p>
             </div>
             <button
               onClick={handleAddClaim}
-              className="px-3.5 py-1.5 rounded-xl bg-amber-700 hover:bg-amber-800 text-white font-semibold text-xs flex items-center gap-1.5 shadow-sm transition"
+              className="px-3.5 py-2 min-h-[38px] rounded-xl bg-amber-700 hover:bg-amber-800 text-white font-medium text-metadata flex items-center gap-1.5 shadow-sm transition"
             >
               <Plus className="w-4 h-4" />
               <span>Thêm Luận điểm mới</span>
@@ -469,8 +554,8 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
           <div className="p-6 md:p-8 rounded-3xl bg-stone-900 text-white shadow-xl space-y-8">
             {/* 1. THESIS NODE (LUẬN ĐỀ TRUNG TÂM) */}
             <div className="max-w-2xl mx-auto text-center p-6 rounded-2xl bg-amber-500/20 border-2 border-amber-400 text-white shadow-lg">
-              <span className="text-[10px] uppercase font-bold tracking-widest text-amber-300 block mb-1">
-                LUẬN ĐỀ TRUNG TÂM (THESIS)
+              <span className="text-metadata font-medium text-amber-300 block mb-1">
+                Luận đề trung tâm (Thesis)
               </span>
               <p className="text-base md:text-lg font-serif font-semibold leading-relaxed text-amber-100">
                 "{argumentMap.thesis}"
@@ -488,24 +573,24 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
                 <div key={claim.id} className="p-5 rounded-2xl bg-stone-800/90 border border-stone-700 shadow-md">
                   <div className="flex items-center justify-between pb-3 mb-3 border-b border-stone-700">
                     <div className="flex items-center gap-2">
-                      <span className="w-6 h-6 rounded-full bg-amber-500 text-stone-950 font-bold text-xs flex items-center justify-center">
+                      <span className="w-6 h-6 rounded-full bg-amber-500 text-stone-950 font-bold text-xs flex items-center justify-center tabular-nums">
                         {cIdx + 1}
                       </span>
-                      <h4 className="font-serif font-bold text-base text-amber-200">
+                      <h4 className="font-serif font-semibold text-card-title text-amber-200">
                         {claim.title}
                       </h4>
                     </div>
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => handleAddReason(cIdx)}
-                        className="px-2.5 py-1 bg-stone-700 hover:bg-stone-600 text-stone-200 rounded-lg text-[11px] font-medium flex items-center gap-1 transition"
+                        className="px-2.5 py-1.5 min-h-[32px] bg-stone-700 hover:bg-stone-600 text-stone-200 rounded-lg text-metadata font-medium flex items-center gap-1 transition"
                       >
                         <Plus className="w-3 h-3" /> Thêm Lý lẽ
                       </button>
                       {argumentMap.claims.length > 1 && (
                         <button
                           onClick={() => handleDeleteClaim(cIdx)}
-                          className="p-1 text-stone-400 hover:text-red-400 rounded-lg"
+                          className="p-1.5 text-stone-400 hover:text-red-400 rounded-lg"
                           title="Xóa luận điểm này"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -519,14 +604,14 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
                     {claim.reasons.map((reason, rIdx) => (
                       <div key={reason.id} className="p-3.5 rounded-xl bg-stone-900/80 border border-stone-700/80 space-y-2">
                         <div className="flex items-start gap-2">
-                          <span className="text-xs font-bold text-blue-400">Lý lẽ {rIdx + 1}:</span>
-                          <p className="text-xs text-stone-200 leading-relaxed font-sans">{reason.text}</p>
+                          <span className="text-metadata font-semibold text-blue-400">Lý lẽ {rIdx + 1}:</span>
+                          <p className="text-body-ui text-stone-200 leading-relaxed font-sans">{reason.text}</p>
                         </div>
 
                         {/* Evidences */}
                         <div className="space-y-1.5 pl-3 pt-1">
                           {reason.evidences.map((ev, eIdx) => (
-                            <div key={ev.id} className="p-2.5 rounded-lg bg-stone-950 border border-stone-800 text-[11px] text-stone-300">
+                            <div key={ev.id} className="p-2.5 rounded-lg bg-stone-950 border border-stone-800 text-metadata text-stone-300">
                               <span className="font-semibold text-emerald-400">Dẫn chứng & Ngữ liệu: </span>
                               <span>{ev.text}</span>
                               <div className="text-amber-200/80 italic font-serif mt-1">
@@ -549,16 +634,17 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
 
             {/* 3. CONCLUSION NODE */}
             <div className="max-w-2xl mx-auto text-center p-5 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 text-white">
-              <span className="text-[10px] uppercase font-bold tracking-widest text-emerald-300 block mb-1">
-                KẾT LUẬN & THÔNG ĐIỆP TỔNG THỂ
+              <span className="text-metadata font-medium text-emerald-300 block mb-1">
+                Kết luận & Thông điệp tổng thể
               </span>
-              <p className="text-sm font-serif leading-relaxed text-emerald-100">
+              <p className="text-body-ui font-serif leading-relaxed text-emerald-100">
                 "{argumentMap.conclusion}"
               </p>
             </div>
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };

@@ -86,11 +86,11 @@ export const TopBar: React.FC<TopBarProps> = ({
             className="flex items-center gap-2 py-1 px-2 -ml-2 rounded-lg hover:bg-stone-50 transition-colors text-left group"
             title="Đổi tác phẩm giảng dạy"
           >
-            <span className="font-serif font-semibold text-[16px] text-[#292524] group-hover:text-[#7C2D37] transition-colors">
+            <span className="font-serif font-literary-inline font-semibold text-card-title text-[#292524] group-hover:text-[#7C2D37] transition-colors">
               {currentLesson.title}
             </span>
-            <span className="text-[#78716C] text-[14px]">/</span>
-            <span className="text-[14px] text-[#57534E]">
+            <span className="text-[#78716C] text-body-ui">/</span>
+            <span className="text-body-ui text-[#57534E]">
               {currentLesson.author}
             </span>
             <ChevronDown className="w-3.5 h-3.5 text-[#78716C] ml-0.5" strokeWidth={1.75} />
@@ -98,7 +98,7 @@ export const TopBar: React.FC<TopBarProps> = ({
 
           {isLessonSwitcherOpen && (
             <div className="absolute left-0 mt-1 w-64 bg-white border border-[#E7E5E4] rounded-xl shadow-lg py-1 z-50">
-              <div className="px-3 py-1.5 text-[11px] font-medium text-[#78716C] uppercase tracking-wider">
+              <div className="px-3 py-1.5 text-metadata font-medium text-[#78716C]">
                 Chọn tác phẩm mẫu
               </div>
               {lessons.map((l) => (
@@ -108,13 +108,13 @@ export const TopBar: React.FC<TopBarProps> = ({
                     onSelectLesson(l.id);
                     setIsLessonSwitcherOpen(false);
                   }}
-                  className={`w-full text-left px-3 py-2 text-[13px] flex items-center justify-between hover:bg-stone-50 transition-colors ${
+                  className={`w-full text-left px-3 py-2 text-body-ui flex items-center justify-between hover:bg-stone-50 transition-colors ${
                     l.id === currentLesson.id ? 'bg-[#FBF4F5] text-[#7C2D37] font-medium' : 'text-[#292524]'
                   }`}
                 >
                   <div>
-                    <div className="font-serif">{l.title}</div>
-                    <div className="text-[12px] text-[#78716C]">{l.author} · {l.grade}</div>
+                    <div className="font-serif font-literary-inline">{l.title}</div>
+                    <div className="text-metadata text-[#78716C]">{l.author} · {l.grade}</div>
                   </div>
                   {l.id === currentLesson.id && (
                     <Check className="w-4 h-4 text-[#7C2D37]" strokeWidth={2} />
@@ -129,14 +129,14 @@ export const TopBar: React.FC<TopBarProps> = ({
       {/* Right: Autosave status, Preview, Export Menu, More */}
       <div className="flex items-center gap-3">
         {/* Autosave Indicator: Minimal, unobtrusive text */}
-        <span className="hidden sm:inline-block text-[13px] text-[#78716C]">
-          Đã lưu · 18:42
+        <span className="hidden sm:inline-block text-metadata text-[#78716C]">
+          Đã lưu · <span className="tabular-nums">18:42</span>
         </span>
 
         {/* Secondary: Xem trước */}
         <button
           onClick={onPreview}
-          className="btn-secondary hidden sm:inline-flex text-[13px] py-1.5 px-3"
+          className="btn-secondary btn-compact hidden sm:inline-flex"
         >
           Xem trước
         </button>
@@ -145,7 +145,7 @@ export const TopBar: React.FC<TopBarProps> = ({
         <div className="relative" ref={exportRef}>
           <button
             onClick={() => setIsExportOpen(!isExportOpen)}
-            className="btn-secondary text-[13px] py-1.5 px-3 flex items-center gap-1.5"
+            className="btn-secondary btn-compact flex items-center gap-1.5"
           >
             <Download className="w-3.5 h-3.5 text-[#57534E]" strokeWidth={1.75} />
             <span>Xuất</span>
@@ -154,7 +154,7 @@ export const TopBar: React.FC<TopBarProps> = ({
 
           {isExportOpen && (
             <div className="absolute right-0 mt-1 w-56 bg-white border border-[#E7E5E4] rounded-xl shadow-lg py-1 z-50">
-              <div className="px-3 py-1.5 text-[11px] font-medium text-[#78716C] uppercase tracking-wider">
+              <div className="px-3 py-1.5 text-metadata font-medium text-[#78716C]">
                 Xuất tài liệu giảng dạy
               </div>
               <button
@@ -162,7 +162,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                   exportWordKHBD(khbd);
                   setIsExportOpen(false);
                 }}
-                className="w-full text-left px-3 py-2 text-[13px] text-[#292524] hover:bg-stone-50 transition-colors flex items-center gap-2.5"
+                className="w-full text-left px-3 py-2 text-body-ui text-[#292524] hover:bg-stone-50 transition-colors flex items-center gap-2.5 min-h-[38px]"
               >
                 <FileText className="w-4 h-4 text-[#7C2D37]" strokeWidth={1.75} />
                 <span>Word KHBD 5512</span>
@@ -172,7 +172,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                   exportWordExam7991(exam, khbd);
                   setIsExportOpen(false);
                 }}
-                className="w-full text-left px-3 py-2 text-[13px] text-[#292524] hover:bg-stone-50 transition-colors flex items-center gap-2.5"
+                className="w-full text-left px-3 py-2 text-body-ui text-[#292524] hover:bg-stone-50 transition-colors flex items-center gap-2.5 min-h-[38px]"
               >
                 <FileText className="w-4 h-4 text-[#15803D]" strokeWidth={1.75} />
                 <span>Word Đề kiểm tra 7991</span>
@@ -182,7 +182,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                   window.print();
                   setIsExportOpen(false);
                 }}
-                className="w-full text-left px-3 py-2 text-[13px] text-[#292524] hover:bg-stone-50 transition-colors flex items-center gap-2.5"
+                className="w-full text-left px-3 py-2 text-body-ui text-[#292524] hover:bg-stone-50 transition-colors flex items-center gap-2.5 min-h-[38px]"
               >
                 <Printer className="w-4 h-4 text-[#57534E]" strokeWidth={1.75} />
                 <span>In A4 / Lưu PDF</span>
@@ -192,7 +192,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                   exportHtmlSlides(slides, currentLesson.title);
                   setIsExportOpen(false);
                 }}
-                className="w-full text-left px-3 py-2 text-[13px] text-[#292524] hover:bg-stone-50 transition-colors flex items-center gap-2.5"
+                className="w-full text-left px-3 py-2 text-body-ui text-[#292524] hover:bg-stone-50 transition-colors flex items-center gap-2.5 min-h-[38px]"
               >
                 <Presentation className="w-4 h-4 text-[#B45309]" strokeWidth={1.75} />
                 <span>Xuất Slide HTML</span>
@@ -203,7 +203,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                   onOpenHandover();
                   setIsExportOpen(false);
                 }}
-                className="w-full text-left px-3 py-2 text-[13px] text-[#292524] hover:bg-stone-50 transition-colors flex items-center gap-2.5"
+                className="w-full text-left px-3 py-2 text-body-ui text-[#292524] hover:bg-stone-50 transition-colors flex items-center gap-2.5 min-h-[38px]"
               >
                 <FileCode2 className="w-4 h-4 text-[#57534E]" strokeWidth={1.75} />
                 <span>JSON State Bàn giao</span>
@@ -231,7 +231,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                     onToggleFocusMode();
                     setIsMoreOpen(false);
                   }}
-                  className="w-full text-left px-3 py-2 text-[13px] text-[#292524] hover:bg-stone-50 transition-colors flex items-center gap-2.5"
+                  className="w-full text-left px-3 py-2 text-body-ui text-[#292524] hover:bg-stone-50 transition-colors flex items-center gap-2.5 min-h-[38px]"
                 >
                   {isFocusMode ? (
                     <>
@@ -251,7 +251,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                   onOpenHandover();
                   setIsMoreOpen(false);
                 }}
-                className="w-full text-left px-3 py-2 text-[13px] text-[#292524] hover:bg-stone-50 transition-colors flex items-center gap-2.5"
+                className="w-full text-left px-3 py-2 text-body-ui text-[#292524] hover:bg-stone-50 transition-colors flex items-center gap-2.5 min-h-[38px]"
               >
                 <FileCode2 className="w-4 h-4 text-[#78716C]" strokeWidth={1.75} />
                 <span>Xem dữ liệu phiên (JSON)</span>

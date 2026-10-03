@@ -35,16 +35,16 @@ export const tokens = {
   },
   typography: {
     fonts: {
-      ui: "'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-      literary: "'Lora', Georgia, Cambria, 'Times New Roman', serif",
+      ui: '"Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif',
+      literary: '"Lora", "Times New Roman", Georgia, serif',
     },
     scale: {
-      pageTitle: { size: '28px', weight: '600', lineHeight: '1.2' },
-      sectionTitle: { size: '20px', weight: '600', lineHeight: '1.3' },
+      pageTitle: { size: '28px', weight: '600', lineHeight: '1.3' },
+      sectionTitle: { size: '20px', weight: '600', lineHeight: '1.4' },
       cardTitle: { size: '16px', weight: '500', lineHeight: '1.4' },
-      bodyUI: { size: '14px', weight: '400', lineHeight: '1.5' },
+      bodyUI: { size: '15px', weight: '400', lineHeight: '1.55' },
+      metadata: { size: '13px', weight: '400', lineHeight: '1.5' },
       document: { size: '18px', weight: '400', lineHeight: '1.8' },
-      metadata: { size: '12px', weight: '400', lineHeight: '1.4' },
     }
   },
   spacing: [4, 8, 12, 16, 24, 32, 48],

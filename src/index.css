@@ -1,18 +1,98 @@
 @import "tailwindcss";
+@import "./fonts.css";
 
 @layer base {
   :root {
-    --font-serif: 'Lora', Georgia, Cambria, 'Times New Roman', serif;
-    --font-sans: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    /* 1. Font Stack */
+    --font-ui: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    --font-literary: "Lora", "Times New Roman", Georgia, serif;
     --font-mono: 'JetBrains Mono', monospace;
+
+    /* Backward compatibility mappings */
+    --font-sans: var(--font-ui);
+    --font-serif: var(--font-literary);
+
+    /* 2. Typography System Tokens */
+    --text-page-title-size: 28px;
+    --text-page-title-weight: 600;
+    --text-page-title-line: 1.3;
+
+    --text-section-size: 20px;
+    --text-section-weight: 600;
+    --text-section-line: 1.4;
+
+    --text-card-title-size: 16px;
+    --text-card-title-weight: 500;
+    --text-card-title-line: 1.4;
+
+    --text-body-size: 15px;
+    --text-body-weight: 400;
+    --text-body-line: 1.55;
+
+    --text-meta-size: 13px;
+    --text-meta-weight: 400;
+    --text-meta-line: 1.5;
+
+    --text-document-size: 18px;
+    --text-document-weight: 400;
+    --text-document-line: 1.8;
+
+    /* 3. Viewport-First Desktop Layout Tokens */
+    --topbar-height: 56px;
+    --sidebar-width: 248px;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  html {
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   body {
-    font-family: var(--font-sans);
+    font-family: var(--font-ui);
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-line);
     color: #292524; /* Charcoal */
     background-color: #FAF8F5; /* Warm Ivory */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: normal;
+    word-break: normal;
+    overflow-wrap: break-word;
+    hyphens: none;
+    font-feature-settings: "kern" 1, "liga" 1;
+  }
+
+  /* Form & Interactive Controls Typography Inheritance */
+  input,
+  textarea,
+  select,
+  button {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    letter-spacing: normal;
+  }
+
+  /* Text control minimum heights and safe vertical paddings for Vietnamese diacritics */
+  input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
+  select {
+    min-height: 40px;
+    padding-block: 8px;
+    line-height: 1.4;
+  }
+
+  textarea {
+    line-height: 1.55;
+    padding-block: 8px;
   }
 
   /* Custom Literary Selection Highlight (Warm Amber) */
@@ -41,12 +121,97 @@
   }
 }
 
-.font-serif {
-  font-family: 'Lora', Georgia, Cambria, serif;
+/* Font Family Utilities */
+.font-ui,
+.font-sans {
+  font-family: var(--font-ui);
 }
 
-.font-sans {
-  font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+.font-literary,
+.font-serif {
+  font-family: var(--font-literary);
+}
+
+/* Inline mixed font compensation (balancing optical x-height between Be Vietnam Pro & Lora) */
+.font-literary-inline {
+  font-family: var(--font-literary);
+  font-size: 0.96em;
+}
+
+/* Numeric Typography (tabular nums for aligned scores, times, percentages, and matrix figures) */
+.tabular-nums,
+[data-tabular-nums] {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Safe Text Truncation with Vietnamese Diacritic Buffer */
+.truncate-safe,
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-block: 2px;
+  line-height: max(1.4, inherit);
+}
+
+/* Typography Hierarchy Tokens & Helper Classes */
+.text-page-title {
+  font-size: var(--text-page-title-size);
+  font-weight: var(--text-page-title-weight);
+  line-height: var(--text-page-title-line);
+  color: #292524;
+  letter-spacing: normal;
+  text-wrap: balance;
+}
+
+.text-section-title,
+.text-section {
+  font-size: var(--text-section-size);
+  font-weight: var(--text-section-weight);
+  line-height: var(--text-section-line);
+  color: #292524;
+  letter-spacing: normal;
+  text-wrap: balance;
+}
+
+.text-card-title {
+  font-size: var(--text-card-title-size);
+  font-weight: var(--text-card-title-weight);
+  line-height: var(--text-card-title-line);
+  color: #292524;
+  letter-spacing: normal;
+  text-wrap: balance;
+}
+
+.text-body-ui,
+.text-body {
+  font-size: var(--text-body-size);
+  font-weight: var(--text-body-weight);
+  line-height: var(--text-body-line);
+  color: #292524;
+  letter-spacing: normal;
+  text-wrap: pretty;
+}
+
+.text-metadata,
+.text-meta {
+  font-size: var(--text-meta-size);
+  font-weight: var(--text-meta-weight);
+  line-height: var(--text-meta-line);
+  color: #57534E;
+  letter-spacing: normal;
+  text-wrap: pretty;
+}
+
+.text-document {
+  font-family: var(--font-literary);
+  font-size: var(--text-document-size);
+  font-weight: var(--text-document-weight);
+  line-height: var(--text-document-line);
+  color: #292524;
+  max-width: 760px;
+  letter-spacing: normal;
+  text-wrap: pretty;
 }
 
 /* 3 Card Styles */
@@ -73,14 +238,18 @@
   border-color: #A8A29E;
 }
 
-/* 4 Button Styles */
+/* 4 Button Styles - Standardized Safe Heights & Line Heights */
 .btn-primary {
   background-color: #7C2D37;
   color: #FFFFFF;
+  font-family: inherit;
   font-weight: 500;
   border-radius: 8px;
+  min-height: 40px;
   padding: 8px 16px;
   font-size: 14px;
+  line-height: 1.4;
+  letter-spacing: normal;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -99,10 +268,14 @@
   background-color: #FFFFFF;
   color: #292524;
   border: 1px solid #E7E5E4;
+  font-family: inherit;
   font-weight: 500;
   border-radius: 8px;
+  min-height: 40px;
   padding: 8px 16px;
   font-size: 14px;
+  line-height: 1.4;
+  letter-spacing: normal;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -117,10 +290,14 @@
 .btn-ghost {
   background-color: transparent;
   color: #78716C;
+  font-family: inherit;
   font-weight: 500;
   border-radius: 8px;
+  min-height: 40px;
   padding: 8px 12px;
   font-size: 14px;
+  line-height: 1.4;
+  letter-spacing: normal;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -135,10 +312,14 @@
 .btn-danger {
   background-color: transparent;
   color: #B91C1C;
+  font-family: inherit;
   font-weight: 500;
   border-radius: 8px;
+  min-height: 40px;
   padding: 8px 12px;
   font-size: 14px;
+  line-height: 1.4;
+  letter-spacing: normal;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -149,45 +330,12 @@
   background-color: #FEF2F2;
 }
 
-/* Typography Hierarchy Helpers */
-.text-page-title {
-  font-size: 28px;
-  line-height: 1.25;
-  font-weight: 600;
-  color: #292524;
-}
-
-.text-section-title {
-  font-size: 20px;
-  line-height: 1.35;
-  font-weight: 600;
-  color: #292524;
-}
-
-.text-card-title {
-  font-size: 16px;
+/* Compact button for tight toolbars and dropdowns */
+.btn-compact {
+  min-height: 36px;
+  padding: 6px 12px;
+  font-size: 13px;
   line-height: 1.4;
-  font-weight: 500;
-  color: #292524;
-}
-
-.text-body-ui {
-  font-size: 14px;
-  line-height: 1.5;
-  color: #292524;
-}
-
-.text-document {
-  font-family: var(--font-serif);
-  font-size: 18px;
-  line-height: 1.8;
-  color: #292524;
-}
-
-.text-metadata {
-  font-size: 12px;
-  line-height: 1.4;
-  color: #57534E;
 }
 
 @media print {
@@ -211,3 +359,52 @@
     break-before: page;
   }
 }
+
+/* ========================================================================= */
+/* 29. VIEWPORT-FIRST DESKTOP LAYOUT UTILITIES                               */
+/* ========================================================================= */
+
+.app-shell {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.workspace-viewport {
+  height: calc(100vh - var(--topbar-height));
+  min-height: 0;
+  overflow: hidden;
+}
+
+.panel-scroll {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.table-scroll {
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+/* Height-based responsive rules: Optimized for 1366x768 and compact displays */
+@media (max-height: 800px) {
+  .compact-hide-on-short {
+    display: none !important;
+  }
+
+  .compact-short-p {
+    padding: 0.75rem !important;
+  }
+
+  .compact-short-gap {
+    gap: 0.5rem !important;
+  }
+
+  .compact-short-m {
+    margin-top: 0.25rem !important;
+    margin-bottom: 0.25rem !important;
+  }
+}
+

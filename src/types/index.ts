@@ -8,7 +8,8 @@ export type ActiveModule =
   | 'slides' 
   | 'exam' 
   | 'matrix' 
-  | 'export_handover';
+  | 'export_handover'
+  | 'typography_test';
 
 export interface AdministrativeInfo {
   department: string; // Sở GD&ĐT
