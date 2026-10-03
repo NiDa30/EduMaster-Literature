@@ -1,36 +1,30 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { 
-  BookOpen, 
-  Feather, 
   Highlighter, 
   MessageSquarePlus, 
   HelpCircle, 
-  Presentation, 
-  CheckSquare, 
+  MoreHorizontal, 
   Maximize2, 
   Minimize2, 
-  ChevronLeft, 
   ChevronRight, 
-  Bookmark, 
-  Sparkles, 
+  ChevronDown,
   Trash2, 
-  Plus, 
-  Eye, 
-  Share2, 
-  Tag, 
-  Heart, 
+  Bookmark, 
   Compass, 
-  Quote,
-  Lightbulb,
-  FileText,
-  X
+  Heart, 
+  Tag, 
+  Sparkles, 
+  FileText, 
+  Presentation, 
+  CheckSquare, 
+  X,
+  Share2,
+  BookOpen
 } from 'lucide-react';
 import { 
   LiteratureLesson, 
   TextAnnotation, 
-  ActiveModule, 
-  SlideItem, 
-  LiteratureQuestionItem 
+  ActiveModule 
 } from '../../types';
 
 interface LiteratureReaderProps {
@@ -40,6 +34,8 @@ interface LiteratureReaderProps {
   onAddSlideFromQuote: (quote: string, author: string) => void;
   onAddQuestionFromPassage: (passage: string) => void;
   onSetExamPassage: (passage: string) => void;
+  isFocusMode?: boolean;
+  onToggleFocusMode?: () => void;
 }
 
 export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
@@ -48,71 +44,88 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
   setActiveModule,
   onAddSlideFromQuote,
   onAddQuestionFromPassage,
-  onSetExamPassage
+  onSetExamPassage,
+  isFocusMode: externalFocusMode,
+  onToggleFocusMode: externalToggleFocusMode
 }) => {
-  const [isFocusMode, setIsFocusMode] = useState(false);
-  const [leftCollapsed, setLeftCollapsed] = useState(false);
-  const [rightCollapsed, setRightCollapsed] = useState(false);
-  const [activeOutlineSection, setActiveOutlineSection] = useState<string>('text');
-  const [activeRightTab, setActiveRightTab] = useState<'content' | 'art' | 'imagery' | 'keywords' | 'emotion' | 'connection' | 'questions'>('content');
-  
-  // Text selection state & floating toolbar
-  const [selectedText, setSelectedText] = useState('');
-  const [floatingPos, setFloatingPos] = useState<{ x: number; y: number } | null>(null);
-  const [showAnnotationModal, setShowAnnotationModal] = useState(false);
-  const [annotationNote, setAnnotationNote] = useState('');
-  const [annotationColor, setAnnotationColor] = useState<'amber' | 'emerald' | 'blue' | 'purple' | 'rose'>('amber');
-  const [annotationType, setAnnotationType] = useState<TextAnnotation['type']>('highlight');
-  const [notificationToast, setNotificationToast] = useState<string | null>(null);
+  // Local Focus Mode fallback if not controlled from parent
+  const [internalFocusMode, setInternalFocusMode] = useState(false);
+  const isFocusMode = externalFocusMode !== undefined ? externalFocusMode : internalFocusMode;
+  const toggleFocusMode = externalToggleFocusMode || (() => setInternalFocusMode(!internalFocusMode));
 
-  const readerContainerRef = useRef<HTMLDivElement>(null);
+  // Layout panels toggle (on desktop)
+  const [isOutlineOpen, setIsOutlineOpen] = useState(true);
+  const [isAnalysisOpen, setIsAnalysisOpen] = useState(true);
+
+  // Left Column tab: 'outline' | 'annotations'
+  const [outlineTab, setOutlineTab] = useState<'outline' | 'annotations'>('outline');
+  const [selectedOutlineSection, setSelectedOutlineSection] = useState<string>('text');
+
+  // Right Column tab: 'analysis' | 'notes' | 'links'
+  const [activeRightTab, setActiveRightTab] = useState<'analysis' | 'notes' | 'links'>('analysis');
+
+  // Analysis sub-sections accordion state
+  const [openAnalysisSection, setOpenAnalysisSection] = useState<'content' | 'art' | 'imagery' | 'keywords' | 'emotion'>('content');
+
+  // Text Selection & Floating Contextual Toolbar state
+  const [selectedText, setSelectedText] = useState('');
+  const [toolbarPos, setToolbarPos] = useState<{ x: number; y: number } | null>(null);
+  const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
+  const [showAnnotationModal, setShowAnnotationModal] = useState(false);
+  const [annotationInputNote, setAnnotationInputNote] = useState('');
+  const [annotationColor, setAnnotationColor] = useState<'amber' | 'emerald' | 'blue' | 'purple' | 'rose'>('amber');
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const documentContainerRef = useRef<HTMLDivElement>(null);
 
   const showToast = (msg: string) => {
-    setNotificationToast(msg);
-    setTimeout(() => setNotificationToast(null), 2500);
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 2400);
   };
 
-  // Handle mouseup for text selection
-  const handleTextSelection = () => {
+  // Text selection handler
+  const handleSelection = () => {
     const selection = window.getSelection();
     if (!selection || selection.isCollapsed || !selection.toString().trim()) {
-      setFloatingPos(null);
+      setToolbarPos(null);
       setSelectedText('');
+      setIsMoreMenuOpen(false);
       return;
     }
 
     const text = selection.toString().trim();
-    if (text.length > 2) {
+    if (text.length >= 2) {
       const range = selection.getRangeAt(0);
       const rect = range.getBoundingClientRect();
       setSelectedText(text);
-      setFloatingPos({
-        x: Math.max(10, rect.left + rect.width / 2 - 160),
-        y: Math.max(10, rect.top - 55)
+      setToolbarPos({
+        x: Math.max(16, rect.left + rect.width / 2 - 130),
+        y: Math.max(16, rect.top - 48)
       });
+      setIsMoreMenuOpen(false);
     }
   };
 
-  // Add annotation / highlight
+  // Save annotation or highlight
   const handleSaveAnnotation = (type: TextAnnotation['type'], defaultNote = '') => {
     if (!selectedText) return;
-    const newAnno: TextAnnotation = {
+    const newAnnotation: TextAnnotation = {
       id: `anno-${Date.now()}`,
       textSnippet: selectedText,
       type: type,
-      note: annotationNote || defaultNote || `Đoạn trích: "${selectedText.slice(0, 30)}..."`,
+      note: annotationInputNote || defaultNote || `Đoạn trích: "${selectedText.slice(0, 30)}..."`,
       color: annotationColor,
       timestamp: 'Vừa xong'
     };
 
     onUpdateLesson({
-      annotations: [newAnno, ...lesson.annotations]
+      annotations: [newAnnotation, ...lesson.annotations]
     });
 
-    setFloatingPos(null);
+    setToolbarPos(null);
     setShowAnnotationModal(false);
-    setAnnotationNote('');
-    showToast(`Đã thêm ghi chú cho: "${selectedText.slice(0, 25)}..."`);
+    setAnnotationInputNote('');
+    showToast(`Đã lưu chú thích cho: "${selectedText.slice(0, 24)}..."`);
   };
 
   const handleDeleteAnnotation = (id: string) => {
@@ -123,364 +136,328 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
   };
 
   // Outline Sections
-  const outlineItems = [
-    { id: 'author', label: '1. Tác giả & Bối cảnh', icon: Feather },
-    { id: 'text', label: '2. Toàn văn Tác phẩm', icon: BookOpen },
-    { id: 'doc_hieu', label: '3. Đọc hiểu chi tiết', icon: Sparkles },
-    { id: 'phan_tich', label: '4. Phân tích thi pháp', icon: Compass },
-    { id: 'tong_ket', label: '5. Tổng kết giá trị', icon: Bookmark },
-    { id: 'luyen_tap', label: '6. Luyện tập & Vận dụng', icon: CheckSquare }
+  const outlineList = [
+    { id: 'author', label: 'Tác giả & Hoàn cảnh ra đời' },
+    { id: 'text', label: 'Văn bản tác phẩm' },
+    { id: 'doc_hieu', label: 'Đọc hiểu chi tiết' },
+    { id: 'phan_tich', label: 'Phân tích thi pháp' },
+    { id: 'tong_ket', label: 'Tổng kết giá trị' }
   ];
 
   return (
-    <div className={`space-y-4 ${isFocusMode ? 'fixed inset-0 z-50 bg-[#FAF8F5] p-6 md:p-12 overflow-y-auto' : ''}`}>
-      {/* Top Bar Controls */}
-      <div className="bg-white p-4 md:p-5 rounded-2xl border border-stone-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#7C2D37]/10 text-[#7C2D37] flex items-center justify-center font-bold">
-            <Feather className="w-5 h-5" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold px-2 py-0.5 rounded bg-stone-100 text-stone-700">
-                {lesson.genre === 'poetry' ? 'Thơ trữ tình' : lesson.genre === 'story' ? 'Truyện ngắn' : 'Văn nghị luận'}
-              </span>
-              <span className="text-xs text-stone-400">·</span>
-              <span className="text-xs text-stone-600">{lesson.grade} ({lesson.textbook})</span>
-            </div>
-            <h1 className="text-xl font-bold font-serif text-stone-900 tracking-tight">
-              {lesson.title} — {lesson.author}
-            </h1>
-          </div>
-        </div>
-
-        {/* View Controls & Action buttons */}
-        <div className="flex items-center gap-2 self-start md:self-auto">
-          <button
-            onClick={() => setIsFocusMode(!isFocusMode)}
-            className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
-              isFocusMode 
-                ? 'bg-amber-600 text-white shadow-sm' 
-                : 'bg-stone-100 hover:bg-stone-200 text-stone-700 border border-stone-300'
-            }`}
-            title="Chế độ Đọc sách tập trung (ẩn thanh công cụ)"
-          >
-            {isFocusMode ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
-            <span>{isFocusMode ? 'Thoát Focus Mode' : 'Reading Focus Mode'}</span>
-          </button>
-
-          <button
-            onClick={() => setActiveModule('genre_analysis')}
-            className="px-3.5 py-2 bg-stone-100 hover:bg-stone-200 text-stone-800 rounded-xl text-xs font-semibold flex items-center gap-1.5 border border-stone-300 transition"
-          >
-            <Compass className="w-3.5 h-3.5 text-[#7C2D37]" />
-            <span>Phân tích thể loại</span>
-          </button>
-
-          <button
-            onClick={() => setActiveModule('khbd')}
-            className="px-3.5 py-2 bg-[#7C2D37] hover:bg-[#68232D] text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-sm transition"
-          >
-            <FileText className="w-3.5 h-3.5" />
-            <span>Chuyển sang KHBD 5512</span>
-          </button>
-        </div>
-      </div>
-
+    <div className={`relative min-h-[calc(100vh-56px)] flex flex-col ${isFocusMode ? 'bg-[#FAF8F5]' : ''}`}>
       {/* Toast Notification */}
-      {notificationToast && (
-        <div className="fixed bottom-6 right-6 z-50 bg-stone-900 text-white px-4 py-2.5 rounded-xl shadow-lg text-xs font-medium flex items-center gap-2 animate-fade-in border border-stone-700">
-          <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-          <span>{notificationToast}</span>
+      {toastMessage && (
+        <div className="fixed bottom-6 right-6 z-50 bg-[#292524] text-white text-[13px] px-3.5 py-2 rounded-lg shadow-lg flex items-center gap-2 border border-stone-700 animate-fade-in">
+          <Sparkles className="w-3.5 h-3.5 text-amber-400" strokeWidth={1.75} />
+          <span>{toastMessage}</span>
         </div>
       )}
 
-      {/* 3-COLUMN DESKTOP WORKSPACE LAYOUT */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+      {/* Floating Toolbar when Focus Mode is active */}
+      {isFocusMode && (
+        <div className="fixed top-4 right-6 z-40 bg-white/90 backdrop-blur-xs border border-[#E7E5E4] rounded-full px-3 py-1.5 shadow-xs flex items-center gap-2 text-[13px]">
+          <span className="text-[#78716C] font-serif italic text-[12px]">Focus Mode</span>
+          <button
+            onClick={toggleFocusMode}
+            className="btn-ghost py-1 px-2 text-[12px] h-auto flex items-center gap-1"
+            title="Thoát chế độ tập trung"
+          >
+            <Minimize2 className="w-3.5 h-3.5" strokeWidth={1.75} />
+            <span>Thoát</span>
+          </button>
+        </div>
+      )}
+
+      {/* Main Workspace Body */}
+      <div className="flex-1 flex gap-6 items-start py-4">
         {/* ========================================================================= */}
-        {/* LEFT PANEL: OUTLINE BÀI HỌC (COL 1-3) */}
+        {/* CỘT 1: OUTLINE (240px) */}
         {/* ========================================================================= */}
         {!isFocusMode && (
-          <div className={`${leftCollapsed ? 'lg:col-span-1' : 'lg:col-span-3'} transition-all duration-200`}>
-            <div className="bg-white rounded-2xl border border-stone-200 p-4 shadow-xs sticky top-20">
-              <div className="flex items-center justify-between pb-3 mb-3 border-b border-stone-100">
-                <span className="text-xs font-bold font-serif text-stone-800 uppercase tracking-wider flex items-center gap-1.5">
-                  <Bookmark className="w-3.5 h-3.5 text-[#7C2D37]" />
-                  {!leftCollapsed && 'Cấu trúc bài học'}
-                </span>
+          <aside 
+            className={`w-[240px] shrink-0 transition-all duration-200 ${
+              isOutlineOpen ? 'block' : 'hidden'
+            } hidden xl:block`}
+          >
+            <div className="card-surface p-3 sticky top-20 text-[13px]">
+              {/* Outline / Annotations Tab Selector */}
+              <div className="flex p-0.5 bg-stone-100 rounded-lg mb-3">
                 <button
-                  onClick={() => setLeftCollapsed(!leftCollapsed)}
-                  className="p-1 text-stone-400 hover:text-stone-700 rounded-md hover:bg-stone-100"
-                  title={leftCollapsed ? 'Mở rộng dàn ý' : 'Thu gọn dàn ý'}
+                  onClick={() => setOutlineTab('outline')}
+                  className={`flex-1 py-1 rounded-md text-[12px] font-medium transition-colors ${
+                    outlineTab === 'outline' ? 'bg-white text-[#292524] shadow-2xs' : 'text-[#78716C]'
+                  }`}
                 >
-                  {leftCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+                  Cấu trúc
+                </button>
+                <button
+                  onClick={() => setOutlineTab('annotations')}
+                  className={`flex-1 py-1 rounded-md text-[12px] font-medium transition-colors ${
+                    outlineTab === 'annotations' ? 'bg-white text-[#7C2D37] shadow-2xs' : 'text-[#78716C]'
+                  }`}
+                >
+                  Chú thích ({lesson.annotations.length})
                 </button>
               </div>
 
-              {!leftCollapsed ? (
-                <div className="space-y-1 text-xs">
-                  {outlineItems.map((item) => {
-                    const Icon = item.icon;
-                    const isActive = activeOutlineSection === item.id;
+              {outlineTab === 'outline' ? (
+                <div className="space-y-1">
+                  {outlineList.map((item, index) => {
+                    const isActive = selectedOutlineSection === item.id;
                     return (
                       <button
                         key={item.id}
-                        onClick={() => setActiveOutlineSection(item.id)}
-                        className={`w-full text-left px-3 py-2 rounded-xl transition flex items-center gap-2.5 font-medium ${
+                        onClick={() => setSelectedOutlineSection(item.id)}
+                        className={`w-full text-left px-2.5 py-1.5 rounded-lg transition-colors flex items-center gap-2 ${
                           isActive
-                            ? 'bg-[#7C2D37]/10 text-[#7C2D37] font-semibold border-l-2 border-[#7C2D37]'
-                            : 'text-stone-600 hover:text-stone-900 hover:bg-stone-50'
+                            ? 'bg-[#FBF4F5] text-[#7C2D37] font-medium'
+                            : 'text-[#57534E] hover:text-[#292524] hover:bg-stone-50'
                         }`}
                       >
-                        <Icon className="w-4 h-4 shrink-0" />
+                        <span className="text-[11px] text-[#78716C] w-4">{index + 1}.</span>
                         <span className="truncate">{item.label}</span>
                       </button>
                     );
                   })}
-
-                  <div className="mt-4 pt-3 border-t border-stone-100">
-                    <div className="text-[11px] font-semibold text-stone-500 uppercase tracking-wider mb-2">
-                      Ghi chú đã tạo ({lesson.annotations.length})
-                    </div>
-                    <div className="max-h-48 overflow-y-auto space-y-1.5 pr-1">
-                      {lesson.annotations.length === 0 ? (
-                        <p className="text-[11px] text-stone-400 italic">Bôi đen văn bản để thêm chú thích hoặc highlight.</p>
-                      ) : (
-                        lesson.annotations.map((a) => (
-                          <div
-                            key={a.id}
-                            className="p-2 rounded-lg bg-stone-50 border border-stone-200 text-[11px] hover:border-amber-300 transition flex items-start justify-between gap-1 group"
-                          >
-                            <div>
-                              <div className="font-semibold text-stone-800 line-clamp-1">"{a.textSnippet}"</div>
-                              <div className="text-stone-500 line-clamp-1 mt-0.5">{a.note}</div>
-                            </div>
-                            <button
-                              onClick={() => handleDeleteAnnotation(a.id)}
-                              className="text-stone-300 hover:text-red-600 opacity-0 group-hover:opacity-100 transition p-0.5"
-                              title="Xóa ghi chú"
-                            >
-                              <Trash2 className="w-3 h-3" />
-                            </button>
-                          </div>
-                        ))
-                      )}
-                    </div>
-                  </div>
                 </div>
               ) : (
-                <div className="flex flex-col items-center gap-2 py-2">
-                  {outlineItems.map((item) => {
-                    const Icon = item.icon;
-                    return (
-                      <button
-                        key={item.id}
-                        onClick={() => {
-                          setLeftCollapsed(false);
-                          setActiveOutlineSection(item.id);
-                        }}
-                        className="p-2 text-stone-600 hover:text-[#7C2D37] hover:bg-stone-100 rounded-lg transition"
-                        title={item.label}
+                <div className="space-y-2 max-h-[380px] overflow-y-auto pr-1">
+                  {lesson.annotations.length === 0 ? (
+                    <p className="text-[12px] text-[#78716C] italic p-2">
+                      Chưa có chú thích. Bôi đen văn bản để thêm ghi chú.
+                    </p>
+                  ) : (
+                    lesson.annotations.map((anno) => (
+                      <div
+                        key={anno.id}
+                        className="p-2.5 rounded-lg border border-[#E7E5E4] bg-stone-50/70 hover:bg-white text-[12px] group transition-colors"
                       >
-                        <Icon className="w-4 h-4" />
-                      </button>
-                    );
-                  })}
+                        <div className="flex items-start justify-between gap-1">
+                          <span className="font-serif font-medium text-[#292524] line-clamp-1">
+                            "{anno.textSnippet}"
+                          </span>
+                          <button
+                            onClick={() => handleDeleteAnnotation(anno.id)}
+                            className="text-stone-400 hover:text-red-700 opacity-0 group-hover:opacity-100 transition-opacity p-0.5"
+                            title="Xóa chú thích"
+                          >
+                            <Trash2 className="w-3 h-3" strokeWidth={1.75} />
+                          </button>
+                        </div>
+                        <p className="text-[#57534E] mt-1 line-clamp-2">
+                          {anno.note}
+                        </p>
+                      </div>
+                    ))
+                  )}
                 </div>
               )}
             </div>
-          </div>
+          </aside>
         )}
 
         {/* ========================================================================= */}
-        {/* CENTER PANEL: DOCUMENT READER / EDITOR (COL 4-8 or FULL IN FOCUS MODE) */}
+        {/* CỘT 2: DOCUMENT AREA (TRANG SÁCH CHÍNH - 760–820px, LORA 18px / 1.8) */}
         {/* ========================================================================= */}
-        <div 
-          className={`transition-all duration-200 ${
-            isFocusMode 
-              ? 'max-w-3xl mx-auto w-full' 
-              : leftCollapsed && rightCollapsed
-              ? 'lg:col-span-10'
-              : leftCollapsed || rightCollapsed
-              ? 'lg:col-span-8'
-              : 'lg:col-span-6'
-          }`}
-        >
-          {/* Reader Document Container */}
-          <div 
-            ref={readerContainerRef}
-            onMouseUp={handleTextSelection}
-            className="bg-[#FAF8F5] rounded-3xl border border-stone-200 p-8 md:p-12 shadow-sm text-stone-900 relative selection:bg-amber-200 selection:text-stone-900"
+        <main className="flex-1 flex justify-center min-w-0">
+          <article 
+            ref={documentContainerRef}
+            onMouseUp={handleSelection}
+            className={`w-full max-w-[800px] bg-white border border-[#E7E5E4] rounded-2xl p-8 md:p-14 transition-all duration-200 select-text ${
+              isFocusMode ? 'max-w-[760px] shadow-sm' : ''
+            }`}
           >
-            {/* Author & Historical Context Box (Only in non-text sections or toggled) */}
-            {activeOutlineSection === 'author' && (
-              <div className="mb-8 p-6 rounded-2xl bg-white border border-stone-200 space-y-4">
-                <div className="flex items-center gap-2 text-xs font-semibold text-[#7C2D37] uppercase">
-                  <Feather className="w-4 h-4" />
-                  Tiểu sử tác giả & Hoàn cảnh sáng tác
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold font-serif text-stone-900">{lesson.author}</h3>
-                  <p className="text-sm text-stone-700 leading-relaxed mt-1 font-serif">{lesson.authorBio}</p>
-                </div>
-                <div className="pt-3 border-t border-stone-100">
-                  <h4 className="text-xs font-bold text-stone-800 uppercase">Hoàn cảnh ra đời tác phẩm:</h4>
-                  <p className="text-xs text-stone-600 leading-relaxed mt-1">{lesson.historicalContext}</p>
+            {/* Outline: Context Box when "Tác giả" is selected */}
+            {selectedOutlineSection === 'author' && !isFocusMode && (
+              <div className="card-highlight p-5 mb-8 text-[14px]">
+                <h3 className="font-medium text-[#7C2D37] text-[13px] uppercase tracking-wider mb-1">
+                  Tác giả & Bối cảnh lịch sử
+                </h3>
+                <p className="text-[#292524] leading-relaxed">
+                  {lesson.authorBio}
+                </p>
+                <div className="mt-2 pt-2 border-t border-[#E7E5E4] text-[13px] text-[#57534E]">
+                  <strong>Hoàn cảnh ra đời:</strong> {lesson.historicalContext}
                 </div>
               </div>
             )}
 
-            {/* Document Header */}
-            <div className="text-center pb-8 mb-8 border-b border-stone-200">
-              <span className="text-xs uppercase tracking-widest text-[#7C2D37] font-semibold">
-                VĂN BẢN ĐỌC HIỂU
-              </span>
-              <h2 className="text-2xl md:text-3xl font-bold font-serif text-stone-900 tracking-tight mt-1.5">
+            {/* Document Book Header */}
+            <header className="text-center pb-8 mb-8 border-b border-[#E7E5E4]">
+              <div className="text-[12px] text-[#78716C] uppercase tracking-widest font-medium mb-1">
+                {lesson.genre === 'poetry' ? 'Văn bản thơ' : lesson.genre === 'story' ? 'Văn bản truyện' : 'Văn bản nghị luận'} · {lesson.grade} ({lesson.textbook})
+              </div>
+              <h1 className="font-serif text-[30px] font-semibold text-[#292524] tracking-tight">
                 {lesson.title}
-              </h2>
-              <p className="text-sm italic font-serif text-stone-600 mt-1">
-                Tác giả: {lesson.author}
+              </h1>
+              <p className="font-serif italic text-[16px] text-[#57534E] mt-1">
+                {lesson.author}
               </p>
-              <p className="text-xs text-stone-400 mt-2 font-mono">
-                Bôi đen từ hoặc câu thơ để kích hoạt thanh công cụ phân tích và chú giải ngữ văn
-              </p>
-            </div>
+            </header>
 
-            {/* Document Body with rich typography */}
-            <div className="space-y-8 font-serif text-base md:text-lg leading-loose text-stone-800">
-              {lesson.textSections.map((sec, sIdx) => (
-                <div key={sec.id} className="relative group">
-                  <div className="text-xs font-sans font-semibold text-stone-400 uppercase tracking-wider mb-2 flex items-center justify-between">
-                    <span>{sec.title}</span>
-                    <button
-                      onClick={() => onAddQuestionFromPassage(sec.content)}
-                      className="opacity-0 group-hover:opacity-100 transition text-[11px] text-[#7C2D37] hover:underline flex items-center gap-1 font-sans"
-                    >
-                      <HelpCircle className="w-3 h-3" /> Tạo câu hỏi đoạn này
-                    </button>
-                  </div>
-
-                  <div className="p-4 rounded-2xl transition hover:bg-stone-100/50">
-                    <p className="whitespace-pre-line text-stone-900 font-serif leading-relaxed">
+            {/* Document Body: Pure, serene reading experience */}
+            <div className="text-document space-y-7">
+              {lesson.textSections && lesson.textSections.length > 0 ? (
+                lesson.textSections.map((sec) => (
+                  <section key={sec.id} className="relative">
+                    <p className="whitespace-pre-line text-[#292524]">
                       {sec.content}
                     </p>
-                  </div>
-                </div>
-              ))}
+                  </section>
+                ))
+              ) : (
+                <p className="whitespace-pre-line text-[#292524]">
+                  {lesson.fullText}
+                </p>
+              )}
             </div>
 
-            {/* Bottom Citation & Metadata */}
-            <div className="mt-12 pt-6 border-t border-stone-200 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-500 font-sans gap-2">
-              <span>Nguồn: SGK Ngữ văn {lesson.grade} ({lesson.textbook})</span>
-              <span className="flex items-center gap-1.5">
-                <Bookmark className="w-3.5 h-3.5 text-amber-600" />
-                {lesson.annotations.length} chú thích đang hoạt động
-              </span>
-            </div>
-          </div>
-        </div>
+            {/* Book Page Footer / Source */}
+            <footer className="mt-12 pt-6 border-t border-[#E7E5E4] flex flex-col sm:flex-row items-center justify-between text-[12px] text-[#78716C] gap-2">
+              <span>Theo SGK Ngữ văn {lesson.grade}, {lesson.textbook}</span>
+              <span>{lesson.annotations.length} chú thích đang lưu</span>
+            </footer>
+          </article>
+        </main>
 
         {/* ========================================================================= */}
-        {/* RIGHT PANEL: CONTEXTUAL ANALYSIS PANEL (COL 9-12) */}
+        {/* CỘT 3: ANALYSIS PANEL (320px - 3 TABS: PHÂN TÍCH | GHI CHÚ | LIÊN KẾT) */}
         {/* ========================================================================= */}
         {!isFocusMode && (
-          <div className={`${rightCollapsed ? 'lg:col-span-1' : 'lg:col-span-3'} transition-all duration-200`}>
-            <div className="bg-white rounded-2xl border border-stone-200 p-4 shadow-xs sticky top-20 space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-stone-100">
-                <span className="text-xs font-bold font-serif text-stone-800 uppercase tracking-wider flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-                  {!rightCollapsed && 'Bảng phân tích ngữ cảnh'}
+          <aside 
+            className={`w-[320px] shrink-0 transition-all duration-200 ${
+              isAnalysisOpen ? 'block' : 'hidden'
+            } hidden lg:block`}
+          >
+            <div className="card-surface p-4 sticky top-20 text-[13px] space-y-4">
+              {/* Header with ONE Primary Action: "Chú thích" */}
+              <div className="flex items-center justify-between pb-2 border-b border-[#E7E5E4]">
+                <span className="font-medium text-[14px] text-[#292524]">
+                  Không gian nghiên cứu
                 </span>
                 <button
-                  onClick={() => setRightCollapsed(!rightCollapsed)}
-                  className="p-1 text-stone-400 hover:text-stone-700 rounded-md hover:bg-stone-100"
-                  title={rightCollapsed ? 'Mở rộng phân tích' : 'Thu gọn phân tích'}
+                  onClick={() => setShowAnnotationModal(true)}
+                  className="btn-primary py-1 px-2.5 text-[12px] h-7"
                 >
-                  {rightCollapsed ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                  <MessageSquarePlus className="w-3.5 h-3.5" strokeWidth={1.75} />
+                  <span>Chú thích</span>
                 </button>
               </div>
 
-              {!rightCollapsed && (
-                <>
-                  {/* Analysis Tabs */}
-                  <div className="flex flex-wrap gap-1 p-1 bg-stone-100 rounded-xl text-[11px] font-medium">
+              {/* 3 Tabs: Phân tích · Ghi chú · Liên kết */}
+              <div className="flex p-0.5 bg-stone-100 rounded-lg">
+                {[
+                  { id: 'analysis' as const, label: 'Phân tích' },
+                  { id: 'notes' as const, label: 'Ghi chú' },
+                  { id: 'links' as const, label: 'Liên kết' }
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveRightTab(tab.id)}
+                    className={`flex-1 py-1 rounded-md text-[12px] font-medium transition-colors ${
+                      activeRightTab === tab.id
+                        ? 'bg-white text-[#292524] shadow-2xs font-semibold'
+                        : 'text-[#78716C] hover:text-[#292524]'
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* TAB 1: PHÂN TÍCH (Nội dung, Nghệ thuật, Hình ảnh, Từ khóa, Mạch cảm xúc) */}
+              {activeRightTab === 'analysis' && (
+                <div className="space-y-3">
+                  {/* Sub-section buttons */}
+                  <div className="flex flex-wrap gap-1">
                     {[
-                      { id: 'content', label: 'Nội dung' },
-                      { id: 'art', label: 'Nghệ thuật' },
-                      { id: 'imagery', label: 'Hình ảnh' },
-                      { id: 'keywords', label: 'Từ khóa' },
-                      { id: 'emotion', label: 'Cảm xúc' }
-                    ].map((tab) => (
+                      { id: 'content' as const, label: 'Nội dung' },
+                      { id: 'art' as const, label: 'Nghệ thuật' },
+                      { id: 'imagery' as const, label: 'Hình ảnh' },
+                      { id: 'keywords' as const, label: 'Từ khóa' },
+                      { id: 'emotion' as const, label: 'Mạch cảm xúc' }
+                    ].map((sec) => (
                       <button
-                        key={tab.id}
-                        onClick={() => setActiveRightTab(tab.id as any)}
-                        className={`px-2.5 py-1 rounded-lg transition ${
-                          activeRightTab === tab.id
-                            ? 'bg-white text-stone-900 font-semibold shadow-2xs'
-                            : 'text-stone-600 hover:text-stone-900'
+                        key={sec.id}
+                        onClick={() => setOpenAnalysisSection(sec.id)}
+                        className={`px-2 py-1 rounded text-[12px] transition-colors ${
+                          openAnalysisSection === sec.id
+                            ? 'bg-[#FBF4F5] text-[#7C2D37] font-medium border border-[#7C2D37]/30'
+                            : 'bg-stone-50 text-[#57534E] hover:text-[#292524] border border-[#E7E5E4]'
                         }`}
                       >
-                        {tab.label}
+                        {sec.label}
                       </button>
                     ))}
                   </div>
 
-                  {/* Tab Body Content */}
-                  <div className="text-xs space-y-3 pt-1">
-                    {activeRightTab === 'content' && (
-                      <div className="space-y-3">
-                        <div className="p-3 rounded-xl bg-amber-50/50 border border-amber-200/60">
-                          <h4 className="font-bold text-amber-900 mb-1 flex items-center gap-1">
-                            <Bookmark className="w-3.5 h-3.5" /> Chủ đề cốt lõi:
-                          </h4>
-                          <p className="text-stone-700 leading-relaxed">
-                            {lesson.poetryAnalysis?.theme || lesson.storyAnalysis?.message || 'Cảm hứng nhân văn và lý tưởng sống cao đẹp của con người Việt Nam.'}
+                  {/* Section Content */}
+                  <div className="pt-2">
+                    {openAnalysisSection === 'content' && (
+                      <div className="space-y-2.5">
+                        <div className="p-3 bg-stone-50 rounded-lg border border-[#E7E5E4]">
+                          <span className="text-[11px] font-medium text-[#78716C] uppercase tracking-wider block mb-1">
+                            Chủ đề cốt lõi
+                          </span>
+                          <p className="text-[#292524] leading-relaxed">
+                            {lesson.poetryAnalysis?.theme || lesson.storyAnalysis?.themes?.join(', ') || 'Vẻ đẹp hào hoa, bi tráng của người lính trong kháng chiến.'}
                           </p>
                         </div>
-
-                        <div className="p-3 rounded-xl bg-stone-50 border border-stone-200">
-                          <h4 className="font-bold text-stone-800 mb-1">Giá trị nội dung:</h4>
-                          <p className="text-stone-600 leading-relaxed">
-                            {lesson.poetryAnalysis?.contentValue || 'Tái hiện chân thực bức tranh lịch sử và vẻ đẹp tâm hồn con người thời kháng chiến.'}
+                        <div className="p-3 bg-stone-50 rounded-lg border border-[#E7E5E4]">
+                          <span className="text-[11px] font-medium text-[#78716C] uppercase tracking-wider block mb-1">
+                            Giá trị nội dung
+                          </span>
+                          <p className="text-[#57534E] leading-relaxed">
+                            {lesson.poetryAnalysis?.contentValue || lesson.storyAnalysis?.message || 'Bức tượng đài bất tử về thế hệ trẻ sẵn sàng hy sinh vì độc lập Tổ quốc.'}
                           </p>
                         </div>
                       </div>
                     )}
 
-                    {activeRightTab === 'art' && (
-                      <div className="space-y-3">
-                        <div className="p-3 rounded-xl bg-purple-50/50 border border-purple-200/60">
-                          <h4 className="font-bold text-purple-900 mb-1">Biện pháp tu từ nổi bật:</h4>
-                          <ul className="list-disc pl-4 space-y-1 text-stone-700 leading-relaxed">
+                    {openAnalysisSection === 'art' && (
+                      <div className="space-y-2.5">
+                        <div className="p-3 bg-stone-50 rounded-lg border border-[#E7E5E4]">
+                          <span className="text-[11px] font-medium text-[#78716C] uppercase tracking-wider block mb-1">
+                            Biện pháp tu từ đặc sắc
+                          </span>
+                          <ul className="space-y-1 text-[#292524]">
                             {(lesson.poetryAnalysis?.rhetoricalDevices || [
-                              'Nhân hóa giàu tính biểu cảm',
-                              'Nói giảm nói tránh bất tử hóa cái chết',
-                              'Nghệ thuật tương phản đối lập'
+                              'Nhân hóa: súng ngửi trời, thác gầm thét',
+                              'Nói giảm nói tránh: anh về đất, không bước nữa',
+                              'Tương phản đối lập: rải rác biên cương >< chẳng tiếc đời xanh'
                             ]).map((dev, i) => (
-                              <li key={i}>{dev}</li>
+                              <li key={i} className="flex items-start gap-1.5">
+                                <span className="text-[#7C2D37] mt-0.5">•</span>
+                                <span>{dev}</span>
+                              </li>
                             ))}
                           </ul>
                         </div>
-
-                        <div className="p-3 rounded-xl bg-stone-50 border border-stone-200">
-                          <h4 className="font-bold text-stone-800 mb-1">Nhịp điệu & Giọng điệu:</h4>
-                          <p className="text-stone-600 leading-relaxed">
-                            {lesson.poetryAnalysis?.tone || 'Hào hùng, bi tráng, tha thiết hoài niệm.'}
+                        <div className="p-3 bg-stone-50 rounded-lg border border-[#E7E5E4]">
+                          <span className="text-[11px] font-medium text-[#78716C] uppercase tracking-wider block mb-1">
+                            Nhịp điệu & Giọng điệu
+                          </span>
+                          <p className="text-[#57534E] leading-relaxed">
+                            {lesson.poetryAnalysis?.tone || 'Hào hùng, bi tráng, hoài niệm thiết tha.'}
                           </p>
                         </div>
                       </div>
                     )}
 
-                    {activeRightTab === 'imagery' && (
+                    {openAnalysisSection === 'imagery' && (
                       <div className="space-y-2">
-                        <h4 className="font-bold text-stone-800">Hệ thống hình tượng trung tâm:</h4>
-                        <div className="space-y-2">
+                        <span className="text-[11px] font-medium text-[#78716C] uppercase tracking-wider block">
+                          Hình tượng nghệ thuật trung tâm
+                        </span>
+                        <div className="space-y-1.5">
                           {(lesson.poetryAnalysis?.imagery || [
-                            'Dòng Sông Mã oai linh',
-                            'Đỉnh đèo súng ngửi trời',
-                            'Đêm hội đuốc hoa'
+                            'Dòng sông Mã gầm thét oai linh',
+                            'Đỉnh đèo heo hút cồn mây, súng ngửi trời',
+                            'Đêm hội đuốc hoa ấm tình quân dân',
+                            'Hình tượng người lính Tây Tiến bi tráng'
                           ]).map((img, i) => (
-                            <div key={i} className="p-2.5 rounded-lg bg-stone-50 border border-stone-200 text-stone-800 font-serif">
+                            <div key={i} className="p-2 bg-stone-50 rounded-lg border border-[#E7E5E4] text-[#292524] font-serif">
                               ✦ {img}
                             </div>
                           ))}
@@ -488,14 +465,18 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
                       </div>
                     )}
 
-                    {activeRightTab === 'keywords' && (
+                    {openAnalysisSection === 'keywords' && (
                       <div className="space-y-2">
-                        <h4 className="font-bold text-stone-800">Từ khóa thi pháp học:</h4>
+                        <span className="text-[11px] font-medium text-[#78716C] uppercase tracking-wider block">
+                          Từ khóa thi pháp học
+                        </span>
                         <div className="flex flex-wrap gap-1.5">
-                          {(lesson.poetryAnalysis?.keywords || ['Sông Mã', 'nhớ chơi vơi', 'súng ngửi trời', 'áo bào']).map((kw, i) => (
+                          {(lesson.poetryAnalysis?.keywords || [
+                            'Sông Mã', 'nhớ chơi vơi', 'súng ngửi trời', 'hội đuốc hoa', 'dáng kiều thơm', 'áo bào', 'độc hành'
+                          ]).map((kw, i) => (
                             <span 
                               key={i} 
-                              className="px-2.5 py-1 rounded-lg bg-amber-100 text-amber-900 font-serif text-xs border border-amber-200"
+                              className="px-2.5 py-1 rounded bg-[#FBF4F5] text-[#7C2D37] font-serif text-[12px] border border-[#7C2D37]/20"
                             >
                               {kw}
                             </span>
@@ -504,209 +485,266 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
                       </div>
                     )}
 
-                    {activeRightTab === 'emotion' && (
-                      <div className="p-3.5 rounded-xl bg-rose-50/50 border border-rose-200 text-stone-800 space-y-2">
-                        <h4 className="font-bold text-rose-950 flex items-center gap-1.5">
-                          <Heart className="w-3.5 h-3.5 text-rose-600" />
-                          Mạch cảm xúc bài học:
-                        </h4>
-                        <p className="text-stone-700 leading-relaxed">
-                          {lesson.poetryAnalysis?.emotionalFlow || 'Vận động từ nỗi nhớ da diết đến hào hùng bi tráng và lời thề tâm linh.'}
+                    {openAnalysisSection === 'emotion' && (
+                      <div className="p-3 bg-stone-50 rounded-lg border border-[#E7E5E4]">
+                        <span className="text-[11px] font-medium text-[#78716C] uppercase tracking-wider block mb-1">
+                          Vận động mạch cảm xúc
+                        </span>
+                        <p className="text-[#292524] leading-relaxed">
+                          {lesson.poetryAnalysis?.emotionalFlow || 'Khởi nguồn từ nỗi nhớ da diết chơi vơi → Hành quân gian lao → Đêm hội tình quân dân → Bức tượng đài bi tráng → Khúc vĩ thanh son sắt.'}
                         </p>
                       </div>
                     )}
                   </div>
+                </div>
+              )}
 
-                  {/* Fast Action Connectors */}
-                  <div className="pt-3 border-t border-stone-100 space-y-1.5">
+              {/* TAB 2: GHI CHÚ */}
+              {activeRightTab === 'notes' && (
+                <div className="space-y-2.5">
+                  <div className="flex items-center justify-between text-[12px] text-[#78716C]">
+                    <span>Tổng số: {lesson.annotations.length} ghi chú</span>
                     <button
-                      onClick={() => {
-                        onSetExamPassage(lesson.fullText.slice(0, 400));
-                        setActiveModule('exam');
-                      }}
-                      className="w-full py-2 bg-stone-100 hover:bg-stone-200 text-stone-800 font-semibold rounded-xl text-xs flex items-center justify-center gap-1.5 transition border border-stone-200"
+                      onClick={() => setShowAnnotationModal(true)}
+                      className="text-[#7C2D37] hover:underline font-medium"
                     >
-                      <CheckSquare className="w-3.5 h-3.5 text-emerald-700" />
-                      <span>Đưa tác phẩm vào Đề 7991</span>
-                    </button>
-                    <button
-                      onClick={() => {
-                        onAddSlideFromQuote(lesson.textSections[0]?.content.slice(0, 160) || '', lesson.author);
-                        setActiveModule('slides');
-                      }}
-                      className="w-full py-2 bg-stone-100 hover:bg-stone-200 text-stone-800 font-semibold rounded-xl text-xs flex items-center justify-center gap-1.5 transition border border-stone-200"
-                    >
-                      <Presentation className="w-3.5 h-3.5 text-amber-700" />
-                      <span>Tạo Quote Slide trình chiếu</span>
+                      + Thêm mới
                     </button>
                   </div>
-                </>
+                  <div className="space-y-2 max-h-[420px] overflow-y-auto pr-1">
+                    {lesson.annotations.map((a) => (
+                      <div key={a.id} className="p-2.5 rounded-lg border border-[#E7E5E4] bg-stone-50/50 hover:bg-white text-[12px] group">
+                        <div className="flex items-start justify-between">
+                          <span className="font-serif font-medium text-[#292524]">
+                            "{a.textSnippet}"
+                          </span>
+                          <button
+                            onClick={() => handleDeleteAnnotation(a.id)}
+                            className="text-stone-400 hover:text-red-700 opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </button>
+                        </div>
+                        <p className="text-[#57534E] mt-1">{a.note}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 3: LIÊN KẾT */}
+              {activeRightTab === 'links' && (
+                <div className="space-y-2">
+                  <span className="text-[11px] font-medium text-[#78716C] uppercase tracking-wider block mb-1">
+                    Liên kết học liệu & Bài dạy
+                  </span>
+
+                  <button
+                    onClick={() => setActiveModule('khbd')}
+                    className="w-full text-left p-3 rounded-lg border border-[#E7E5E4] hover:border-stone-400 bg-stone-50/60 hover:bg-white transition-colors"
+                  >
+                    <div className="flex items-center gap-2 font-medium text-[#292524]">
+                      <FileText className="w-4 h-4 text-[#7C2D37]" strokeWidth={1.75} />
+                      <span>Kế hoạch bài dạy (5512)</span>
+                    </div>
+                    <p className="text-[12px] text-[#78716C] mt-1">
+                      Chuyển sang soạn 4 hoạt động dạy học
+                    </p>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      onAddSlideFromQuote(lesson.textSections[0]?.content.slice(0, 150) || '', lesson.author);
+                      setActiveModule('slides');
+                    }}
+                    className="w-full text-left p-3 rounded-lg border border-[#E7E5E4] hover:border-stone-400 bg-stone-50/60 hover:bg-white transition-colors"
+                  >
+                    <div className="flex items-center gap-2 font-medium text-[#292524]">
+                      <Presentation className="w-4 h-4 text-[#B45309]" strokeWidth={1.75} />
+                      <span>Slide bài giảng</span>
+                    </div>
+                    <p className="text-[12px] text-[#78716C] mt-1">
+                      Tạo Quote Slide khám phá từ đoạn trích
+                    </p>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      onSetExamPassage(lesson.fullText.slice(0, 400));
+                      setActiveModule('exam');
+                    }}
+                    className="w-full text-left p-3 rounded-lg border border-[#E7E5E4] hover:border-stone-400 bg-stone-50/60 hover:bg-white transition-colors"
+                  >
+                    <div className="flex items-center gap-2 font-medium text-[#292524]">
+                      <CheckSquare className="w-4 h-4 text-[#15803D]" strokeWidth={1.75} />
+                      <span>Đề kiểm tra (7991)</span>
+                    </div>
+                    <p className="text-[12px] text-[#78716C] mt-1">
+                      Đưa đoạn trích vào ma trận & đề thi
+                    </p>
+                  </button>
+                </div>
               )}
             </div>
-          </div>
+          </aside>
         )}
       </div>
 
       {/* ========================================================================= */}
-      {/* FLOATING CONTEXTUAL TOOLBAR WHEN TEXT IS SELECTED */}
+      {/* FLOATING CONTEXTUAL TOOLBAR (TỐI ĐA 4 HÀNH ĐỘNG KHI BÔI ĐEN VĂN BẢN) */}
+      {/* 1. Highlight · 2. Chú thích · 3. Tạo câu hỏi · 4. ••• */}
       {/* ========================================================================= */}
-      {floatingPos && selectedText && (
+      {toolbarPos && selectedText && (
         <div 
-          style={{ top: `${floatingPos.y}px`, left: `${floatingPos.x}px` }}
-          className="fixed z-50 bg-[#1C1917] text-white px-2 py-1.5 rounded-2xl shadow-2xl border border-stone-700 flex items-center gap-1 animate-fade-in text-xs backdrop-blur-md"
+          style={{ top: `${toolbarPos.y}px`, left: `${toolbarPos.x}px` }}
+          className="fixed z-50 bg-[#292524] text-white px-1.5 py-1 rounded-xl shadow-lg border border-stone-700 flex items-center gap-0.5 text-[12px] select-none animate-fade-in"
         >
-          {/* Highlight quick button */}
+          {/* Action 1: Highlight */}
           <button
-            onClick={() => handleSaveAnnotation('highlight', 'Đã đánh dấu đoạn văn')}
-            className="p-1.5 hover:bg-stone-800 text-amber-300 rounded-lg flex items-center gap-1 transition"
-            title="Đánh dấu highlight"
+            onClick={() => handleSaveAnnotation('highlight', 'Đoạn highlight trọng tâm')}
+            className="px-2.5 py-1 hover:bg-stone-800 text-amber-300 rounded-lg flex items-center gap-1.5 transition-colors"
+            title="Đánh dấu đoạn văn"
           >
-            <Highlighter className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Highlight</span>
+            <Highlighter className="w-3.5 h-3.5" strokeWidth={1.75} />
+            <span>Highlight</span>
           </button>
 
-          {/* Add annotation button */}
+          {/* Action 2: Chú thích */}
           <button
             onClick={() => setShowAnnotationModal(true)}
-            className="p-1.5 hover:bg-stone-800 text-rose-300 rounded-lg flex items-center gap-1 transition"
-            title="Thêm chú thích chi tiết"
+            className="px-2.5 py-1 hover:bg-stone-800 text-rose-300 rounded-lg flex items-center gap-1.5 transition-colors"
+            title="Thêm chú thích sư phạm"
           >
-            <MessageSquarePlus className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Chú thích</span>
+            <MessageSquarePlus className="w-3.5 h-3.5" strokeWidth={1.75} />
+            <span>Chú thích</span>
           </button>
 
-          {/* Biện pháp nghệ thuật */}
-          <button
-            onClick={() => handleSaveAnnotation('device', 'Biện pháp nghệ thuật đặc sắc')}
-            className="p-1.5 hover:bg-stone-800 text-purple-300 rounded-lg flex items-center gap-1 transition"
-            title="Đánh dấu Biện pháp nghệ thuật"
-          >
-            <Compass className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Nghệ thuật</span>
-          </button>
-
-          <span className="w-px h-4 bg-stone-700 mx-1"></span>
-
-          {/* Tạo câu hỏi */}
+          {/* Action 3: Tạo câu hỏi */}
           <button
             onClick={() => {
               onAddQuestionFromPassage(selectedText);
-              setFloatingPos(null);
+              setToolbarPos(null);
               setActiveModule('question_builder');
             }}
-            className="p-1.5 hover:bg-stone-800 text-blue-300 rounded-lg flex items-center gap-1 transition"
-            title="Tạo câu hỏi đọc hiểu từ đoạn này"
+            className="px-2.5 py-1 hover:bg-stone-800 text-stone-200 rounded-lg flex items-center gap-1.5 transition-colors"
+            title="Tạo câu hỏi từ ngữ liệu này"
           >
-            <HelpCircle className="w-3.5 h-3.5" />
+            <HelpCircle className="w-3.5 h-3.5" strokeWidth={1.75} />
             <span>Tạo câu hỏi</span>
           </button>
 
-          {/* Đưa vào Slide */}
-          <button
-            onClick={() => {
-              onAddSlideFromQuote(selectedText, lesson.author);
-              setFloatingPos(null);
-              setActiveModule('slides');
-            }}
-            className="p-1.5 hover:bg-stone-800 text-amber-300 rounded-lg flex items-center gap-1 transition"
-            title="Tạo Quote Slide cho đoạn này"
-          >
-            <Presentation className="w-3.5 h-3.5" />
-            <span>Vào Slide</span>
-          </button>
+          <div className="w-px h-3.5 bg-stone-700 mx-0.5" />
 
-          {/* Đưa vào đề kiểm tra */}
-          <button
-            onClick={() => {
-              onSetExamPassage(selectedText);
-              setFloatingPos(null);
-              setActiveModule('exam');
-            }}
-            className="p-1.5 hover:bg-stone-800 text-emerald-300 rounded-lg flex items-center gap-1 transition"
-            title="Đưa vào đề thi làm ngữ liệu"
-          >
-            <CheckSquare className="w-3.5 h-3.5" />
-            <span>Vào Đề</span>
-          </button>
+          {/* Action 4: ••• Menu (Phân tích nghệ thuật, Vào slide, Vào đề, Liên kết hoạt động) */}
+          <div className="relative">
+            <button
+              onClick={() => setIsMoreMenuOpen(!isMoreMenuOpen)}
+              className="p-1.5 hover:bg-stone-800 text-stone-300 hover:text-white rounded-lg transition-colors"
+              title="Thao tác nâng cao"
+            >
+              <MoreHorizontal className="w-3.5 h-3.5" strokeWidth={1.75} />
+            </button>
 
-          <button
-            onClick={() => setFloatingPos(null)}
-            className="p-1 hover:bg-stone-800 text-stone-400 hover:text-white rounded-lg ml-1"
-          >
-            <X className="w-3.5 h-3.5" />
-          </button>
+            {isMoreMenuOpen && (
+              <div className="absolute right-0 top-full mt-1.5 w-48 bg-white text-[#292524] border border-[#E7E5E4] rounded-xl shadow-xl py-1 z-50">
+                <button
+                  onClick={() => {
+                    handleSaveAnnotation('device', 'Phân tích nghệ thuật đặc sắc');
+                    setIsMoreMenuOpen(false);
+                  }}
+                  className="w-full text-left px-3 py-1.5 hover:bg-stone-50 text-[12px] flex items-center gap-2"
+                >
+                  <Compass className="w-3.5 h-3.5 text-[#7C2D37]" strokeWidth={1.75} />
+                  <span>Phân tích nghệ thuật</span>
+                </button>
+                <button
+                  onClick={() => {
+                    onAddSlideFromQuote(selectedText, lesson.author);
+                    setToolbarPos(null);
+                    setActiveModule('slides');
+                  }}
+                  className="w-full text-left px-3 py-1.5 hover:bg-stone-50 text-[12px] flex items-center gap-2"
+                >
+                  <Presentation className="w-3.5 h-3.5 text-[#B45309]" strokeWidth={1.75} />
+                  <span>Đưa vào Slide</span>
+                </button>
+                <button
+                  onClick={() => {
+                    onSetExamPassage(selectedText);
+                    setToolbarPos(null);
+                    setActiveModule('exam');
+                  }}
+                  className="w-full text-left px-3 py-1.5 hover:bg-stone-50 text-[12px] flex items-center gap-2"
+                >
+                  <CheckSquare className="w-3.5 h-3.5 text-[#15803D]" strokeWidth={1.75} />
+                  <span>Đưa vào Đề kiểm tra</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setToolbarPos(null);
+                    setActiveModule('khbd');
+                  }}
+                  className="w-full text-left px-3 py-1.5 hover:bg-stone-50 text-[12px] flex items-center gap-2"
+                >
+                  <FileText className="w-3.5 h-3.5 text-[#2563EB]" strokeWidth={1.75} />
+                  <span>Liên kết hoạt động</span>
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       )}
 
-      {/* Annotation Input Modal */}
+      {/* ========================================================================= */}
+      {/* ANNOTATION MODAL (PROGRESSIVE DISCLOSURE - CHỈ MỞ KHI CẦN) */}
+      {/* ========================================================================= */}
       {showAnnotationModal && (
-        <div className="fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl border border-stone-200 max-w-md w-full p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-stone-100">
-              <h3 className="font-serif font-bold text-base text-stone-900 flex items-center gap-2">
-                <MessageSquarePlus className="w-4 h-4 text-[#7C2D37]" />
-                Thêm chú thích sư phạm
+        <div className="fixed inset-0 z-50 bg-stone-900/40 backdrop-blur-2xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl border border-[#E7E5E4] max-w-md w-full p-5 shadow-xl space-y-4">
+            <div className="flex items-center justify-between pb-2 border-b border-[#E7E5E4]">
+              <h3 className="font-medium text-[15px] text-[#292524]">
+                Thêm chú thích học thuật
               </h3>
-              <button 
+              <button
                 onClick={() => setShowAnnotationModal(false)}
-                className="text-stone-400 hover:text-stone-700"
+                className="text-[#78716C] hover:text-[#292524] p-1"
               >
-                <X className="w-4 h-4" />
+                <X className="w-4 h-4" strokeWidth={1.75} />
               </button>
             </div>
 
-            <div className="p-3 bg-stone-50 rounded-xl border border-stone-200 text-xs font-serif italic text-stone-700 max-h-24 overflow-y-auto">
-              "{selectedText}"
-            </div>
+            {selectedText && (
+              <div className="p-3 bg-stone-50 rounded-lg border border-[#E7E5E4] font-serif text-[13px] text-[#292524] italic max-h-24 overflow-y-auto">
+                "{selectedText}"
+              </div>
+            )}
 
             <div>
-              <label className="block text-xs font-semibold text-stone-700 mb-1">
-                Nội dung chú giải / Hướng dẫn phân tích:
+              <label className="block text-[12px] font-medium text-[#57534E] mb-1">
+                Nội dung chú giải / Cảm thụ / Định hướng phân tích:
               </label>
               <textarea
                 rows={3}
-                placeholder="Nhập cảm thụ văn học, ý nghĩa hình ảnh hoặc câu hỏi định hướng..."
-                value={annotationNote}
-                onChange={(e) => setAnnotationNote(e.target.value)}
-                className="w-full text-xs p-3 border border-stone-300 rounded-xl focus:ring-2 focus:ring-[#7C2D37] outline-none"
+                placeholder="Nhập cảm thụ ngôn từ, thi pháp hoặc câu hỏi dẫn dắt học sinh..."
+                value={annotationInputNote}
+                onChange={(e) => setAnnotationInputNote(e.target.value)}
+                className="w-full text-[13px] p-2.5 border border-[#E7E5E4] rounded-lg focus:outline-none focus:border-[#7C2D37] text-[#292524]"
+                autoFocus
               />
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-stone-700 mb-1.5">
-                Màu sắc ghi chú:
-              </label>
-              <div className="flex gap-2">
-                {(['amber', 'emerald', 'blue', 'purple', 'rose'] as const).map((color) => (
-                  <button
-                    key={color}
-                    type="button"
-                    onClick={() => setAnnotationColor(color)}
-                    className={`w-7 h-7 rounded-full border-2 transition ${
-                      annotationColor === color ? 'border-stone-900 scale-110' : 'border-transparent'
-                    } ${
-                      color === 'amber' ? 'bg-amber-300' :
-                      color === 'emerald' ? 'bg-emerald-300' :
-                      color === 'blue' ? 'bg-blue-300' :
-                      color === 'purple' ? 'bg-purple-300' : 'bg-rose-300'
-                    }`}
-                  />
-                ))}
-              </div>
             </div>
 
             <div className="flex items-center justify-end gap-2 pt-2">
               <button
                 type="button"
                 onClick={() => setShowAnnotationModal(false)}
-                className="px-4 py-2 rounded-xl text-xs font-medium text-stone-600 hover:bg-stone-100"
+                className="btn-secondary text-[13px] py-1.5 px-3"
               >
-                Hủy bỏ
+                Hủy
               </button>
               <button
                 type="button"
                 onClick={() => handleSaveAnnotation('annotation')}
-                className="px-4 py-2 rounded-xl text-xs font-semibold bg-[#7C2D37] hover:bg-[#68232D] text-white shadow"
+                className="btn-primary text-[13px] py-1.5 px-3"
               >
                 Lưu chú thích
               </button>

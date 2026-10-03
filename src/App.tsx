@@ -1,24 +1,5 @@
 import React, { useState } from 'react';
 import { 
-  Menu, 
-  BookOpen, 
-  Feather, 
-  Presentation, 
-  CheckSquare, 
-  Grid3X3, 
-  Share2, 
-  Download, 
-  Printer, 
-  Sparkles, 
-  GraduationCap, 
-  Clock, 
-  CheckCircle2,
-  FileText,
-  Compass,
-  HelpCircle,
-  Home
-} from 'lucide-react';
-import { 
   ActiveModule, 
   AppState, 
   LessonPlan5512, 
@@ -30,6 +11,7 @@ import {
 } from './types';
 import { initialAppState } from './data/presets';
 import { Sidebar } from './components/Sidebar';
+import { TopBar } from './components/TopBar';
 import { TeacherDashboard } from './components/TeacherDashboard';
 import { LiteratureReader } from './components/LiteratureWorkspace/LiteratureReader';
 import { GenreAnalysisView } from './components/LiteratureWorkspace/GenreAnalysisView';
@@ -40,11 +22,13 @@ import { SlidesView } from './components/SlidesView';
 import { Exam7991View } from './components/Exam7991View';
 import { MatrixView } from './components/MatrixView';
 import { ExportHandoverView } from './components/ExportHandoverView';
-import { exportWordKHBD, exportWordExam7991, exportHtmlSlides } from './utils/exportUtils';
+import { X } from 'lucide-react';
 
 export default function App() {
   const [appState, setAppState] = useState<AppState>(initialAppState);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isFocusMode, setIsFocusMode] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [prefilledPassage, setPrefilledPassage] = useState('');
 
   const currentLesson = appState.lessons.find(l => l.id === appState.currentLessonId) || appState.lessons[0];
@@ -160,99 +144,57 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex bg-[#FAF8F5] text-[#1C1917]">
+    <div className="min-h-screen flex bg-[#FAF8F5] text-[#292524] antialiased">
       {/* Mobile Backdrop */}
       {isSidebarOpen && (
         <div 
           onClick={() => setIsSidebarOpen(false)}
-          className="fixed inset-0 z-30 bg-stone-900/50 backdrop-blur-xs lg:hidden"
+          className="fixed inset-0 z-30 bg-stone-900/40 backdrop-blur-2xs lg:hidden"
         />
       )}
 
-      {/* Left Split-Pane: 360px Workspace Sidebar */}
-      <Sidebar
-        activeModule={appState.activeModule}
-        setActiveModule={setActiveModule}
-        khbd={appState.khbd}
-        setKhbd={setKhbd}
-        exam={appState.exam}
-        setExam={setExam}
-        slides={appState.slides}
-        setSlides={setSlides}
-        isSidebarOpen={isSidebarOpen}
-        setIsSidebarOpen={setIsSidebarOpen}
-        onOpenHandover={() => setActiveModule('export_handover')}
-        lessons={appState.lessons}
-        currentLessonId={appState.currentLessonId}
-        onSelectLesson={handleSelectLesson}
-      />
+      {/* 248px Workspace Sidebar (hidden in Focus Mode) */}
+      {!isFocusMode && (
+        <Sidebar
+          activeModule={appState.activeModule}
+          setActiveModule={setActiveModule}
+          khbd={appState.khbd}
+          setKhbd={setKhbd}
+          exam={appState.exam}
+          setExam={setExam}
+          slides={appState.slides}
+          setSlides={setSlides}
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
+          onOpenHandover={() => setActiveModule('export_handover')}
+          onOpenSettings={() => setIsSettingsOpen(true)}
+          lessons={appState.lessons}
+          currentLessonId={appState.currentLessonId}
+          onSelectLesson={handleSelectLesson}
+        />
+      )}
 
-      {/* Right Split-Pane: Flexible Literary Workspace */}
+      {/* Flexible Literary Workspace Area */}
       <div className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto">
-        {/* Top Navbar */}
-        <header className="sticky top-0 z-20 bg-white/90 backdrop-blur-md border-b border-stone-200 px-4 md:px-8 py-3.5 flex items-center justify-between no-print">
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setIsSidebarOpen(true)}
-              className="lg:hidden p-2 rounded-xl text-stone-600 hover:text-stone-900 hover:bg-stone-100"
-              title="Mở menu điều khiển"
-            >
-              <Menu className="w-5 h-5" />
-            </button>
-            <div className="flex items-center gap-2">
-              <div className="hidden sm:flex items-center gap-2">
-                <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-[#7C2D37]/10 text-[#7C2D37] border border-[#7C2D37]/20 flex items-center gap-1 font-serif">
-                  <Feather className="w-3 h-3" />
-                  {appState.khbd.info.subject}
-                </span>
-                <span className="text-xs font-mono px-2 py-0.5 rounded bg-stone-100 text-stone-700">
-                  {currentLesson.grade}
-                </span>
-              </div>
-              <h2 className="text-sm md:text-base font-bold font-serif text-stone-800 truncate max-w-xs md:max-w-md">
-                {currentLesson.title} — {currentLesson.author}
-              </h2>
-            </div>
-          </div>
-
-          {/* Quick Actions & Autosave Indicator */}
-          <div className="flex items-center gap-3">
-            <div className="hidden md:flex items-center gap-1.5 text-[11px] text-stone-500">
-              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-              <span>Đã lưu tự động</span>
-            </div>
-
-            <button
-              onClick={() => exportWordKHBD(appState.khbd)}
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-800 border border-stone-300 rounded-lg text-xs font-semibold transition"
-              title="Xuất kế hoạch bài dạy chuẩn 5512 sang Word"
-            >
-              <Download className="w-3.5 h-3.5 text-[#7C2D37]" />
-              <span>Word 5512</span>
-            </button>
-
-            <button
-              onClick={() => exportWordExam7991(appState.exam, appState.khbd)}
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-800 border border-stone-300 rounded-lg text-xs font-semibold transition"
-              title="Xuất đề kiểm tra chuẩn 7991 sang Word"
-            >
-              <Download className="w-3.5 h-3.5 text-emerald-700" />
-              <span>Word 7991</span>
-            </button>
-
-            <button
-              onClick={() => window.print()}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 border border-stone-300 rounded-lg text-xs font-semibold transition"
-              title="In trang A4"
-            >
-              <Printer className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">In A4</span>
-            </button>
-          </div>
-        </header>
+        {/* Editorial TopBar */}
+        <TopBar
+          currentLesson={currentLesson}
+          lessons={appState.lessons}
+          onSelectLesson={handleSelectLesson}
+          onOpenSidebar={() => setIsSidebarOpen(true)}
+          isFocusMode={isFocusMode}
+          onToggleFocusMode={() => setIsFocusMode(!isFocusMode)}
+          onPreview={() => window.print()}
+          khbd={appState.khbd}
+          exam={appState.exam}
+          slides={appState.slides}
+          onOpenHandover={() => setActiveModule('export_handover')}
+        />
 
         {/* Workspace Body */}
-        <main className="p-4 md:p-8 flex-1 max-w-7xl w-full mx-auto pb-16">
+        <main className={`p-4 md:p-6 lg:p-8 flex-1 w-full mx-auto pb-16 ${
+          appState.activeModule === 'workspace' ? 'max-w-7xl' : 'max-w-6xl'
+        }`}>
           {appState.activeModule === 'dashboard' && (
             <TeacherDashboard
               lessons={appState.lessons}
@@ -271,6 +213,8 @@ export default function App() {
               onAddSlideFromQuote={handleAddSlideFromQuote}
               onAddQuestionFromPassage={handleAddQuestionFromPassage}
               onSetExamPassage={handleSetExamPassage}
+              isFocusMode={isFocusMode}
+              onToggleFocusMode={() => setIsFocusMode(!isFocusMode)}
             />
           )}
 
@@ -340,6 +284,89 @@ export default function App() {
           )}
         </main>
       </div>
+
+      {/* Settings Modal (Cài đặt thông tin Giáo viên & Trường) */}
+      {isSettingsOpen && (
+        <div className="fixed inset-0 z-50 bg-stone-900/40 backdrop-blur-2xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl border border-[#E7E5E4] max-w-md w-full p-6 shadow-xl space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-[#E7E5E4]">
+              <h3 className="font-semibold text-[16px] text-[#292524]">
+                Cài đặt & Thông tin Giáo viên
+              </h3>
+              <button
+                onClick={() => setIsSettingsOpen(false)}
+                className="text-[#78716C] hover:text-[#292524] p-1"
+              >
+                <X className="w-4 h-4" strokeWidth={1.75} />
+              </button>
+            </div>
+
+            <div className="space-y-3 text-[13px]">
+              <div>
+                <label className="block font-medium text-[#57534E] mb-1">Sở Giáo dục & Đào tạo</label>
+                <input
+                  type="text"
+                  value={appState.khbd.info.department}
+                  onChange={(e) => setKhbd(prev => ({
+                    ...prev,
+                    info: { ...prev.info, department: e.target.value }
+                  }))}
+                  className="w-full px-3 py-1.5 border border-[#E7E5E4] rounded-lg text-[#292524] focus:outline-none focus:border-[#7C2D37]"
+                />
+              </div>
+
+              <div>
+                <label className="block font-medium text-[#57534E] mb-1">Trường THPT</label>
+                <input
+                  type="text"
+                  value={appState.khbd.info.school}
+                  onChange={(e) => setKhbd(prev => ({
+                    ...prev,
+                    info: { ...prev.info, school: e.target.value }
+                  }))}
+                  className="w-full px-3 py-1.5 border border-[#E7E5E4] rounded-lg text-[#292524] focus:outline-none focus:border-[#7C2D37]"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-medium text-[#57534E] mb-1">Giáo viên phụ trách</label>
+                  <input
+                    type="text"
+                    value={appState.khbd.info.teacherName}
+                    onChange={(e) => setKhbd(prev => ({
+                      ...prev,
+                      info: { ...prev.info, teacherName: e.target.value }
+                    }))}
+                    className="w-full px-3 py-1.5 border border-[#E7E5E4] rounded-lg text-[#292524] focus:outline-none focus:border-[#7C2D37]"
+                  />
+                </div>
+                <div>
+                  <label className="block font-medium text-[#57534E] mb-1">Tổ chuyên môn</label>
+                  <input
+                    type="text"
+                    value={appState.khbd.info.subjectGroup}
+                    onChange={(e) => setKhbd(prev => ({
+                      ...prev,
+                      info: { ...prev.info, subjectGroup: e.target.value }
+                    }))}
+                    className="w-full px-3 py-1.5 border border-[#E7E5E4] rounded-lg text-[#292524] focus:outline-none focus:border-[#7C2D37]"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end pt-2">
+              <button
+                onClick={() => setIsSettingsOpen(false)}
+                className="btn-primary text-[13px] py-1.5 px-4"
+              >
+                Lưu và đóng
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
