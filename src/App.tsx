@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   ActiveModule, 
   AppState, 
@@ -24,31 +24,107 @@ import { MatrixView } from './components/MatrixView';
 import { ExportHandoverView } from './components/ExportHandoverView';
 import { TypographyTestView } from './components/TypographyTestView';
 import { normalizeDeepNFC, normalizeVietnamese } from './utils/unicode';
-import { X } from 'lucide-react';
+import { X, CheckCircle2 } from 'lucide-react';
+
+export const STORAGE_KEY = 'edumaster_app_state_v3';
+
+const VALID_MODULES: ActiveModule[] = [
+  'dashboard', 'workspace', 'genre_analysis', 'khbd', 
+  'question_builder', 'rubric', 'slides', 'exam', 
+  'matrix', 'export_handover', 'typography_test'
+];
 
 const getInitialModule = (): ActiveModule => {
   if (typeof window !== 'undefined') {
+    const rawHash = window.location.hash.replace(/^#\/?/, '').trim().toLowerCase();
+    if (VALID_MODULES.includes(rawHash as ActiveModule)) {
+      return rawHash as ActiveModule;
+    }
     const path = window.location.pathname.toLowerCase();
-    const hash = window.location.hash.toLowerCase();
     const search = window.location.search.toLowerCase();
-    if (path.includes('typographytest') || hash.includes('typographytest') || search.includes('typography_test')) {
+    if (path.includes('typographytest') || rawHash.includes('typographytest') || search.includes('typography_test')) {
       return 'typography_test';
     }
   }
   return initialAppState.activeModule;
 };
 
-export default function App() {
-  const [appState, setAppState] = useState<AppState>(() => ({
+const loadInitialState = (): AppState => {
+  const initMod = getInitialModule();
+  if (typeof window !== 'undefined') {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        return {
+          ...initialAppState,
+          ...parsed,
+          activeModule: initMod,
+          khbd: { ...initialAppState.khbd, ...(parsed.khbd || {}) },
+          exam: { ...initialAppState.exam, ...(parsed.exam || {}) },
+          rubric: { ...initialAppState.rubric, ...(parsed.rubric || {}) },
+          slides: parsed.slides && Array.isArray(parsed.slides) ? parsed.slides : initialAppState.slides,
+          lessons: parsed.lessons && Array.isArray(parsed.lessons) ? parsed.lessons : initialAppState.lessons,
+          questions: parsed.questions && Array.isArray(parsed.questions) ? parsed.questions : initialAppState.questions,
+          lastUpdated: parsed.lastUpdated || new Date().toISOString()
+        };
+      }
+    } catch (e) {
+      console.warn('Lỗi đọc dữ liệu từ localStorage:', e);
+    }
+  }
+  return {
     ...initialAppState,
-    activeModule: getInitialModule()
-  }));
+    activeModule: initMod
+  };
+};
+
+export default function App() {
+  const [appState, setAppState] = useState<AppState>(loadInitialState);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isFocusMode, setIsFocusMode] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [prefilledPassage, setPrefilledPassage] = useState('');
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const currentLesson = appState.lessons.find(l => l.id === appState.currentLessonId) || appState.lessons[0];
+
+  // Đồng bộ hash URL với activeModule
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const currentHash = window.location.hash.replace(/^#\/?/, '').trim().toLowerCase();
+      if (currentHash !== appState.activeModule) {
+        window.location.hash = `#/${appState.activeModule}`;
+      }
+    }
+  }, [appState.activeModule]);
+
+  // Lắng nghe thay đổi hash từ browser (Back/Forward)
+  useEffect(() => {
+    const handleHashChange = () => {
+      const rawHash = window.location.hash.replace(/^#\/?/, '').trim().toLowerCase();
+      if (VALID_MODULES.includes(rawHash as ActiveModule)) {
+        setAppState(prev => {
+          if (prev.activeModule === rawHash) return prev;
+          return { ...prev, activeModule: rawHash as ActiveModule };
+        });
+      }
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  // Tự động lưu vào localStorage khi appState thay đổi (debounced 300ms)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+      } catch (err) {
+        console.error('Lỗi khi tự động lưu dữ liệu vào localStorage:', err);
+      }
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [appState]);
 
   // Updaters
   const setActiveModule = (mod: ActiveModule) => {
@@ -118,11 +194,16 @@ export default function App() {
         ...prev.khbd,
         info: {
           ...prev.khbd.info,
-          lessonTitle: `${target.title} (${target.author})`
+          lessonTitle: `${target.title} (${target.author})`,
+          grade: target.grade || prev.khbd.info.grade,
+          textbook: target.textbook || prev.khbd.info.textbook
         }
       },
       lastUpdated: new Date().toISOString()
     }));
+
+    setToastMessage(`Đã chuyển sang tác phẩm "${target.title} (${target.author})".`);
+    setTimeout(() => setToastMessage(null), 3500);
   };
 
   // Cross-module connectors
@@ -207,6 +288,7 @@ export default function App() {
           exam={appState.exam}
           slides={appState.slides}
           onOpenHandover={() => setActiveModule('export_handover')}
+          lastUpdated={appState.lastUpdated}
         />
 
         {/* Workspace Body */}
@@ -398,6 +480,14 @@ export default function App() {
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 bg-[#292524] text-white px-4 py-3 rounded-xl shadow-xl text-body-ui border border-[#44403C] animate-in fade-in slide-in-from-bottom-2">
+          <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+          <span>{toastMessage}</span>
         </div>
       )}
     </div>

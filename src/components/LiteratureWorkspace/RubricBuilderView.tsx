@@ -9,10 +9,11 @@ import {
   CheckCircle2, 
   Edit3, 
   Sparkles,
-  HelpCircle
+  HelpCircle,
+  ChevronDown
 } from 'lucide-react';
 import { RubricData, RubricCriterion } from '../../types';
-import { exportRubricDoc } from '../../utils/exportUtils';
+import { exportDocxRubric, exportRubricDoc } from '../../utils/exportUtils';
 import { normalizeVietnamese } from '../../utils/unicode';
 
 interface RubricBuilderViewProps {
@@ -22,6 +23,7 @@ interface RubricBuilderViewProps {
 
 export const RubricBuilderView: React.FC<RubricBuilderViewProps> = ({ rubric, setRubric }) => {
   const [editingCriterionId, setEditingCriterionId] = useState<string | null>(null);
+  const [isExportDropdownOpen, setIsExportDropdownOpen] = useState(false);
 
   // Auto calculate total points
   const calculatedTotal = rubric.criteria.reduce((sum, c) => sum + (c.maxPoints || 0), 0);
@@ -91,13 +93,47 @@ export const RubricBuilderView: React.FC<RubricBuilderViewProps> = ({ rubric, se
             <Plus className="w-3.5 h-3.5" />
             <span>Thêm tiêu chí</span>
           </button>
-          <button
-            onClick={() => exportRubricDoc(rubric)}
-            className="btn-secondary min-h-[36px] px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-800 rounded-xl text-metadata font-semibold flex items-center gap-1.5 border border-stone-300 transition"
-          >
-            <Download className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Xuất Rubric (.doc)</span>
-          </button>
+          <div className="relative">
+            <button
+              onClick={() => setIsExportDropdownOpen(!isExportDropdownOpen)}
+              className="btn-secondary min-h-[36px] px-3.5 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-800 rounded-xl text-metadata font-semibold flex items-center gap-1.5 border border-stone-300 transition"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>Xuất Rubric (.docx)</span>
+              <ChevronDown className="w-3.5 h-3.5" />
+            </button>
+
+            {isExportDropdownOpen && (
+              <div className="absolute right-0 mt-1 w-60 bg-white border border-stone-200 rounded-xl shadow-lg py-1 z-50">
+                <button
+                  onClick={() => {
+                    exportDocxRubric(rubric);
+                    setIsExportDropdownOpen(false);
+                  }}
+                  className="w-full text-left px-3 py-2 text-body-ui text-stone-900 hover:bg-stone-50 flex items-center gap-2 font-medium"
+                >
+                  <FileText className="w-4 h-4 text-[#7C2D37]" />
+                  <div>
+                    <div>Xuất Rubric (.docx) — Chuẩn</div>
+                    <div className="text-[11px] text-stone-500">Chuẩn OpenXML Barem đánh giá A4</div>
+                  </div>
+                </button>
+                <button
+                  onClick={() => {
+                    exportRubricDoc(rubric);
+                    setIsExportDropdownOpen(false);
+                  }}
+                  className="w-full text-left px-3 py-2 text-body-ui text-stone-700 hover:bg-stone-50 flex items-center gap-2"
+                >
+                  <FileText className="w-4 h-4 text-stone-400" />
+                  <div>
+                    <div>Xuất Rubric (.doc cũ)</div>
+                    <div className="text-[11px] text-stone-500">Định dạng HTML Blob tương thích cũ</div>
+                  </div>
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

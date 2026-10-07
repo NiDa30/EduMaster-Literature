@@ -10,7 +10,8 @@ import {
   Settings,
   HelpCircle,
   X,
-  Feather
+  Feather,
+  GraduationCap
 } from 'lucide-react';
 import { ActiveModule, LessonPlan5512, Exam7991Data, SlideItem, LiteratureLesson } from '../types';
 
@@ -40,7 +41,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onOpenHandover,
   onOpenSettings
 }) => {
-  // 7 core teaching & assessment navigation items
+  // 8 core teaching & assessment navigation items
   const mainNavItems = [
     { id: 'dashboard' as ActiveModule, label: 'Bàn làm việc', icon: Home },
     { id: 'workspace' as ActiveModule, label: 'Tác phẩm', icon: BookOpen },
@@ -48,12 +49,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'question_builder' as ActiveModule, label: 'Câu hỏi', icon: HelpCircle },
     { id: 'exam' as ActiveModule, label: 'Đề kiểm tra', icon: CheckSquare },
     { id: 'matrix' as ActiveModule, label: 'Ma trận', icon: Grid3X3 },
+    { id: 'rubric' as ActiveModule, label: 'Rubric tự luận', icon: GraduationCap },
     { id: 'slides' as ActiveModule, label: 'Slide', icon: Presentation },
   ];
 
   return (
     <aside 
-      className={`fixed lg:static top-0 bottom-0 left-0 z-40 w-[248px] bg-white border-r border-[#E7E5E4] flex flex-col transition-transform duration-200 ease-in-out ${
+      className={`fixed lg:static top-0 bottom-0 left-0 z-40 w-[248px] bg-white border-r border-[#E7E5E4] flex flex-col transition-transform duration-200 ease-in-out no-print ${
         isSidebarOpen ? 'translate-x-0 shadow-lg lg:shadow-none' : '-translate-x-full lg:translate-x-0'
       }`}
     >

@@ -20,7 +20,7 @@ export const MatrixView: React.FC<MatrixViewProps> = ({ exam, khbd }) => {
   return (
     <div className="h-full min-h-0 flex flex-col p-4 md:p-6 space-y-3 overflow-hidden">
       {/* Top Banner (shrink-0) */}
-      <div className="bg-white p-3.5 md:p-4 rounded-2xl border border-stone-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0">
+      <div className="bg-white p-3.5 md:p-4 rounded-2xl border border-stone-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0 no-print">
         <div>
           <div className="flex items-center gap-2">
             <span className="px-2.5 py-0.5 rounded-full text-metadata font-semibold bg-purple-100 text-purple-900 border border-purple-200">

@@ -21,7 +21,9 @@ import {
   CognitiveLevel, 
   SkillType, 
   Exam7991Data, 
-  ActiveModule 
+  ActiveModule,
+  PartIITrueFalseQuestion,
+  PartIIIShortAnswerQuestion
 } from '../../types';
 import { normalizeVietnamese } from '../../utils/unicode';
 
@@ -42,9 +44,16 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
   setActiveModule,
   defaultPassage = ''
 }) => {
-  const [filterType, setFilterType] = useState<string>('all');
+  const [filterType, setFilterType] = useState<QuestionType | 'all'>('all');
+  const [filterLevel, setFilterLevel] = useState<CognitiveLevel | 'all'>('all');
   const [selectedQuestionId, setSelectedQuestionId] = useState<string | null>(questions[0]?.id || null);
   const [isCreatingNew, setIsCreatingNew] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 2500);
+  };
 
   const selectedQuestion = questions.find(q => q.id === selectedQuestionId) || questions[0];
 
@@ -97,10 +106,12 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
     setNewQuestion('');
     setNewAnswer('');
     setNewGuide('');
+    showToast(`Đã lưu câu hỏi "${item.code}" vào Ngân hàng!`);
   };
 
   const handleDeleteQuestion = (id: string) => {
     setQuestions(questions.filter(q => q.id !== id));
+    showToast('Đã xóa câu hỏi khỏi Ngân hàng.');
   };
 
   const handlePushToExam = (q: LiteratureQuestionItem) => {
@@ -121,22 +132,50 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
         explanation: q.guide || 'Căn cứ vào ngữ liệu đọc hiểu bài học.'
       };
       setExam({ ...exam, partI: [...exam.partI, newPartI] });
-      alert('Đã chuyển câu hỏi vào Phần I (Trắc nghiệm nhiều lựa chọn) của Đề 7991!');
-    } else if (q.linkedPart === 'partIV' || q.type === 'nl_van_hoc' || q.type === 'nl_xa_hoi') {
+      showToast('Đã chuyển câu hỏi vào Phần I (Trắc nghiệm nhiều lựa chọn) của Đề 7991!');
+    } else if (q.linkedPart === 'partII') {
+      const newPartII: PartIITrueFalseQuestion = {
+        id: `p2-${Date.now()}`,
+        code: `Câu ${exam.partII.length + 1} (Đúng/Sai)`,
+        level: q.level,
+        stem: q.question,
+        statements: [
+          { subId: 'a', text: q.answer || 'Nhận định a về chi tiết nghệ thuật hoặc nội dung.', isCorrect: true, explanation: q.guide || 'Đúng theo ngữ liệu.' },
+          { subId: 'b', text: 'Nhận định b có ý phủ định hoặc suy diễn chưa chính xác.', isCorrect: false, explanation: 'Chưa phù hợp ngữ cảnh tác phẩm.' },
+          { subId: 'c', text: 'Nhận định c mở rộng liên hệ tư tưởng thẩm mỹ.', isCorrect: true, explanation: 'Đúng theo đặc trưng thể loại.' },
+          { subId: 'd', text: 'Nhận định d áp đặt góc nhìn phiến diện.', isCorrect: false, explanation: 'Không có căn cứ trong văn bản.' }
+        ],
+        points: 1.0
+      };
+      setExam({ ...exam, partII: [...exam.partII, newPartII] });
+      showToast('Đã chuyển câu hỏi vào Phần II (Trắc nghiệm Đúng/Sai) của Đề 7991!');
+    } else if (q.linkedPart === 'partIII' || q.type === 'tieng_viet') {
+      const newPartIII: PartIIIShortAnswerQuestion = {
+        id: `p3-${Date.now()}`,
+        code: `Câu ${exam.partIII.length + 1}`,
+        level: q.level === 'NB' ? 'TH' : q.level,
+        question: q.question,
+        correctAnswer: q.answer || 'Từ ngữ / Khái niệm chuẩn',
+        points: 0.5,
+        explanation: q.guide || 'Căn cứ ngữ liệu và chuẩn kiến thức tiếng Việt.'
+      };
+      setExam({ ...exam, partIII: [...exam.partIII, newPartIII] });
+      showToast('Đã chuyển câu hỏi vào Phần III (Trả lời ngắn) của Đề 7991!');
+    } else {
       const newPartIV = {
         id: `p4-${Date.now()}`,
         code: `Câu ${exam.partIV.length + 1} (Tự luận)`,
         level: 'VD' as const,
         question: q.question,
         rubric: [
-          { step: 'Đảm bảo cấu trúc bài văn nghị luận, xác định đúng vấn đề', points: 0.5 },
-          { step: q.answer ? `Phân tích luận điểm cốt lõi: ${q.answer.slice(0, 100)}` : 'Triển khai hệ thống luận điểm sáng rõ', points: 1.5 },
-          { step: 'Chính tả, ngữ pháp và sáng tạo liên hệ', points: 1.0 }
+          { step: '1. Đảm bảo cấu trúc bài văn nghị luận, xác định đúng vấn đề', points: 0.5 },
+          { step: q.answer ? `2. Phân tích luận điểm cốt lõi: ${q.answer.slice(0, 100)}` : '2. Triển khai hệ thống luận điểm sáng rõ', points: 1.5 },
+          { step: '3. Chính tả, ngữ pháp và sáng tạo liên hệ', points: 1.0 }
         ],
         points: q.points || 3.0
       };
       setExam({ ...exam, partIV: [...exam.partIV, newPartIV] });
-      alert('Đã chuyển câu hỏi vào Phần IV (Tự luận) của Đề 7991!');
+      showToast('Đã chuyển câu hỏi vào Phần IV (Tự luận) của Đề 7991!');
     }
   };
 
@@ -231,7 +270,7 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
             <div className="grid grid-cols-2 gap-2 text-metadata">
               <select
                 value={filterType}
-                onChange={(e) => setFilterType(e.target.value)}
+                onChange={(e) => setFilterType(e.target.value as QuestionType | 'all')}
                 className="min-h-[34px] px-2 py-1 bg-stone-50 border border-stone-300 rounded-lg text-[12px]"
               >
                 <option value="all">Tất cả dạng</option>
@@ -243,7 +282,7 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
 
               <select
                 value={filterLevel}
-                onChange={(e) => setFilterLevel(e.target.value)}
+                onChange={(e) => setFilterLevel(e.target.value as CognitiveLevel | 'all')}
                 className="min-h-[34px] px-2 py-1 bg-stone-50 border border-stone-300 rounded-lg text-[12px]"
               >
                 <option value="all">Tất cả mức</option>
@@ -543,6 +582,14 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
           )}
         </section>
       </div>
+
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="fixed bottom-6 right-6 z-50 bg-[#292524] text-white text-[13px] px-3.5 py-2 rounded-lg shadow-lg flex items-center gap-2 border border-stone-700 animate-fade-in">
+          <Sparkles className="w-3.5 h-3.5 text-amber-400" strokeWidth={1.75} />
+          <span>{toastMessage}</span>
+        </div>
+      )}
     </div>
   );
 };

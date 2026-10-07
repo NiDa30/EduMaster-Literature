@@ -21,7 +21,7 @@ import {
   Share2
 } from 'lucide-react';
 import { LessonPlan5512, TeachingActivity, ActiveModule } from '../types';
-import { exportWordKHBD } from '../utils/exportUtils';
+import { exportDocxKHBD, exportWordKHBD } from '../utils/exportUtils';
 import { normalizeVietnamese } from '../utils/unicode';
 
 interface KhbdViewProps {
@@ -39,6 +39,7 @@ export const KhbdView: React.FC<KhbdViewProps> = ({
 }) => {
   const [viewMode, setViewMode] = useState<'visual_builder' | 'document'>('visual_builder');
   const [expandedActivity, setExpandedActivity] = useState<string | null>(khbd.activities[0]?.id || null);
+  const [isExportDropdownOpen, setIsExportDropdownOpen] = useState(false);
 
   const handleUpdateActivity = (actId: string, updated: Partial<TeachingActivity>) => {
     const sanitizedUpdated = { ...updated };
@@ -109,7 +110,7 @@ export const KhbdView: React.FC<KhbdViewProps> = ({
   return (
     <div className="h-full min-h-0 flex flex-col p-4 md:p-6 space-y-3 overflow-hidden">
       {/* Top Banner & Control Bar (shrink-0) */}
-      <div className="bg-white p-3.5 md:p-4 rounded-2xl border border-stone-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0">
+      <div className="bg-white p-3.5 md:p-4 rounded-2xl border border-stone-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0 no-print">
         <div>
           <div className="flex items-center gap-2">
             <span className="px-2.5 py-0.5 rounded-full text-metadata font-semibold bg-[#7C2D37]/10 text-[#7C2D37] border border-[#7C2D37]/20">
@@ -149,13 +150,47 @@ export const KhbdView: React.FC<KhbdViewProps> = ({
             </button>
           </div>
 
-          <button
-            onClick={() => exportWordKHBD(khbd)}
-            className="btn-primary min-h-[36px] px-3 py-1.5 bg-[#7C2D37] hover:bg-[#68232D] text-white rounded-xl text-metadata font-semibold flex items-center gap-1.5 shadow-sm transition"
-          >
-            <Download className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Xuất Word (.doc)</span>
-          </button>
+          <div className="relative">
+            <button
+              onClick={() => setIsExportDropdownOpen(!isExportDropdownOpen)}
+              className="btn-primary min-h-[36px] px-3.5 py-1.5 bg-[#7C2D37] hover:bg-[#68232D] text-white rounded-xl text-metadata font-semibold flex items-center gap-1.5 shadow-sm transition"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>Xuất Word (.docx)</span>
+              <ChevronDown className="w-3.5 h-3.5" />
+            </button>
+
+            {isExportDropdownOpen && (
+              <div className="absolute right-0 mt-1 w-60 bg-white border border-stone-200 rounded-xl shadow-lg py-1 z-50">
+                <button
+                  onClick={() => {
+                    exportDocxKHBD(khbd);
+                    setIsExportDropdownOpen(false);
+                  }}
+                  className="w-full text-left px-3 py-2 text-body-ui text-stone-900 hover:bg-stone-50 flex items-center gap-2 font-medium"
+                >
+                  <FileText className="w-4 h-4 text-[#7C2D37]" />
+                  <div>
+                    <div>Xuất Word (.docx) — Chuẩn</div>
+                    <div className="text-[11px] text-stone-500">Chuẩn OpenXML 5512, căn lề A4</div>
+                  </div>
+                </button>
+                <button
+                  onClick={() => {
+                    exportWordKHBD(khbd);
+                    setIsExportDropdownOpen(false);
+                  }}
+                  className="w-full text-left px-3 py-2 text-body-ui text-stone-700 hover:bg-stone-50 flex items-center gap-2"
+                >
+                  <FileText className="w-4 h-4 text-stone-400" />
+                  <div>
+                    <div>Xuất Word (.doc cũ)</div>
+                    <div className="text-[11px] text-stone-500">Định dạng HTML Blob tương thích cũ</div>
+                  </div>
+                </button>
+              </div>
+            )}
+          </div>
           <button
             onClick={() => window.print()}
             className="btn-secondary min-h-[36px] px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 border border-stone-300 rounded-xl text-metadata font-semibold flex items-center gap-1.5 transition"

@@ -8,18 +8,19 @@ import {
   Download, 
   Plus, 
   Trash2, 
-  CheckCircle, 
-  HelpCircle, 
+  Copy,
+  Edit3,
+  CheckCircle2, 
   Lightbulb, 
-  Sparkles, 
   Quote, 
-  Feather, 
-  Heart, 
-  Compass, 
-  BookOpen 
+  BookOpen,
+  X,
+  FileCode2,
+  Layers
 } from 'lucide-react';
 import { SlideItem } from '../types';
-import { exportHtmlSlides } from '../utils/exportUtils';
+import { exportHtmlSlides, exportPptxSlides } from '../utils/exportUtils';
+import { normalizeVietnamese } from '../utils/unicode';
 
 interface SlidesViewProps {
   slides: SlideItem[];
@@ -30,13 +31,20 @@ interface SlidesViewProps {
 export const SlidesView: React.FC<SlidesViewProps> = ({ slides, setSlides, lessonTitle }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [selectedQuizOption, setSelectedQuizOption] = useState<number | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
+  const [isExportingPptx, setIsExportingPptx] = useState(false);
+  const [toastMsg, setToastMsg] = useState<string | null>(null);
 
   const currentSlide = slides[currentIndex] || slides[0];
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't intercept arrows if user is focused inside input / textarea
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement)?.tagName)) {
+        return;
+      }
       if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
         e.preventDefault();
         setCurrentIndex(prev => Math.min(prev + 1, slides.length - 1));
@@ -56,6 +64,11 @@ export const SlidesView: React.FC<SlidesViewProps> = ({ slides, setSlides, lesso
     setShowExplanation(false);
   }, [currentIndex]);
 
+  const showToast = (msg: string) => {
+    setToastMsg(msg);
+    setTimeout(() => setToastMsg(null), 3500);
+  };
+
   const handleAddSlide = () => {
     const newSlide: SlideItem = {
       id: `slide-${Date.now()}`,
@@ -70,13 +83,50 @@ export const SlidesView: React.FC<SlidesViewProps> = ({ slides, setSlides, lesso
     };
     setSlides([...slides, newSlide]);
     setCurrentIndex(slides.length);
+    showToast('Đã thêm slide mới thành công!');
+  };
+
+  const handleDuplicateSlide = (idx: number) => {
+    const target = slides[idx];
+    if (!target) return;
+    const duplicated: SlideItem = {
+      ...JSON.parse(JSON.stringify(target)),
+      id: `slide-${Date.now()}`,
+      title: `${target.title} (Bản sao)`
+    };
+    const nextSlides = [...slides];
+    nextSlides.splice(idx + 1, 0, duplicated);
+    setSlides(nextSlides);
+    setCurrentIndex(idx + 1);
+    showToast('Đã nhân bản slide thành công!');
   };
 
   const handleDeleteSlide = (idx: number) => {
-    if (slides.length <= 1) return;
+    if (slides.length <= 1) {
+      showToast('Bộ slide cần có ít nhất 1 slide.');
+      return;
+    }
     const nextSlides = slides.filter((_, i) => i !== idx);
     setSlides(nextSlides);
     setCurrentIndex(prev => Math.min(prev, nextSlides.length - 1));
+    showToast('Đã xóa slide.');
+  };
+
+  const handleUpdateSlide = (patch: Partial<SlideItem>) => {
+    setSlides(prev => prev.map((s, idx) => idx === currentIndex ? { ...s, ...patch } : s));
+  };
+
+  const handleExportPptx = async () => {
+    try {
+      setIsExportingPptx(true);
+      await exportPptxSlides(slides, lessonTitle);
+      showToast('Đã tạo và tải file PowerPoint (.pptx) thành công!');
+    } catch (err) {
+      console.error('Lỗi khi xuất PowerPoint:', err);
+      showToast('Không thể tạo file PowerPoint. Vui lòng thử lại.');
+    } finally {
+      setIsExportingPptx(false);
+    }
   };
 
   const getTagColor = (tag: SlideItem['phaseTag']) => {
@@ -118,107 +168,92 @@ export const SlidesView: React.FC<SlidesViewProps> = ({ slides, setSlides, lesso
       </div>
 
       {/* Slide Title */}
-      <div className="mb-4 shrink-0">
-        <h2 className="text-xl md:text-3xl font-serif font-semibold text-white leading-normal">
+      <div className="mb-4 text-center shrink-0">
+        <h2 className="text-section md:text-page-title font-serif font-semibold text-stone-100 tracking-wide uppercase">
           {currentSlide.title}
         </h2>
       </div>
 
-      {/* Slide Body by Layout */}
-      <div className="flex-1 min-h-0 overflow-y-auto panel-scroll my-auto py-2">
-        {/* LAYOUT 1: QUOTE SLIDE (ĐẶC TRƯNG NGỮ VĂN) */}
-        {currentSlide.layout === 'quote' && currentSlide.quoteText ? (
-          <div className="max-w-[760px] mx-auto p-6 md:p-8 rounded-2xl bg-stone-900/90 border border-amber-900/40 text-center shadow-xl space-y-4">
-            <Quote className="w-8 h-8 text-amber-500/40 mx-auto" />
-            <p className="text-lg md:text-xl font-serif italic text-amber-100 leading-[1.8] whitespace-pre-line">
-              "{currentSlide.quoteText}"
-            </p>
-            <div className="text-metadata text-amber-400 font-medium">
-              — {currentSlide.quoteAuthor || 'Trích tác phẩm'}
+      {/* Main Slide Content Canvas (Rule 29.16) */}
+      <div className="flex-1 min-h-0 flex flex-col justify-center overflow-y-auto px-2 panel-scroll">
+        {currentSlide.layout === 'quote' ? (
+          /* QUOTE FOCUS LAYOUT */
+          <div className="max-w-2xl mx-auto w-full text-center space-y-4">
+            <div className="relative inline-block">
+              <Quote className="w-8 h-8 text-amber-500/30 absolute -top-4 -left-6" />
+              <blockquote className="font-serif italic text-quote-highlight md:text-2xl text-amber-100 leading-[1.8] whitespace-pre-line px-4">
+                "{currentSlide.quoteText}"
+              </blockquote>
             </div>
-            {currentSlide.discussionQuestion && (
-              <div className="p-3.5 rounded-xl bg-stone-800/80 border border-stone-700 text-body-ui text-stone-300 font-sans text-left leading-relaxed">
-                <strong className="text-amber-300 block mb-1 text-metadata font-semibold">Câu hỏi thảo luận & Khám phá:</strong>
-                {currentSlide.discussionQuestion}
-              </div>
+
+            {currentSlide.quoteAuthor && (
+              <p className="text-meta text-amber-400/90 font-medium">
+                — {currentSlide.quoteAuthor} —
+              </p>
             )}
-          </div>
-        ) : currentSlide.layout === 'visual_map' ? (
-          /* LAYOUT 2: VISUAL ANALYSIS MAP SLIDE */
-          <div className="max-w-3xl mx-auto p-6 rounded-2xl bg-stone-900/80 border border-stone-800 shadow-xl space-y-4">
-            <div className="flex items-center gap-2 text-metadata font-semibold text-rose-400">
-              <Heart className="w-4 h-4" />
-              Sơ đồ Mạch cảm xúc & Cảm hứng sử thi
-            </div>
-            <p className="text-body-ui text-stone-200 font-serif leading-[1.8]">
-              {currentSlide.contentLeft}
-            </p>
-            {currentSlide.bullets && (
-              <div className="space-y-2.5 pt-1">
-                {currentSlide.bullets.map((b, i) => (
-                  <div key={i} className="p-2.5 rounded-xl bg-stone-950/80 border border-stone-800 flex items-center gap-3 text-body-ui text-stone-200">
-                    <span className="w-6 h-6 rounded-full bg-rose-500/20 text-rose-300 flex items-center justify-center font-semibold text-metadata shrink-0 tabular-nums">
-                      {i + 1}
-                    </span>
-                    <span>{b}</span>
-                  </div>
-                ))}
+
+            {currentSlide.discussionQuestion && (
+              <div className="mt-4 p-4 rounded-xl bg-stone-900/90 border border-amber-900/40 text-left">
+                <span className="text-meta font-semibold text-amber-300 block mb-1">
+                  ✦ Câu hỏi gợi mở / Thảo luận:
+                </span>
+                <p className="text-body-ui text-stone-200 leading-relaxed font-sans">
+                  {currentSlide.discussionQuestion}
+                </p>
               </div>
             )}
           </div>
         ) : currentSlide.layout === 'split' ? (
-          /* LAYOUT 3: SPLIT COMPARISON */
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-start">
-            <div className="bg-stone-900/80 p-5 rounded-2xl border border-stone-800 shadow-inner">
-              <p className="text-body-ui text-stone-200 leading-[1.8] mb-3 font-serif">
+          /* SPLIT 2 COLUMNS */
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto w-full">
+            <div className="bg-stone-900/80 p-5 rounded-2xl border border-stone-800">
+              <p className="text-body-ui text-stone-200 leading-[1.8] font-serif mb-3">
                 {currentSlide.contentLeft}
               </p>
               {currentSlide.bullets && (
-                <ul className="space-y-2 text-body-ui text-stone-300">
+                <ul className="space-y-1.5 text-meta text-stone-300">
                   {currentSlide.bullets.map((b, i) => (
                     <li key={i} className="flex items-start gap-2">
-                      <span className="text-amber-400 font-semibold">✦</span>
+                      <span className="text-amber-400">✦</span>
                       <span>{b}</span>
                     </li>
                   ))}
                 </ul>
               )}
             </div>
-            <div className="bg-stone-900/80 p-5 rounded-2xl border border-stone-800 shadow-inner">
-              <p className="text-body-ui text-stone-200 whitespace-pre-line leading-[1.8] font-serif">
-                {currentSlide.contentRight}
-              </p>
+            <div className="bg-stone-900/80 p-5 rounded-2xl border border-stone-800 font-serif text-stone-200 leading-[1.8] whitespace-pre-line text-body-ui">
+              {currentSlide.contentRight}
             </div>
           </div>
         ) : currentSlide.layout === 'cards' && currentSlide.cards ? (
-          /* LAYOUT 4: THREE CHARACTER / VALUE CARDS */
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {currentSlide.cards.map((c, i) => (
-              <div key={i} className="bg-stone-900/90 p-5 rounded-2xl border border-stone-800 hover:border-amber-500/50 transition flex flex-col justify-between">
+          /* 3 CARDS LAYOUT */
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 max-w-4xl mx-auto w-full">
+            {currentSlide.cards.map((card, i) => (
+              <div key={i} className="bg-stone-900/80 p-4 rounded-2xl border border-stone-800 flex flex-col justify-between">
                 <div>
-                  <div className="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold mb-2.5">
-                    <Sparkles className="w-4 h-4" />
-                  </div>
-                  <h3 className="font-serif font-semibold text-card-title text-amber-200 mb-1.5">{c.title}</h3>
-                  <p className="text-body-ui text-stone-300 leading-relaxed font-serif text-metadata">{c.desc}</p>
+                  <h4 className="text-card-title text-amber-300 font-serif mb-1.5">{card.title}</h4>
+                  <p className="text-meta text-stone-300 leading-relaxed">{card.desc}</p>
                 </div>
               </div>
             ))}
           </div>
         ) : currentSlide.layout === 'quiz' && currentSlide.quizQuestion ? (
-          /* LAYOUT 5: INTERACTIVE LITERARY QUIZ */
-          <div className="max-w-2xl mx-auto bg-stone-900/90 p-6 rounded-2xl border border-stone-800 shadow-xl">
-            <div className="flex items-center gap-2 text-metadata font-semibold text-amber-400 mb-2.5">
-              <HelpCircle className="w-4 h-4" />
-              Câu hỏi Tương tác Đọc hiểu
-            </div>
-            <p className="text-body-ui md:text-card-title font-serif font-medium text-white mb-4 leading-normal">
+          /* INTERACTIVE QUIZ SLIDE */
+          <div className="max-w-2xl mx-auto w-full bg-stone-900/90 p-5 rounded-2xl border border-stone-800 space-y-4">
+            <p className="text-section font-serif text-stone-100 leading-relaxed font-semibold">
               {currentSlide.quizQuestion.question}
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               {currentSlide.quizQuestion.options.map((opt, i) => {
                 const isSelected = selectedQuizOption === i;
                 const isCorrect = i === currentSlide.quizQuestion?.correctIndex;
+                let btnStyle = "bg-stone-800/80 border-stone-700 text-stone-200 hover:bg-stone-700/80";
+                if (showExplanation) {
+                  if (isCorrect) btnStyle = "bg-emerald-950/80 border-emerald-500/60 text-emerald-200 ring-1 ring-emerald-500/50";
+                  else if (isSelected && !isCorrect) btnStyle = "bg-rose-950/80 border-rose-500/60 text-rose-200 ring-1 ring-rose-500/50";
+                } else if (isSelected) {
+                  btnStyle = "bg-amber-950/80 border-amber-500/60 text-amber-200";
+                }
                 return (
                   <button
                     key={i}
@@ -226,25 +261,17 @@ export const SlidesView: React.FC<SlidesViewProps> = ({ slides, setSlides, lesso
                       setSelectedQuizOption(i);
                       setShowExplanation(true);
                     }}
-                    className={`p-3 min-h-[40px] rounded-xl border text-left text-metadata font-medium transition flex items-center justify-between ${
-                      showExplanation && isCorrect
-                        ? 'bg-emerald-950/50 border-emerald-500 text-emerald-200'
-                        : showExplanation && isSelected && !isCorrect
-                        ? 'bg-red-950/50 border-red-500 text-red-200'
-                        : isSelected
-                        ? 'bg-[#7C2D37]/50 border-[#7C2D37] text-white'
-                        : 'bg-stone-950/70 border-stone-800 text-stone-200 hover:bg-stone-800'
-                    }`}
+                    className={`p-3 text-left rounded-xl border text-body-ui font-medium transition flex items-center justify-between ${btnStyle}`}
                   >
                     <span>{opt}</span>
-                    {showExplanation && isCorrect && <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />}
+                    {showExplanation && isCorrect && <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />}
                   </button>
                 );
               })}
             </div>
             {showExplanation && (
-              <div className="p-3 rounded-xl bg-amber-950/30 border border-amber-500/40 text-metadata text-amber-200 leading-relaxed font-serif">
-                <span className="font-semibold font-sans text-amber-400">Giải thích thi pháp: </span>
+              <div className="p-3 bg-stone-950/80 border border-stone-800 rounded-xl text-meta text-stone-300 leading-relaxed">
+                <span className="font-semibold text-amber-400">Giải thích: </span>
                 {currentSlide.quizQuestion.explanation}
               </div>
             )}
@@ -273,7 +300,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({ slides, setSlides, lesso
       <div className="pt-3 mt-3 border-t border-stone-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
         <div className="flex items-center gap-2 text-metadata text-stone-400 max-w-xl leading-relaxed">
           <Lightbulb className="w-4 h-4 text-amber-400 shrink-0" />
-          <span className="line-clamp-1"><strong className="text-stone-300 font-semibold">Ghi chú sư phạm:</strong> {currentSlide.speakerNotes}</span>
+          <span className="line-clamp-1"><strong className="text-stone-300 font-semibold">Ghi chú sư phạm:</strong> {currentSlide.speakerNotes || 'Chưa có ghi chú.'}</span>
         </div>
         <div className="flex items-center gap-2 self-end">
           <button
@@ -307,21 +334,21 @@ export const SlidesView: React.FC<SlidesViewProps> = ({ slides, setSlides, lesso
 
   return (
     <div className="h-full min-h-0 flex flex-col p-4 md:p-6 space-y-3 overflow-hidden">
-      {/* Top Banner (shrink-0) */}
-      <div className="bg-white p-3.5 md:p-4 rounded-2xl border border-stone-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0">
+      {/* Top Banner */}
+      <div className="bg-white p-3.5 md:p-4 rounded-2xl border border-stone-200 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-3 shrink-0 no-print">
         <div>
           <div className="flex items-center gap-2">
             <span className="px-2.5 py-0.5 rounded-full text-metadata font-semibold bg-amber-100 text-amber-900 border border-amber-200">
               Storytelling Presentation
             </span>
-            <span className="text-metadata text-stone-500 font-medium hidden sm:inline">Slide Bài giảng Ngữ văn Nghệ thuật</span>
+            <span className="text-metadata text-stone-500 font-medium hidden sm:inline">Chuẩn 16:9 Nghệ thuật Văn học</span>
           </div>
           <h1 className="text-section md:text-page-title font-semibold text-stone-900 mt-1 leading-[1.3]">
             Slide Trình chiếu & Trích đoạn Văn học
           </h1>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
           <button
             onClick={() => setIsFullscreen(true)}
             className="btn-secondary min-h-[36px] px-3 py-1.5 bg-stone-900 hover:bg-stone-800 text-white rounded-xl text-metadata font-semibold flex items-center gap-1.5 shadow-sm transition"
@@ -329,19 +356,43 @@ export const SlidesView: React.FC<SlidesViewProps> = ({ slides, setSlides, lesso
             <Maximize className="w-3.5 h-3.5" />
             <span>Trình chiếu F5</span>
           </button>
+
           <button
-            onClick={() => exportHtmlSlides(slides, lessonTitle)}
-            className="btn-primary min-h-[36px] px-3 py-1.5 bg-[#7C2D37] hover:bg-[#68232D] text-white rounded-xl text-metadata font-semibold flex items-center gap-1.5 shadow-sm transition"
+            onClick={() => setIsEditing(!isEditing)}
+            className={`min-h-[36px] px-3 py-1.5 rounded-xl text-metadata font-semibold flex items-center gap-1.5 transition border ${
+              isEditing 
+                ? 'bg-amber-100 text-amber-900 border-amber-300 shadow-xs' 
+                : 'bg-stone-100 hover:bg-stone-200 text-stone-700 border-stone-200'
+            }`}
+          >
+            <Edit3 className="w-3.5 h-3.5" />
+            <span>{isEditing ? 'Đóng chỉnh sửa' : 'Chỉnh sửa slide'}</span>
+          </button>
+
+          <button
+            onClick={handleExportPptx}
+            disabled={isExportingPptx}
+            className="btn-primary min-h-[36px] px-3.5 py-1.5 bg-[#7C2D37] hover:bg-[#68232D] text-white rounded-xl text-metadata font-semibold flex items-center gap-1.5 shadow-sm transition disabled:opacity-50"
+            title="Tải xuống tệp trình chiếu PowerPoint chuẩn 16:9"
           >
             <Download className="w-3.5 h-3.5" />
-            <span>Xuất PowerPoint</span>
+            <span>{isExportingPptx ? 'Đang xuất .pptx...' : 'Xuất PowerPoint (.pptx)'}</span>
+          </button>
+
+          <button
+            onClick={() => exportHtmlSlides(slides, lessonTitle)}
+            className="btn-secondary min-h-[36px] px-3 py-1.5 border border-stone-200 hover:bg-stone-50 text-stone-700 rounded-xl text-metadata font-semibold flex items-center gap-1.5 transition"
+            title="Xuất file HTML xem offline và in ấn"
+          >
+            <FileCode2 className="w-3.5 h-3.5 text-stone-500" />
+            <span>Xuất Trình chiếu (.html)</span>
           </button>
         </div>
       </div>
 
-      {/* Main Workspace (Rule 29.16) */}
+      {/* Main Workspace */}
       <div className="flex-1 min-h-0 flex gap-4 overflow-hidden">
-        {/* Left Thumbnails Column (160-180px, shrink-0) */}
+        {/* Left Thumbnails Column (shrink-0) */}
         <div className="w-44 xl:w-52 shrink-0 card-surface p-2.5 flex flex-col gap-2 overflow-hidden">
           <div className="flex items-center justify-between pb-1 border-b border-stone-100 shrink-0">
             <span className="text-metadata font-semibold text-stone-800 flex items-center gap-1">
@@ -378,18 +429,30 @@ export const SlidesView: React.FC<SlidesViewProps> = ({ slides, setSlides, lesso
                 <div className="text-metadata font-serif font-medium text-stone-900 line-clamp-2 leading-snug">
                   {s.title}
                 </div>
-                {slides.length > 1 && (
+                <div className="absolute top-1 right-1 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleDeleteSlide(idx);
+                      handleDuplicateSlide(idx);
                     }}
-                    className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 p-0.5 text-stone-400 hover:text-red-600 rounded bg-white shadow-xs transition"
-                    title="Xóa slide"
+                    className="p-0.5 text-stone-400 hover:text-stone-700 rounded bg-white shadow-xs transition"
+                    title="Nhân bản slide"
                   >
-                    <Trash2 className="w-3 h-3" />
+                    <Copy className="w-3 h-3" />
                   </button>
-                )}
+                  {slides.length > 1 && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteSlide(idx);
+                      }}
+                      className="p-0.5 text-stone-400 hover:text-red-600 rounded bg-white shadow-xs transition"
+                      title="Xóa slide"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                    </button>
+                  )}
+                </div>
               </div>
             ))}
           </div>
@@ -399,7 +462,189 @@ export const SlidesView: React.FC<SlidesViewProps> = ({ slides, setSlides, lesso
         <div className="flex-1 min-h-0 bg-[#1C1817] rounded-2xl p-4 md:p-6 border border-stone-800 text-stone-100 flex flex-col justify-between overflow-hidden shadow-xl">
           {renderSlideCanvas(false)}
         </div>
+
+        {/* Right Editorial Slide Edit Panel (Rule 29.16) */}
+        {isEditing && (
+          <div className="w-80 xl:w-96 shrink-0 card-surface p-4 flex flex-col gap-3 overflow-hidden border-l border-stone-200 shadow-md">
+            <div className="flex items-center justify-between pb-2 border-b border-stone-200 shrink-0">
+              <div className="flex items-center gap-2">
+                <Edit3 className="w-4 h-4 text-[#7C2D37]" />
+                <h3 className="text-card-title text-stone-900">
+                  Sửa Slide #{currentIndex + 1}
+                </h3>
+              </div>
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => handleDuplicateSlide(currentIndex)}
+                  className="p-1.5 text-stone-500 hover:text-stone-800 rounded-lg hover:bg-stone-100 transition"
+                  title="Nhân bản slide này"
+                >
+                  <Copy className="w-3.5 h-3.5" />
+                </button>
+                {slides.length > 1 && (
+                  <button
+                    onClick={() => handleDeleteSlide(currentIndex)}
+                    className="p-1.5 text-stone-500 hover:text-red-600 rounded-lg hover:bg-red-50 transition"
+                    title="Xóa slide này"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                )}
+                <button
+                  onClick={() => setIsEditing(false)}
+                  className="p-1.5 text-stone-400 hover:text-stone-700 rounded-lg transition"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            <div className="flex-1 min-h-0 overflow-y-auto space-y-3 panel-scroll pr-1 text-meta">
+              {/* Phase Tag */}
+              <div>
+                <label className="block font-medium text-stone-700 mb-1">Pha sư phạm</label>
+                <select
+                  value={currentSlide.phaseTag}
+                  onChange={(e) => handleUpdateSlide({ phaseTag: e.target.value as SlideItem['phaseTag'] })}
+                  className="w-full px-3 py-1.5 border border-stone-300 rounded-xl bg-white text-body-ui text-stone-900 focus:outline-none focus:border-[#7C2D37]"
+                >
+                  <option value="Khởi động">Khởi động</option>
+                  <option value="Kiến thức mới">Kiến thức mới</option>
+                  <option value="Luyện tập">Luyện tập</option>
+                  <option value="Vận dụng">Vận dụng</option>
+                </select>
+              </div>
+
+              {/* Title */}
+              <div>
+                <label className="block font-medium text-stone-700 mb-1">Tiêu đề Slide</label>
+                <input
+                  type="text"
+                  value={currentSlide.title}
+                  onChange={(e) => handleUpdateSlide({ title: normalizeVietnamese(e.target.value) })}
+                  className="w-full px-3 py-1.5 border border-stone-300 rounded-xl bg-white text-body-ui text-stone-900 focus:outline-none focus:border-[#7C2D37]"
+                />
+              </div>
+
+              {/* Layout Selector */}
+              <div>
+                <label className="block font-medium text-stone-700 mb-1">Bố cục hiển thị</label>
+                <select
+                  value={currentSlide.layout}
+                  onChange={(e) => handleUpdateSlide({ layout: e.target.value as SlideItem['layout'] })}
+                  className="w-full px-3 py-1.5 border border-stone-300 rounded-xl bg-white text-body-ui text-stone-900 focus:outline-none focus:border-[#7C2D37]"
+                >
+                  <option value="quote">Trích đoạn nghệ thuật (Quote Focus)</option>
+                  <option value="split">Song song 2 cột (Split)</option>
+                  <option value="cards">Thẻ kiến thức 3 cột (Cards)</option>
+                  <option value="quiz">Câu hỏi tương tác (Quiz)</option>
+                  <option value="single">Văn bản chuẩn (Single Text)</option>
+                </select>
+              </div>
+
+              {/* Fields for Quote */}
+              {currentSlide.layout === 'quote' && (
+                <>
+                  <div>
+                    <label className="block font-medium text-stone-700 mb-1">Đoạn trích thơ / văn</label>
+                    <textarea
+                      rows={4}
+                      value={currentSlide.quoteText || ''}
+                      onChange={(e) => handleUpdateSlide({ quoteText: normalizeVietnamese(e.target.value) })}
+                      className="w-full px-3 py-2 border border-stone-300 rounded-xl bg-white text-body-ui text-stone-900 focus:outline-none focus:border-[#7C2D37] font-serif"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-medium text-stone-700 mb-1">Tác giả / Nguồn trích</label>
+                    <input
+                      type="text"
+                      value={currentSlide.quoteAuthor || ''}
+                      onChange={(e) => handleUpdateSlide({ quoteAuthor: normalizeVietnamese(e.target.value) })}
+                      className="w-full px-3 py-1.5 border border-stone-300 rounded-xl bg-white text-body-ui text-stone-900 focus:outline-none focus:border-[#7C2D37]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-medium text-stone-700 mb-1">Câu hỏi khám phá / thảo luận</label>
+                    <textarea
+                      rows={2}
+                      value={currentSlide.discussionQuestion || ''}
+                      onChange={(e) => handleUpdateSlide({ discussionQuestion: normalizeVietnamese(e.target.value) })}
+                      className="w-full px-3 py-2 border border-stone-300 rounded-xl bg-white text-body-ui text-stone-900 focus:outline-none focus:border-[#7C2D37]"
+                    />
+                  </div>
+                </>
+              )}
+
+              {/* Fields for Split */}
+              {currentSlide.layout === 'split' && (
+                <>
+                  <div>
+                    <label className="block font-medium text-stone-700 mb-1">Nội dung cột trái</label>
+                    <textarea
+                      rows={3}
+                      value={currentSlide.contentLeft || ''}
+                      onChange={(e) => handleUpdateSlide({ contentLeft: normalizeVietnamese(e.target.value) })}
+                      className="w-full px-3 py-2 border border-stone-300 rounded-xl bg-white text-body-ui text-stone-900 focus:outline-none focus:border-[#7C2D37]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-medium text-stone-700 mb-1">Nội dung cột phải</label>
+                    <textarea
+                      rows={3}
+                      value={currentSlide.contentRight || ''}
+                      onChange={(e) => handleUpdateSlide({ contentRight: normalizeVietnamese(e.target.value) })}
+                      className="w-full px-3 py-2 border border-stone-300 rounded-xl bg-white text-body-ui text-stone-900 focus:outline-none focus:border-[#7C2D37] font-serif"
+                    />
+                  </div>
+                </>
+              )}
+
+              {/* Content for Single Text */}
+              {currentSlide.layout === 'single' && (
+                <div>
+                  <label className="block font-medium text-stone-700 mb-1">Nội dung chính</label>
+                  <textarea
+                    rows={4}
+                    value={currentSlide.contentLeft || ''}
+                    onChange={(e) => handleUpdateSlide({ contentLeft: normalizeVietnamese(e.target.value) })}
+                    className="w-full px-3 py-2 border border-stone-300 rounded-xl bg-white text-body-ui text-stone-900 focus:outline-none focus:border-[#7C2D37]"
+                  />
+                </div>
+              )}
+
+              {/* Speaker Notes */}
+              <div>
+                <label className="block font-medium text-stone-700 mb-1">Ghi chú sư phạm (Speaker Notes)</label>
+                <textarea
+                  rows={2}
+                  value={currentSlide.speakerNotes || ''}
+                  onChange={(e) => handleUpdateSlide({ speakerNotes: normalizeVietnamese(e.target.value) })}
+                  placeholder="Gợi ý phương pháp, định hướng thời gian thảo luận..."
+                  className="w-full px-3 py-2 border border-stone-300 rounded-xl bg-white text-body-ui text-stone-900 focus:outline-none focus:border-[#7C2D37]"
+                />
+              </div>
+            </div>
+
+            <div className="pt-2 border-t border-stone-200 flex justify-between items-center text-xs text-stone-500">
+              <span>Tự động lưu vào phiên làm việc</span>
+              <button
+                onClick={() => setIsEditing(false)}
+                className="btn-primary py-1 px-3 text-xs"
+              >
+                Xong
+              </button>
+            </div>
+          </div>
+        )}
       </div>
+
+      {/* Floating Toast Notification */}
+      {toastMsg && (
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 bg-stone-900 text-white px-4 py-3 rounded-xl shadow-xl text-body-ui border border-stone-700 animate-in fade-in slide-in-from-bottom-2">
+          <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+          <span>{toastMsg}</span>
+        </div>
+      )}
     </div>
   );
 };

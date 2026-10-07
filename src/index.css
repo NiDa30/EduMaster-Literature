@@ -345,6 +345,22 @@
   .print-only {
     display: block !important;
   }
+  html,
+  body,
+  #root,
+  .app-shell,
+  .workspace-viewport,
+  main,
+  .panel-scroll,
+  .table-scroll {
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    position: static !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    background: transparent !important;
+  }
   body {
     background: white !important;
     color: black !important;

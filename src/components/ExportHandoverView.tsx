@@ -15,8 +15,17 @@ import {
   AlertCircle,
   GraduationCap
 } from 'lucide-react';
-import { AppState, LessonPlan5512, Exam7991Data, SlideItem } from '../types';
-import { exportWordKHBD, exportWordExam7991, exportHtmlSlides, exportRubricDoc } from '../utils/exportUtils';
+import { AppState } from '../types';
+import { 
+  exportDocxKHBD, 
+  exportDocxExam, 
+  exportPptxSlides, 
+  exportDocxRubric, 
+  exportWordKHBD, 
+  exportWordExam7991, 
+  exportHtmlSlides, 
+  exportRubricDoc 
+} from '../utils/exportUtils';
 import { normalizeDeepNFC } from '../utils/unicode';
 
 interface ExportHandoverViewProps {
@@ -176,15 +185,15 @@ export const ExportHandoverView: React.FC<ExportHandoverViewProps> = ({ appState
                   </div>
                   <div className="min-w-0">
                     <div className="font-semibold text-metadata text-stone-900 font-serif leading-tight">Word KHBD (5512)</div>
-                    <div className="text-[11px] text-stone-500 leading-tight">Khung 4 hoạt động chuẩn A4</div>
+                    <div className="text-[11px] text-stone-500 leading-tight">Chuẩn OpenXML 5512 A4</div>
                   </div>
                 </div>
                 <button
-                  onClick={() => exportWordKHBD(appState.khbd)}
+                  onClick={() => exportDocxKHBD(appState.khbd)}
                   className="min-h-[32px] px-2.5 py-1 bg-[#7C2D37] hover:bg-[#68232D] text-white font-semibold text-xs rounded-lg flex items-center gap-1 shrink-0 transition"
                 >
                   <Download className="w-3 h-3" />
-                  <span>Tải Word</span>
+                  <span>Tải Word (.docx)</span>
                 </button>
               </div>
 
@@ -196,15 +205,15 @@ export const ExportHandoverView: React.FC<ExportHandoverViewProps> = ({ appState
                   </div>
                   <div className="min-w-0">
                     <div className="font-semibold text-metadata text-stone-900 font-serif leading-tight">Word Đề thi (7991)</div>
-                    <div className="text-[11px] text-stone-500 leading-tight">4 phần kèm barem 10.0 đ</div>
+                    <div className="text-[11px] text-stone-500 leading-tight">Chuẩn CV 7991 kèm Barem (.docx)</div>
                   </div>
                 </div>
                 <button
-                  onClick={() => exportWordExam7991(appState.exam, appState.khbd)}
+                  onClick={() => exportDocxExam(appState.exam, appState.khbd)}
                   className="min-h-[32px] px-2.5 py-1 bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-xs rounded-lg flex items-center gap-1 shrink-0 transition"
                 >
                   <Download className="w-3 h-3" />
-                  <span>Tải Đề thi</span>
+                  <span>Tải Đề thi (.docx)</span>
                 </button>
               </div>
 
@@ -215,16 +224,16 @@ export const ExportHandoverView: React.FC<ExportHandoverViewProps> = ({ appState
                     <Presentation className="w-3.5 h-3.5" />
                   </div>
                   <div className="min-w-0">
-                    <div className="font-semibold text-metadata text-stone-900 font-serif leading-tight">Slide Storytelling</div>
-                    <div className="text-[11px] text-stone-500 leading-tight">Trình chiếu & Quote nghệ thuật</div>
+                    <div className="font-semibold text-metadata text-stone-900 font-serif leading-tight">PowerPoint Slide</div>
+                    <div className="text-[11px] text-stone-500 leading-tight">Bản trình chiếu 16:9 (.pptx)</div>
                   </div>
                 </div>
                 <button
-                  onClick={() => exportHtmlSlides(appState.slides, appState.khbd.info.lessonTitle)}
+                  onClick={() => exportPptxSlides(appState.slides, appState.khbd.info.lessonTitle)}
                   className="min-h-[32px] px-2.5 py-1 bg-amber-700 hover:bg-amber-800 text-white font-semibold text-xs rounded-lg flex items-center gap-1 shrink-0 transition"
                 >
                   <Download className="w-3 h-3" />
-                  <span>Tải Slide</span>
+                  <span>Tải PPTX (.pptx)</span>
                 </button>
               </div>
 
@@ -236,15 +245,15 @@ export const ExportHandoverView: React.FC<ExportHandoverViewProps> = ({ appState
                   </div>
                   <div className="min-w-0">
                     <div className="font-semibold text-metadata text-stone-900 font-serif leading-tight">Word Rubric Chấm</div>
-                    <div className="text-[11px] text-stone-500 leading-tight">Barem tự luận chuẩn biểu điểm</div>
+                    <div className="text-[11px] text-stone-500 leading-tight">Barem tự luận (.docx)</div>
                   </div>
                 </div>
                 <button
-                  onClick={() => exportRubricDoc(appState.rubric)}
+                  onClick={() => exportDocxRubric(appState.rubric)}
                   className="min-h-[32px] px-2.5 py-1 bg-purple-800 hover:bg-purple-900 text-white font-semibold text-xs rounded-lg flex items-center gap-1 shrink-0 transition"
                 >
                   <Download className="w-3 h-3" />
-                  <span>Tải Rubric</span>
+                  <span>Tải Rubric (.docx)</span>
                 </button>
               </div>
             </div>
