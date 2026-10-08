@@ -11,7 +11,8 @@ import {
   HelpCircle,
   X,
   Feather,
-  GraduationCap
+  GraduationCap,
+  Compass
 } from 'lucide-react';
 import { ActiveModule, LessonPlan5512, Exam7991Data, SlideItem, LiteratureLesson } from '../types';
 
@@ -41,15 +42,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onOpenHandover,
   onOpenSettings
 }) => {
-  // 8 core teaching & assessment navigation items
+  // 9 core teaching & assessment navigation items matching documentation
   const mainNavItems = [
     { id: 'dashboard' as ActiveModule, label: 'Bàn làm việc', icon: Home },
     { id: 'workspace' as ActiveModule, label: 'Tác phẩm', icon: BookOpen },
+    { id: 'genre_analysis' as ActiveModule, label: 'Phân tích thể loại', icon: Compass },
     { id: 'khbd' as ActiveModule, label: 'Kế hoạch bài dạy', icon: FileText },
     { id: 'question_builder' as ActiveModule, label: 'Câu hỏi', icon: HelpCircle },
+    { id: 'matrix' as ActiveModule, label: 'Ma trận & Đặc tả', icon: Grid3X3 },
     { id: 'exam' as ActiveModule, label: 'Đề kiểm tra', icon: CheckSquare },
-    { id: 'matrix' as ActiveModule, label: 'Ma trận', icon: Grid3X3 },
-    { id: 'rubric' as ActiveModule, label: 'Rubric tự luận', icon: GraduationCap },
+    { id: 'rubric' as ActiveModule, label: 'Rubric', icon: GraduationCap },
     { id: 'slides' as ActiveModule, label: 'Slide', icon: Presentation },
   ];
 

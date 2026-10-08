@@ -34,15 +34,26 @@ const VALID_MODULES: ActiveModule[] = [
   'matrix', 'export_handover', 'typography_test'
 ];
 
+export const resolveModuleAlias = (hash: string): ActiveModule | null => {
+  const clean = hash.replace(/^#\/?/, '').trim().toLowerCase();
+  if (VALID_MODULES.includes(clean as ActiveModule)) return clean as ActiveModule;
+  if (clean === 'reader') return 'workspace';
+  if (clean === 'genre') return 'genre_analysis';
+  if (clean === 'questions') return 'question_builder';
+  if (clean === 'export') return 'export_handover';
+  if (clean === 'typographytest' || clean === 'typography_test') return 'typography_test';
+  return null;
+};
+
 const getInitialModule = (): ActiveModule => {
   if (typeof window !== 'undefined') {
-    const rawHash = window.location.hash.replace(/^#\/?/, '').trim().toLowerCase();
-    if (VALID_MODULES.includes(rawHash as ActiveModule)) {
-      return rawHash as ActiveModule;
-    }
+    const rawHash = window.location.hash;
+    const resolved = resolveModuleAlias(rawHash);
+    if (resolved) return resolved;
+
     const path = window.location.pathname.toLowerCase();
     const search = window.location.search.toLowerCase();
-    if (path.includes('typographytest') || rawHash.includes('typographytest') || search.includes('typography_test')) {
+    if (path.includes('typographytest') || search.includes('typography_test')) {
       return 'typography_test';
     }
   }
@@ -56,15 +67,33 @@ const loadInitialState = (): AppState => {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
+        
+        // Merge preset lessons if cached lessons lack bundled packages
+        const mergedLessons = (parsed.lessons && Array.isArray(parsed.lessons) ? parsed.lessons : initialAppState.lessons).map((l: LiteratureLesson) => {
+          const presetMatch = initialAppState.lessons.find(p => p.id === l.id);
+          if (presetMatch) {
+            return {
+              ...presetMatch,
+              ...l,
+              khbd: l.khbd || presetMatch.khbd,
+              slides: l.slides || presetMatch.slides,
+              exam: l.exam || presetMatch.exam,
+              questions: l.questions || presetMatch.questions,
+              rubric: l.rubric || presetMatch.rubric
+            };
+          }
+          return l;
+        });
+
         return {
           ...initialAppState,
           ...parsed,
           activeModule: initMod,
+          lessons: mergedLessons,
           khbd: { ...initialAppState.khbd, ...(parsed.khbd || {}) },
           exam: { ...initialAppState.exam, ...(parsed.exam || {}) },
           rubric: { ...initialAppState.rubric, ...(parsed.rubric || {}) },
           slides: parsed.slides && Array.isArray(parsed.slides) ? parsed.slides : initialAppState.slides,
-          lessons: parsed.lessons && Array.isArray(parsed.lessons) ? parsed.lessons : initialAppState.lessons,
           questions: parsed.questions && Array.isArray(parsed.questions) ? parsed.questions : initialAppState.questions,
           lastUpdated: parsed.lastUpdated || new Date().toISOString()
         };
@@ -99,14 +128,15 @@ export default function App() {
     }
   }, [appState.activeModule]);
 
-  // Lắng nghe thay đổi hash từ browser (Back/Forward)
+  // Lắng nghe thay đổi hash từ browser (Back/Forward) bao gồm alias
   useEffect(() => {
     const handleHashChange = () => {
-      const rawHash = window.location.hash.replace(/^#\/?/, '').trim().toLowerCase();
-      if (VALID_MODULES.includes(rawHash as ActiveModule)) {
+      const rawHash = window.location.hash;
+      const resolved = resolveModuleAlias(rawHash);
+      if (resolved) {
         setAppState(prev => {
-          if (prev.activeModule === rawHash) return prev;
-          return { ...prev, activeModule: rawHash as ActiveModule };
+          if (prev.activeModule === resolved) return prev;
+          return { ...prev, activeModule: resolved };
         });
       }
     };
@@ -187,22 +217,107 @@ export default function App() {
     const target = appState.lessons.find(l => l.id === lessonId);
     if (!target) return;
 
-    setAppState(prev => ({
-      ...prev,
-      currentLessonId: lessonId,
-      khbd: {
+    setAppState(prev => {
+      // 1. Lưu lại gói tài liệu hiện tại của bài học trước khi chuyển
+      const updatedLessons = prev.lessons.map(l => {
+        if (l.id === prev.currentLessonId) {
+          return {
+            ...l,
+            khbd: prev.khbd,
+            slides: prev.slides,
+            exam: prev.exam,
+            questions: prev.questions,
+            rubric: prev.rubric
+          };
+        }
+        return l;
+      });
+
+      // 2. Tìm bài học mục tiêu từ danh sách đã cập nhật
+      const currentTarget = updatedLessons.find(l => l.id === lessonId) || target;
+
+      // 3. Tải các gói tài liệu độc lập của bài học mục tiêu
+      const targetKhbd: LessonPlan5512 = currentTarget.khbd || {
         ...prev.khbd,
         info: {
           ...prev.khbd.info,
-          lessonTitle: `${target.title} (${target.author})`,
-          grade: target.grade || prev.khbd.info.grade,
-          textbook: target.textbook || prev.khbd.info.textbook
+          lessonTitle: `${currentTarget.title} (${currentTarget.author})`,
+          grade: currentTarget.grade || prev.khbd.info.grade,
+          textbook: currentTarget.textbook || prev.khbd.info.textbook
         }
-      },
-      lastUpdated: new Date().toISOString()
-    }));
+      };
+      const targetSlides: SlideItem[] = currentTarget.slides || prev.slides;
+      const targetExam: Exam7991Data = currentTarget.exam || prev.exam;
+      const targetQuestions: LiteratureQuestionItem[] = currentTarget.questions || prev.questions;
+      const targetRubric: RubricData = currentTarget.rubric || prev.rubric;
 
-    setToastMessage(`Đã chuyển sang tác phẩm "${target.title} (${target.author})".`);
+      return {
+        ...prev,
+        lessons: updatedLessons,
+        currentLessonId: lessonId,
+        khbd: targetKhbd,
+        slides: targetSlides,
+        exam: targetExam,
+        questions: targetQuestions,
+        rubric: targetRubric,
+        lastUpdated: new Date().toISOString()
+      };
+    });
+
+    setToastMessage(`Đã chuyển sang tác phẩm "${target.title} (${target.author})". Dữ liệu KHBD, Slide và Đề đã được đồng bộ.`);
+    setTimeout(() => setToastMessage(null), 3500);
+  };
+
+  const handleCreateLesson = (newLesson: LiteratureLesson) => {
+    setAppState(prev => {
+      // Lưu lại bài học hiện tại trước khi tạo mới
+      const updatedLessons = prev.lessons.map(l => {
+        if (l.id === prev.currentLessonId) {
+          return {
+            ...l,
+            khbd: prev.khbd,
+            slides: prev.slides,
+            exam: prev.exam,
+            questions: prev.questions,
+            rubric: prev.rubric
+          };
+        }
+        return l;
+      });
+
+      return {
+        ...prev,
+        lessons: [newLesson, ...updatedLessons],
+        currentLessonId: newLesson.id,
+        khbd: newLesson.khbd || prev.khbd,
+        slides: newLesson.slides || prev.slides,
+        exam: newLesson.exam || prev.exam,
+        questions: newLesson.questions || prev.questions,
+        rubric: newLesson.rubric || prev.rubric,
+        activeModule: 'workspace',
+        lastUpdated: new Date().toISOString()
+      };
+    });
+
+    setToastMessage(`Đã khởi tạo thành công bài dạy "${newLesson.title}". Bắt đầu soạn bài.`);
+    setTimeout(() => setToastMessage(null), 3500);
+  };
+
+  const handleAddToKhbd = (content: string, title?: string) => {
+    setKhbd(prev => {
+      const activities = [...prev.activities];
+      if (activities.length > 1) {
+        activities[1] = {
+          ...activities[1],
+          content: `${activities[1].content}\n\n• ${title ? title + ': ' : ''}${normalizeVietnamese(content)}`
+        };
+      }
+      return {
+        ...prev,
+        activities
+      };
+    });
+    setToastMessage(`Đã đưa ngữ liệu phân tích vào Hoạt động Khám phá của KHBD 5512.`);
     setTimeout(() => setToastMessage(null), 3500);
   };
 
@@ -300,6 +415,7 @@ export default function App() {
               onSelectLesson={handleSelectLesson}
               setActiveModule={setActiveModule}
               khbd={appState.khbd}
+              onCreateLesson={handleCreateLesson}
             />
           )}
 
@@ -321,6 +437,9 @@ export default function App() {
               lesson={currentLesson}
               onUpdateLesson={handleUpdateCurrentLesson}
               setActiveModule={setActiveModule}
+              onAddSlideFromQuote={handleAddSlideFromQuote}
+              onAddQuestionFromPassage={handleAddQuestionFromPassage}
+              onAddToKhbd={handleAddToKhbd}
             />
           )}
 

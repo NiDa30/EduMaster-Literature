@@ -10,7 +10,8 @@ import {
   TableCell, 
   WidthType, 
   AlignmentType, 
-  BorderStyle 
+  BorderStyle,
+  PageOrientation 
 } from 'docx';
 
 function sanitizeFilename(name: string): string {
@@ -1020,6 +1021,302 @@ export async function exportDocxRubric(rubric: RubricData): Promise<void> {
 
   const blob = await Packer.toBlob(doc);
   saveBlob(blob, `RUBRIC_DANH_GIA_${sanitizeFilename(rubric.title)}.docx`);
+}
+
+export async function exportDocxMatrix(exam: Exam7991Data, khbd: LessonPlan5512): Promise<void> {
+  const partINB = exam.partI.filter(q => q.level === 'NB');
+  const partITH = exam.partI.filter(q => q.level === 'TH');
+  const partIVD = exam.partI.filter(q => q.level === 'VD');
+
+  const partIINB = exam.partII.filter(q => q.level === 'NB');
+  const partIITH = exam.partII.filter(q => q.level === 'TH');
+  const partIIVD = exam.partII.filter(q => q.level === 'VD');
+
+  const partIIITH = exam.partIII.filter(q => q.level === 'TH');
+  const partIIIVD = exam.partIII.filter(q => q.level === 'VD');
+
+  const totalPartIPts = exam.partI.reduce((s, q) => s + (q.points || 0.25), 0);
+  const totalPartIIPts = exam.partII.reduce((s, q) => s + (q.points || 1.0), 0);
+  const totalPartIIIPts = exam.partIII.reduce((s, q) => s + (q.points || 0.5), 0);
+  const totalPartIVPts = exam.partIV.reduce((s, q) => s + (q.points || 3.0), 0);
+  const grandTotalPts = totalPartIPts + totalPartIIPts + totalPartIIIPts + totalPartIVPts;
+  const totalQuestions = exam.partI.length + exam.partII.length + exam.partIII.length + exam.partIV.length;
+
+  const nbPts = (partINB.length * 0.25) + (partIINB.length * 1.0);
+  const thPts = (partITH.length * 0.25) + (partIITH.length * 1.0) + (partIIITH.length * 0.5);
+  const vdPts = (partIVD.length * 0.25) + (partIIVD.length * 1.0) + (partIIIVD.length * 0.5) + totalPartIVPts;
+
+  const nbPercent = grandTotalPts > 0 ? Math.round((nbPts / grandTotalPts) * 100) : 40;
+  const thPercent = grandTotalPts > 0 ? Math.round((thPts / grandTotalPts) * 100) : 30;
+  const vdPercent = grandTotalPts > 0 ? (100 - nbPercent - thPercent) : 30;
+
+  const doc = new Document({
+    sections: [
+      {
+        properties: {
+          page: {
+            size: {
+              orientation: PageOrientation.LANDSCAPE,
+            },
+            margin: {
+              top: 1134,
+              bottom: 1134,
+              left: 1134,
+              right: 1134,
+            },
+          },
+        },
+        children: [
+          // Header Table
+          new Table({
+            width: { size: 100, type: WidthType.PERCENTAGE },
+            borders: {
+              top: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+              bottom: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+              left: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+              right: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+              insideHorizontal: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+              insideVertical: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+            },
+            rows: [
+              new TableRow({
+                children: [
+                  new TableCell({
+                    width: { size: 50, type: WidthType.PERCENTAGE },
+                    children: [
+                      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: khbd.info.department.toUpperCase(), font: 'Times New Roman', size: 22 })] }),
+                      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: khbd.info.school.toUpperCase(), bold: true, font: 'Times New Roman', size: 24 })] }),
+                      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `TỔ: ${khbd.info.subjectGroup.toUpperCase()}`, font: 'Times New Roman', size: 22 })] }),
+                    ],
+                  }),
+                  new TableCell({
+                    width: { size: 50, type: WidthType.PERCENTAGE },
+                    children: [
+                      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: 'BẢNG MA TRẬN VÀ BẢN ĐẶC TẢ ĐỀ KIỂM TRA ĐỊNH KỲ', bold: true, font: 'Times New Roman', size: 24, color: '7C2D37' })] }),
+                      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `MÔN: NGỮ VĂN - ${khbd.info.grade.toUpperCase()} (${khbd.info.textbook})`, bold: true, font: 'Times New Roman', size: 22 })] }),
+                      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `Bài học: ${khbd.info.lessonTitle}`, italics: true, font: 'Times New Roman', size: 20 })] }),
+                    ],
+                  }),
+                ],
+              }),
+            ],
+          }),
+          new Paragraph({ text: '', spacing: { after: 150 } }),
+
+          // Part A: KHUNG MA TRẬN
+          new Paragraph({
+            alignment: AlignmentType.CENTER,
+            children: [
+              new TextRun({ text: 'I. KHUNG MA TRẬN ĐỀ KIỂM TRA ĐỊNH KỲ (CHUẨN CÔNG VĂN 7991/BGDĐT-GDTrH)', bold: true, font: 'Times New Roman', size: 26, color: '1E3A8A' }),
+            ],
+            spacing: { before: 100, after: 100 },
+          }),
+          new Paragraph({
+            alignment: AlignmentType.CENTER,
+            children: [
+              new TextRun({ text: `Tổng điểm: ${grandTotalPts.toFixed(1)} điểm  ·  Tỷ lệ nhận thức: Nhận biết ${nbPercent}% - Thông hiểu ${thPercent}% - Vận dụng ${vdPercent}%`, italics: true, font: 'Times New Roman', size: 22 }),
+            ],
+            spacing: { after: 150 },
+          }),
+
+          // Matrix Table
+          new Table({
+            width: { size: 100, type: WidthType.PERCENTAGE },
+            rows: [
+              new TableRow({
+                children: [
+                  new TableCell({ width: { size: 5, type: WidthType.PERCENTAGE }, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: 'TT', bold: true, font: 'Times New Roman', size: 20 })] })] }),
+                  new TableCell({ width: { size: 23, type: WidthType.PERCENTAGE }, children: [new Paragraph({ children: [new TextRun({ text: 'Kỹ năng & Đơn vị kiến thức', bold: true, font: 'Times New Roman', size: 20 })] })] }),
+                  new TableCell({ width: { size: 21, type: WidthType.PERCENTAGE }, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `Nhận biết (${nbPercent}%)`, bold: true, font: 'Times New Roman', size: 20, color: '1E3A8A' })] })] }),
+                  new TableCell({ width: { size: 21, type: WidthType.PERCENTAGE }, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `Thông hiểu (${thPercent}%)`, bold: true, font: 'Times New Roman', size: 20, color: '065F46' })] })] }),
+                  new TableCell({ width: { size: 20, type: WidthType.PERCENTAGE }, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `Vận dụng (${vdPercent}%)`, bold: true, font: 'Times New Roman', size: 20, color: '92400E' })] })] }),
+                  new TableCell({ width: { size: 10, type: WidthType.PERCENTAGE }, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: 'Tổng', bold: true, font: 'Times New Roman', size: 20 })] })] }),
+                ],
+              }),
+              new TableRow({
+                children: [
+                  new TableCell({ children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: '1', font: 'Times New Roman', size: 20 })] })] }),
+                  new TableCell({
+                    children: [
+                      new Paragraph({ children: [new TextRun({ text: `Đọc hiểu văn bản & Tiếng Việt (${khbd.info.lessonTitle})`, bold: true, font: 'Times New Roman', size: 20 })] }),
+                      new Paragraph({ children: [new TextRun({ text: 'Phần I (MCQ), Phần II (Đúng/Sai), Phần III (Trả lời ngắn)', font: 'Times New Roman', size: 18, color: '666666' })] }),
+                    ],
+                  }),
+                  new TableCell({
+                    children: [
+                      new Paragraph({ children: [new TextRun({ text: `• Phần I: ${partINB.length} câu (${(partINB.length * 0.25).toFixed(2)} đ)`, font: 'Times New Roman', size: 20 })] }),
+                      new Paragraph({ children: [new TextRun({ text: `• Phần II: ${partIINB.length} câu (${(partIINB.length * 1.0).toFixed(1)} đ)`, font: 'Times New Roman', size: 20 })] }),
+                    ],
+                  }),
+                  new TableCell({
+                    children: [
+                      new Paragraph({ children: [new TextRun({ text: `• Phần I: ${partITH.length} câu (${(partITH.length * 0.25).toFixed(2)} đ)`, font: 'Times New Roman', size: 20 })] }),
+                      new Paragraph({ children: [new TextRun({ text: `• Phần II: ${partIITH.length} câu (${(partIITH.length * 1.0).toFixed(1)} đ)`, font: 'Times New Roman', size: 20 })] }),
+                      new Paragraph({ children: [new TextRun({ text: `• Phần III: ${partIIITH.length} câu (${(partIIITH.length * 0.5).toFixed(1)} đ)`, font: 'Times New Roman', size: 20 })] }),
+                    ],
+                  }),
+                  new TableCell({
+                    children: [
+                      new Paragraph({ children: [new TextRun({ text: `• Phần I: ${partIVD.length} câu (${(partIVD.length * 0.25).toFixed(2)} đ)`, font: 'Times New Roman', size: 20 })] }),
+                      new Paragraph({ children: [new TextRun({ text: `• Phần II: ${partIIVD.length} câu (${(partIIVD.length * 1.0).toFixed(1)} đ)`, font: 'Times New Roman', size: 20 })] }),
+                      new Paragraph({ children: [new TextRun({ text: `• Phần III: ${partIIIVD.length} câu (${(partIIIVD.length * 0.5).toFixed(1)} đ)`, font: 'Times New Roman', size: 20 })] }),
+                    ],
+                  }),
+                  new TableCell({
+                    children: [
+                      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `${exam.partI.length + exam.partII.length + exam.partIII.length} câu`, bold: true, font: 'Times New Roman', size: 20 })] }),
+                      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `${(totalPartIPts + totalPartIIPts + totalPartIIIPts).toFixed(1)} đ`, bold: true, font: 'Times New Roman', size: 20, color: '1E3A8A' })] }),
+                    ],
+                  }),
+                ],
+              }),
+              new TableRow({
+                children: [
+                  new TableCell({ children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: '2', font: 'Times New Roman', size: 20 })] })] }),
+                  new TableCell({
+                    children: [
+                      new Paragraph({ children: [new TextRun({ text: 'Viết bài văn nghị luận (Phần IV Tự luận)', bold: true, font: 'Times New Roman', size: 20 })] }),
+                      new Paragraph({ children: [new TextRun({ text: 'Nghị luận văn học / Nghị luận xã hội kết hợp đọc hiểu', font: 'Times New Roman', size: 18, color: '666666' })] }),
+                    ],
+                  }),
+                  new TableCell({ children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: '-', font: 'Times New Roman', size: 20 })] })] }),
+                  new TableCell({ children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: '-', font: 'Times New Roman', size: 20 })] })] }),
+                  new TableCell({
+                    children: [
+                      new Paragraph({ children: [new TextRun({ text: `• Phần IV: ${exam.partIV.length} câu tự luận`, bold: true, font: 'Times New Roman', size: 20 })] }),
+                      new Paragraph({ children: [new TextRun({ text: `• Điểm số: ${totalPartIVPts.toFixed(1)} điểm`, font: 'Times New Roman', size: 20 })] }),
+                    ],
+                  }),
+                  new TableCell({
+                    children: [
+                      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `${exam.partIV.length} câu`, bold: true, font: 'Times New Roman', size: 20 })] }),
+                      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `${totalPartIVPts.toFixed(1)} đ`, bold: true, font: 'Times New Roman', size: 20, color: '92400E' })] }),
+                    ],
+                  }),
+                ],
+              }),
+              new TableRow({
+                children: [
+                  new TableCell({ children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: '', font: 'Times New Roman', size: 20 })] })] }),
+                  new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: 'TỔNG CỘNG THEO MỨC ĐỘ', bold: true, font: 'Times New Roman', size: 20 })] })] }),
+                  new TableCell({ children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `${nbPts.toFixed(1)} đ (${nbPercent}%)`, bold: true, font: 'Times New Roman', size: 20, color: '1E3A8A' })] })] }),
+                  new TableCell({ children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `${thPts.toFixed(1)} đ (${thPercent}%)`, bold: true, font: 'Times New Roman', size: 20, color: '065F46' })] })] }),
+                  new TableCell({ children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `${vdPts.toFixed(1)} đ (${vdPercent}%)`, bold: true, font: 'Times New Roman', size: 20, color: '92400E' })] })] }),
+                  new TableCell({ children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `${totalQuestions} câu · ${grandTotalPts.toFixed(1)} đ`, bold: true, font: 'Times New Roman', size: 20, color: '7C2D37' })] })] }),
+                ],
+              }),
+            ],
+          }),
+          new Paragraph({ text: '', spacing: { after: 200 } }),
+
+          // Part B: BẢN ĐẶC TẢ
+          new Paragraph({
+            alignment: AlignmentType.CENTER,
+            children: [
+              new TextRun({ text: 'II. BẢN ĐẶC TẢ MA TRẬN ĐỀ KIỂM TRA ĐỊNH KỲ (CV 7991)', bold: true, font: 'Times New Roman', size: 26, color: '1E3A8A' }),
+            ],
+            spacing: { before: 150, after: 120 },
+          }),
+
+          // Specification Table
+          new Table({
+            width: { size: 100, type: WidthType.PERCENTAGE },
+            rows: [
+              new TableRow({
+                children: [
+                  new TableCell({ width: { size: 5, type: WidthType.PERCENTAGE }, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: 'TT', bold: true, font: 'Times New Roman', size: 20 })] })] }),
+                  new TableCell({ width: { size: 22, type: WidthType.PERCENTAGE }, children: [new Paragraph({ children: [new TextRun({ text: 'Đơn vị kiến thức', bold: true, font: 'Times New Roman', size: 20 })] })] }),
+                  new TableCell({ width: { size: 45, type: WidthType.PERCENTAGE }, children: [new Paragraph({ children: [new TextRun({ text: 'Yêu cầu cần đạt (YCCĐ)', bold: true, font: 'Times New Roman', size: 20 })] })] }),
+                  new TableCell({ width: { size: 16, type: WidthType.PERCENTAGE }, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: 'Vị trí trong đề', bold: true, font: 'Times New Roman', size: 20 })] })] }),
+                  new TableCell({ width: { size: 12, type: WidthType.PERCENTAGE }, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: 'Mức độ', bold: true, font: 'Times New Roman', size: 20 })] })] }),
+                ],
+              }),
+              new TableRow({
+                children: [
+                  new TableCell({ children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: '1', font: 'Times New Roman', size: 20 })] })] }),
+                  new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `Đọc hiểu: ${khbd.info.lessonTitle}`, bold: true, font: 'Times New Roman', size: 20 })] })] }),
+                  new TableCell({
+                    children: [
+                      new Paragraph({ children: [new TextRun({ text: '• Nhận biết: Nhận diện thể loại, hoàn cảnh sáng tác, từ ngữ, hình ảnh, ngôi kể, điểm nhìn.', font: 'Times New Roman', size: 20 })] }),
+                      new Paragraph({ children: [new TextRun({ text: '• Thông hiểu: Phân tích ý nghĩa chi tiết nghệ thuật, cảm xúc và thông điệp tư tưởng.', font: 'Times New Roman', size: 20 })] }),
+                      new Paragraph({ children: [new TextRun({ text: '• Vận dụng: Đánh giá tư tưởng, rút ra bài học nhận thức và liên hệ thực tế.', font: 'Times New Roman', size: 20 })] }),
+                    ],
+                  }),
+                  new TableCell({
+                    children: [
+                      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `Phần I (12 câu)\nPhần II (2 câu)\nPhần III (4 câu)`, font: 'Times New Roman', size: 20 })] }),
+                    ],
+                  }),
+                  new TableCell({ children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: 'NB, TH, VD', font: 'Times New Roman', size: 20 })] })] }),
+                ],
+              }),
+              new TableRow({
+                children: [
+                  new TableCell({ children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: '2', font: 'Times New Roman', size: 20 })] })] }),
+                  new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: 'Viết bài văn nghị luận', bold: true, font: 'Times New Roman', size: 20 })] })] }),
+                  new TableCell({
+                    children: [
+                      new Paragraph({ children: [new TextRun({ text: '• Vận dụng: Viết bài văn nghị luận phân tích, đánh giá tác phẩm hoặc vấn đề xã hội đặt ra trong tác phẩm; lập luận chặt chẽ, dẫn chứng xác đáng, diễn đạt truyền cảm.', font: 'Times New Roman', size: 20 })] }),
+                    ],
+                  }),
+                  new TableCell({
+                    children: [
+                      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `Phần IV (Câu 1 - ${totalPartIVPts} đ)`, bold: true, font: 'Times New Roman', size: 20 })] }),
+                    ],
+                  }),
+                  new TableCell({ children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: 'Vận dụng', bold: true, font: 'Times New Roman', size: 20, color: '92400E' })] })] }),
+                ],
+              }),
+            ],
+          }),
+          new Paragraph({ text: '', spacing: { after: 250 } }),
+
+          // Signatures
+          new Table({
+            width: { size: 100, type: WidthType.PERCENTAGE },
+            borders: {
+              top: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+              bottom: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+              left: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+              right: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+              insideHorizontal: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+              insideVertical: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+            },
+            rows: [
+              new TableRow({
+                children: [
+                  new TableCell({
+                    width: { size: 33, type: WidthType.PERCENTAGE },
+                    children: [
+                      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: 'BAN GIÁM HIỆU DUYỆT', bold: true, font: 'Times New Roman', size: 22 })] }),
+                      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: '(Ký và ghi rõ họ tên)', italics: true, font: 'Times New Roman', size: 20, color: '777777' })] }),
+                    ],
+                  }),
+                  new TableCell({
+                    width: { size: 33, type: WidthType.PERCENTAGE },
+                    children: [
+                      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: 'TỔ TRƯỞNG CHUYÊN MÔN', bold: true, font: 'Times New Roman', size: 22 })] }),
+                      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: '(Ký và ghi rõ họ tên)', italics: true, font: 'Times New Roman', size: 20, color: '777777' })] }),
+                    ],
+                  }),
+                  new TableCell({
+                    width: { size: 34, type: WidthType.PERCENTAGE },
+                    children: [
+                      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: 'GIÁO VIÊN BIÊN SOẠN', bold: true, font: 'Times New Roman', size: 22 })] }),
+                      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: khbd.info.teacherName || 'Giáo viên Ngữ văn', font: 'Times New Roman', size: 22 })] }),
+                    ],
+                  }),
+                ],
+              }),
+            ],
+          }),
+        ],
+      },
+    ],
+  });
+
+  const blob = await Packer.toBlob(doc);
+  saveBlob(blob, `MA_TRAN_DAC_TA_7991_${sanitizeFilename(khbd.info.lessonTitle)}.docx`);
 }
 
 // =========================================================================

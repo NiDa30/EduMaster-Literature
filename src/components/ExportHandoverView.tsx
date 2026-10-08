@@ -13,7 +13,8 @@ import {
   Presentation, 
   ShieldCheck, 
   AlertCircle,
-  GraduationCap
+  GraduationCap,
+  FileSpreadsheet
 } from 'lucide-react';
 import { AppState } from '../types';
 import { 
@@ -21,6 +22,7 @@ import {
   exportDocxExam, 
   exportPptxSlides, 
   exportDocxRubric, 
+  exportDocxMatrix,
   exportWordKHBD, 
   exportWordExam7991, 
   exportHtmlSlides, 
@@ -214,6 +216,26 @@ export const ExportHandoverView: React.FC<ExportHandoverViewProps> = ({ appState
                 >
                   <Download className="w-3 h-3" />
                   <span>Tải Đề thi (.docx)</span>
+                </button>
+              </div>
+
+              {/* Word Ma trận & Đặc tả */}
+              <div className="p-2.5 rounded-xl border border-stone-200 bg-stone-50/70 hover:bg-white transition flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="w-7 h-7 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center shrink-0">
+                    <FileSpreadsheet className="w-3.5 h-3.5" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="font-semibold text-metadata text-stone-900 font-serif leading-tight">Word Ma trận & Đặc tả</div>
+                    <div className="text-[11px] text-stone-500 leading-tight">Khung ma trận 2 chiều CV 7991 (.docx)</div>
+                  </div>
+                </div>
+                <button
+                  onClick={() => exportDocxMatrix(appState.exam, appState.khbd)}
+                  className="min-h-[32px] px-2.5 py-1 bg-purple-700 hover:bg-purple-800 text-white font-semibold text-xs rounded-lg flex items-center gap-1 shrink-0 transition"
+                >
+                  <Download className="w-3 h-3" />
+                  <span>Tải Ma trận (.docx)</span>
                 </button>
               </div>
 

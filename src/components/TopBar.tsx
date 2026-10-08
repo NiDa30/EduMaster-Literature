@@ -10,13 +10,15 @@ import {
   Maximize2,
   Minimize2,
   MoreHorizontal,
-  Check
+  Check,
+  FileSpreadsheet
 } from 'lucide-react';
 import { LiteratureLesson, LessonPlan5512, Exam7991Data, SlideItem } from '../types';
 import { 
   exportDocxKHBD, 
   exportDocxExam, 
   exportPptxSlides, 
+  exportDocxMatrix,
   exportWordKHBD, 
   exportWordExam7991, 
   exportHtmlSlides 
@@ -200,6 +202,19 @@ export const TopBar: React.FC<TopBarProps> = ({
                 <div>
                   <div className="font-medium">Word Đề kiểm tra (.docx)</div>
                   <div className="text-[11px] text-stone-500">Chuẩn CV 7991 & Barem</div>
+                </div>
+              </button>
+              <button
+                onClick={() => {
+                  exportDocxMatrix(exam, khbd);
+                  setIsExportOpen(false);
+                }}
+                className="w-full text-left px-3 py-2 text-body-ui text-[#292524] hover:bg-stone-50 transition-colors flex items-center gap-2.5 min-h-[38px]"
+              >
+                <FileSpreadsheet className="w-4 h-4 text-[#7C3AED]" strokeWidth={1.75} />
+                <div>
+                  <div className="font-medium">Word Ma trận & Đặc tả (.docx)</div>
+                  <div className="text-[11px] text-stone-500">Chuẩn CV 7991 2 chiều</div>
                 </div>
               </button>
               <button

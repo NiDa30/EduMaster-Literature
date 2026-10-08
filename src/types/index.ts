@@ -123,6 +123,11 @@ export interface LiteratureLesson {
   khbdStatus: 'ready' | 'draft';
   slideStatus: 'ready' | 'draft';
   examStatus: 'ready' | 'draft';
+  khbd?: LessonPlan5512;
+  slides?: SlideItem[];
+  exam?: Exam7991Data;
+  questions?: LiteratureQuestionItem[];
+  rubric?: RubricData;
 }
 
 // ---------------- Công văn 5512: Kế hoạch bài dạy ----------------
