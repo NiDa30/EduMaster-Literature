@@ -63,7 +63,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   return (
     <aside 
       data-tour-id="sidebar"
-      className={`fixed lg:static top-0 bottom-0 left-0 z-40 w-[248px] bg-white border-r border-[#E5E0DA] flex flex-col transition-transform duration-[240ms] ease-[cubic-bezier(0.2,0,0,1)] no-print select-none ${
+      className={`fixed lg:static top-0 bottom-0 left-0 z-40 w-[248px] bg-white border-r border-[#E5E0DA] flex flex-col motion-drawer no-print select-none ${
         isSidebarOpen ? 'translate-x-0 shadow-lg lg:shadow-none' : '-translate-x-full lg:translate-x-0'
       }`}
     >

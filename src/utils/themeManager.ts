@@ -1,3 +1,4 @@
+import { motionDurationPresets, tokens } from '../theme/tokens';
 import { 
   WorkspaceSettings, 
   AccentColorId 
@@ -121,44 +122,17 @@ export function applyWorkspaceSettingsToDom(settings: WorkspaceSettings): void {
   root.setAttribute('data-motion-button', String(motionPrefs.buttonFeedback));
   root.setAttribute('data-respect-reduced-motion', String(motionPrefs.respectReducedMotion));
 
-  // Smooth scroll
-  root.style.scrollBehavior = motionPrefs.smoothScroll ? 'smooth' : 'auto';
+  // Smooth scrolling belongs only to explicit outline/bookmark actions.
+  root.style.scrollBehavior = 'auto';
+  root.setAttribute('data-motion-scroll', String(motionPrefs.smoothScroll));
 
-  // Motion tokens & easings
-  root.style.setProperty('--ease-standard', 'cubic-bezier(0.2, 0, 0, 1)');
-  root.style.setProperty('--ease-smooth', 'cubic-bezier(0.22, 1, 0.36, 1)');
-  root.style.setProperty('--ease-enter', 'cubic-bezier(0, 0, 0.2, 1)');
-  root.style.setProperty('--ease-exit', 'cubic-bezier(0.4, 0, 1, 1)');
-
-  if (motionPrefs.preset === 'off') {
-    root.style.setProperty('--motion-instant', '0ms');
-    root.style.setProperty('--motion-fast', '0ms');
-    root.style.setProperty('--motion-normal', '0ms');
-    root.style.setProperty('--motion-smooth', '0ms');
-    root.style.setProperty('--motion-slow', '0ms');
-    root.style.setProperty('--motion-emphasis', '0ms');
-  } else if (motionPrefs.preset === 'light') {
-    root.style.setProperty('--motion-instant', '60ms');
-    root.style.setProperty('--motion-fast', '100ms');
-    root.style.setProperty('--motion-normal', '140ms');
-    root.style.setProperty('--motion-smooth', '180ms');
-    root.style.setProperty('--motion-slow', '220ms');
-    root.style.setProperty('--motion-emphasis', '180ms');
-  } else if (motionPrefs.preset === 'slow') {
-    root.style.setProperty('--motion-instant', '120ms');
-    root.style.setProperty('--motion-fast', '160ms');
-    root.style.setProperty('--motion-normal', '240ms');
-    root.style.setProperty('--motion-smooth', '300ms');
-    root.style.setProperty('--motion-slow', '360ms');
-    root.style.setProperty('--motion-emphasis', '300ms');
-  } else {
-    // Default 'smooth'
-    root.style.setProperty('--motion-instant', '90ms');
-    root.style.setProperty('--motion-fast', '130ms');
-    root.style.setProperty('--motion-normal', '190ms');
-    root.style.setProperty('--motion-smooth', '240ms');
-    root.style.setProperty('--motion-slow', '280ms');
-    root.style.setProperty('--motion-emphasis', '240ms');
+  for (const [name, value] of Object.entries(tokens.motion.easing)) {
+    root.style.setProperty(`--ease-${name}`, value);
+  }
+  root.style.setProperty('--ease-smooth', tokens.motion.easing.standard);
+  const durations = motionDurationPresets[motionPrefs.preset] || motionDurationPresets.smooth;
+  for (const [name, value] of Object.entries(durations)) {
+    root.style.setProperty(`--motion-${name}`, value);
   }
 }
 

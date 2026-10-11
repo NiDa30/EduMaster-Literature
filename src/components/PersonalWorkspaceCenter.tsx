@@ -1231,7 +1231,7 @@ export const PersonalWorkspaceCenter: React.FC<PersonalWorkspaceCenterProps> = (
                   {/* Visual Progress Bar */}
                   <div className="w-full h-3 rounded-full bg-stone-200 overflow-hidden mb-3">
                     <div 
-                      className="h-full bg-[#7A2938] transition-all duration-300"
+                      className="h-full bg-[#7A2938] motion-progress"
                       style={{ width: `${Math.max(storageReport.percentageUsed, 3)}%` }}
                     />
                   </div>

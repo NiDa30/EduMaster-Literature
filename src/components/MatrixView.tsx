@@ -207,7 +207,7 @@ export const MatrixView: React.FC<MatrixViewProps> = ({ exam, khbd }) => {
             </span>
           </div>
           <div className="w-full bg-[#F5F3F0] h-1.5 rounded-full overflow-hidden mb-1.5">
-            <div className="bg-sky-600 h-full rounded-full transition-all duration-300" style={{ width: `${Math.min(nbPercent, 100)}%` }}></div>
+            <div className="bg-sky-600 h-full rounded-full motion-progress" style={{ width: `${Math.min(nbPercent, 100)}%` }}></div>
           </div>
           <p className="text-xs text-[#706A65] leading-snug line-clamp-1 font-serif">
             Phần I: {partINB.length} câu · Phần II: {partIINB.length} câu
@@ -222,7 +222,7 @@ export const MatrixView: React.FC<MatrixViewProps> = ({ exam, khbd }) => {
             </span>
           </div>
           <div className="w-full bg-[#F5F3F0] h-1.5 rounded-full overflow-hidden mb-1.5">
-            <div className="bg-[#166534] h-full rounded-full transition-all duration-300" style={{ width: `${Math.min(thPercent, 100)}%` }}></div>
+            <div className="bg-[#166534] h-full rounded-full motion-progress" style={{ width: `${Math.min(thPercent, 100)}%` }}></div>
           </div>
           <p className="text-xs text-[#706A65] leading-snug line-clamp-1 font-serif">
             Phần I: {partITH.length} câu · Phần II: {partIITH.length} câu · Phần III: {partIIITH.length} câu
@@ -237,7 +237,7 @@ export const MatrixView: React.FC<MatrixViewProps> = ({ exam, khbd }) => {
             </span>
           </div>
           <div className="w-full bg-[#F5F3F0] h-1.5 rounded-full overflow-hidden mb-1.5">
-            <div className="bg-[#B45309] h-full rounded-full transition-all duration-300" style={{ width: `${Math.min(vdPercent, 100)}%` }}></div>
+            <div className="bg-[#B45309] h-full rounded-full motion-progress" style={{ width: `${Math.min(vdPercent, 100)}%` }}></div>
           </div>
           <p className="text-xs text-[#706A65] leading-snug line-clamp-1 font-serif">
             Phần I/II/III ({partIVD.length + partIIVD.length + partIIIVD.length} câu) · Phần IV: {exam.partIV.length} câu

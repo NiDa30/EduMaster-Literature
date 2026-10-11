@@ -33,7 +33,7 @@ test('About: owner, contact, copy, footer/settings navigation and unchanged less
   expect(afterData).toEqual(beforeData);
   await page.goBack();
   await expect(page).toHaveURL(/#\/workspace/);
-  await page.getByRole('button', { name: 'Cài đặt sư phạm' }).click();
+  await page.getByRole('button', { name: 'Cài đặt sư phạm', exact: true }).click();
   await page.getByRole('button', { name: '6. Phím tắt & Trợ giúp' }).click();
   await page.getByRole('button', { name: 'Xem thông tin' }).click();
   await expect(page).toHaveURL(/#\/about/);

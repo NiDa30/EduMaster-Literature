@@ -151,7 +151,7 @@ export const RubricBuilderView: React.FC<RubricBuilderViewProps> = ({ rubric, se
           </div>
           <div className="flex items-center gap-2">
             <span className="text-metadata text-[#706A65]">Tổng điểm Rubric:</span>
-            <span className={`text-lg md:text-xl font-bold tabular-nums transition-colors duration-[240ms] ${
+            <span className={`text-lg md:text-xl font-bold tabular-nums motion-colors ${
               Math.abs(calculatedTotal - 10.0) < 0.01 ? 'text-[#166534] anim-total-success' : 'text-[#B45309] anim-total-danger'
             }`}>
               {calculatedTotal.toFixed(1)} / 10.0 điểm

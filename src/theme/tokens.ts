@@ -182,3 +182,12 @@ export const tokens = {
 } as const;
 
 export type DesignTokens = typeof tokens;
+
+
+/** Runtime presets share the canonical durations above; legacy modes stay supported. */
+export const motionDurationPresets = {
+  off: { instant: '0ms', fast: '0ms', normal: '0ms', smooth: '0ms', slow: '0ms', emphasis: '0ms' },
+  light: { instant: '80ms', fast: '100ms', normal: '140ms', smooth: '180ms', slow: '220ms', emphasis: '180ms' },
+  smooth: { ...tokens.motion.duration, smooth: tokens.motion.duration.emphasis },
+  slow: { instant: '100ms', fast: '140ms', normal: '220ms', smooth: '260ms', slow: '280ms', emphasis: '280ms' },
+} as const;

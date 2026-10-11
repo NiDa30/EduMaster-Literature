@@ -64,7 +64,7 @@ export const StatCard: React.FC<StatCardProps> = ({
       {progressPercent !== undefined ? (
         <div className="mt-3 w-full bg-[#F5F3F0] h-1.5 rounded-full overflow-hidden">
           <div
-            className="h-full rounded-full transition-all duration-300"
+            className="h-full rounded-full motion-progress"
             style={{ width: `${Math.min(100, Math.max(0, progressPercent))}%`, backgroundColor: accentBarColor }}
           />
         </div>

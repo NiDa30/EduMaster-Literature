@@ -22,6 +22,7 @@ import {
   TextAnnotation, 
   ActiveModule 
 } from '../../types';
+import { getNavigationScrollBehavior } from '../../utils/motionUtils';
 import { normalizeVietnamese } from '../../utils/unicode';
 
 interface LiteratureReaderProps {
@@ -151,7 +152,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
     setSelectedOutlineSection(id);
     const targetElement = document.getElementById(id);
     if (targetElement) {
-      targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      targetElement.scrollIntoView({ behavior: getNavigationScrollBehavior(), block: 'start' });
     }
   };
 

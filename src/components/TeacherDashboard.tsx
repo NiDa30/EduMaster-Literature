@@ -766,7 +766,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
               <div className="flex-1 flex items-center gap-3">
                 <div className="flex-1 bg-[#F5F3F0] h-2 rounded-full overflow-hidden">
                   <div 
-                    className="bg-[#7A2938] h-full rounded-full transition-all duration-300"
+                    className="bg-[#7A2938] h-full rounded-full motion-progress"
                     style={{ width: `${currentLesson.progress || 75}%` }}
                   />
                 </div>

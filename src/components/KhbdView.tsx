@@ -365,7 +365,7 @@ export const KhbdView: React.FC<KhbdViewProps> = ({
 
                   {/* Expanded Content Details */}
                   {isExpanded && (
-                    <div className="p-5 border-t border-[#E5E0DA] bg-[#FAF9F7] space-y-4">
+                    <div className="p-5 border-t border-[#E5E0DA] bg-[#FAF9F7] space-y-4 anim-tab-content">
                       {/* Sub-toolbar: Method, Tools */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-metadata">
                         <div>

@@ -1,3 +1,4 @@
+import { getNavigationScrollBehavior } from './motionUtils';
 import { TourPreferences, TourPlacement } from '../types/tour';
 
 export const TOUR_STORAGE_KEY = 'edumaster_tour_preferences';
@@ -112,7 +113,7 @@ export function scrollTargetIntoView(el: HTMLElement, reducedMotion: boolean = f
     el.scrollIntoView({
       block: 'center',
       inline: 'nearest',
-      behavior: reducedMotion ? 'auto' : 'smooth',
+      behavior: reducedMotion ? 'auto' : getNavigationScrollBehavior(),
     });
   }
 }
