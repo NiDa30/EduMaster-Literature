@@ -186,12 +186,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </nav>
 
       {/* Global owner identity; lesson-specific teacher data stays in the lesson. */}
-      <div className="p-3 border-t border-[var(--color-border-default)] bg-[var(--color-surface-subtle)] shrink-0">
+      <div className="p-3 border-t border-[var(--color-border-default)] bg-[var(--color-surface-subtle)] shrink-0 flex items-start gap-1">
         <a
           href="#/about"
           onClick={() => setIsSidebarOpen(false)}
           aria-label={`Chủ sở hữu & quản lý: ${ownerProfile.fullName}. Xem thông tin chủ sở hữu`}
-          className="block rounded-lg p-1 text-[var(--color-text-primary)] hover:bg-[var(--color-brand-50)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand-700)]"
+          className="block flex-1 min-w-0 rounded-lg p-1 text-[var(--color-text-primary)] hover:bg-[var(--color-brand-50)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand-700)]"
         >
           <span className="block text-[10px] font-semibold uppercase tracking-wide text-[var(--color-text-secondary)] mb-2">Chủ sở hữu &amp; quản lý</span>
           <span className="flex items-start gap-2.5">
@@ -205,6 +205,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </span>
           </span>
         </a>
+        <button
+          type="button"
+          onClick={() => onOpenSettings?.()}
+          aria-label="Mở cài đặt sư phạm"
+          title="Cài đặt sư phạm"
+          className="shrink-0 p-2 rounded-lg text-[var(--color-text-secondary)] hover:text-[var(--color-text-strong)] hover:bg-[var(--color-surface-muted)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand-700)]"
+        >
+          <Settings className="w-4 h-4" aria-hidden="true" strokeWidth={1.75} />
+        </button>
       </div>
     </aside>
   );
