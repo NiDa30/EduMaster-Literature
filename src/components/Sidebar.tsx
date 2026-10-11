@@ -197,11 +197,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <span className="flex items-start gap-2.5">
             <span aria-hidden="true" className="w-8 h-8 rounded-full bg-[var(--color-brand-50)] border border-[var(--color-brand-200)] flex items-center justify-center text-[var(--color-brand-700)] shrink-0 font-serif font-bold text-xs">TĐ</span>
             <span className="min-w-0">
-              <span className="text-[13px] font-semibold block">{ownerProfile.fullName}</span>
-              <span className="text-[11px] text-[var(--color-text-secondary)] block mt-0.5">{ownerProfile.role}</span>
-              <span className="text-[11px] text-[var(--color-text-secondary)] block mt-1 leading-relaxed">{ownerProfile.institution}</span>
-              <span className="text-[11px] text-[var(--color-text-secondary)] block mt-1 leading-relaxed">{ownerProfile.address}</span>
-              <span className="text-[11px] text-[var(--color-brand-700)] block mt-2">Xem thông tin chủ sở hữu →</span>
+              <span className="text-[14px] font-semibold block">{ownerProfile.fullName}</span>
+              <span className="text-[12px] text-[var(--color-text-secondary)] block mt-0.5">{ownerProfile.role}</span>
+              <span className="text-[12px] text-[var(--color-text-secondary)] block mt-1 leading-relaxed">{ownerProfile.institution}</span>
+              <span className="text-[12px] text-[var(--color-text-secondary)] block mt-1 leading-relaxed">{ownerProfile.address}</span>
+              <span className="text-[12px] text-[var(--color-brand-700)] block mt-2">Xem thông tin chủ sở hữu →</span>
             </span>
           </span>
         </a>

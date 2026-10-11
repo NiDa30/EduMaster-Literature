@@ -212,9 +212,9 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
   };
 
   return (
-    <div className="h-full min-h-0 flex flex-col p-4 md:p-6 space-y-3 overflow-hidden">
+    <div className="responsive-workspace exam-workspace h-full min-h-0 flex flex-col p-4 md:p-6 space-y-3 overflow-hidden">
       {/* Top Banner & Control Bar */}
-      <div className="bg-white p-3.5 md:p-4 rounded-2xl border border-stone-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0 no-print">
+      <div className="workspace-header bg-white p-3.5 md:p-4 rounded-2xl border border-stone-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0 no-print">
         <div>
           <div className="flex items-center gap-2">
             <span className="px-2.5 py-0.5 rounded-full text-metadata font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1">
@@ -310,9 +310,9 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
       </div>
 
       {/* Main 2-Column Workspace */}
-      <div className="flex-1 min-h-0 flex gap-4 overflow-hidden">
+      <div className="workspace-split flex-1 min-h-0 flex gap-4 overflow-hidden">
         {/* Left Column: 4 Parts Navigation & Matrix Summary */}
-        <div className="w-64 xl:w-72 shrink-0 flex flex-col gap-3 overflow-hidden no-print">
+        <div className="exam-navigation w-64 xl:w-72 shrink-0 flex flex-col gap-3 overflow-hidden no-print">
           {/* Navigation Card */}
           <div data-tour-id="exam-validation" className="card-surface p-3.5 flex flex-col gap-2 shrink-0">
             <div className="flex items-center justify-between text-metadata font-semibold text-stone-700 pb-1 border-b border-stone-100">
@@ -322,7 +322,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
               </span>
             </div>
 
-            <div className="space-y-1.5 pt-1">
+            <div className="exam-part-list space-y-1.5 pt-1">
               <button
                 onClick={() => setSelectedPart('all')}
                 className={`w-full text-left p-2.5 rounded-xl border transition-all duration-150 flex items-center justify-between text-metadata ${
@@ -452,7 +452,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
         </div>
 
         {/* Right Column: Scrollable Exam Paper Document */}
-        <div data-tour-id="exam-builder" className="flex-1 min-h-0 overflow-y-auto panel-scroll pr-1">
+        <div data-tour-id="exam-builder" className="exam-document min-w-0 flex-1 min-h-0 overflow-y-auto panel-scroll pr-1">
           <div className="bg-white rounded-2xl border border-stone-300 p-8 md:p-12 shadow-md max-w-4xl mx-auto text-stone-900">
             {/* Exam Header */}
             <div className="grid grid-cols-2 gap-4 pb-6 border-b border-stone-300">
@@ -503,7 +503,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                 <div className="space-y-4">
                   {exam.partI.map((q, idx) => (
                     <div key={q.id} className="p-4 rounded-xl bg-white border border-[#E5E0DA] hover:border-[#D6D0C8] shadow-[var(--shadow-xs)] relative group transition-all duration-150">
-                      <div className="flex items-start justify-between gap-2 mb-2">
+                      <div className="flex flex-col sm:flex-row items-start justify-between gap-2 mb-2">
                         <p className="text-body-ui text-[#211E1C] font-medium">
                           <span className="font-semibold text-[#7A2938] tabular-nums">{q.code || `Câu ${idx + 1}`}: </span>
                           {q.question}
@@ -590,7 +590,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                 <div className="space-y-6">
                   {exam.partII.map((q, idx) => (
                     <div key={q.id} className="p-4 rounded-xl bg-stone-50/60 border border-stone-200">
-                      <div className="flex items-start justify-between gap-2 mb-2">
+                      <div className="flex flex-col sm:flex-row items-start justify-between gap-2 mb-2">
                         <p className="text-body-ui text-stone-900 font-medium leading-relaxed font-serif">
                           <span className="font-semibold text-emerald-900 tabular-nums">{q.code || `Câu ${idx + 1}`}: </span>
                           {q.stem}
@@ -675,7 +675,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                 <div className="space-y-4">
                   {exam.partIII.map((q, idx) => (
                     <div key={q.id} className="p-4 rounded-xl bg-white border border-[#E5E0DA] hover:border-[#D6D0C8] shadow-[var(--shadow-xs)] transition-all duration-150">
-                      <div className="flex items-start justify-between gap-2 mb-2">
+                      <div className="flex flex-col sm:flex-row items-start justify-between gap-2 mb-2">
                         <p className="text-body-ui font-medium text-[#211E1C]">
                           <span className="font-semibold text-[#7A2938] tabular-nums">{q.code || `Câu ${idx + 1}`}: </span>
                           {q.question}
@@ -751,7 +751,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                 <div className="space-y-4">
                   {exam.partIV.map((q, idx) => (
                     <div key={q.id} className="p-5 rounded-2xl bg-white border border-[#E5E0DA] hover:border-[#D6D0C8] shadow-[var(--shadow-xs)] transition-all duration-150">
-                      <div className="flex items-start justify-between gap-2 mb-2">
+                      <div className="flex flex-col sm:flex-row items-start justify-between gap-2 mb-2">
                         <p className="text-body-ui font-medium text-stone-900 leading-[1.8] font-serif">
                           <span className="font-semibold text-amber-900 tabular-nums">{q.code || `Câu ${idx + 1}`}: </span>
                           {q.question}

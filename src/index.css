@@ -83,11 +83,11 @@
     --text-card-title-weight: 600;
     --text-card-title-line: 1.4;
 
-    --text-body-size: 14px;
+    --text-body-size: 15px;
     --text-body-weight: 400;
     --text-body-line: 1.55;
 
-    --text-meta-size: 12.5px;
+    --text-meta-size: 13px;
     --text-meta-weight: 400;
     --text-meta-line: 1.5;
 
@@ -1042,7 +1042,7 @@ html[data-motion-button="false"] .btn-icon-motion:active {
 }
 
 .workspace-viewport {
-  height: calc(100vh - var(--topbar-height));
+  height: 100dvh;
   min-height: 0;
   overflow: hidden;
 }
@@ -1130,3 +1130,82 @@ html[data-motion-modal="false"] .anim-toast-exit { animation: none !important; }
 
 .btn-primary:active, .btn-motion:active { transition-duration: var(--motion-instant); }
 html[data-motion-hover="false"] .btn-icon-motion:hover { transform: none !important; }
+
+/* Usability: readable controls and workspaces that adapt without squeezing editors. */
+.app-shell { height: 100dvh; }
+.app-shell main :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]), textarea, select) { font-size: max(14px, 1em); }
+.app-shell main button { font-size: max(13px, 1em); }
+.workspace-header { flex-wrap: wrap; }
+.workspace-header > :first-child { min-width: 0; }
+.reader-outline-tabs { flex-wrap: wrap; gap: 4px; }
+.reader-research-tabs { flex-wrap: wrap; gap: 4px; }
+.reader-research-tabs button { padding: 6px 8px; }
+.reader-toolbar { flex-wrap: wrap; }
+.reader-column { min-width: 0; }
+.reader-outline { width: 200px; }
+.reader-insights { width: 280px; }
+@media (min-width: 1536px) { .reader-outline { width: 220px; } .reader-insights { width: 300px; } }
+@media (min-width: 1024px) and (max-width: 1535px) {
+  .reader-insights { display: none; }
+  .reader-outline { display: flex; }
+}
+@media (max-width: 1023px) {
+  .responsive-workspace { overflow-y: auto; }
+  .workspace-split { flex: none; flex-direction: column; overflow: visible; }
+  .workspace-split > :is(aside, section, div) { width: 100%; height: auto; flex: none; min-height: 0; }
+  .question-workspace .question-bank { height: 300px; }
+  .question-workspace .question-editor { min-height: 520px; overflow: visible; }
+  .question-editor > form { height: auto; min-height: 520px; overflow: visible; }
+  .question-editor > form > .panel-scroll { flex: none; overflow: visible; }
+  .exam-workspace .exam-navigation { overflow: visible; }
+  .exam-navigation .exam-part-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .exam-navigation .exam-part-list > button:first-child { grid-column: 1 / -1; }
+  .exam-navigation .exam-part-list > button { margin: 0; gap: 8px; }
+  .exam-navigation .exam-part-list > button > span:last-child { white-space: nowrap; flex-shrink: 0; }
+  .exam-workspace .exam-document { min-height: 480px; overflow: visible; }
+  .slides-workspace .slides-thumbnails { height: 200px; }
+  .slides-thumbnails > .panel-scroll { display: flex; gap: 12px; overflow-x: auto; }
+  .slides-thumbnails > .panel-scroll > button { width: 160px; flex-shrink: 0; }
+  .slides-workspace .slides-stage { min-height: 480px; overflow: auto; }
+  .slides-workspace .slides-inspector { min-height: 540px; max-height: 760px; }
+  .export-workspace .workspace-split > div { overflow: visible; }
+  .export-workspace [data-tour-id="export-panel"] { flex: none; max-height: none; overflow: visible; }
+  .export-workspace .workspace-split [data-tour-id="backup-restore"] { height: 560px; min-height: 560px; overflow: hidden; }
+  .matrix-workspace [data-tour-id="matrix-grid"] { flex: none; min-height: 420px; }
+  .rubric-workspace [data-tour-id="rubric-builder"] { flex: none; min-height: 420px; }
+}
+@media (max-width: 767px) {
+  .app-shell main :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]), textarea, select) { font-size: 16px; }
+  .matrix-workspace table { min-width: 900px; }
+  .rubric-workspace table { min-width: 800px; }
+  .workspace-header > div { max-width: 100%; }
+  .workspace-header button { min-height: 40px; }
+  .reader-toolbar > :first-child { flex-wrap: wrap; }
+}
+@media (min-width: 1024px) and (max-width: 1535px) {
+  .slides-workspace.is-editing .slides-thumbnails { display: none; }
+}
+
+@media (min-width: 1536px) { .reader-panel-actions { display: none; } }
+@media (min-width: 1024px) and (max-width: 1535px) {
+  .reader-workspace[data-reader-panel="research"] .reader-insights { display: flex; }
+  .reader-workspace[data-reader-panel="research"] .reader-outline { display: none; }
+}
+@media (max-width: 1023px) {
+  .reader-workspace[data-reader-panel="outline"] .reader-outline,
+  .reader-workspace[data-reader-panel="research"] .reader-insights {
+    display: flex; position: absolute; z-index: 20; top: 16px; bottom: 16px; right: 16px;
+    width: min(340px, calc(100% - 32px)); height: auto; box-shadow: var(--shadow-lg);
+  }
+  .question-editor > form > .overflow-y-auto { flex: none; overflow: visible; }
+}
+
+.backup-header { flex-wrap: wrap; gap: 12px; }
+.slides-workspace .workspace-header > :first-child { flex-basis: 100%; }
+.slides-workspace .workspace-header > :last-child { width: 100%; min-width: 0; }
+.slides-thumbnails > .panel-scroll > button { flex-shrink: 0; }
+@media (max-width: 767px) {
+  .slides-thumbnails > .panel-scroll > button { min-width: 150px; }
+  .exam-workspace .workspace-header > :last-child { flex-wrap: wrap; }
+  .exam-workspace .workspace-header > :last-child > button { flex-shrink: 0; }
+}

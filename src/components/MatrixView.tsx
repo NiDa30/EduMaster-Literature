@@ -134,9 +134,9 @@ export const MatrixView: React.FC<MatrixViewProps> = ({ exam, khbd }) => {
   };
 
   return (
-    <div className="h-full min-h-0 flex flex-col p-4 md:p-6 space-y-3 overflow-hidden">
+    <div className="responsive-workspace matrix-workspace h-full min-h-0 flex flex-col p-4 md:p-6 space-y-3 overflow-hidden">
       {/* Top Banner (shrink-0) */}
-      <div className="bg-white p-3.5 md:p-4 rounded-2xl border border-[#E5E0DA] shadow-[var(--shadow-xs)] flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0 no-print">
+      <div className="workspace-header bg-white p-3.5 md:p-4 rounded-2xl border border-[#E5E0DA] shadow-[var(--shadow-xs)] flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0 no-print">
         <div>
           <div className="flex items-center gap-2">
             <span className="px-2.5 py-0.5 rounded-full text-metadata font-semibold bg-[#FCF3F4] text-[#7A2938] border border-[#7A2938]/15 flex items-center gap-1">

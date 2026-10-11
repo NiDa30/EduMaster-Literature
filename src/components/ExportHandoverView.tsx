@@ -106,9 +106,9 @@ export const ExportHandoverView: React.FC<ExportHandoverViewProps> = ({ appState
   ];
 
   return (
-    <div className="h-full min-h-0 flex flex-col p-4 md:p-6 space-y-3 overflow-hidden">
+    <div className="responsive-workspace export-workspace h-full min-h-0 flex flex-col p-4 md:p-6 space-y-3 overflow-hidden">
       {/* Top Banner (shrink-0) */}
-      <div className="bg-white p-3.5 md:p-4 rounded-2xl border border-[#E5E0DA] shadow-[var(--shadow-xs)] flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0">
+      <div className="workspace-header bg-white p-3.5 md:p-4 rounded-2xl border border-[#E5E0DA] shadow-[var(--shadow-xs)] flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0">
         <div>
           <div className="flex items-center gap-2">
             <span className="px-2.5 py-0.5 rounded-full text-metadata font-semibold bg-[#FCF3F4] text-[#7A2938] border border-[#7A2938]/15 flex items-center gap-1">
@@ -118,7 +118,7 @@ export const ExportHandoverView: React.FC<ExportHandoverViewProps> = ({ appState
             <span className="text-metadata text-[#706A65] font-medium hidden sm:inline">Hệ thống Ngữ văn GDPT 2018</span>
           </div>
           <h1 className="text-section md:text-page-title font-semibold text-[#211E1C] mt-1 leading-[1.3]">
-            Trung tâm Xuất bản & Khối JSON State Bàn giao
+            Xuất tài liệu & Sao lưu dữ liệu
           </h1>
         </div>
 
@@ -128,20 +128,20 @@ export const ExportHandoverView: React.FC<ExportHandoverViewProps> = ({ appState
             className="btn-secondary min-h-[36px] px-3.5 py-1.5 rounded-xl text-metadata font-semibold flex items-center gap-1.5"
           >
             {copied ? <Check className="w-3.5 h-3.5 text-[#166534]" /> : <Copy className="w-3.5 h-3.5 text-[#706A65]" />}
-            <span>{copied ? 'Đã chép State' : 'Sao chép JSON'}</span>
+            <span>{copied ? 'Đã chép State' : 'Sao chép bản sao lưu'}</span>
           </button>
           <button
             onClick={handleDownloadJson}
             className="btn-primary min-h-[36px] px-3.5 py-1.5 rounded-xl text-metadata font-semibold flex items-center gap-1.5"
           >
             <Download className="w-3.5 h-3.5" />
-            <span>Tải file .JSON</span>
+            <span>Tải bản sao lưu</span>
           </button>
         </div>
       </div>
 
       {/* Main 2-Panel Workspace (Rule 29.18) */}
-      <div className="flex-1 min-h-0 flex flex-col md:flex-row gap-4 overflow-hidden">
+      <div className="workspace-split flex-1 min-h-0 flex flex-col md:flex-row gap-4 overflow-hidden">
         {/* Left Panel: Checklist + Export Office Suite (340-380px, shrink-0) */}
         <div className="w-full md:w-80 xl:w-96 shrink-0 flex flex-col gap-3 overflow-hidden">
           {/* Verification Checklist Box (shrink-0) */}
@@ -180,7 +180,7 @@ export const ExportHandoverView: React.FC<ExportHandoverViewProps> = ({ appState
 
             <div className="flex-1 min-h-0 overflow-y-auto panel-scroll space-y-2 pr-0.5">
               {/* Word KHBD */}
-              <div className="p-2.5 rounded-xl border border-[#E5E0DA] bg-[#FAF9F7] hover:bg-white hover:border-[#D6D0C8] transition-colors flex items-center justify-between gap-2">
+              <div className="p-2.5 rounded-xl border border-[#E5E0DA] bg-[#FAF9F7] hover:bg-white hover:border-[#D6D0C8] transition-colors flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
                 <div className="flex items-center gap-2.5 min-w-0">
                   <div className="w-7 h-7 rounded-lg bg-[#FCF3F4] text-[#7A2938] border border-[#7A2938]/15 flex items-center justify-center shrink-0">
                     <FileText className="w-3.5 h-3.5" />
@@ -200,7 +200,7 @@ export const ExportHandoverView: React.FC<ExportHandoverViewProps> = ({ appState
               </div>
 
               {/* Word Đề thi */}
-              <div className="p-2.5 rounded-xl border border-[#E5E0DA] bg-[#FAF9F7] hover:bg-white hover:border-[#D6D0C8] transition-colors flex items-center justify-between gap-2">
+              <div className="p-2.5 rounded-xl border border-[#E5E0DA] bg-[#FAF9F7] hover:bg-white hover:border-[#D6D0C8] transition-colors flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
                 <div className="flex items-center gap-2.5 min-w-0">
                   <div className="w-7 h-7 rounded-lg bg-[#FCF3F4] text-[#7A2938] border border-[#7A2938]/15 flex items-center justify-center shrink-0">
                     <CheckCircle2 className="w-3.5 h-3.5" />
@@ -220,7 +220,7 @@ export const ExportHandoverView: React.FC<ExportHandoverViewProps> = ({ appState
               </div>
 
               {/* Word Ma trận & Đặc tả */}
-              <div className="p-2.5 rounded-xl border border-[#E5E0DA] bg-[#FAF9F7] hover:bg-white hover:border-[#D6D0C8] transition-colors flex items-center justify-between gap-2">
+              <div className="p-2.5 rounded-xl border border-[#E5E0DA] bg-[#FAF9F7] hover:bg-white hover:border-[#D6D0C8] transition-colors flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
                 <div className="flex items-center gap-2.5 min-w-0">
                   <div className="w-7 h-7 rounded-lg bg-[#FCF3F4] text-[#7A2938] border border-[#7A2938]/15 flex items-center justify-center shrink-0">
                     <FileSpreadsheet className="w-3.5 h-3.5" />
@@ -240,7 +240,7 @@ export const ExportHandoverView: React.FC<ExportHandoverViewProps> = ({ appState
               </div>
 
               {/* Slide PowerPoint */}
-              <div className="p-2.5 rounded-xl border border-[#E5E0DA] bg-[#FAF9F7] hover:bg-white hover:border-[#D6D0C8] transition-colors flex items-center justify-between gap-2">
+              <div className="p-2.5 rounded-xl border border-[#E5E0DA] bg-[#FAF9F7] hover:bg-white hover:border-[#D6D0C8] transition-colors flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
                 <div className="flex items-center gap-2.5 min-w-0">
                   <div className="w-7 h-7 rounded-lg bg-[#FCF3F4] text-[#7A2938] border border-[#7A2938]/15 flex items-center justify-center shrink-0">
                     <Presentation className="w-3.5 h-3.5" />
@@ -260,7 +260,7 @@ export const ExportHandoverView: React.FC<ExportHandoverViewProps> = ({ appState
               </div>
 
               {/* Word Rubric */}
-              <div className="p-2.5 rounded-xl border border-[#E5E0DA] bg-[#FAF9F7] hover:bg-white hover:border-[#D6D0C8] transition-colors flex items-center justify-between gap-2">
+              <div className="p-2.5 rounded-xl border border-[#E5E0DA] bg-[#FAF9F7] hover:bg-white hover:border-[#D6D0C8] transition-colors flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
                 <div className="flex items-center gap-2.5 min-w-0">
                   <div className="w-7 h-7 rounded-lg bg-[#FCF3F4] text-[#7A2938] border border-[#7A2938]/15 flex items-center justify-center shrink-0">
                     <GraduationCap className="w-3.5 h-3.5" />
@@ -285,14 +285,14 @@ export const ExportHandoverView: React.FC<ExportHandoverViewProps> = ({ appState
         {/* Right Panel: JSON State Handover & Restore (Rule 29.18) */}
         <div data-tour-id="backup-restore" className="flex-1 min-h-0 bg-[#171413] text-stone-100 p-4 rounded-2xl border border-stone-800 shadow-xl flex flex-col overflow-hidden">
           {/* Header row (shrink-0) */}
-          <div className="flex items-center justify-between pb-2.5 border-b border-stone-800 shrink-0">
+          <div className="backup-header flex items-center justify-between pb-2.5 border-b border-stone-800 shrink-0">
             <div className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-lg bg-[#7A2938]/30 text-rose-300 flex items-center justify-center">
                 <FileCode2 className="w-4 h-4" />
               </div>
               <div>
                 <h3 className="font-semibold text-metadata text-white">
-                  JSON State Bàn giao Phiên làm việc (Session Handover)
+                  Sao lưu & Khôi phục phiên làm việc
                 </h3>
                 <p className="text-[11px] text-stone-400">
                   Bảo toàn dữ liệu tác phẩm, chú thích, KHBD, slide và đề thi
@@ -304,7 +304,7 @@ export const ExportHandoverView: React.FC<ExportHandoverViewProps> = ({ appState
               className="min-h-[32px] px-2.5 py-1 bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs font-semibold rounded-lg flex items-center gap-1 transition border border-stone-700"
             >
               {copied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-              <span>{copied ? 'Đã sao chép!' : 'Sao chép JSON'}</span>
+              <span>{copied ? 'Đã sao chép!' : 'Sao chép bản sao lưu'}</span>
             </button>
           </div>
 
@@ -319,15 +319,15 @@ export const ExportHandoverView: React.FC<ExportHandoverViewProps> = ({ appState
           <div className="pt-2.5 border-t border-stone-800 shrink-0">
             <h4 className="text-xs font-semibold text-stone-300 mb-1.5 flex items-center gap-1">
               <Upload className="w-3 h-3 text-amber-400" />
-              Phục hồi phiên làm việc từ mã JSON:
+              Khôi phục dữ liệu từ bản sao lưu:
             </h4>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <textarea
                 rows={2}
-                placeholder="Dán mã JSON State phiên trước vào đây để khôi phục..."
+                placeholder="Dán nội dung tệp sao lưu (.json) vào đây để khôi phục..."
                 value={importJsonText}
                 onChange={(e) => setImportJsonText(e.target.value)}
-                className="flex-1 text-xs font-mono p-2 bg-stone-900 border border-stone-700 rounded-lg text-stone-200 focus:ring-2 focus:ring-[#7A2938]/40 resize-none min-h-[48px]"
+                className="min-w-0 flex-1 text-xs font-mono p-2 bg-stone-900 border border-stone-700 rounded-lg text-stone-200 focus:ring-2 focus:ring-[#7A2938]/40 resize-none min-h-[48px]"
               />
               <button
                 onClick={handleApplyImport}
@@ -335,7 +335,7 @@ export const ExportHandoverView: React.FC<ExportHandoverViewProps> = ({ appState
                 className="btn-primary min-h-[48px] px-3.5 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-semibold rounded-lg flex items-center gap-1.5 shrink-0"
               >
                 <Upload className="w-3.5 h-3.5" />
-                <span>Nạp lại State</span>
+                <span>Khôi phục dữ liệu</span>
               </button>
             </div>
             {(importSuccess || importError) && (

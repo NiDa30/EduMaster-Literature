@@ -1,0 +1,920 @@
+[
+  {
+    "route": "dashboard",
+    "width": 1366,
+    "height": 768,
+    "mainWidth": 1118,
+    "mainHeight": 674,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "dashboard-resume",
+        "w": 618,
+        "h": 299
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "workspace",
+    "width": 1366,
+    "height": 768,
+    "mainWidth": 1118,
+    "mainHeight": 674,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "reader-tools",
+        "w": 760,
+        "h": 60
+      },
+      {
+        "id": "reader-content",
+        "w": 760,
+        "h": 2145
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "genre_analysis",
+    "width": 1366,
+    "height": 768,
+    "mainWidth": 1118,
+    "mainHeight": 674,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "genre-tabs",
+        "w": 1070,
+        "h": 54
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "khbd",
+    "width": 1366,
+    "height": 768,
+    "mainWidth": 1118,
+    "mainHeight": 674,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "khbd-document-view",
+        "w": 136,
+        "h": 36
+      },
+      {
+        "id": "khbd-builder",
+        "w": 1070,
+        "h": 478
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "question_builder",
+    "width": 1366,
+    "height": 768,
+    "mainWidth": 1118,
+    "mainHeight": 674,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "question-bank",
+        "w": 340,
+        "h": 524
+      },
+      {
+        "id": "question-editor",
+        "w": 714,
+        "h": 524
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "matrix",
+    "width": 1366,
+    "height": 768,
+    "mainWidth": 1118,
+    "mainHeight": 674,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "matrix-summary",
+        "w": 1070,
+        "h": 86
+      },
+      {
+        "id": "matrix-grid",
+        "w": 1070,
+        "h": 368
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "exam",
+    "width": 1366,
+    "height": 768,
+    "mainWidth": 1118,
+    "mainHeight": 674,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "exam-validation",
+        "w": 288,
+        "h": 381
+      },
+      {
+        "id": "exam-builder",
+        "w": 766,
+        "h": 466
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "rubric",
+    "width": 1366,
+    "height": 768,
+    "mainWidth": 1118,
+    "mainHeight": 674,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "rubric-builder",
+        "w": 1070,
+        "h": 446
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "slides",
+    "width": 1366,
+    "height": 768,
+    "mainWidth": 1118,
+    "mainHeight": 674,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "slides-presentation-button",
+        "w": 160,
+        "h": 38
+      },
+      {
+        "id": "slides-editor",
+        "w": 188,
+        "h": 37
+      },
+      {
+        "id": "slides-thumbnails",
+        "w": 224,
+        "h": 474
+      },
+      {
+        "id": "slides-stage",
+        "w": 830,
+        "h": 474
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "export_handover",
+    "width": 1366,
+    "height": 768,
+    "mainWidth": 1118,
+    "mainHeight": 674,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "export-panel",
+        "w": 384,
+        "h": 230
+      },
+      {
+        "id": "backup-restore",
+        "w": 670,
+        "h": 524
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "about",
+    "width": 1366,
+    "height": 768,
+    "mainWidth": 1118,
+    "mainHeight": 674,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "ARTICLE",
+        "w": 1118,
+        "h": 1320
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "dashboard",
+    "width": 1440,
+    "height": 900,
+    "mainWidth": 1192,
+    "mainHeight": 806,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "dashboard-resume",
+        "w": 661,
+        "h": 299
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "workspace",
+    "width": 1440,
+    "height": 900,
+    "mainWidth": 1192,
+    "mainHeight": 806,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "reader-tools",
+        "w": 760,
+        "h": 60
+      },
+      {
+        "id": "reader-content",
+        "w": 760,
+        "h": 2145
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "genre_analysis",
+    "width": 1440,
+    "height": 900,
+    "mainWidth": 1192,
+    "mainHeight": 806,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "genre-tabs",
+        "w": 1104,
+        "h": 54
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "khbd",
+    "width": 1440,
+    "height": 900,
+    "mainWidth": 1192,
+    "mainHeight": 806,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "khbd-document-view",
+        "w": 136,
+        "h": 36
+      },
+      {
+        "id": "khbd-builder",
+        "w": 1144,
+        "h": 656
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "question_builder",
+    "width": 1440,
+    "height": 900,
+    "mainWidth": 1192,
+    "mainHeight": 806,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "question-bank",
+        "w": 340,
+        "h": 656
+      },
+      {
+        "id": "question-editor",
+        "w": 788,
+        "h": 656
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "matrix",
+    "width": 1440,
+    "height": 900,
+    "mainWidth": 1192,
+    "mainHeight": 806,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "matrix-summary",
+        "w": 1144,
+        "h": 86
+      },
+      {
+        "id": "matrix-grid",
+        "w": 1144,
+        "h": 500
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "exam",
+    "width": 1440,
+    "height": 900,
+    "mainWidth": 1192,
+    "mainHeight": 806,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "exam-validation",
+        "w": 288,
+        "h": 381
+      },
+      {
+        "id": "exam-builder",
+        "w": 840,
+        "h": 598
+      }
+    ],
+    "smallControls": 1,
+    "narrowInputs": []
+  },
+  {
+    "route": "rubric",
+    "width": 1440,
+    "height": 900,
+    "mainWidth": 1192,
+    "mainHeight": 806,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "rubric-builder",
+        "w": 1144,
+        "h": 578
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "slides",
+    "width": 1440,
+    "height": 900,
+    "mainWidth": 1192,
+    "mainHeight": 806,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "slides-presentation-button",
+        "w": 160,
+        "h": 38
+      },
+      {
+        "id": "slides-editor",
+        "w": 188,
+        "h": 37
+      },
+      {
+        "id": "slides-thumbnails",
+        "w": 224,
+        "h": 606
+      },
+      {
+        "id": "slides-stage",
+        "w": 904,
+        "h": 606
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "export_handover",
+    "width": 1440,
+    "height": 900,
+    "mainWidth": 1192,
+    "mainHeight": 806,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "export-panel",
+        "w": 384,
+        "h": 362
+      },
+      {
+        "id": "backup-restore",
+        "w": 744,
+        "h": 656
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "about",
+    "width": 1440,
+    "height": 900,
+    "mainWidth": 1192,
+    "mainHeight": 806,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "ARTICLE",
+        "w": 1140,
+        "h": 1320
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "dashboard",
+    "width": 768,
+    "height": 1024,
+    "mainWidth": 768,
+    "mainHeight": 930,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "dashboard-resume",
+        "w": 720,
+        "h": 299
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "workspace",
+    "width": 768,
+    "height": 1024,
+    "mainWidth": 768,
+    "mainHeight": 930,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "reader-tools",
+        "w": 704,
+        "h": 82
+      },
+      {
+        "id": "reader-content",
+        "w": 704,
+        "h": 2145
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "genre_analysis",
+    "width": 768,
+    "height": 1024,
+    "mainWidth": 768,
+    "mainHeight": 930,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "genre-tabs",
+        "w": 720,
+        "h": 54
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "khbd",
+    "width": 768,
+    "height": 1024,
+    "mainWidth": 768,
+    "mainHeight": 930,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "khbd-document-view",
+        "w": 136,
+        "h": 36
+      },
+      {
+        "id": "khbd-builder",
+        "w": 720,
+        "h": 596
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "question_builder",
+    "width": 768,
+    "height": 1024,
+    "mainWidth": 768,
+    "mainHeight": 930,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "question-bank",
+        "w": 720,
+        "h": 300
+      },
+      {
+        "id": "question-editor",
+        "w": 720,
+        "h": 520
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "matrix",
+    "width": 768,
+    "height": 1024,
+    "mainWidth": 768,
+    "mainHeight": 930,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "matrix-summary",
+        "w": 720,
+        "h": 106
+      },
+      {
+        "id": "matrix-grid",
+        "w": 720,
+        "h": 431
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "exam",
+    "width": 768,
+    "height": 1024,
+    "mainWidth": 768,
+    "mainHeight": 930,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "exam-validation",
+        "w": 720,
+        "h": 252
+      },
+      {
+        "id": "exam-builder",
+        "w": 720,
+        "h": 5712
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "rubric",
+    "width": 768,
+    "height": 1024,
+    "mainWidth": 768,
+    "mainHeight": 930,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "rubric-builder",
+        "w": 720,
+        "h": 1419
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "slides",
+    "width": 768,
+    "height": 1024,
+    "mainWidth": 768,
+    "mainHeight": 930,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "slides-presentation-button",
+        "w": 160,
+        "h": 38
+      },
+      {
+        "id": "slides-editor",
+        "w": 188,
+        "h": 37
+      },
+      {
+        "id": "slides-thumbnails",
+        "w": 720,
+        "h": 200
+      },
+      {
+        "id": "slides-stage",
+        "w": 720,
+        "h": 507
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "export_handover",
+    "width": 768,
+    "height": 1024,
+    "mainWidth": 768,
+    "mainHeight": 930,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "export-panel",
+        "w": 720,
+        "h": 390
+      },
+      {
+        "id": "backup-restore",
+        "w": 720,
+        "h": 560
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "about",
+    "width": 768,
+    "height": 1024,
+    "mainWidth": 768,
+    "mainHeight": 930,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "ARTICLE",
+        "w": 768,
+        "h": 1419
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "dashboard",
+    "width": 390,
+    "height": 844,
+    "mainWidth": 390,
+    "mainHeight": 750,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "dashboard-resume",
+        "w": 358,
+        "h": 359
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "workspace",
+    "width": 390,
+    "height": 844,
+    "mainWidth": 390,
+    "mainHeight": 750,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "reader-tools",
+        "w": 350,
+        "h": 82
+      },
+      {
+        "id": "reader-content",
+        "w": 350,
+        "h": 2583
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "genre_analysis",
+    "width": 390,
+    "height": 844,
+    "mainWidth": 390,
+    "mainHeight": 750,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "genre-tabs",
+        "w": 358,
+        "h": 123
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "khbd",
+    "width": 390,
+    "height": 844,
+    "mainWidth": 390,
+    "mainHeight": 750,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "khbd-document-view",
+        "w": 73,
+        "h": 67
+      },
+      {
+        "id": "khbd-builder",
+        "w": 358,
+        "h": 504
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "question_builder",
+    "width": 390,
+    "height": 844,
+    "mainWidth": 390,
+    "mainHeight": 750,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "question-bank",
+        "w": 358,
+        "h": 300
+      },
+      {
+        "id": "question-editor",
+        "w": 358,
+        "h": 720
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "matrix",
+    "width": 390,
+    "height": 844,
+    "mainWidth": 390,
+    "mainHeight": 750,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "matrix-summary",
+        "w": 358,
+        "h": 360
+      },
+      {
+        "id": "matrix-grid",
+        "w": 358,
+        "h": 470
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "exam",
+    "width": 390,
+    "height": 844,
+    "mainWidth": 390,
+    "mainHeight": 750,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "exam-validation",
+        "w": 358,
+        "h": 352
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "rubric",
+    "width": 390,
+    "height": 844,
+    "mainWidth": 390,
+    "mainHeight": 750,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "rubric-builder",
+        "w": 358,
+        "h": 1213
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "slides",
+    "width": 390,
+    "height": 844,
+    "mainWidth": 390,
+    "mainHeight": 750,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "slides-presentation-button",
+        "w": 160,
+        "h": 40
+      },
+      {
+        "id": "slides-editor",
+        "w": 188,
+        "h": 40
+      },
+      {
+        "id": "slides-thumbnails",
+        "w": 358,
+        "h": 200
+      },
+      {
+        "id": "slides-stage",
+        "w": 358,
+        "h": 733
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "export_handover",
+    "width": 390,
+    "height": 844,
+    "mainWidth": 390,
+    "mainHeight": 750,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "export-panel",
+        "w": 358,
+        "h": 596
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  },
+  {
+    "route": "about",
+    "width": 390,
+    "height": 844,
+    "mainWidth": 390,
+    "mainHeight": 750,
+    "overflow": false,
+    "panels": [
+      {
+        "id": "ARTICLE",
+        "w": 390,
+        "h": 2000
+      }
+    ],
+    "smallControls": 0,
+    "narrowInputs": []
+  }
+]

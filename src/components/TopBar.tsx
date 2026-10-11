@@ -85,7 +85,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   return (
     <header className="h-14 bg-white border-b border-[#E5E0DA] px-4 md:px-5 flex items-center justify-between sticky top-0 z-30 select-none shrink-0 no-print">
       {/* Left: Breadcrumb & Lesson Switcher */}
-      <div className="flex items-center gap-2.5 min-w-0">
+      <div className="flex items-center gap-2.5 min-w-0 flex-1">
         <button
           onClick={onOpenSidebar}
           className="lg:hidden p-1.5 rounded-lg text-[#706A65] hover:text-[#211E1C] hover:bg-[#FAF9F7] transition-colors"
@@ -95,20 +95,20 @@ export const TopBar: React.FC<TopBarProps> = ({
         </button>
 
         {/* Lesson Switcher Dropdown */}
-        <div className="relative" ref={lessonSwitcherRef} data-tour-id="lesson-switcher">
+        <div className="relative min-w-0 flex-1 max-w-[480px]" ref={lessonSwitcherRef} data-tour-id="lesson-switcher">
           <button
             onClick={() => setIsLessonSwitcherOpen(!isLessonSwitcherOpen)}
-            className="flex items-center gap-1.5 py-1 px-2.5 -ml-1 rounded-lg hover:bg-[#FAF9F7] transition-colors text-left group"
+            className="flex w-full min-w-0 items-center gap-1.5 py-1 px-2.5 -ml-1 rounded-lg hover:bg-[#FAF9F7] transition-colors text-left group"
             title="Nhấp để đổi tác phẩm giảng dạy"
           >
             <span className="text-xs font-semibold uppercase tracking-wider text-[#99918A] shrink-0">
               {currentLesson.grade || 'Ngữ văn 12'}
             </span>
             <span className="text-[#D6D0C8]">/</span>
-            <span className="font-serif font-bold text-[#211E1C] text-sm md:text-[15px] group-hover:text-[#7A2938] transition-colors truncate max-w-[180px] sm:max-w-[260px] md:max-w-none">
+            <span className="font-serif font-bold text-[#211E1C] text-sm md:text-[15px] group-hover:text-[#7A2938] transition-colors truncate min-w-0 flex-1">
               {currentLesson.title}
             </span>
-            <span className="text-[#706A65] font-serif italic text-xs hidden sm:inline">
+            <span className="text-[#706A65] font-serif italic text-xs whitespace-nowrap shrink-0 hidden xl:inline">
               — {currentLesson.author}
             </span>
             <ChevronDown className="w-3.5 h-3.5 text-[#99918A] ml-0.5 shrink-0 transition-transform group-hover:text-[#706A65]" strokeWidth={1.75} />
@@ -154,14 +154,14 @@ export const TopBar: React.FC<TopBarProps> = ({
         {/* Autosave Status: Minimal semantic dot (Rule XI) */}
         <div 
           data-tour-id="autosave-status"
-          className="hidden sm:inline-flex items-center gap-1.5 text-[12px] text-[#706A65]"
+          className="hidden xl:inline-flex items-center gap-1.5 text-[12px] text-[#706A65]"
           title={`Tự động đồng bộ và lưu cục bộ lúc ${formatSavedTime(lastUpdated)}`}
         >
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 shrink-0" />
           <span>Đã lưu · <span className="tabular-nums font-medium text-[#302C29]">{formatSavedTime(lastUpdated)}</span></span>
         </div>
 
-        <div className="h-4 w-px bg-[#EEEAE5] hidden sm:block" />
+        <div className="h-4 w-px bg-[#EEEAE5] hidden xl:block" />
 
         {/* Toggle Focus Mode */}
         {onToggleFocusMode && (
@@ -173,17 +173,18 @@ export const TopBar: React.FC<TopBarProps> = ({
                 ? 'bg-[#FCF3F4] text-[#7A2938] border border-[#ECC2C9]' 
                 : 'text-[#706A65] hover:text-[#211E1C] hover:bg-[#FAF9F7]'
             }`}
+            aria-label={isFocusMode ? "Thoát chế độ tập trung" : "Chế độ tập trung"}
             title={isFocusMode ? "Thoát chế độ tập trung" : "Chế độ tập trung (ẩn sidebar)"}
           >
             {isFocusMode ? (
               <>
                 <Minimize2 className="w-3.5 h-3.5" strokeWidth={1.75} />
-                <span>Thoát</span>
+                <span className="hidden xl:inline">Thoát</span>
               </>
             ) : (
               <>
                 <Maximize2 className="w-3.5 h-3.5" strokeWidth={1.75} />
-                <span>Tập trung</span>
+                <span className="hidden xl:inline">Tập trung</span>
               </>
             )}
           </button>
@@ -198,7 +199,7 @@ export const TopBar: React.FC<TopBarProps> = ({
             aria-label="Hướng dẫn sử dụng"
           >
             <HelpCircle className="w-3.5 h-3.5" strokeWidth={1.75} />
-            <span className="hidden md:inline">Hướng dẫn</span>
+            <span className="hidden xl:inline">Hướng dẫn</span>
           </button>
         )}
 
@@ -208,9 +209,10 @@ export const TopBar: React.FC<TopBarProps> = ({
             onClick={onPreview}
             className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-[#706A65] hover:text-[#211E1C] hover:bg-[#FAF9F7] transition-colors"
             title="In hoặc Xem trước trang in A4"
+            aria-label="In / Xem trước"
           >
             <Printer className="w-3.5 h-3.5" strokeWidth={1.75} />
-            <span>In / Xem trước</span>
+            <span className="hidden xl:inline">In / Xem trước</span>
           </button>
         )}
 
@@ -222,7 +224,7 @@ export const TopBar: React.FC<TopBarProps> = ({
             title="Tải về tài liệu"
           >
             <Download className="w-3.5 h-3.5 text-[#706A65]" strokeWidth={1.75} />
-            <span className="hidden sm:inline">Xuất file</span>
+            <span className="hidden xl:inline">Xuất file</span>
             <ChevronDown className="w-3 h-3 text-[#99918A]" strokeWidth={1.75} />
           </button>
 

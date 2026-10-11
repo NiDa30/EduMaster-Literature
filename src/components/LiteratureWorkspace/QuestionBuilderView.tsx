@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { 
   HelpCircle, 
   Plus, 
@@ -143,6 +143,12 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
   const [filterLevel, setFilterLevel] = useState<CognitiveLevel | 'all'>('all');
   const [selectedQuestionId, setSelectedQuestionId] = useState<string | null>(questions[0]?.id || null);
   const [isCreatingNew, setIsCreatingNew] = useState(false);
+  const editorRef = useRef<HTMLElement>(null);
+  const revealEditor = () => {
+    if (window.matchMedia('(max-width: 1023px)').matches) {
+      requestAnimationFrame(() => editorRef.current?.scrollIntoView?.({ block: 'start', behavior: 'auto' }));
+    }
+  };
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const showToast = (msg: string) => {
@@ -154,6 +160,7 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
 
   const handleStartCreate = () => {
     setIsCreatingNew(true);
+    revealEditor();
     setNewQuestion('');
     setNewAnswer('');
     setNewGuide('');
@@ -246,9 +253,9 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
   };
 
   return (
-    <div className="h-full min-h-0 flex flex-col p-4 md:p-6 space-y-3 overflow-hidden max-w-7xl w-full mx-auto">
+    <div className="responsive-workspace question-workspace h-full min-h-0 flex flex-col p-4 md:p-6 space-y-3 overflow-hidden max-w-7xl w-full mx-auto">
       {/* Header Bar */}
-      <div className="bg-white p-3.5 md:p-4 rounded-2xl border border-[#E5E0DA] shadow-[var(--shadow-xs)] flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0">
+      <div className="workspace-header bg-white p-3.5 md:p-4 rounded-2xl border border-[#E5E0DA] shadow-[var(--shadow-xs)] flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0">
         <div>
           <div className="flex items-center gap-2">
             <span className="px-2.5 py-0.5 rounded-full text-metadata font-semibold bg-[#FCF3F4] text-[#7A2938] border border-[#7A2938]/15 flex items-center gap-1">
@@ -281,9 +288,9 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
       </div>
 
       {/* 2-Column Split Workspace (Rule 29.14) */}
-      <div className="flex-1 min-h-0 flex flex-col lg:flex-row gap-4 overflow-hidden">
+      <div className="workspace-split flex-1 min-h-0 flex flex-col lg:flex-row gap-4 overflow-hidden">
         {/* LEFT COLUMN: Questions List + Search/Filter */}
-        <aside data-tour-id="question-bank" className="w-full lg:w-[380px] xl:w-[420px] shrink-0 h-full min-h-0 flex flex-col card-surface p-3 overflow-hidden">
+        <aside data-tour-id="question-bank" className="question-bank w-full lg:w-[320px] xl:w-[340px] shrink-0 h-full min-h-0 flex flex-col card-surface p-3 overflow-hidden">
           {/* Filters Bar */}
           <div className="space-y-2 pb-3 border-b border-[#E7E5E4] shrink-0">
             <div className="flex items-center justify-between text-metadata">
@@ -335,13 +342,16 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
               filteredQuestions.map((q, idx) => {
                 const isSelected = !isCreatingNew && (q.id === selectedQuestionId || (!selectedQuestionId && idx === 0));
                 return (
-                  <div
+                  <button
+                    type="button"
+                    aria-pressed={isSelected}
                     key={q.id}
                     onClick={() => {
                       setSelectedQuestionId(q.id);
                       setIsCreatingNew(false);
+                      revealEditor();
                     }}
-                    className={`p-3 rounded-xl border cursor-pointer transition-all ${
+                    className={`block w-full text-left p-3 rounded-xl border cursor-pointer transition-all ${
                       isSelected
                         ? 'bg-[#FCF3F4] border-[#7A2938] shadow-[var(--shadow-xs)]'
                         : 'bg-white border-[#E5E0DA] hover:border-[#D6D0C8] hover:bg-[#FAF9F7]'
@@ -369,7 +379,7 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
                       <span>{getLevelLabel(q.level)} · {q.skill}</span>
                       <ArrowRight className="w-3.5 h-3.5 text-[#99918A]" />
                     </div>
-                  </div>
+                  </button>
                 );
               })
             )}
@@ -377,7 +387,7 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
         </aside>
 
         {/* RIGHT COLUMN: Question Editor or Detailed Preview */}
-        <section data-tour-id="question-editor" className="flex-1 h-full min-h-0 flex flex-col card-surface p-5 overflow-hidden">
+        <section ref={editorRef} data-tour-id="question-editor" className="question-editor min-w-0 flex-1 h-full min-h-0 flex flex-col card-surface p-5 overflow-hidden">
           {isCreatingNew ? (
             /* CREATE FORM */
             <form onSubmit={handleCreateQuestion} className="h-full min-h-0 flex flex-col space-y-3 overflow-hidden">

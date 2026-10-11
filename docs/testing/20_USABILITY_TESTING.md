@@ -1939,3 +1939,75 @@ DEFINE REAL USER
 → IMPROVE
 → RETEST
 → REPORT
+
+---
+
+## Báo cáo thực thi: đánh giá bố cục nội bộ ngày 11/10/2026
+
+### Mục tiêu, phương pháp và giới hạn
+
+Kiểm tra khả năng đọc và tiếp cận các vùng thao tác của giáo viên; sửa các vùng bị ép hẹp, cắt khỏi viewport hoặc có chữ/nút quá nhỏ. Thực hiện heuristic review, cognitive walkthrough nội bộ và kiểm tra trình duyệt tự động trên bản production build. Baseline: commit `866fb5192a7f6cf148114d18efb3d7e3d2fcce01`.
+
+**No real-user validation performed.** Không có giáo viên tham gia phiên này (0 người tham gia). Không đo SUS, SEQ, thời gian làm việc của người dùng, mức hài lòng hoặc tỷ lệ thành công của giáo viên; không có trích dẫn phỏng vấn. Kết quả test tự động bên dưới là kiểm tra kỹ thuật, không thay thế nghiên cứu người dùng.
+
+Môi trường: Chromium hệ thống trên Linux, Vite production build/preview, dữ liệu mẫu Tây Tiến, profile trình duyệt sạch theo từng kích thước. Kiểm tra 1366×768, 1440×900, 768×1024 và 390×844. Chụp 44 tổ hợp màn hình/kích thước: Bàn làm việc, Tác phẩm, Phân tích thể loại, KHBD, Câu hỏi, Ma trận, Đề thi, Rubric, Slide, Xuất bản/Sao lưu và Giới thiệu. Ảnh baseline/final dùng reduced motion để ổn định ảnh; smoke test riêng kiểm tra motion normal/reduced/off.
+
+### Walkthrough và quan sát
+
+| Tác vụ nội bộ | Kiểm tra và kết quả sau sửa |
+| --- | --- |
+| Mở/đổi/tạo bài dạy | Smoke test tạo bài tối thiểu, đổi tác phẩm, điều hướng các module; không có lỗi render nghiêm trọng. |
+| Đọc tác phẩm, mở chú thích và nghiên cứu | Nội dung chính được ưu tiên; nút Mục lục/Nghiên cứu mở vùng phụ khi màn hình hẹp. Tab chú thích và thi pháp/dẫn chứng vẫn hoạt động. |
+| Xem KHBD và phân tích thể loại | Review ảnh ở bốn kích thước; không phát hiện tràn ngang của main trong dữ liệu mẫu. Nội dung dài vẫn cần cuộn. |
+| Tạo/chọn câu hỏi | Tablet/mobile dùng danh sách phía trên, editor phía dưới; thao tác tạo/chọn tự đưa editor vào vùng nhìn. Ô nhập chữ ≥14px, mobile 16px. |
+| Xem ma trận và rubric | Bảng có chiều cao tối thiểu để đọc; mobile cuộn ngang bên trong bảng thay vì ép các cột xuống vài chữ. |
+| Đọc đề thi, mở vùng chỉnh sửa | Mobile đặt điều hướng và tài liệu theo chiều dọc; phần nội dung câu hỏi và nhóm thao tác tách dòng để dễ đọc. |
+| Xem/biên tập slide | Thumbnail mobile cuộn ngang; canvas đủ chiều rộng; mở thiết kế đưa inspector vào viewport. Nút trình chiếu và xuất vẫn tiếp cận được. |
+| Xuất/sao lưu/khôi phục | Các định dạng tài liệu và ô khôi phục tiếp cận được sau khi cuộn; nhãn dùng ngôn ngữ giáo viên. Test chức năng kiểm tra clipboard, tải JSON, khôi phục hợp lệ và từ chối dữ liệu không hợp lệ. |
+| Mở thông tin chủ sở hữu/Cài đặt | Test kiểm tra điều hướng từ footer/sidebar/Cài đặt; giữ icon bánh răng và thông tin Trầm Thị Đổi. |
+
+### Vấn đề, mức độ và thay đổi
+
+Mức độ do người đánh giá nội bộ ước lượng theo ảnh hưởng quan sát được: cao = vùng thao tác/nội dung gần như không sử dụng được; trung bình = đọc/thao tác khó; thấp = ảnh hưởng thẩm mỹ. Không suy diễn tần suất từ số người dùng.
+
+| ID | Mức độ | Bằng chứng trước sửa | Cải thiện và kiểm tra lại |
+| --- | --- | --- | --- |
+| U01 | Cao | Tablet 768px: danh sách câu hỏi chiếm phần lớn chiều ngang, editor chỉ khoảng 42px; mobile editor bị cắt. | Chuyển thành hai vùng xếp dọc dưới 1024px, editor ≥520px cao và đủ chiều ngang. Test tạo câu hỏi xác nhận editor/textarea nằm trong viewport. |
+| U02 | Cao | Mobile 390px: tài liệu đề thi chỉ rộng khoảng 86px. | Tài liệu rộng 358px, điều hướng phía trên. Nội dung câu hỏi và metadata/nút tách dòng trên mobile. |
+| U03 | Cao | Mobile: canvas slide chỉ khoảng 150px, tiêu đề xuống từng chữ; tablet nhóm nút xuất tràn sang phải. | Canvas mobile 358px, thumbnail cuộn ngang; banner/nút tự xuống dòng. Test kiểm tra nút nằm trong chiều ngang main và inspector tiếp cận được. |
+| U04 | Trung bình | Reader laptop có ba cột khiến article khoảng 446px; tab bảng nghiên cứu chen chúc. | Article đạt 760px trên hai kích thước desktop được kiểm tra; bảng nghiên cứu mở theo nhu cầu dưới 1536px, tab xuống dòng. Mobile bảng phụ có nút đóng. |
+| U05 | Trung bình | TopBar tablet có nguy cơ chồng tên tác phẩm/trạng thái/nút. | Tên tác phẩm co và ellipsis, metadata phụ ẩn theo breakpoint; nút dùng icon có tên truy cập/title. Giữ chế độ tập trung trên tablet. |
+| U06 | Trung bình | Mobile phần tổng quan ma trận chiếm vùng nhìn, bảng còn rất thấp. | Cho workspace cuộn dọc; bảng giữ ≥420px cao, cột cuộn ngang cục bộ. Rubric áp dụng cách tương tự. |
+| U07 | Trung bình | Export mobile cắt mất vùng sao lưu/khôi phục; nhãn kỹ thuật khó hiểu và hàng tải tài liệu bị bó chữ. | Xếp dọc, khung sao lưu 560px với JSON cuộn riêng; hàng tài liệu và ô khôi phục xếp dọc trên mobile. Đổi nhãn Sao chép/Tải bản sao lưu, Khôi phục dữ liệu. |
+| U08 | Trung bình | Nhiều nút/ô nhập 11–12px, thông tin chủ sở hữu nhỏ. | Token body 15px, metadata 13px; nút trong main ≥13px, ô nhập ≥14px (mobile 16px), tên chủ sở hữu 14px và thông tin phụ 12px. Không tăng chữ preview slide/bảng theo cách làm sai tài liệu xuất. |
+| U09 | Thấp | Shell tính thiếu chiều cao TopBar, để khoảng trống 56px dưới footer; Reader dùng chiều cao độc lập. | Shell/workspace dùng 100dvh; Reader dùng chiều cao vùng cha. Footer nằm ở đáy viewport, nội dung cuộn trong vùng làm việc. |
+
+### Bằng chứng trước/sau
+
+Ảnh là dữ liệu mẫu, không chứa dữ liệu giáo viên thật. Ảnh cuộn bổ sung chứng minh nội dung bên dưới viewport vẫn tiếp cận được; không so sánh ảnh cuộn với ảnh đầu trang như một phép đo cùng vị trí.
+
+| Màn hình | Trước | Sau |
+| --- | --- | --- |
+| Reader laptop | [Ảnh trước](../usability/2026-10-11/workspace-1366-before.png) | [Ảnh sau](../usability/2026-10-11/workspace-1366-after.png) |
+| Câu hỏi tablet | [Ảnh trước](../usability/2026-10-11/question_builder-768-before.png) | [Ảnh sau](../usability/2026-10-11/question_builder-768-after.png) |
+| Đề thi mobile | [Ảnh trước](../usability/2026-10-11/exam-390-before.png) | [Ảnh sau](../usability/2026-10-11/exam-390-after.png), [nội dung sau khi cuộn](../usability/2026-10-11/exam-390-scrolled.png) |
+| Slide mobile | [Ảnh trước](../usability/2026-10-11/slides-390-before.png) | [Ảnh sau](../usability/2026-10-11/slides-390-after.png), [inspector](../usability/2026-10-11/slides-390-inspector.png) |
+| Xuất/Sao lưu mobile | [Ảnh trước](../usability/2026-10-11/export_handover-390-before.png) | [Ảnh sau](../usability/2026-10-11/export_handover-390-after.png), [khôi phục](../usability/2026-10-11/export_handover-390-scrolled.png) |
+| Ma trận mobile | [Ảnh trước](../usability/2026-10-11/matrix-390-before.png) | [Ảnh sau](../usability/2026-10-11/matrix-390-after.png), [bảng sau khi cuộn](../usability/2026-10-11/matrix-390-scrolled.png) |
+
+[Editor tạo câu hỏi mobile](../usability/2026-10-11/question-390-create.png). [Thông số baseline](../usability/2026-10-11/metrics-before.json), [thông số final](../usability/2026-10-11/metrics-after.json). Metrics chỉ tính panel đang giao với viewport; panel không xuất hiện trong metrics có thể nằm dưới vùng nhìn và cần cuộn.
+
+### Regression và kết luận nội bộ
+
+- `npm run lint`: đạt kiểm tra TypeScript.
+- `npm run build`: đạt; còn cảnh báo bundle >500kB đã tồn tại trước thay đổi.
+- `npm run test:run`: 25 file, 233 test đạt.
+- Playwright trên production preview: 20 test đạt (16 smoke hiện có và 4 test responsive mới). Dùng Chromium `/usr/bin/chromium` trong cloud; cấu hình chạy repo tiêu chuẩn vẫn giữ nguyên.
+- Chụp/review 44 tổ hợp final; không có tràn ngang ở main trong dữ liệu mẫu. Các bảng/thumbnail/JSON có cuộn cục bộ có chủ đích.
+- Test responsive bảo vệ chiều rộng Reader, vị trí các nút banner, editor câu hỏi, tài liệu đề thi, inspector slide và ô khôi phục; smoke kiểm tra About/Cài đặt và motion. Đây không phải audit WCAG đầy đủ.
+
+Các lỗi bố cục quan sát được đã được sửa và retest. Chưa thể kết luận giáo viên thấy dễ dùng hơn nếu chưa có phiên người dùng thật. Chưa kiểm tra Safari/iOS, bàn phím ảo trên thiết bị thật, mọi tên bài quá dài hoặc dữ liệu hàng nghìn câu hỏi. Khôi phục vẫn yêu cầu dán JSON; chọn tệp trực tiếp là cải tiến tương lai. Không xác nhận toàn bộ tài liệu Word/PowerPoint sau xuất chỉ từ ảnh UI; không thay đổi thuật toán xuất hoặc dữ liệu nghiệp vụ trong đợt này.
+
+### Kế hoạch xác thực với giáo viên
+
+Mời 5–8 giáo viên Ngữ văn THPT có mức kinh nghiệm công nghệ khác nhau, phiên 30–45 phút, xin đồng ý trước ghi hình. Dùng yêu cầu trung lập: chuẩn bị bài từ tác phẩm, tạo câu hỏi, xem ma trận/đề, sửa slide, xuất và sao lưu/khôi phục; không chỉ sẵn nút. Ghi mỗi tác vụ vào phiếu: mã người tham gia, thiết bị, hoàn thành độc lập/có trợ giúp/không hoàn thành, thời gian thực tế, lỗi, chỗ ngập ngừng, phát biểu nguyên văn và trợ giúp của moderator. Có thể thu SEQ sau tác vụ và SUS cuối phiên theo đúng biểu mẫu. Xếp ưu tiên lại theo tần suất × ảnh hưởng thực tế sau phiên, rồi retest các sửa đổi.

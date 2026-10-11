@@ -27,6 +27,7 @@ test.describe('SMOKE: Literature Workspace & Reader (P0)', () => {
     // Switch back to structure tab
     await structureTab.click();
 
+    await readerMain.getByRole('button', { name: 'Nghiên cứu tác phẩm', exact: true }).click();
     // Current literary research panel and its pedagogical tabs
     await expect(readerMain.getByText('Nghiên cứu văn bản')).toBeVisible();
     await expect(readerMain.getByRole('button', { name: 'Thi pháp', exact: true })).toBeVisible();

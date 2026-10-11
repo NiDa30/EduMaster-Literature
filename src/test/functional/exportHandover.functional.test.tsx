@@ -23,11 +23,11 @@ describe('Functional: Export Handover & State Backup/Restore', () => {
       />
     );
 
-    expect(screen.getByText(/Trung tâm Xuất bản & Khối JSON State Bàn giao/i)).toBeInTheDocument();
+    expect(screen.getByText(/Xuất tài liệu & Sao lưu dữ liệu/i)).toBeInTheDocument();
     expect(screen.getByText(/Đầy đủ hệ sinh thái Ngữ văn THPT/i)).toBeInTheDocument();
   });
 
-  it('copies JSON state to clipboard when clicking "Sao chép JSON"', async () => {
+  it('copies JSON state to clipboard when clicking "Sao chép bản sao lưu"', async () => {
     const writeTextMock = vi.fn().mockResolvedValue(undefined);
     Object.assign(navigator, {
       clipboard: {
@@ -42,7 +42,7 @@ describe('Functional: Export Handover & State Backup/Restore', () => {
       />
     );
 
-    const copyBtn = screen.getAllByRole('button', { name: /Sao chép JSON/i })[0];
+    const copyBtn = screen.getAllByRole('button', { name: /Sao chép bản sao lưu/i })[0];
     fireEvent.click(copyBtn);
 
     expect(writeTextMock).toHaveBeenCalledTimes(1);
@@ -51,7 +51,7 @@ describe('Functional: Export Handover & State Backup/Restore', () => {
     );
   });
 
-  it('downloads JSON backup file when clicking "Tải file .JSON"', () => {
+  it('downloads JSON backup file when clicking "Tải bản sao lưu"', () => {
     const createObjectURLSpy = vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:mock-url');
     const revokeObjectURLSpy = vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
 
@@ -62,7 +62,7 @@ describe('Functional: Export Handover & State Backup/Restore', () => {
       />
     );
 
-    const downloadBtn = screen.getByRole('button', { name: /Tải file \.JSON/i });
+    const downloadBtn = screen.getByRole('button', { name: /Tải bản sao lưu/i });
     fireEvent.click(downloadBtn);
 
     expect(createObjectURLSpy).toHaveBeenCalled();
@@ -83,10 +83,10 @@ describe('Functional: Export Handover & State Backup/Restore', () => {
         currentLessonId: 'restored-lesson-id'
       });
 
-      const textarea = screen.getByPlaceholderText(/Dán mã JSON State phiên trước vào đây để khôi phục/i);
+      const textarea = screen.getByPlaceholderText(/Dán nội dung tệp sao lưu/i);
       fireEvent.change(textarea, { target: { value: validJson } });
 
-      const restoreBtn = screen.getByRole('button', { name: /Nạp lại State/i });
+      const restoreBtn = screen.getByRole('button', { name: /Khôi phục dữ liệu/i });
       fireEvent.click(restoreBtn);
 
       expect(onRestoreState).toHaveBeenCalledTimes(1);
@@ -102,10 +102,10 @@ describe('Functional: Export Handover & State Backup/Restore', () => {
         />
       );
 
-      const textarea = screen.getByPlaceholderText(/Dán mã JSON State phiên trước vào đây để khôi phục/i);
+      const textarea = screen.getByPlaceholderText(/Dán nội dung tệp sao lưu/i);
       fireEvent.change(textarea, { target: { value: '{ invalid_json_syntax: true, }' } });
 
-      const restoreBtn = screen.getByRole('button', { name: /Nạp lại State/i });
+      const restoreBtn = screen.getByRole('button', { name: /Khôi phục dữ liệu/i });
       fireEvent.click(restoreBtn);
 
       expect(onRestoreState).not.toHaveBeenCalled();
@@ -126,10 +126,10 @@ describe('Functional: Export Handover & State Backup/Restore', () => {
         lessons: []
       });
 
-      const textarea = screen.getByPlaceholderText(/Dán mã JSON State phiên trước vào đây để khôi phục/i);
+      const textarea = screen.getByPlaceholderText(/Dán nội dung tệp sao lưu/i);
       fireEvent.change(textarea, { target: { value: incompleteJson } });
 
-      const restoreBtn = screen.getByRole('button', { name: /Nạp lại State/i });
+      const restoreBtn = screen.getByRole('button', { name: /Khôi phục dữ liệu/i });
       fireEvent.click(restoreBtn);
 
       expect(onRestoreState).not.toHaveBeenCalled();

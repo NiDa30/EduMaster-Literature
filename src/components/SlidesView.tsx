@@ -89,6 +89,12 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const inspectorRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!isEditing || !window.matchMedia('(max-width: 1023px)').matches) return;
+    const frame = requestAnimationFrame(() => inspectorRef.current?.scrollIntoView?.({ block: 'start', behavior: 'auto' }));
+    return () => cancelAnimationFrame(frame);
+  }, [isEditing]);
   const [activeEditTab, setActiveEditTab] = useState<EditTab>('content');
   const [selectedQuizOption, setSelectedQuizOption] = useState<number | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
@@ -843,9 +849,9 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
   }
 
   return (
-    <div className="h-full min-h-0 flex flex-col p-4 md:p-6 space-y-3 overflow-hidden bg-[#FAF9F7]">
+    <div className="responsive-workspace slides-workspace h-full min-h-0 flex flex-col p-4 md:p-6 space-y-3 overflow-hidden bg-[#FAF9F7]">
       {/* Top Banner */}
-      <div className="bg-white p-3.5 md:p-4 rounded-2xl border border-[#E5E0DA] shadow-[var(--shadow-xs)] flex flex-col lg:flex-row lg:items-center justify-between gap-3 shrink-0 no-print">
+      <div className="workspace-header bg-white p-3.5 md:p-4 rounded-2xl border border-[#E5E0DA] shadow-[var(--shadow-xs)] flex flex-wrap items-center justify-between gap-3 shrink-0 no-print">
         <div>
           <div className="flex items-center gap-2">
             <span className="px-2.5 py-0.5 rounded-full text-metadata font-semibold bg-[#FCF3F4] text-[#7A2938] border border-[#7A2938]/15 flex items-center gap-1">
@@ -907,11 +913,11 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
       </div>
 
       {/* Main Workspace */}
-      <div className="flex-1 min-h-0 flex gap-4 overflow-hidden">
+      <div className={`workspace-split slides-workspace ${isEditing ? 'is-editing' : ''} flex-1 min-h-0 flex gap-4 overflow-hidden`}>
         {/* Left Thumbnails Column */}
         <div 
           data-tour-id="slides-thumbnails" 
-          className="w-48 xl:w-56 shrink-0 bg-white rounded-2xl border border-[#E5E0DA] shadow-[var(--shadow-xs)] p-2.5 flex flex-col gap-2 overflow-hidden"
+          className="slides-thumbnails w-48 xl:w-56 shrink-0 bg-white rounded-2xl border border-[#E5E0DA] shadow-[var(--shadow-xs)] p-2.5 flex flex-col gap-2 overflow-hidden"
         >
           <div className="flex items-center justify-between pb-1.5 border-b border-[#EEEAE5] shrink-0">
             <span className="text-metadata font-semibold text-[#211E1C] flex items-center gap-1">
@@ -1015,7 +1021,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
         {/* Center Main Slide Canvas */}
         <div 
           data-tour-id="slides-stage" 
-          className="flex-1 min-h-0 rounded-2xl p-4 md:p-6 border border-stone-800 text-stone-100 flex flex-col justify-between overflow-hidden shadow-xl relative transition-all duration-300"
+          className="slides-stage min-w-0 flex-1 min-h-0 rounded-2xl p-4 md:p-6 border border-stone-800 text-stone-100 flex flex-col justify-between overflow-hidden shadow-xl relative transition-all duration-300"
           style={getSlideCssBackground(resolvedStyle.background)}
         >
           {resolvedStyle.background.type === 'image' && resolvedStyle.background.overlay && (
@@ -1034,7 +1040,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
 
         {/* Right Curated Editorial & Design Drawer */}
         {isEditing && (
-          <div className="w-88 xl:w-96 shrink-0 bg-white rounded-2xl p-4 flex flex-col gap-3 overflow-hidden border border-[#E5E0DA] shadow-lg animate-in slide-in-from-right duration-200">
+          <div ref={inspectorRef} className="slides-inspector w-88 xl:w-96 shrink-0 bg-white rounded-2xl p-4 flex flex-col gap-3 overflow-hidden border border-[#E5E0DA] shadow-lg animate-in slide-in-from-right duration-200">
             {/* Drawer Header */}
             <div className="flex items-center justify-between pb-2 border-b border-[#EEEAE5] shrink-0">
               <div className="flex items-center gap-2">

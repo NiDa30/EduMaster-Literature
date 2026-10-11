@@ -57,6 +57,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
   // Layout panels toggle (on desktop)
   const [isOutlineOpen, setIsOutlineOpen] = useState(true);
   const [isAnalysisOpen, setIsAnalysisOpen] = useState(true);
+  const [activePanel, setActivePanel] = useState<'outline' | 'research' | null>(null);
 
   // Left Column tab: 'outline' | 'annotations'
   const [outlineTab, setOutlineTab] = useState<'outline' | 'annotations'>('outline');
@@ -157,7 +158,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
   };
 
   return (
-    <div className={`relative min-h-[calc(100vh-56px)] flex flex-col ${isFocusMode ? 'bg-[#FAF8F5]' : ''}`}>
+    <div data-reader-panel={activePanel || undefined} className={`reader-workspace relative h-full min-h-0 flex flex-col ${isFocusMode ? 'bg-[#FAF8F5]' : ''}`}>
       {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed bottom-6 right-6 z-50 bg-[#292524] text-white text-[13px] px-4 py-2.5 rounded-xl shadow-xl flex items-center gap-2 border border-stone-700 anim-toast">
@@ -188,12 +189,13 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
         {/* ========================================================================= */}
         {!isFocusMode && (
           <aside 
-            className={`w-[240px] shrink-0 h-full min-h-0 flex flex-col card-surface p-3 overflow-hidden transition-all duration-200 ${
+            className={`reader-outline shrink-0 h-full min-h-0 flex flex-col card-surface p-3 overflow-hidden transition-all duration-200 ${
               isOutlineOpen ? 'flex' : 'hidden'
-            } hidden xl:flex`}
+            } hidden lg:flex`}
           >
+            {activePanel === 'outline' && <button className="btn-secondary mb-2 px-3 py-2" onClick={() => setActivePanel(null)}>Đóng bảng cấu trúc</button>}
             {/* Outline / Annotations Tab Selector */}
-            <div className="flex p-0.5 bg-stone-100 rounded-lg mb-3 shrink-0">
+            <div className="reader-outline-tabs flex p-0.5 bg-stone-100 rounded-lg mb-3 shrink-0">
               <button
                 onClick={() => setOutlineTab('outline')}
                 className={`flex-1 py-1 rounded-md text-[12px] font-medium transition-colors ${
@@ -278,9 +280,9 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
         {/* ========================================================================= */}
         {/* CỘT 2: DOCUMENT AREA (Văn bản tác phẩm chuẩn Lora 18px / 1.85 - Scroll riêng) */}
         {/* ========================================================================= */}
-        <section className="flex-1 h-full min-h-0 overflow-y-auto flex flex-col items-center px-1 md:px-2 panel-scroll">
+        <section className="reader-column min-w-0 flex-1 h-full min-h-0 overflow-y-auto flex flex-col items-center px-1 md:px-2 panel-scroll">
           {/* Action Bar: Read / Edit Mode Toggle */}
-          <div data-tour-id="reader-tools" className="w-full max-w-[760px] flex items-center justify-between bg-white px-4 py-2.5 rounded-xl border border-[#E5E0DA] shadow-[var(--shadow-xs)] mb-3 shrink-0">
+          <div data-tour-id="reader-tools" className="reader-toolbar w-full max-w-[760px] flex items-center justify-between bg-white px-4 py-2.5 rounded-xl border border-[#E5E0DA] shadow-[var(--shadow-xs)] mb-3 shrink-0">
             <div className="flex items-center gap-2">
               <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold flex items-center gap-1.5 ${
                 isEditingDoc 
@@ -325,6 +327,12 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
             </button>
           </div>
 
+          {!isFocusMode && (
+            <div className="reader-panel-actions w-full max-w-[760px] flex flex-wrap gap-2 mb-3">
+              <button className="btn-secondary px-3 py-2" aria-expanded={activePanel === 'outline'} onClick={() => setActivePanel(activePanel === 'outline' ? null : 'outline')}>Mục lục tác phẩm</button>
+              <button className="btn-secondary px-3 py-2" aria-expanded={activePanel === 'research'} onClick={() => setActivePanel(activePanel === 'research' ? null : 'research')}>Nghiên cứu tác phẩm</button>
+            </div>
+          )}
           <article 
             ref={documentContainerRef}
             data-tour-id="reader-content"
@@ -552,10 +560,11 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
         {/* ========================================================================= */}
         {!isFocusMode && (
           <aside 
-            className={`w-[320px] shrink-0 h-full min-h-0 flex flex-col card-surface p-4 overflow-hidden transition-all duration-200 ${
+            className={`reader-insights shrink-0 h-full min-h-0 flex flex-col card-surface p-4 overflow-hidden transition-all duration-200 ${
               isAnalysisOpen ? 'flex' : 'hidden'
             } hidden lg:flex`}
           >
+            {activePanel === 'research' && <button className="btn-secondary mb-2 px-3 py-2" onClick={() => setActivePanel(null)}>Đóng bảng nghiên cứu</button>}
             {/* Header with ONE Primary Action: "Chú thích" */}
             <div className="flex items-center justify-between pb-2 border-b border-[#E7E5E4] shrink-0">
               <span className="font-semibold text-card-title text-[#292524] flex items-center gap-1.5">
@@ -572,7 +581,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
             </div>
 
             {/* 5 Tabs Sư phạm: Thi pháp · Hình tượng · Từ khóa · Dẫn chứng · Ghi chú */}
-            <div className="flex p-0.5 bg-stone-100 rounded-lg shrink-0 my-2.5 overflow-x-auto">
+            <div className="reader-research-tabs flex p-0.5 bg-stone-100 rounded-lg shrink-0 my-2.5">
               {[
                 { id: 'poetics' as const, label: 'Thi pháp' },
                 { id: 'imagery' as const, label: 'Hình tượng' },
