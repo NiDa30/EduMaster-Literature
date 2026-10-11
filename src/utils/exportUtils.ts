@@ -1,13 +1,10 @@
 import { LessonPlan5512, Exam7991Data, SlideItem, RubricData, SlidesPresentationSettings } from '../types';
 import { resolveSlideStyle, getPptxFontName, getSlideCssFontFamily, getEffectiveBackgroundHex } from './slideStyleUtils';
 import PptxGenJS from 'pptxgenjs';
+import { Paragraph, TextRun, Table, TableRow, formatExportPoints, formatExamCode } from './exportWordFormatting';
 import { 
   Document, 
   Packer, 
-  Paragraph, 
-  TextRun, 
-  Table, 
-  TableRow, 
   TableCell, 
   WidthType, 
   AlignmentType, 
@@ -48,7 +45,8 @@ export async function exportPptxSlides(
   presentationSettings?: SlidesPresentationSettings
 ): Promise<void> {
   const pres = new PptxGenJS();
-  pres.layout = 'LAYOUT_16x9';
+  pres.defineLayout({ name: 'EDUMASTER_WIDE', width: 13.333333, height: 7.5 });
+  pres.layout = 'EDUMASTER_WIDE';
   pres.author = 'EduMaster Văn';
   pres.company = 'EduMaster';
   pres.title = title || 'Bài giảng Ngữ văn';
@@ -78,7 +76,7 @@ export async function exportPptxSlides(
     // Background setup
     if (resolved.background.type === 'image' && resolved.background.imageUrl) {
       slide.addImage({
-        data: resolved.background.imageUrl,
+        ...(resolved.background.imageUrl.startsWith('data:') ? { data: resolved.background.imageUrl } : { path: resolved.background.imageUrl }),
         x: 0,
         y: 0,
         w: 13.33,
@@ -207,7 +205,7 @@ export async function exportPptxSlides(
       if (s.bullets && s.bullets.length > 0) {
         const bulletRuns = s.bullets.map(b => ({
           text: b,
-          options: { bullet: true, color: bodyColor, fontSize: 13 }
+          options: { bullet: { indent: 14 }, hanging: 3, breakLine: true, color: bodyColor, fontSize: 13 }
         }));
         slide.addText(bulletRuns, {
           x: 1.0,
@@ -351,7 +349,7 @@ export async function exportPptxSlides(
       if (s.bullets && s.bullets.length > 0) {
         const bulletRuns = s.bullets.map(b => ({
           text: b,
-          options: { bullet: true, color: bodyColor, fontSize: 14 }
+          options: { bullet: { indent: 16 }, hanging: 3, breakLine: true, color: bodyColor, fontSize: 14 }
         }));
         slide.addText(bulletRuns, {
           x: 1.6,
@@ -417,6 +415,7 @@ export async function exportDocxKHBD(khbd: LessonPlan5512): Promise<void> {
             },
             rows: [
               new TableRow({
+                tableHeader: true,
                 children: [
                   new TableCell({
                     width: { size: 50, type: WidthType.PERCENTAGE },
@@ -475,6 +474,7 @@ export async function exportDocxKHBD(khbd: LessonPlan5512): Promise<void> {
           // I. Mục tiêu
           new Paragraph({
             children: [new TextRun({ text: 'I. MỤC TIÊU DẠY HỌC', bold: true, font: 'Times New Roman', size: 26 })],
+            keepNext: true,
             spacing: { before: 200, after: 100 },
           }),
           new Paragraph({
@@ -545,6 +545,7 @@ export async function exportDocxKHBD(khbd: LessonPlan5512): Promise<void> {
           // II. Thiết bị dạy học và học liệu
           new Paragraph({
             children: [new TextRun({ text: 'II. THIẾT BỊ VÀ HỌC LIỆU', bold: true, font: 'Times New Roman', size: 26 })],
+            keepNext: true,
             spacing: { before: 200, after: 100 },
           }),
           new Paragraph({
@@ -568,6 +569,7 @@ export async function exportDocxKHBD(khbd: LessonPlan5512): Promise<void> {
           // III. Tiến trình dạy học
           new Paragraph({
             children: [new TextRun({ text: 'III. TIẾN TRÌNH DẠY HỌC (CHUẨN 4 HOẠT ĐỘNG CÔNG VĂN 5512)', bold: true, font: 'Times New Roman', size: 26 })],
+            keepNext: true,
             spacing: { before: 250, after: 120 },
           }),
           ...khbd.activities.flatMap((act, idx) => [
@@ -576,6 +578,7 @@ export async function exportDocxKHBD(khbd: LessonPlan5512): Promise<void> {
                 new TextRun({ text: `Hoạt động ${idx + 1}: ${act.name} `, bold: true, font: 'Times New Roman', size: 24, color: '1E3A8A' }),
                 new TextRun({ text: `(${act.time})`, italics: true, font: 'Times New Roman', size: 22 }),
               ],
+              keepNext: true,
               spacing: { before: 180, after: 80 },
             }),
             new Paragraph({
@@ -609,6 +612,8 @@ export async function exportDocxKHBD(khbd: LessonPlan5512): Promise<void> {
               width: { size: 100, type: WidthType.PERCENTAGE },
               rows: [
                 new TableRow({
+                  tableHeader: true,
+                  cantSplit: true,
                   children: [
                     new TableCell({
                       width: { size: 30, type: WidthType.PERCENTAGE },
@@ -663,6 +668,7 @@ export async function exportDocxKHBD(khbd: LessonPlan5512): Promise<void> {
             },
             rows: [
               new TableRow({
+                tableHeader: true,
                 children: [
                   new TableCell({
                     width: { size: 50, type: WidthType.PERCENTAGE },
@@ -721,13 +727,14 @@ export async function exportDocxExam(exam: Exam7991Data, khbd: LessonPlan5512): 
             },
             rows: [
               new TableRow({
+                tableHeader: true,
                 children: [
                   new TableCell({
                     width: { size: 50, type: WidthType.PERCENTAGE },
                     children: [
                       new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: khbd.info.department.toUpperCase(), font: 'Times New Roman', size: 22 })] }),
                       new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: khbd.info.school.toUpperCase(), bold: true, font: 'Times New Roman', size: 24 })] }),
-                      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `MÃ ĐỀ: ${exam.examHeader.examCode}`, bold: true, font: 'Times New Roman', size: 22 })] }),
+                      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: formatExamCode(exam.examHeader.examCode), bold: true, font: 'Times New Roman', size: 22 })] }),
                     ],
                   }),
                   new TableCell({
@@ -779,29 +786,13 @@ export async function exportDocxExam(exam: Exam7991Data, khbd: LessonPlan5512): 
                 new TextRun({ text: q.question, font: 'Times New Roman', size: 24 }),
                 new TextRun({ text: ` [${q.level}]`, italics: true, font: 'Times New Roman', size: 20, color: '888888' }),
               ],
+              keepNext: true,
               spacing: { before: 80, after: 40 },
             }),
-            new Table({
-              width: { size: 100, type: WidthType.PERCENTAGE },
-              borders: {
-                top: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
-                bottom: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
-                left: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
-                right: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
-                insideHorizontal: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
-                insideVertical: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
-              },
-              rows: [
-                new TableRow({
-                  children: [
-                    new TableCell({ width: { size: 25, type: WidthType.PERCENTAGE }, children: [new Paragraph({ children: [new TextRun({ text: 'A. ', bold: true, font: 'Times New Roman', size: 22 }), new TextRun({ text: q.options.A, font: 'Times New Roman', size: 22 })] })] }),
-                    new TableCell({ width: { size: 25, type: WidthType.PERCENTAGE }, children: [new Paragraph({ children: [new TextRun({ text: 'B. ', bold: true, font: 'Times New Roman', size: 22 }), new TextRun({ text: q.options.B, font: 'Times New Roman', size: 22 })] })] }),
-                    new TableCell({ width: { size: 25, type: WidthType.PERCENTAGE }, children: [new Paragraph({ children: [new TextRun({ text: 'C. ', bold: true, font: 'Times New Roman', size: 22 }), new TextRun({ text: q.options.C, font: 'Times New Roman', size: 22 })] })] }),
-                    new TableCell({ width: { size: 25, type: WidthType.PERCENTAGE }, children: [new Paragraph({ children: [new TextRun({ text: 'D. ', bold: true, font: 'Times New Roman', size: 22 }), new TextRun({ text: q.options.D, font: 'Times New Roman', size: 22 })] })] }),
-                  ],
-                }),
-              ],
-            }),
+            ...(['A', 'B', 'C', 'D'] as const).map(letter => new Paragraph({
+              children: [new TextRun({ text: `${letter}. `, bold: true, font: 'Times New Roman', size: 22 }), new TextRun({ text: q.options[letter], font: 'Times New Roman', size: 22 })],
+              indent: { left: 160 }, spacing: { after: 40 }, keepNext: letter !== 'D',
+            })),
           ]),
 
           // Part II
@@ -826,6 +817,8 @@ export async function exportDocxExam(exam: Exam7991Data, khbd: LessonPlan5512): 
               width: { size: 100, type: WidthType.PERCENTAGE },
               rows: [
                 new TableRow({
+                  tableHeader: true,
+                  cantSplit: true,
                   children: [
                     new TableCell({ width: { size: 10, type: WidthType.PERCENTAGE }, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: 'Lệnh', bold: true, font: 'Times New Roman', size: 22 })] })] }),
                     new TableCell({ width: { size: 70, type: WidthType.PERCENTAGE }, children: [new Paragraph({ children: [new TextRun({ text: 'Phát biểu khẳng định', bold: true, font: 'Times New Roman', size: 22 })] })] }),
@@ -893,9 +886,11 @@ export async function exportDocxExam(exam: Exam7991Data, khbd: LessonPlan5512): 
             spacing: { before: 250, after: 300 },
           }),
 
-          // Page Break for Answer Key
+          // Keep the answer key separate from the student question paper.
           new Paragraph({
+            pageBreakBefore: true,
             children: [new TextRun({ text: 'HƯỚNG DẪN CHẤM & ĐÁP ÁN CHI TIẾT (10.0 ĐIỂM)', bold: true, font: 'Times New Roman', size: 26, color: '7C2D37' })],
+            keepNext: true,
             spacing: { before: 200, after: 100 },
           }),
 
@@ -904,10 +899,11 @@ export async function exportDocxExam(exam: Exam7991Data, khbd: LessonPlan5512): 
             children: [new TextRun({ text: 'ĐÁP ÁN PHẦN I (3.0 ĐIỂM):', bold: true, font: 'Times New Roman', size: 24 })],
             spacing: { before: 100, after: 60 },
           }),
-          new Table({
+          ...(exam.partI.length ? [new Table({
             width: { size: 100, type: WidthType.PERCENTAGE },
             rows: [
               new TableRow({
+                tableHeader: true,
                 children: exam.partI.map((_, i) => new TableCell({
                   children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `C${i+1}`, bold: true, font: 'Times New Roman', size: 20 })] })],
                 })),
@@ -918,7 +914,7 @@ export async function exportDocxExam(exam: Exam7991Data, khbd: LessonPlan5512): 
                 })),
               }),
             ],
-          }),
+          })] : [new Paragraph('Chưa có câu hỏi trong phần này.')]),
 
           // Part II Answer Table
           new Paragraph({
@@ -929,6 +925,7 @@ export async function exportDocxExam(exam: Exam7991Data, khbd: LessonPlan5512): 
             width: { size: 100, type: WidthType.PERCENTAGE },
             rows: [
               new TableRow({
+                tableHeader: true,
                 children: [
                   new TableCell({ width: { size: 15, type: WidthType.PERCENTAGE }, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: 'Câu', bold: true, font: 'Times New Roman', size: 22 })] })] }),
                   new TableCell({ width: { size: 15, type: WidthType.PERCENTAGE }, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: 'Ý a', bold: true, font: 'Times New Roman', size: 22 })] })] }),
@@ -956,10 +953,11 @@ export async function exportDocxExam(exam: Exam7991Data, khbd: LessonPlan5512): 
             children: [new TextRun({ text: 'ĐÁP ÁN PHẦN III (2.0 ĐIỂM):', bold: true, font: 'Times New Roman', size: 24 })],
             spacing: { before: 150, after: 60 },
           }),
-          new Table({
+          ...(exam.partIII.length ? [new Table({
             width: { size: 100, type: WidthType.PERCENTAGE },
             rows: [
               new TableRow({
+                tableHeader: true,
                 children: exam.partIII.map((_, i) => new TableCell({
                   children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `C${i+1}`, bold: true, font: 'Times New Roman', size: 20 })] })],
                 })),
@@ -970,7 +968,7 @@ export async function exportDocxExam(exam: Exam7991Data, khbd: LessonPlan5512): 
                 })),
               }),
             ],
-          }),
+          })] : [new Paragraph('Chưa có câu hỏi trong phần này.')]),
 
           // Part IV Rubric
           new Paragraph({
@@ -982,6 +980,8 @@ export async function exportDocxExam(exam: Exam7991Data, khbd: LessonPlan5512): 
               width: { size: 100, type: WidthType.PERCENTAGE },
               rows: [
                 new TableRow({
+                  tableHeader: true,
+                  cantSplit: true,
                   children: [
                     new TableCell({ width: { size: 80, type: WidthType.PERCENTAGE }, children: [new Paragraph({ children: [new TextRun({ text: 'Tiêu chí và nội dung phân tích', bold: true, font: 'Times New Roman', size: 22 })] })] }),
                     new TableCell({ width: { size: 20, type: WidthType.PERCENTAGE }, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: 'Điểm', bold: true, font: 'Times New Roman', size: 22 })] })] }),
@@ -996,7 +996,7 @@ export async function exportDocxExam(exam: Exam7991Data, khbd: LessonPlan5512): 
                 new TableRow({
                   children: [
                     new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: 'TỔNG ĐIỂM CÂU TỰ LUẬN', bold: true, font: 'Times New Roman', size: 22 })] })] }),
-                    new TableCell({ children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `${q.points}.0 đ`, bold: true, font: 'Times New Roman', size: 22, color: '7C2D37' })] })] }),
+                    new TableCell({ children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `${formatExportPoints(q.points)} đ`, bold: true, font: 'Times New Roman', size: 22, color: '7C2D37' })] })] }),
                   ],
                 }),
               ],
@@ -1037,7 +1037,7 @@ export async function exportDocxRubric(rubric: RubricData): Promise<void> {
           new Paragraph({
             alignment: AlignmentType.CENTER,
             children: [
-              new TextRun({ text: `Tổng điểm tối đa: ${rubric.totalPoints}.0 điểm`, italics: true, font: 'Times New Roman', size: 24 }),
+              new TextRun({ text: `Tổng điểm tối đa: ${formatExportPoints(rubric.totalPoints)} điểm`, italics: true, font: 'Times New Roman', size: 24 }),
             ],
             spacing: { after: 200 },
           }),
@@ -1045,6 +1045,7 @@ export async function exportDocxRubric(rubric: RubricData): Promise<void> {
             width: { size: 100, type: WidthType.PERCENTAGE },
             rows: [
               new TableRow({
+                tableHeader: true,
                 children: [
                   new TableCell({ width: { size: 22, type: WidthType.PERCENTAGE }, children: [new Paragraph({ children: [new TextRun({ text: 'Tiêu chí đánh giá', bold: true, font: 'Times New Roman', size: 22 })] })] }),
                   new TableCell({ width: { size: 10, type: WidthType.PERCENTAGE }, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: 'Trọng số', bold: true, font: 'Times New Roman', size: 22 })] })] }),
@@ -1145,6 +1146,7 @@ export async function exportDocxMatrix(exam: Exam7991Data, khbd: LessonPlan5512)
             },
             rows: [
               new TableRow({
+                tableHeader: true,
                 children: [
                   new TableCell({
                     width: { size: 50, type: WidthType.PERCENTAGE },
@@ -1189,6 +1191,7 @@ export async function exportDocxMatrix(exam: Exam7991Data, khbd: LessonPlan5512)
             width: { size: 100, type: WidthType.PERCENTAGE },
             rows: [
               new TableRow({
+                tableHeader: true,
                 children: [
                   new TableCell({ width: { size: 5, type: WidthType.PERCENTAGE }, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: 'TT', bold: true, font: 'Times New Roman', size: 20 })] })] }),
                   new TableCell({ width: { size: 23, type: WidthType.PERCENTAGE }, children: [new Paragraph({ children: [new TextRun({ text: 'Kỹ năng & Đơn vị kiến thức', bold: true, font: 'Times New Roman', size: 20 })] })] }),
@@ -1288,6 +1291,7 @@ export async function exportDocxMatrix(exam: Exam7991Data, khbd: LessonPlan5512)
             width: { size: 100, type: WidthType.PERCENTAGE },
             rows: [
               new TableRow({
+                tableHeader: true,
                 children: [
                   new TableCell({ width: { size: 5, type: WidthType.PERCENTAGE }, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: 'TT', bold: true, font: 'Times New Roman', size: 20 })] })] }),
                   new TableCell({ width: { size: 22, type: WidthType.PERCENTAGE }, children: [new Paragraph({ children: [new TextRun({ text: 'Đơn vị kiến thức', bold: true, font: 'Times New Roman', size: 20 })] })] }),
@@ -1349,6 +1353,7 @@ export async function exportDocxMatrix(exam: Exam7991Data, khbd: LessonPlan5512)
             },
             rows: [
               new TableRow({
+                tableHeader: true,
                 children: [
                   new TableCell({
                     width: { size: 33, type: WidthType.PERCENTAGE },
@@ -1607,7 +1612,7 @@ export function exportRubricDoc(rubric: RubricData) {
 </head>
 <body>
   <h2 class="center">${rubric.title}</h2>
-  <p class="center italic">Tổng điểm tối đa: ${rubric.totalPoints}.0 điểm</p>
+  <p class="center italic">Tổng điểm tối đa: ${formatExportPoints(rubric.totalPoints)} điểm</p>
   <table>
     <tr>
       <th width="25%">Tiêu chí</th>
