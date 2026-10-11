@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "./fonts.css";
+@import "./settings-fonts.css";
 
 @layer base {
   :root {
@@ -55,6 +56,7 @@
     /* 5. Motion Tokens (Mục 29, 30 & 79 design_animation.md) */
     --motion-instant: 90ms;
     --motion-fast: 120ms;
+    --motion-hover: 120ms;
     --motion-normal: 180ms;
     --motion-smooth: 240ms;
     --motion-slow: 240ms;
@@ -150,8 +152,8 @@
     border: 1px solid var(--color-border-default);
     color: var(--color-text-primary);
     border-radius: 8px;
-    transition: border-color var(--motion-fast) var(--ease-standard),
-                box-shadow var(--motion-fast) var(--ease-standard);
+    transition: border-color var(--motion-hover) var(--ease-standard),
+                box-shadow var(--motion-hover) var(--ease-standard);
   }
 
   input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):hover,
@@ -173,8 +175,8 @@
     border: 1px solid var(--color-border-default);
     color: var(--color-text-primary);
     border-radius: 8px;
-    transition: border-color var(--motion-fast) var(--ease-standard),
-                box-shadow var(--motion-fast) var(--ease-standard);
+    transition: border-color var(--motion-hover) var(--ease-standard),
+                box-shadow var(--motion-hover) var(--ease-standard);
   }
 
   textarea:hover {
@@ -327,10 +329,10 @@
   border: 1px solid var(--color-border-default);
   border-radius: 12px;
   box-shadow: var(--shadow-xs);
-  transition: transform var(--motion-fast) var(--ease-standard),
-              box-shadow var(--motion-fast) var(--ease-standard),
-              border-color var(--motion-fast) var(--ease-standard),
-              background-color var(--motion-fast) var(--ease-standard);
+  transition: transform var(--motion-hover) var(--ease-standard),
+              box-shadow var(--motion-hover) var(--ease-standard),
+              border-color var(--motion-hover) var(--ease-standard),
+              background-color var(--motion-hover) var(--ease-standard);
 }
 
 .card-interactive:hover {
@@ -376,11 +378,11 @@
   justify-content: center;
   gap: 8px;
   box-shadow: var(--shadow-xs);
-  transition: background-color var(--motion-fast) var(--ease-standard),
-              border-color var(--motion-fast) var(--ease-standard),
-              color var(--motion-fast) var(--ease-standard),
-              box-shadow var(--motion-normal) var(--ease-standard),
-              transform var(--motion-fast) var(--ease-standard);
+  transition: background-color var(--motion-hover) var(--ease-standard),
+              border-color var(--motion-hover) var(--ease-standard),
+              color var(--motion-hover) var(--ease-standard),
+              box-shadow var(--motion-hover) var(--ease-standard),
+              transform var(--motion-hover) var(--ease-standard);
   user-select: none;
 }
 
@@ -392,27 +394,27 @@
 
 .btn-primary:active {
   background-color: var(--color-brand-900);
-  transform: translateY(0) scale(0.985);
+  transform: translateY(1px);
 }
 
 /* Reusable Motion Helpers (design_animation_guid.md) */
 .btn-motion {
-  transition: background-color var(--motion-fast) var(--ease-standard),
-              border-color var(--motion-fast) var(--ease-standard),
-              color var(--motion-fast) var(--ease-standard),
-              box-shadow var(--motion-normal) var(--ease-standard),
-              transform var(--motion-fast) var(--ease-standard);
+  transition: background-color var(--motion-hover) var(--ease-standard),
+              border-color var(--motion-hover) var(--ease-standard),
+              color var(--motion-hover) var(--ease-standard),
+              box-shadow var(--motion-hover) var(--ease-standard),
+              transform var(--motion-hover) var(--ease-standard);
 }
 .btn-motion:hover {
   transform: translateY(-1px);
 }
 .btn-motion:active {
-  transform: translateY(0) scale(0.985);
+  transform: translateY(1px);
 }
 
 .btn-icon-motion {
-  transition: background-color var(--motion-fast) var(--ease-standard),
-              color var(--motion-fast) var(--ease-standard),
+  transition: background-color var(--motion-hover) var(--ease-standard),
+              color var(--motion-hover) var(--ease-standard),
               transform var(--motion-instant) var(--ease-standard);
 }
 .btn-icon-motion:hover {
@@ -446,9 +448,9 @@
   justify-content: center;
   gap: 8px;
   box-shadow: var(--shadow-xs);
-  transition: background-color var(--motion-fast) var(--ease-standard),
-              border-color var(--motion-fast) var(--ease-standard),
-              color var(--motion-fast) var(--ease-standard),
+  transition: background-color var(--motion-hover) var(--ease-standard),
+              border-color var(--motion-hover) var(--ease-standard),
+              color var(--motion-hover) var(--ease-standard),
               transform var(--motion-instant) var(--ease-standard);
   user-select: none;
 }
@@ -460,7 +462,7 @@
 }
 
 .btn-secondary:active {
-  transform: scale(0.985);
+  transform: translateY(1px);
 }
 
 .btn-secondary:focus-visible {
@@ -483,8 +485,8 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: color var(--motion-fast) var(--ease-standard),
-              background-color var(--motion-fast) var(--ease-standard),
+  transition: color var(--motion-hover) var(--ease-standard),
+              background-color var(--motion-hover) var(--ease-standard),
               transform var(--motion-instant) var(--ease-standard);
   user-select: none;
 }
@@ -495,7 +497,7 @@
 }
 
 .btn-ghost:active {
-  transform: scale(0.985);
+  transform: translateY(1px);
 }
 
 .btn-ghost:focus-visible {
@@ -514,8 +516,8 @@
   justify-content: center;
   background-color: transparent;
   color: var(--color-text-secondary);
-  transition: background-color var(--motion-fast) var(--ease-standard),
-              color var(--motion-fast) var(--ease-standard),
+  transition: background-color var(--motion-hover) var(--ease-standard),
+              color var(--motion-hover) var(--ease-standard),
               transform var(--motion-instant) var(--ease-standard);
 }
 
@@ -545,8 +547,8 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: background-color var(--motion-fast) var(--ease-standard),
-              border-color var(--motion-fast) var(--ease-standard),
+  transition: background-color var(--motion-hover) var(--ease-standard),
+              border-color var(--motion-hover) var(--ease-standard),
               transform var(--motion-instant) var(--ease-standard);
 }
 
@@ -556,7 +558,7 @@
 }
 
 .btn-danger:active {
-  transform: scale(0.985);
+  transform: translateY(1px);
 }
 
 .btn-compact {
@@ -623,8 +625,8 @@
   font-weight: 500;
   border-bottom: 2px solid transparent;
   color: var(--color-text-secondary);
-  transition: color var(--motion-fast) var(--ease-standard),
-              border-color var(--motion-fast) var(--ease-standard);
+  transition: color var(--motion-hover) var(--ease-standard),
+              border-color var(--motion-hover) var(--ease-standard);
 }
 
 .tab-underline-item:hover {
@@ -650,11 +652,11 @@
 @keyframes modalDialogEnter {
   from {
     opacity: 0;
-    transform: scale(0.98) translateY(4px);
+    transform: translateY(4px);
   }
   to {
     opacity: 1;
-    transform: scale(1) translateY(0);
+    transform: translateY(0);
   }
 }
 
@@ -676,7 +678,7 @@
   }
   to {
     opacity: 1;
-    transform: scale(1) translateY(0);
+    transform: translateY(0);
   }
 }
 
@@ -711,11 +713,11 @@
 @keyframes modalDialogExit {
   from {
     opacity: 1;
-    transform: scale(1) translateY(0);
+    transform: translateY(0);
   }
   to {
     opacity: 0;
-    transform: scale(0.98) translateY(4px);
+    transform: translateY(4px);
   }
 }
 
@@ -841,7 +843,7 @@
 }
 
 .anim-accordion-chevron {
-  transition: transform var(--motion-normal) var(--ease-standard);
+  transition: transform var(--motion-hover) var(--ease-standard);
 }
 
 .anim-slide-switch {
@@ -857,7 +859,7 @@
 }
 
 .anim-tooltip {
-  animation: tooltipEnter var(--motion-fast) var(--ease-enter) forwards;
+  animation: tooltipEnter var(--motion-hover) var(--ease-enter) forwards;
 }
 
 .anim-validation-shake {
@@ -880,7 +882,7 @@
 
 /* Table Row Interaction (Mục 43 design_animation.md - 100-120ms) */
 .table-row-interactive {
-  transition: background-color var(--motion-fast) var(--ease-standard);
+  transition: background-color var(--motion-hover) var(--ease-standard);
 }
 .table-row-interactive:hover {
   background-color: var(--color-surface-subtle);
@@ -896,11 +898,11 @@
 @keyframes modalMotionEnter {
   from {
     opacity: 0;
-    transform: translateY(4px) scale(0.98);
+    transform: translateY(4px);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
 }
 
@@ -1100,10 +1102,10 @@ html[data-motion-button="false"] .btn-icon-motion:active {
 .about-page a, .app-owner-footer a { color: var(--color-brand-700); overflow-wrap: anywhere; }
 .about-page a:hover, .app-owner-footer a:hover { color: var(--color-brand-800); text-decoration: underline; }
 .about-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
-.about-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 16px; border: 1px solid var(--color-border-default); border-radius: 8px; background: var(--color-surface); font-size: 13px; cursor: pointer; transition: transform var(--motion-fast) var(--ease-standard), box-shadow var(--motion-fast) var(--ease-standard); }
+.about-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 16px; border: 1px solid var(--color-border-default); border-radius: 8px; background: var(--color-surface); font-size: 13px; cursor: pointer; transition: transform var(--motion-hover) var(--ease-standard), box-shadow var(--motion-hover) var(--ease-standard); }
 .about-page .about-button-primary { background: var(--color-brand-700); color: white; border-color: var(--color-brand-700); }
 .about-button:hover { transform: translateY(-1px); box-shadow: var(--shadow-xs); }
-.about-button:active { transform: scale(.985); }
+.about-button:active { transform: translateY(1px); }
 .about-copy-status { font-size: 13px; margin-top: 10px; }
 .about-page :focus-visible, .app-owner-footer a:focus-visible { outline: 2px solid var(--color-brand-700); outline-offset: 4px; border-radius: 3px; }
 .app-owner-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; padding: 10px 20px; border-top: 1px solid var(--color-border-default); background: var(--color-surface); font-size: 11px; color: var(--color-text-secondary); flex-shrink: 0; }
@@ -1116,7 +1118,7 @@ html[data-motion-button="false"] .btn-icon-motion:active {
 /* Targeted transitions avoid animating layout or Reader typography accidentally. */
 .motion-drawer { transition: transform var(--motion-emphasis) var(--ease-standard); }
 .motion-progress { transition: width var(--motion-normal) var(--ease-standard); }
-.motion-colors { transition: color var(--motion-fast) var(--ease-standard), background-color var(--motion-fast) var(--ease-standard), border-color var(--motion-fast) var(--ease-standard); }
+.motion-colors { transition: color var(--motion-hover) var(--ease-standard), background-color var(--motion-hover) var(--ease-standard), border-color var(--motion-hover) var(--ease-standard); }
 html[data-motion="off"] .btn-primary:hover, html[data-motion="off"] .btn-primary:active,
 html[data-motion="off"] .btn-motion:hover, html[data-motion="off"] .btn-motion:active,
 html[data-motion="off"] .btn-icon-motion:active, html[data-motion="off"] .card-interactive:hover,
@@ -1210,8 +1212,8 @@ html[data-motion-hover="false"] .btn-icon-motion:hover:not(:active) { transform:
 }
 
 /* Shared timing covers Tailwind transitions as well as semantic motion helpers. */
-:root { --default-transition-duration: var(--motion-fast); --default-transition-timing-function: var(--ease-standard); }
-.motion-surface { transition: opacity var(--motion-normal) var(--ease-standard), transform var(--motion-normal) var(--ease-standard), color var(--motion-fast) var(--ease-standard), background-color var(--motion-fast) var(--ease-standard), border-color var(--motion-fast) var(--ease-standard), box-shadow var(--motion-normal) var(--ease-standard); }
+:root { --default-transition-duration: var(--motion-hover); --default-transition-timing-function: var(--ease-standard); }
+.motion-surface { transition: opacity var(--motion-normal) var(--ease-standard), transform var(--motion-hover) var(--ease-standard), color var(--motion-hover) var(--ease-standard), background-color var(--motion-hover) var(--ease-standard), border-color var(--motion-hover) var(--ease-standard), box-shadow var(--motion-hover) var(--ease-standard); }
 .motion-hover-lift:hover { transform: translateY(-1px); }
 .motion-hover-scale:hover { transform: scale(1.06); }
 .workspace-view-enter { animation: workspaceViewEnter var(--motion-normal) var(--ease-enter); }
@@ -1229,3 +1231,11 @@ html[data-motion="light"] :is(.card-interactive, .btn-primary, .btn-motion, .abo
 @media (prefers-reduced-motion: reduce) {
   html:not([data-respect-reduced-motion="false"]) :is(.card-interactive, .btn-primary, .about-button):hover { box-shadow: var(--shadow-xs); }
 }
+
+/* Every shared button family obeys Off, click feedback, and the OS guard. */
+html[data-motion-button="false"] :is(.btn-secondary, .btn-ghost, .btn-icon, .btn-danger):active,
+html[data-motion="off"] :is(.btn-secondary, .btn-ghost, .btn-icon, .btn-danger):is(:hover, :active) { transform: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-respect-reduced-motion="false"]) :is(.btn-secondary, .btn-ghost, .btn-icon, .btn-danger):is(:hover, :active) { transform: none !important; }
+}
+:is(.btn-secondary, .btn-ghost, .btn-icon, .btn-danger, .btn-icon-motion, .about-button):active { transition-duration: var(--motion-instant); }

@@ -72,7 +72,7 @@ for (const [label, preset, normal, emphasis] of [
     const button = page.locator('main .btn-primary').first();
     if (await button.count()) {
       const durations = await button.evaluate(el => getComputedStyle(el).transitionDuration.split(',').map(Number.parseFloat));
-      expect(Math.max(...durations)).toBeLessThanOrEqual(Math.max(normal, .01));
+      expect(Math.max(...durations)).toBeLessThanOrEqual(Math.max(preset === 'slow' ? .32 : normal, .01));
     }
   });
 }

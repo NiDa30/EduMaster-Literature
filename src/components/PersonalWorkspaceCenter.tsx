@@ -534,6 +534,7 @@ export const PersonalWorkspaceCenter: React.FC<PersonalWorkspaceCenterProps> = (
                         PHÔNG CHỮ GIAO DIỆN (UI FONT)
                       </label>
                       <select
+                        aria-label="Phông chữ giao diện"
                         value={settings.appearance.uiFont}
                         onChange={(e) => handleUpdate(prev => ({
                           ...prev,
@@ -683,7 +684,7 @@ export const PersonalWorkspaceCenter: React.FC<PersonalWorkspaceCenterProps> = (
                       </div>
 
                       <p className="text-xs text-[#706A65] leading-relaxed">
-                        Thời gian trên dành cho chuyển cảnh và cửa sổ. Hover và click dùng nhịp ngắn hơn để phản hồi nhanh;
+                        Thời gian trên dành cho chuyển cảnh và cửa sổ. Hover chậm theo mức đã chọn; click giữ phản hồi nhanh;
                         thay đổi được áp dụng và lưu ngay. Nếu bật Giảm chuyển động trên thiết bị, hiệu ứng sẽ tắt khi chọn tôn trọng cài đặt này.
                       </p>
 
@@ -897,6 +898,7 @@ export const PersonalWorkspaceCenter: React.FC<PersonalWorkspaceCenterProps> = (
                     <div>
                       <label className="block text-[11px] font-medium text-stone-600 mb-1">Phông chữ đọc</label>
                       <select
+                        aria-label="Phông chữ đọc"
                         value={settings.authoring.readerFont}
                         onChange={(e) => handleUpdate(prev => ({
                           ...prev,

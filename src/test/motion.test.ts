@@ -35,6 +35,7 @@ describe('Navigation motion policy', () => {
     applyWorkspaceSettingsToDom({ ...DEFAULT_WORKSPACE_SETTINGS, appearance: { ...DEFAULT_WORKSPACE_SETTINGS.appearance, motionPreferences: { ...DEFAULT_MOTION_PREFERENCES, preset: 'slow' } } });
     expect(document.documentElement.style.getPropertyValue('--motion-normal')).toBe('240ms');
     expect(document.documentElement.style.getPropertyValue('--motion-emphasis')).toBe('320ms');
+    expect(document.documentElement.style.getPropertyValue('--motion-hover')).toBe('320ms');
   });
   it('keeps default durations within the documented limits without global smooth scrolling', () => {
     applyWorkspaceSettingsToDom({ ...DEFAULT_WORKSPACE_SETTINGS, appearance: { ...DEFAULT_WORKSPACE_SETTINGS.appearance, motionPreferences: { ...DEFAULT_MOTION_PREFERENCES, preset: 'smooth' } } });

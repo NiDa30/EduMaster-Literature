@@ -113,7 +113,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 }
                 setIsSidebarOpen(false);
               }}
-              className={`w-full text-left px-3 py-2 rounded-lg text-body-ui min-h-[38px] motion-surface duration-[var(--motion-fast)] flex items-center gap-3 relative ${
+              className={`w-full text-left px-3 py-2 rounded-lg text-body-ui min-h-[38px] motion-surface duration-[var(--motion-hover)] flex items-center gap-3 relative ${
                 isActive
                   ? 'bg-[#FCF3F4] text-[#7A2938] font-semibold shadow-[inset_0_1px_0_rgba(122,41,56,0.08)]'
                   : 'text-[#706A65] hover:text-[#211E1C] hover:bg-[#FAF9F7] font-normal'
@@ -146,7 +146,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             if (onOpenSettings) onOpenSettings();
             setIsSidebarOpen(false);
           }}
-          className="w-full text-left px-3 py-2 rounded-lg text-body-ui min-h-[38px] text-[#706A65] hover:text-[#211E1C] hover:bg-[#FAF9F7] transition-colors duration-[var(--motion-fast)] flex items-center gap-3 font-normal"
+          className="w-full text-left px-3 py-2 rounded-lg text-body-ui min-h-[38px] text-[#706A65] hover:text-[#211E1C] hover:bg-[#FAF9F7] transition-colors duration-[var(--motion-hover)] flex items-center gap-3 font-normal"
         >
           <Settings className="w-4 h-4 text-[#99918A] shrink-0" strokeWidth={1.75} />
           <span className="truncate-safe text-[13.5px]">Cài đặt sư phạm</span>
@@ -158,7 +158,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               onOpenTour();
               setIsSidebarOpen(false);
             }}
-            className="w-full text-left px-3 py-2 rounded-lg text-body-ui min-h-[38px] text-[#706A65] hover:text-[#7A2938] hover:bg-[#FCF3F4] transition-colors duration-[var(--motion-fast)] flex items-center gap-3 font-normal"
+            className="w-full text-left px-3 py-2 rounded-lg text-body-ui min-h-[38px] text-[#706A65] hover:text-[#7A2938] hover:bg-[#FCF3F4] transition-colors duration-[var(--motion-hover)] flex items-center gap-3 font-normal"
           >
             <HelpCircle className="w-4 h-4 text-[#7A2938] shrink-0" strokeWidth={1.75} />
             <span className="truncate-safe text-[13.5px]">Hướng dẫn sử dụng</span>
@@ -170,7 +170,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             setActiveModule('typography_test');
             setIsSidebarOpen(false);
           }}
-          className={`w-full text-left px-3 py-2 rounded-lg text-body-ui min-h-[38px] transition-colors duration-[var(--motion-fast)] flex items-center gap-3 relative ${
+          className={`w-full text-left px-3 py-2 rounded-lg text-body-ui min-h-[38px] transition-colors duration-[var(--motion-hover)] flex items-center gap-3 relative ${
             activeModule === 'typography_test'
               ? 'bg-[#FCF3F4] text-[#7A2938] font-semibold'
               : 'text-[#706A65] hover:text-[#211E1C] hover:bg-[#FAF9F7] font-normal'
