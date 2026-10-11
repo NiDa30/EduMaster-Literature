@@ -1,6 +1,7 @@
 import { WorkspaceSettings } from './settings';
 
 export type ActiveModule = 
+  | 'about'
   | 'dashboard'
   | 'workspace' 
   | 'genre_analysis'

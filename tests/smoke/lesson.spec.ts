@@ -1,6 +1,12 @@
 import { test, expect } from '@playwright/test';
 import { smokeLessonData } from '../fixtures/smokeLesson';
 
+test.beforeEach(async ({ page }) => {
+  await page.addLocatorHandler(page.getByRole('dialog', { name: 'Chào mừng đến với EduMaster Văn' }), async dialog => {
+    await dialog.getByText('Để sau', { exact: true }).click();
+  });
+});
+
 test.describe('SMOKE: Lesson Management (P0)', () => {
   test('SMOKE-LESSON-001: Switches current lesson via TopBar dropdown', async ({ page }) => {
     await page.goto('/');
@@ -27,7 +33,7 @@ test.describe('SMOKE: Lesson Management (P0)', () => {
     await page.goto('/');
 
     // Click "Tạo bài dạy" button
-    const createBtn = page.getByRole('button', { name: 'Tạo bài dạy' });
+    const createBtn = page.getByRole('button', { name: 'Tạo bài dạy', exact: true });
     await expect(createBtn).toBeVisible();
     await createBtn.click();
 

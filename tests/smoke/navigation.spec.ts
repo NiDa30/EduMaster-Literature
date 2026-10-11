@@ -1,5 +1,11 @@
 import { test, expect } from '@playwright/test';
 
+test.beforeEach(async ({ page }) => {
+  await page.addLocatorHandler(page.getByRole('dialog', { name: 'Chào mừng đến với EduMaster Văn' }), async dialog => {
+    await dialog.getByText('Để sau', { exact: true }).click();
+  });
+});
+
 test.describe('SMOKE: Sidebar Navigation (P0)', () => {
   test('SMOKE-NAV-001: Navigates across all 10 core modules without crash', async ({ page }) => {
     await page.goto('/');

@@ -11,6 +11,8 @@ import {
   WorkspaceSettings 
 } from './types';
 import { initialAppState } from './data/presets';
+import { AboutPage } from './components/about/AboutPage';
+import { ownerProfile, systemInfo } from './config/ownerProfile';
 import { Sidebar } from './components/Sidebar';
 import { TopBar } from './components/TopBar';
 import { TeacherDashboard } from './components/TeacherDashboard';
@@ -36,7 +38,7 @@ export const STORAGE_KEY = 'edumaster_app_state_v3';
 const VALID_MODULES: ActiveModule[] = [
   'dashboard', 'workspace', 'genre_analysis', 'khbd', 
   'question_builder', 'rubric', 'slides', 'exam', 
-  'matrix', 'export_handover', 'typography_test'
+  'matrix', 'export_handover', 'typography_test', 'about'
 ];
 
 export const resolveModuleAlias = (hash: string): ActiveModule | null => {
@@ -455,6 +457,7 @@ export default function App() {
 
         {/* Workspace Body */}
         <main className="flex-1 min-h-0 overflow-hidden flex flex-col w-full relative">
+          {appState.activeModule === 'about' && <AboutPage />}
           {appState.activeModule === 'dashboard' && (
             <TeacherDashboard
               lessons={appState.lessons}
@@ -559,6 +562,10 @@ export default function App() {
             <TypographyTestView />
           )}
         </main>
+        <footer className="app-owner-footer">
+          <span>{systemInfo.name} · {ownerProfile.fullName}</span>
+          <a href="#/about">Giới thiệu &amp; Chủ sở hữu</a>
+        </footer>
       </div>
 
       {/* Trung tâm Không gian Làm việc Cá nhân (Settings Hub) */}
@@ -569,6 +576,7 @@ export default function App() {
         onUpdateSettings={handleUpdateWorkspaceSettings}
         onUpdateKhbdInfo={handleUpdateKhbdInfo}
         onTriggerTour={openTour}
+        onOpenAbout={() => { setIsSettingsOpen(false); window.location.hash = '#/about'; }}
       />
 
       {/* Toast Notification (Mục 46 design_animation.md) */}

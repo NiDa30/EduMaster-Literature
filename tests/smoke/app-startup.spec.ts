@@ -33,7 +33,7 @@ test.describe('SMOKE: App Startup & Core Shell (P0)', () => {
     await page.goto('/');
 
     // Sidebar branding
-    const brand = page.getByText('EduMaster Văn');
+    const brand = page.locator('aside').getByText('EduMaster Văn', { exact: true });
     await expect(brand).toBeVisible();
 
     // TopBar element

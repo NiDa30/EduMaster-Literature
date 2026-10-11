@@ -69,6 +69,7 @@ interface PersonalWorkspaceCenterProps {
   onUpdateSettings: (settings: WorkspaceSettings) => void;
   onUpdateKhbdInfo?: (patch: Partial<LessonPlan5512['info']>) => void;
   onTriggerTour?: () => void;
+  onOpenAbout?: () => void;
 }
 
 export const PersonalWorkspaceCenter: React.FC<PersonalWorkspaceCenterProps> = ({
@@ -77,7 +78,8 @@ export const PersonalWorkspaceCenter: React.FC<PersonalWorkspaceCenterProps> = (
   appState,
   onUpdateSettings,
   onUpdateKhbdInfo,
-  onTriggerTour
+  onTriggerTour,
+  onOpenAbout
 }) => {
   const [activeTab, setActiveTab] = useState<SettingsTab>('appearance');
   const [settings, setSettings] = useState<WorkspaceSettings>(
@@ -1283,6 +1285,11 @@ export const PersonalWorkspaceCenter: React.FC<PersonalWorkspaceCenterProps> = (
             {/* ---------------------------------------------------- */}
             {activeTab === 'help' && (
               <div className="space-y-6">
+                <section className="space-y-2">
+                  <h4 className="font-semibold">Giới thiệu &amp; Chủ sở hữu</h4>
+                  <p className="text-sm text-[var(--color-text-secondary)]">Xem thông tin về EduMaster Văn, chủ sở hữu và thông tin liên hệ.</p>
+                  <button className="btn-primary px-4 py-2" onClick={onOpenAbout}>Xem thông tin</button>
+                </section>
                 {/* Guided Tour Launcher */}
                 <div className="p-4 rounded-2xl bg-[#FCF3F4]/60 border border-[#7A2938]/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div>
