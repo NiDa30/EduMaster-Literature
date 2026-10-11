@@ -83,12 +83,12 @@ export const TopBar: React.FC<TopBarProps> = ({
   };
 
   return (
-    <header className="h-14 bg-white border-b border-[#E5E0DA] px-4 md:px-5 flex items-center justify-between sticky top-0 z-30 select-none shrink-0 no-print">
+    <header className="h-14 bg-[var(--color-surface)] border-b border-[var(--color-border-default)] px-4 md:px-5 flex items-center justify-between sticky top-0 z-30 select-none shrink-0 no-print">
       {/* Left: Breadcrumb & Lesson Switcher */}
       <div className="flex items-center gap-2.5 min-w-0 flex-1">
         <button
           onClick={onOpenSidebar}
-          className="lg:hidden p-1.5 rounded-lg text-[#706A65] hover:text-[#211E1C] hover:bg-[#FAF9F7] transition-colors"
+          className="lg:hidden p-1.5 rounded-lg text-[var(--color-text-secondary)] hover:text-[var(--color-text-strong)] hover:bg-[var(--color-surface-subtle)] transition-colors"
           aria-label="Mở menu điều hướng"
         >
           <Menu className="w-5 h-5" strokeWidth={1.75} />
@@ -98,25 +98,25 @@ export const TopBar: React.FC<TopBarProps> = ({
         <div className="relative min-w-0 flex-1 max-w-[480px]" ref={lessonSwitcherRef} data-tour-id="lesson-switcher">
           <button
             onClick={() => setIsLessonSwitcherOpen(!isLessonSwitcherOpen)}
-            className="flex w-full min-w-0 items-center gap-1.5 py-1 px-2.5 -ml-1 rounded-lg hover:bg-[#FAF9F7] transition-colors text-left group"
+            className="flex w-full min-w-0 items-center gap-1.5 py-1 px-2.5 -ml-1 rounded-lg hover:bg-[var(--color-surface-subtle)] transition-colors text-left group"
             title="Nhấp để đổi tác phẩm giảng dạy"
           >
-            <span className="text-xs font-semibold uppercase tracking-wider text-[#99918A] shrink-0">
+            <span className="text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)] shrink-0">
               {currentLesson.grade || 'Ngữ văn 12'}
             </span>
-            <span className="text-[#D6D0C8]">/</span>
-            <span className="font-serif font-bold text-[#211E1C] text-sm md:text-[15px] group-hover:text-[#7A2938] transition-colors truncate min-w-0 flex-1">
+            <span className="text-[var(--color-border-strong)]">/</span>
+            <span className="font-serif font-bold text-[var(--color-text-strong)] text-sm md:text-[15px] group-hover:text-[var(--color-brand-text)] transition-colors truncate min-w-0 flex-1">
               {currentLesson.title}
             </span>
-            <span className="text-[#706A65] font-serif italic text-xs whitespace-nowrap shrink-0 hidden xl:inline">
+            <span className="text-[var(--color-text-secondary)] font-serif italic text-xs whitespace-nowrap shrink-0 hidden xl:inline">
               — {currentLesson.author}
             </span>
-            <ChevronDown className="w-3.5 h-3.5 text-[#99918A] ml-0.5 shrink-0 transition-transform group-hover:text-[#706A65]" strokeWidth={1.75} />
+            <ChevronDown className="w-3.5 h-3.5 text-[var(--color-text-muted)] ml-0.5 shrink-0 transition-transform group-hover:text-[var(--color-text-secondary)]" strokeWidth={1.75} />
           </button>
 
           {isLessonSwitcherOpen && (
-            <div className="absolute left-0 mt-1.5 w-72 bg-white border border-[#E5E0DA] rounded-xl shadow-[var(--shadow-md)] py-1.5 z-50 anim-dropdown">
-              <div className="px-3 py-1.5 text-[11px] font-semibold tracking-wider uppercase text-[#99918A] border-b border-[#EEEAE5] mb-1">
+            <div className="absolute left-0 mt-1.5 w-72 bg-[var(--color-surface)] border border-[var(--color-border-default)] rounded-xl shadow-[var(--shadow-md)] py-1.5 z-50 anim-dropdown">
+              <div className="px-3 py-1.5 text-[11px] font-semibold tracking-wider uppercase text-[var(--color-text-muted)] border-b border-[var(--color-border-subtle)] mb-1">
                 Tác phẩm giảng dạy ({lessons.length})
               </div>
               <div className="max-h-72 overflow-y-auto">
@@ -129,16 +129,16 @@ export const TopBar: React.FC<TopBarProps> = ({
                         onSelectLesson(l.id);
                         setIsLessonSwitcherOpen(false);
                       }}
-                      className={`w-full text-left px-3 py-2 text-body-ui flex items-center justify-between hover:bg-[#FAF9F7] transition-colors ${
-                        isSelected ? 'bg-[#FCF3F4] text-[#7A2938] font-medium' : 'text-[#211E1C]'
+                      className={`w-full text-left px-3 py-2 text-body-ui flex items-center justify-between hover:bg-[var(--color-surface-subtle)] transition-colors ${
+                        isSelected ? 'bg-[var(--color-brand-soft)] text-[var(--color-brand-text)] font-medium' : 'text-[var(--color-text-strong)]'
                       }`}
                     >
                       <div className="min-w-0 pr-2">
                         <div className="font-serif font-semibold text-sm truncate">{l.title}</div>
-                        <div className="text-[12px] text-[#706A65] truncate">{l.author} · {l.grade}</div>
+                        <div className="text-[12px] text-[var(--color-text-secondary)] truncate">{l.author} · {l.grade}</div>
                       </div>
                       {isSelected && (
-                        <Check className="w-4 h-4 text-[#7A2938] shrink-0" strokeWidth={2} />
+                        <Check className="w-4 h-4 text-[var(--color-brand-text)] shrink-0" strokeWidth={2} />
                       )}
                     </button>
                   );
@@ -154,14 +154,14 @@ export const TopBar: React.FC<TopBarProps> = ({
         {/* Autosave Status: Minimal semantic dot (Rule XI) */}
         <div 
           data-tour-id="autosave-status"
-          className="hidden xl:inline-flex items-center gap-1.5 text-[12px] text-[#706A65]"
+          className="hidden xl:inline-flex items-center gap-1.5 text-[12px] text-[var(--color-text-secondary)]"
           title={`Tự động đồng bộ và lưu cục bộ lúc ${formatSavedTime(lastUpdated)}`}
         >
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 shrink-0" />
-          <span>Đã lưu · <span className="tabular-nums font-medium text-[#302C29]">{formatSavedTime(lastUpdated)}</span></span>
+          <span>Đã lưu · <span className="tabular-nums font-medium text-[var(--color-text-primary)]">{formatSavedTime(lastUpdated)}</span></span>
         </div>
 
-        <div className="h-4 w-px bg-[#EEEAE5] hidden xl:block" />
+        <div className="h-4 w-px bg-[var(--color-border-subtle)] hidden xl:block" />
 
         {/* Toggle Focus Mode */}
         {onToggleFocusMode && (
@@ -170,8 +170,8 @@ export const TopBar: React.FC<TopBarProps> = ({
             onClick={onToggleFocusMode}
             className={`hidden md:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors ${
               isFocusMode 
-                ? 'bg-[#FCF3F4] text-[#7A2938] border border-[#ECC2C9]' 
-                : 'text-[#706A65] hover:text-[#211E1C] hover:bg-[#FAF9F7]'
+                ? 'bg-[var(--color-brand-soft)] text-[var(--color-brand-text)] border border-[var(--color-brand-200)]'
+                : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-strong)] hover:bg-[var(--color-surface-subtle)]'
             }`}
             aria-label={isFocusMode ? "Thoát chế độ tập trung" : "Chế độ tập trung"}
             title={isFocusMode ? "Thoát chế độ tập trung" : "Chế độ tập trung (ẩn sidebar)"}
@@ -194,7 +194,7 @@ export const TopBar: React.FC<TopBarProps> = ({
         {onOpenTour && (
           <button
             onClick={onOpenTour}
-            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-[#706A65] hover:text-[#7A2938] hover:bg-[#FCF3F4] transition-colors"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-brand-text)] hover:bg-[var(--color-brand-soft)] transition-colors"
             title="Hướng dẫn sử dụng toàn hệ thống"
             aria-label="Hướng dẫn sử dụng"
           >
@@ -207,7 +207,7 @@ export const TopBar: React.FC<TopBarProps> = ({
         {onPreview && (
           <button
             onClick={onPreview}
-            className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-[#706A65] hover:text-[#211E1C] hover:bg-[#FAF9F7] transition-colors"
+            className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-strong)] hover:bg-[var(--color-surface-subtle)] transition-colors"
             title="In hoặc Xem trước trang in A4"
             aria-label="In / Xem trước"
           >
@@ -223,14 +223,14 @@ export const TopBar: React.FC<TopBarProps> = ({
             className="btn-secondary btn-compact gap-1.5"
             title="Tải về tài liệu"
           >
-            <Download className="w-3.5 h-3.5 text-[#706A65]" strokeWidth={1.75} />
+            <Download className="w-3.5 h-3.5 text-[var(--color-text-secondary)]" strokeWidth={1.75} />
             <span className="hidden xl:inline">Xuất file</span>
-            <ChevronDown className="w-3 h-3 text-[#99918A]" strokeWidth={1.75} />
+            <ChevronDown className="w-3 h-3 text-[var(--color-text-muted)]" strokeWidth={1.75} />
           </button>
 
           {isExportOpen && (
-            <div className="absolute right-0 mt-1.5 w-60 bg-white border border-[#E5E0DA] rounded-xl shadow-[var(--shadow-md)] py-1.5 z-50 anim-dropdown text-left">
-              <div className="px-3 py-1 text-[11px] font-semibold text-[#99918A] uppercase tracking-wider">
+            <div className="absolute right-0 mt-1.5 w-60 bg-[var(--color-surface)] border border-[var(--color-border-default)] rounded-xl shadow-[var(--shadow-md)] py-1.5 z-50 anim-dropdown text-left">
+              <div className="px-3 py-1 text-[11px] font-semibold text-[var(--color-text-muted)] uppercase tracking-wider">
                 Giáo án & Trình chiếu
               </div>
               <button
@@ -238,7 +238,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                   exportDocxKHBD(khbd);
                   setIsExportOpen(false);
                 }}
-                className="w-full text-left px-3 py-2 text-xs text-[#302C29] hover:bg-[#FAF9F7] flex items-center gap-2.5 transition-colors"
+                className="w-full text-left px-3 py-2 text-xs text-[var(--color-text-primary)] hover:bg-[var(--color-surface-subtle)] flex items-center gap-2.5 transition-colors"
               >
                 <FileText className="w-4 h-4 text-[#1E40AF] shrink-0" strokeWidth={1.75} />
                 <span>Giáo án KHBD 5512 (DOCX)</span>
@@ -248,14 +248,14 @@ export const TopBar: React.FC<TopBarProps> = ({
                   exportPptxSlides(slides, khbd.info.lessonTitle);
                   setIsExportOpen(false);
                 }}
-                className="w-full text-left px-3 py-2 text-xs text-[#302C29] hover:bg-[#FAF9F7] flex items-center gap-2.5 transition-colors"
+                className="w-full text-left px-3 py-2 text-xs text-[var(--color-text-primary)] hover:bg-[var(--color-surface-subtle)] flex items-center gap-2.5 transition-colors"
               >
                 <Presentation className="w-4 h-4 text-[#92400E] shrink-0" strokeWidth={1.75} />
                 <span>Bài giảng điện tử (PPTX)</span>
               </button>
 
-              <div className="h-px bg-[#EEEAE5] my-1" />
-              <div className="px-3 py-1 text-[11px] font-semibold text-[#99918A] uppercase tracking-wider">
+              <div className="h-px bg-[var(--color-border-subtle)] my-1" />
+              <div className="px-3 py-1 text-[11px] font-semibold text-[var(--color-text-muted)] uppercase tracking-wider">
                 Khảo thí & Đánh giá
               </div>
               <button
@@ -263,9 +263,9 @@ export const TopBar: React.FC<TopBarProps> = ({
                   exportDocxExam(exam, khbd);
                   setIsExportOpen(false);
                 }}
-                className="w-full text-left px-3 py-2 text-xs text-[#302C29] hover:bg-[#FAF9F7] flex items-center gap-2.5 transition-colors"
+                className="w-full text-left px-3 py-2 text-xs text-[var(--color-text-primary)] hover:bg-[var(--color-surface-subtle)] flex items-center gap-2.5 transition-colors"
               >
-                <FileText className="w-4 h-4 text-[#7A2938] shrink-0" strokeWidth={1.75} />
+                <FileText className="w-4 h-4 text-[var(--color-brand-text)] shrink-0" strokeWidth={1.75} />
                 <span>Đề thi & Hướng dẫn (DOCX)</span>
               </button>
               <button
@@ -273,7 +273,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                   exportDocxMatrix(exam, khbd);
                   setIsExportOpen(false);
                 }}
-                className="w-full text-left px-3 py-2 text-xs text-[#302C29] hover:bg-[#FAF9F7] flex items-center gap-2.5 transition-colors"
+                className="w-full text-left px-3 py-2 text-xs text-[var(--color-text-primary)] hover:bg-[var(--color-surface-subtle)] flex items-center gap-2.5 transition-colors"
               >
                 <FileSpreadsheet className="w-4 h-4 text-[#166534] shrink-0" strokeWidth={1.75} />
                 <span>Ma trận & Bản đặc tả (DOCX)</span>

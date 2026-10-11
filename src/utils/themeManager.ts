@@ -8,7 +8,7 @@ import {
   AccentPreset, 
   SURFACE_STYLE_PRESETS 
 } from '../config/defaultSettings';
-import { validateHexColor, hexToRgb } from './slideStyleUtils';
+import { validateHexColor, hexToRgb, normalizeHex, getContrastRatio } from './slideStyleUtils';
 import { AppState } from '../types';
 
 // =========================================================================
@@ -33,7 +33,7 @@ export function getAccentScale(accentId: AccentColorId, customHex?: string): Acc
       return {
         id: 'custom',
         name: 'Màu tùy chỉnh',
-        hex: customHex,
+        hex: normalizeHex(customHex),
         hoverHex,
         pressedHex,
         softHex: `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.08)`,
@@ -51,10 +51,20 @@ export function getAccentScale(accentId: AccentColorId, customHex?: string): Acc
 // 2. DOM CSS VARIABLES INJECTION & SYNCHRONIZATION
 // =========================================================================
 
+/** Preserve hue while making accent labels readable on workspace surfaces. */
+export function getReadableAccent(hex: string, ...backgrounds: string[]): string {
+  const rgb = hexToRgb(hex)!;
+  const target = getContrastRatio('#FFFFFF', backgrounds[0]) > getContrastRatio('#000000', backgrounds[0]) ? 255 : 0;
+  for (let step = 0; step <= 100; step++) {
+    const candidate = '#' + [rgb.r, rgb.g, rgb.b].map(channel => Math.round(channel + (target - channel) * step / 100).toString(16).padStart(2, '0')).join('');
+    if (backgrounds.every(background => getContrastRatio(candidate, background) >= 4.5)) return candidate;
+  }
+  return target ? '#FFFFFF' : '#000000';
+}
+
 export function applyWorkspaceSettingsToDom(settings: WorkspaceSettings): void {
   if (typeof document === 'undefined') return;
   const root = document.documentElement;
-  root.dataset.theme = settings.appearance.themeMode;
 
   // 1. Accent Color
   const accent = getAccentScale(settings.appearance.accentColorId, settings.appearance.customAccentHex);
@@ -70,6 +80,28 @@ export function applyWorkspaceSettingsToDom(settings: WorkspaceSettings): void {
   root.style.setProperty('--color-canvas', surface.canvas);
   root.style.setProperty('--color-surface', surface.surface);
   root.style.setProperty('--color-surface-subtle', surface.surfaceSubtle);
+  root.dataset.theme = surface.isDark ? 'dark' : 'light';
+  const neutral = surface.isDark ? {
+    'text-strong': '#FAFAF9', 'text-primary': '#F5F5F4', 'text-secondary': '#D6D3D1', 'text-muted': '#A8A29E',
+    'border-subtle': '#44403C', 'border-default': '#57534E', 'border-strong': '#78716C',
+  } : {
+    'text-strong': '#211E1C', 'text-primary': '#302C29', 'text-secondary': '#706A65', 'text-muted': '#706A65',
+    'border-subtle': '#EEEAE5', 'border-default': '#E5E0DA', 'border-strong': '#D6D0C8',
+  };
+  for (const [name, value] of Object.entries(neutral)) root.style.setProperty(`--color-${name}`, value);
+  root.style.setProperty('--color-status-success', surface.isDark ? '#6EE7B7' : '#047857');
+  root.style.setProperty('--color-status-info', surface.isDark ? '#93C5FD' : '#1E40AF');
+  root.style.setProperty('--color-canvas-elevated', surface.surface);
+  root.style.setProperty('--color-surface-muted', surface.surfaceSubtle);
+  root.style.setProperty('--color-reader-paper', surface.surface);
+  const readableAccent = getReadableAccent(accent.hex, surface.surface, surface.surfaceSubtle);
+  root.style.setProperty('--color-brand-text', readableAccent);
+  root.style.setProperty('--color-brand-on-accent', getContrastRatio('#FFFFFF', accent.hex) >= 4.5 ? '#FFFFFF' : '#000000');
+  root.style.setProperty('--color-brand-on-hover', getContrastRatio('#FFFFFF', accent.hoverHex) >= 4.5 ? '#FFFFFF' : '#000000');
+  root.style.setProperty('--color-brand-on-pressed', getContrastRatio('#FFFFFF', accent.pressedHex) >= 4.5 ? '#FFFFFF' : '#000000');
+  root.style.setProperty('--color-brand-border', accent.borderHex);
+  const tint = surface.isDark ? `color-mix(in srgb, ${readableAccent} 12%, ${surface.surface})` : accent.softHex;
+  for (const level of ['25', '50', '100', 'soft']) root.style.setProperty(`--color-brand-${level}`, tint);
 
   // 3. UI Font
   let uiFontStack = '"Be Vietnam Pro", system-ui, -apple-system, sans-serif';

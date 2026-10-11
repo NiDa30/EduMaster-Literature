@@ -221,7 +221,7 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
   const getTypeBadge = (type: QuestionType) => {
     switch (type) {
       case 'doc_hieu': return 'bg-sky-50 text-sky-900 border-sky-200/60';
-      case 'tieng_viet': return 'bg-[#FCF3F4] text-[#7A2938] border-[#7A2938]/20';
+      case 'tieng_viet': return 'bg-[var(--color-brand-soft)] text-[var(--color-brand-text)] border-[var(--color-brand-700)]/20';
       case 'nl_xa_hoi': return 'bg-amber-50 text-amber-900 border-amber-200/60';
       case 'nl_van_hoc': return 'bg-rose-50 text-rose-900 border-rose-200/60';
     }
@@ -238,7 +238,7 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
 
   const getLevelBadge = (level: CognitiveLevel) => {
     switch (level) {
-      case 'NB': return 'bg-[#F5F3F0] text-[#706A65] border border-[#E5E0DA]';
+      case 'NB': return 'bg-[var(--color-surface-muted)] text-[var(--color-text-secondary)] border border-[var(--color-border-default)]';
       case 'TH': return 'bg-sky-50 text-sky-800 border border-sky-200/60';
       case 'VD': return 'bg-emerald-50 text-emerald-800 border border-emerald-200/60';
     }
@@ -255,16 +255,16 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
   return (
     <div className="responsive-workspace question-workspace h-full min-h-0 flex flex-col p-4 md:p-6 space-y-3 overflow-hidden max-w-7xl w-full mx-auto">
       {/* Header Bar */}
-      <div className="workspace-header bg-white p-3.5 md:p-4 rounded-2xl border border-[#E5E0DA] shadow-[var(--shadow-xs)] flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0">
+      <div className="workspace-header bg-[var(--color-surface)] p-3.5 md:p-4 rounded-2xl border border-[var(--color-border-default)] shadow-[var(--shadow-xs)] flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0">
         <div>
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full text-metadata font-semibold bg-[#FCF3F4] text-[#7A2938] border border-[#7A2938]/15 flex items-center gap-1">
+            <span className="px-2.5 py-0.5 rounded-full text-metadata font-semibold bg-[var(--color-brand-soft)] text-[var(--color-brand-text)] border border-[var(--color-brand-700)]/15 flex items-center gap-1">
               <Sparkles className="w-3.5 h-3.5" />
               Ngân hàng Câu hỏi Ngữ văn
             </span>
-            <span className="text-metadata text-[#706A65] font-medium hidden sm:inline">Theo chuẩn Ma trận Đánh giá Năng lực</span>
+            <span className="text-metadata text-[var(--color-text-secondary)] font-medium hidden sm:inline">Theo chuẩn Ma trận Đánh giá Năng lực</span>
           </div>
-          <h1 className="text-section md:text-page-title font-semibold text-[#211E1C] mt-1 leading-[1.3]">
+          <h1 className="text-section md:text-page-title font-semibold text-[var(--color-text-strong)] mt-1 leading-[1.3]">
             Question Builder Chuyên sâu: Ngữ liệu · Câu hỏi · Barem
           </h1>
         </div>
@@ -281,7 +281,7 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
             onClick={() => setActiveModule('matrix')}
             className="btn-secondary min-h-[36px] px-3.5 py-1.5 rounded-xl text-metadata font-semibold flex items-center gap-1.5"
           >
-            <Grid3X3 className="w-4 h-4 text-[#7A2938]" />
+            <Grid3X3 className="w-4 h-4 text-[var(--color-brand-text)]" />
             <span>Xem Ma trận</span>
           </button>
         </div>
@@ -292,15 +292,15 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
         {/* LEFT COLUMN: Questions List + Search/Filter */}
         <aside data-tour-id="question-bank" className="question-bank w-full lg:w-[320px] xl:w-[340px] shrink-0 h-full min-h-0 flex flex-col card-surface p-3 overflow-hidden">
           {/* Filters Bar */}
-          <div className="space-y-2 pb-3 border-b border-[#E7E5E4] shrink-0">
+          <div className="space-y-2 pb-3 border-b border-[var(--color-border-default)] shrink-0">
             <div className="flex items-center justify-between text-metadata">
-              <span className="font-semibold text-stone-700 flex items-center gap-1.5">
-                <Filter className="w-3.5 h-3.5 text-stone-400" />
+              <span className="font-semibold text-[var(--color-text-primary)] flex items-center gap-1.5">
+                <Filter className="w-3.5 h-3.5 text-[var(--color-text-muted)]" />
                 Danh sách ({filteredQuestions.length})
               </span>
               <button
                 onClick={handleStartCreate}
-                className="text-[#7A2938] hover:underline font-medium text-[12px]"
+                className="text-[var(--color-brand-text)] hover:underline font-medium text-[12px]"
               >
                 + Thêm mới
               </button>
@@ -310,7 +310,7 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
               <select
                 value={filterType}
                 onChange={(e) => setFilterType(e.target.value as QuestionType | 'all')}
-                className="min-h-[34px] px-2 py-1 bg-stone-50 border border-stone-300 rounded-lg text-[12px]"
+                className="min-h-[34px] px-2 py-1 bg-[var(--color-surface-subtle)] border border-stone-300 rounded-lg text-[12px]"
               >
                 <option value="all">Tất cả dạng</option>
                 <option value="doc_hieu">Đọc hiểu</option>
@@ -322,7 +322,7 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
               <select
                 value={filterLevel}
                 onChange={(e) => setFilterLevel(e.target.value as CognitiveLevel | 'all')}
-                className="min-h-[34px] px-2 py-1 bg-stone-50 border border-stone-300 rounded-lg text-[12px]"
+                className="min-h-[34px] px-2 py-1 bg-[var(--color-surface-subtle)] border border-stone-300 rounded-lg text-[12px]"
               >
                 <option value="all">Tất cả mức</option>
                 <option value="NB">Nhận biết</option>
@@ -335,7 +335,7 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
           {/* Questions Scrollable List */}
           <div className="flex-1 min-h-0 overflow-y-auto space-y-2 pt-2 pr-1">
             {filteredQuestions.length === 0 ? (
-              <p className="text-metadata text-stone-400 text-center py-6">
+              <p className="text-metadata text-[var(--color-text-muted)] text-center py-6">
                 Không tìm thấy câu hỏi phù hợp bộ lọc.
               </p>
             ) : (
@@ -353,31 +353,31 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
                     }}
                     className={`block w-full text-left p-3 rounded-xl border cursor-pointer motion-surface ${
                       isSelected
-                        ? 'bg-[#FCF3F4] border-[#7A2938] shadow-[var(--shadow-xs)]'
-                        : 'bg-white border-[#E5E0DA] hover:border-[#D6D0C8] hover:bg-[#FAF9F7]'
+                        ? 'bg-[var(--color-brand-soft)] border-[var(--color-brand-700)] shadow-[var(--shadow-xs)]'
+                        : 'bg-[var(--color-surface)] border-[var(--color-border-default)] hover:border-[var(--color-border-strong)] hover:bg-[var(--color-surface-subtle)]'
                     }`}
                   >
                     <div className="flex items-center justify-between gap-1 mb-1">
                       <div className="flex items-center gap-1.5">
-                        <span className="font-semibold text-metadata text-[#211E1C] bg-[#F5F3F0] border border-[#E5E0DA] px-2 py-0.5 rounded text-[11px] tabular-nums">
+                        <span className="font-semibold text-metadata text-[var(--color-text-strong)] bg-[var(--color-surface-muted)] border border-[var(--color-border-default)] px-2 py-0.5 rounded text-[11px] tabular-nums">
                           {q.code || `Câu ${idx + 1}`}
                         </span>
                         <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded border ${getTypeBadge(q.type)}`}>
                           {getTypeLabel(q.type)}
                         </span>
                       </div>
-                      <span className="text-[11px] font-semibold text-[#7A2938] tabular-nums">
+                      <span className="text-[11px] font-semibold text-[var(--color-brand-text)] tabular-nums">
                         {q.points}đ
                       </span>
                     </div>
 
-                    <p className="text-metadata text-[#302C29] line-clamp-2 leading-snug">
+                    <p className="text-metadata text-[var(--color-text-primary)] line-clamp-2 leading-snug">
                       {q.question}
                     </p>
 
-                    <div className="flex items-center justify-between text-[11px] text-[#706A65] mt-2 pt-1 border-t border-[#EEEAE5]">
+                    <div className="flex items-center justify-between text-[11px] text-[var(--color-text-secondary)] mt-2 pt-1 border-t border-[var(--color-border-subtle)]">
                       <span>{getLevelLabel(q.level)} · {q.skill}</span>
-                      <ArrowRight className="w-3.5 h-3.5 text-[#99918A]" />
+                      <ArrowRight className="w-3.5 h-3.5 text-[var(--color-text-muted)]" />
                     </div>
                   </button>
                 );
@@ -391,18 +391,18 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
           {isCreatingNew ? (
             /* CREATE FORM */
             <form onSubmit={handleCreateQuestion} className="h-full min-h-0 flex flex-col space-y-3 overflow-hidden">
-              <div className="flex items-center justify-between pb-2 border-b border-[#E7E5E4] shrink-0">
+              <div className="flex items-center justify-between pb-2 border-b border-[var(--color-border-default)] shrink-0">
                 <div>
-                  <h3 className="font-semibold text-card-title text-stone-900 flex items-center gap-2">
-                    <Plus className="w-4 h-4 text-[#7A2938]" />
+                  <h3 className="font-semibold text-card-title text-[var(--color-text-strong)] flex items-center gap-2">
+                    <Plus className="w-4 h-4 text-[var(--color-brand-text)]" />
                     Soạn câu hỏi mới
                   </h3>
-                  <span className="text-metadata text-stone-500">Quy trình chuẩn hóa 4 bước Ngữ văn</span>
+                  <span className="text-metadata text-[var(--color-text-secondary)]">Quy trình chuẩn hóa 4 bước Ngữ văn</span>
                 </div>
                 <button
                   type="button"
                   onClick={() => setIsCreatingNew(false)}
-                  className="text-metadata text-stone-500 hover:text-stone-800 px-2 py-1"
+                  className="text-metadata text-[var(--color-text-secondary)] hover:text-[var(--color-text-strong)] px-2 py-1"
                 >
                   Đóng
                 </button>
@@ -411,11 +411,11 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
               <div className="flex-1 min-h-0 overflow-y-auto space-y-3 pr-1 text-metadata">
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                   <div>
-                    <label className="block font-medium text-stone-700 mb-1">Dạng câu hỏi:</label>
+                    <label className="block font-medium text-[var(--color-text-primary)] mb-1">Dạng câu hỏi:</label>
                     <select
                       value={newType}
                       onChange={(e) => setNewType(e.target.value as QuestionType)}
-                      className="w-full p-2 min-h-[38px] bg-stone-50 border border-stone-300 rounded-xl text-metadata"
+                      className="w-full p-2 min-h-[38px] bg-[var(--color-surface-subtle)] border border-stone-300 rounded-xl text-metadata"
                     >
                       <option value="doc_hieu">Đọc hiểu</option>
                       <option value="tieng_viet">Tiếng Việt</option>
@@ -425,11 +425,11 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
                   </div>
 
                   <div>
-                    <label className="block font-medium text-stone-700 mb-1">Mức độ nhận thức:</label>
+                    <label className="block font-medium text-[var(--color-text-primary)] mb-1">Mức độ nhận thức:</label>
                     <select
                       value={newLevel}
                       onChange={(e) => setNewLevel(e.target.value as CognitiveLevel)}
-                      className="w-full p-2 min-h-[38px] bg-stone-50 border border-stone-300 rounded-xl text-metadata"
+                      className="w-full p-2 min-h-[38px] bg-[var(--color-surface-subtle)] border border-stone-300 rounded-xl text-metadata"
                     >
                       <option value="NB">Nhận biết (NB)</option>
                       <option value="TH">Thông hiểu (TH)</option>
@@ -438,11 +438,11 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
                   </div>
 
                   <div>
-                    <label className="block font-medium text-stone-700 mb-1">Kỹ năng đặc thù:</label>
+                    <label className="block font-medium text-[var(--color-text-primary)] mb-1">Kỹ năng đặc thù:</label>
                     <select
                       value={newSkill}
                       onChange={(e) => setNewSkill(e.target.value as SkillType)}
-                      className="w-full p-2 min-h-[38px] bg-stone-50 border border-stone-300 rounded-xl text-metadata"
+                      className="w-full p-2 min-h-[38px] bg-[var(--color-surface-subtle)] border border-stone-300 rounded-xl text-metadata"
                     >
                       <option value="Nhận diện">Nhận diện</option>
                       <option value="Giải thích">Giải thích</option>
@@ -455,7 +455,7 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
                   </div>
 
                   <div>
-                    <label className="block font-medium text-stone-700 mb-1">Thang điểm:</label>
+                    <label className="block font-medium text-[var(--color-text-primary)] mb-1">Thang điểm:</label>
                     <input
                       type="number"
                       step="0.25"
@@ -463,13 +463,13 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
                       max="10"
                       value={newPoints}
                       onChange={(e) => setNewPoints(parseFloat(e.target.value) || 0.5)}
-                      className="w-full p-2 min-h-[38px] bg-stone-50 border border-stone-300 rounded-xl text-metadata tabular-nums font-semibold"
+                      className="w-full p-2 min-h-[38px] bg-[var(--color-surface-subtle)] border border-stone-300 rounded-xl text-metadata tabular-nums font-semibold"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-stone-800 mb-1">1. Ngữ liệu trích dẫn (Passage):</label>
+                  <label className="block font-semibold text-[var(--color-text-strong)] mb-1">1. Ngữ liệu trích dẫn (Passage):</label>
                   <textarea
                     rows={2}
                     placeholder="Đoạn thơ/văn tham chiếu..."
@@ -480,7 +480,7 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-stone-800 mb-1">2. Lệnh hỏi / Yêu cầu câu hỏi:</label>
+                  <label className="block font-semibold text-[var(--color-text-strong)] mb-1">2. Lệnh hỏi / Yêu cầu câu hỏi:</label>
                   <textarea
                     rows={2}
                     required
@@ -493,7 +493,7 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-semibold text-stone-800 mb-1">3. Đáp án gợi ý:</label>
+                    <label className="block font-semibold text-[var(--color-text-strong)] mb-1">3. Đáp án gợi ý:</label>
                     <textarea
                       rows={2}
                       placeholder="Ý trả lời chuẩn..."
@@ -504,7 +504,7 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
                   </div>
 
                   <div>
-                    <label className="block font-semibold text-stone-800 mb-1">4. Hướng dẫn chấm & Barem:</label>
+                    <label className="block font-semibold text-[var(--color-text-strong)] mb-1">4. Hướng dẫn chấm & Barem:</label>
                     <textarea
                       rows={2}
                       placeholder="Biểu điểm..."
@@ -516,7 +516,7 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#E7E5E4] shrink-0">
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-[var(--color-border-default)] shrink-0">
                 <button
                   type="button"
                   onClick={() => setIsCreatingNew(false)}
@@ -536,9 +536,9 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
             /* DETAILED VIEW / EDIT OF SELECTED QUESTION */
             <div className="h-full min-h-0 flex flex-col space-y-4 overflow-hidden">
               {/* Header with badges and Action buttons */}
-              <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-[#EEEAE5] shrink-0">
+              <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-[var(--color-border-subtle)] shrink-0">
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold text-card-title text-[#211E1C] bg-[#F5F3F0] border border-[#E5E0DA] px-3 py-1 rounded-lg tabular-nums">
+                  <span className="font-semibold text-card-title text-[var(--color-text-strong)] bg-[var(--color-surface-muted)] border border-[var(--color-border-default)] px-3 py-1 rounded-lg tabular-nums">
                     {selectedQuestion.code}
                   </span>
                   <span className={`text-metadata font-medium px-2.5 py-1 rounded-full border ${getTypeBadge(selectedQuestion.type)}`}>
@@ -547,13 +547,13 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
                   <span className={`text-metadata font-medium px-2.5 py-1 rounded ${getLevelBadge(selectedQuestion.level)}`}>
                     {getLevelLabel(selectedQuestion.level)}
                   </span>
-                  <span className="text-metadata font-medium px-2.5 py-1 rounded bg-[#FAF9F7] text-[#302C29] border border-[#E5E0DA]">
+                  <span className="text-metadata font-medium px-2.5 py-1 rounded bg-[var(--color-surface-subtle)] text-[var(--color-text-primary)] border border-[var(--color-border-default)]">
                     Kỹ năng: {selectedQuestion.skill}
                   </span>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="text-metadata tabular-nums font-semibold text-[#7A2938] bg-[#FCF3F4] px-2.5 py-1 rounded border border-[#7A2938]/15">
+                  <span className="text-metadata tabular-nums font-semibold text-[var(--color-brand-text)] bg-[var(--color-brand-soft)] px-2.5 py-1 rounded border border-[var(--color-brand-700)]/15">
                     {selectedQuestion.points} điểm
                   </span>
                   <button
@@ -566,7 +566,7 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
                   </button>
                   <button
                     onClick={() => handleDeleteQuestion(selectedQuestion.id)}
-                    className="p-1.5 text-[#706A65] hover:text-[#B91C1C] rounded-lg hover:bg-rose-50 transition-colors min-h-[32px] min-w-[32px] flex items-center justify-center"
+                    className="p-1.5 text-[var(--color-text-secondary)] hover:text-[#B91C1C] rounded-lg hover:bg-rose-50 transition-colors min-h-[32px] min-w-[32px] flex items-center justify-center"
                     title="Xóa câu hỏi này"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -578,8 +578,8 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
               <div className="flex-1 min-h-0 overflow-y-auto space-y-4 pr-1">
                 {/* Passage Snippet */}
                 {selectedQuestion.passageSnippet && (
-                  <div className="p-4 bg-[#FAF9F7] rounded-xl border border-[#E5E0DA] text-body-ui font-serif italic text-[#211E1C] whitespace-pre-line border-l-4 border-l-[#7A2938] leading-[1.8]">
-                    <strong className="font-sans not-italic text-[#706A65] block mb-1 text-metadata font-semibold">
+                  <div className="p-4 bg-[var(--color-surface-subtle)] rounded-xl border border-[var(--color-border-default)] text-body-ui font-serif italic text-[var(--color-text-strong)] whitespace-pre-line border-l-4 border-l-[var(--color-brand-700)] leading-[1.8]">
+                    <strong className="font-sans not-italic text-[var(--color-text-secondary)] block mb-1 text-metadata font-semibold">
                       Ngữ liệu tham chiếu:
                     </strong>
                     {selectedQuestion.passageSnippet}
@@ -587,30 +587,30 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
                 )}
 
                 {/* Question */}
-                <div className="p-4 rounded-xl bg-[#FAF9F7] border border-[#E5E0DA]">
-                  <span className="font-semibold text-[#706A65] text-metadata block mb-1">
+                <div className="p-4 rounded-xl bg-[var(--color-surface-subtle)] border border-[var(--color-border-default)]">
+                  <span className="font-semibold text-[var(--color-text-secondary)] text-metadata block mb-1">
                     Lệnh hỏi:
                   </span>
-                  <p className="text-body-ui font-medium text-[#211E1C] leading-normal">
+                  <p className="text-body-ui font-medium text-[var(--color-text-strong)] leading-normal">
                     {selectedQuestion.question}
                   </p>
                 </div>
 
                 {/* Answer & Guide */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="p-4 bg-white rounded-xl border border-[#E5E0DA] shadow-[var(--shadow-xs)]">
-                    <span className="font-semibold text-[#211E1C] block mb-1 text-metadata">
+                  <div className="p-4 bg-[var(--color-surface)] rounded-xl border border-[var(--color-border-default)] shadow-[var(--shadow-xs)]">
+                    <span className="font-semibold text-[var(--color-text-strong)] block mb-1 text-metadata">
                       Đáp án gợi ý:
                     </span>
-                    <p className="text-[#302C29] whitespace-pre-line leading-relaxed text-body-ui">
+                    <p className="text-[var(--color-text-primary)] whitespace-pre-line leading-relaxed text-body-ui">
                       {selectedQuestion.answer || 'Chưa cập nhật'}
                     </p>
                   </div>
-                  <div className="p-4 bg-white rounded-xl border border-[#E5E0DA] shadow-[var(--shadow-xs)]">
-                    <span className="font-semibold text-[#211E1C] block mb-1 text-metadata">
+                  <div className="p-4 bg-[var(--color-surface)] rounded-xl border border-[var(--color-border-default)] shadow-[var(--shadow-xs)]">
+                    <span className="font-semibold text-[var(--color-text-strong)] block mb-1 text-metadata">
                       Hướng dẫn chấm & Barem:
                     </span>
-                    <p className="text-stone-600 whitespace-pre-line leading-relaxed text-body-ui">
+                    <p className="text-[var(--color-text-secondary)] whitespace-pre-line leading-relaxed text-body-ui">
                       {selectedQuestion.guide || 'Chấm theo barem chính xác.'}
                     </p>
                   </div>
@@ -618,7 +618,7 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
               </div>
             </div>
           ) : (
-            <div className="h-full flex items-center justify-center text-stone-400 text-metadata">
+            <div className="h-full flex items-center justify-center text-[var(--color-text-muted)] text-metadata">
               Chọn câu hỏi từ danh sách bên trái hoặc nhấn "+ Tạo câu hỏi"
             </div>
           )}

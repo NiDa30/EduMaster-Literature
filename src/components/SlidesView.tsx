@@ -849,20 +849,20 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
   }
 
   return (
-    <div className="responsive-workspace slides-workspace h-full min-h-0 flex flex-col p-4 md:p-6 space-y-3 overflow-hidden bg-[#FAF9F7]">
+    <div className="responsive-workspace slides-workspace h-full min-h-0 flex flex-col p-4 md:p-6 space-y-3 overflow-hidden bg-[var(--color-surface-subtle)]">
       {/* Top Banner */}
-      <div className="workspace-header bg-white p-3.5 md:p-4 rounded-2xl border border-[#E5E0DA] shadow-[var(--shadow-xs)] flex flex-wrap items-center justify-between gap-3 shrink-0 no-print">
+      <div className="workspace-header bg-[var(--color-surface)] p-3.5 md:p-4 rounded-2xl border border-[var(--color-border-default)] shadow-[var(--shadow-xs)] flex flex-wrap items-center justify-between gap-3 shrink-0 no-print">
         <div>
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full text-metadata font-semibold bg-[#FCF3F4] text-[#7A2938] border border-[#7A2938]/15 flex items-center gap-1">
+            <span className="px-2.5 py-0.5 rounded-full text-metadata font-semibold bg-[var(--color-brand-soft)] text-[var(--color-brand-text)] border border-[var(--color-brand-700)]/15 flex items-center gap-1">
               <Presentation className="w-3.5 h-3.5" />
               Storytelling Presentation
             </span>
-            <span className="text-metadata text-[#706A65] font-medium hidden sm:inline">
+            <span className="text-metadata text-[var(--color-text-secondary)] font-medium hidden sm:inline">
               Chuẩn 16:9 Nghệ thuật Văn học • {resolvedStyle.theme.name}
             </span>
           </div>
-          <h1 className="text-section md:text-page-title font-semibold text-[#211E1C] mt-1 leading-[1.3]">
+          <h1 className="text-section md:text-page-title font-semibold text-[var(--color-text-strong)] mt-1 leading-[1.3]">
             Slide Trình chiếu & Trích đoạn Văn học
           </h1>
         </div>
@@ -874,7 +874,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
             className="btn-secondary min-h-[36px] px-3.5 py-1.5 rounded-xl text-metadata font-semibold flex items-center gap-1.5 cursor-pointer"
             title="Trình chiếu toàn màn hình (F5 / Phím mũi tên / Space)"
           >
-            <Maximize className="w-3.5 h-3.5 text-[#706A65]" />
+            <Maximize className="w-3.5 h-3.5 text-[var(--color-text-secondary)]" />
             <span>Trình chiếu F5</span>
           </button>
 
@@ -883,8 +883,8 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
             onClick={() => setIsEditing(!isEditing)}
             className={`min-h-[36px] px-3.5 py-1.5 rounded-xl text-metadata font-semibold flex items-center gap-1.5 motion-surface border cursor-pointer ${
               isEditing 
-                ? 'bg-[#7A2938] text-white border-[#7A2938] shadow-[var(--shadow-xs)]' 
-                : 'bg-white hover:bg-[#FAF9F7] text-[#302C29] border-[#E5E0DA]'
+                ? 'bg-[var(--color-brand-700)] text-white border-[var(--color-brand-700)] shadow-[var(--shadow-xs)]'
+                : 'bg-[var(--color-surface)] hover:bg-[var(--color-surface-subtle)] text-[var(--color-text-primary)] border-[var(--color-border-default)]'
             }`}
           >
             <Palette className="w-3.5 h-3.5" />
@@ -906,7 +906,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
             className="btn-secondary min-h-[36px] px-3 py-1.5 rounded-xl text-metadata font-semibold flex items-center gap-1.5 cursor-pointer"
             title="Xuất file HTML xem offline với định dạng font chữ và nền giữ nguyên"
           >
-            <FileCode2 className="w-3.5 h-3.5 text-[#706A65]" />
+            <FileCode2 className="w-3.5 h-3.5 text-[var(--color-text-secondary)]" />
             <span>Xuất Trình chiếu (.html)</span>
           </button>
         </div>
@@ -917,16 +917,16 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
         {/* Left Thumbnails Column */}
         <div 
           data-tour-id="slides-thumbnails" 
-          className="slides-thumbnails w-48 xl:w-56 shrink-0 bg-white rounded-2xl border border-[#E5E0DA] shadow-[var(--shadow-xs)] p-2.5 flex flex-col gap-2 overflow-hidden"
+          className="slides-thumbnails w-48 xl:w-56 shrink-0 bg-[var(--color-surface)] rounded-2xl border border-[var(--color-border-default)] shadow-[var(--shadow-xs)] p-2.5 flex flex-col gap-2 overflow-hidden"
         >
-          <div className="flex items-center justify-between pb-1.5 border-b border-[#EEEAE5] shrink-0">
-            <span className="text-metadata font-semibold text-[#211E1C] flex items-center gap-1">
-              <Presentation className="w-3.5 h-3.5 text-[#7A2938]" />
+          <div className="flex items-center justify-between pb-1.5 border-b border-[var(--color-border-subtle)] shrink-0">
+            <span className="text-metadata font-semibold text-[var(--color-text-strong)] flex items-center gap-1">
+              <Presentation className="w-3.5 h-3.5 text-[var(--color-brand-text)]" />
               <span>Slides ({slides.length})</span>
             </span>
             <button
               onClick={handleAddSlide}
-              className="p-1 rounded-md bg-[#FCF3F4] hover:bg-[#F8EAEB] text-[#7A2938] border border-[#7A2938]/20 text-xs font-semibold flex items-center gap-0.5 transition cursor-pointer"
+              className="p-1 rounded-md bg-[var(--color-brand-soft)] hover:bg-[var(--color-brand-100)] text-[var(--color-brand-text)] border border-[var(--color-brand-700)]/20 text-xs font-semibold flex items-center gap-0.5 transition cursor-pointer"
               title="Thêm Slide mới"
             >
               <Plus className="w-3 h-3" />
@@ -945,8 +945,8 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                   onClick={() => setCurrentIndex(idx)}
                   className={`p-2 rounded-xl border cursor-pointer motion-surface relative group ${
                     isActive
-                      ? 'border-[#7A2938] ring-2 ring-[#7A2938]/20 bg-[#FCF3F4]/60 shadow-xs'
-                      : 'border-[#E5E0DA] hover:border-[#D6D0C8] bg-white'
+                      ? 'border-[var(--color-brand-700)] ring-2 ring-[var(--color-brand-700)]/20 bg-[var(--color-brand-soft)]/60 shadow-xs'
+                      : 'border-[var(--color-border-default)] hover:border-[var(--color-border-strong)] bg-[var(--color-surface)]'
                   }`}
                 >
                   {/* Visual 16:9 mini preview card */}
@@ -983,18 +983,18 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                     </div>
                   </div>
 
-                  <div className="text-[11px] font-medium text-[#211E1C] line-clamp-1 leading-snug">
+                  <div className="text-[11px] font-medium text-[var(--color-text-strong)] line-clamp-1 leading-snug">
                     {s.title}
                   </div>
 
                   {/* Duplicate / Delete on hover */}
-                  <div className="absolute top-1.5 right-1.5 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition z-10 bg-white/90 p-0.5 rounded shadow-xs">
+                  <div className="absolute top-1.5 right-1.5 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition z-10 bg-[var(--color-surface)]/90 p-0.5 rounded shadow-xs">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         handleDuplicateSlide(idx);
                       }}
-                      className="p-1 text-stone-500 hover:text-stone-800 rounded transition"
+                      className="p-1 text-[var(--color-text-secondary)] hover:text-[var(--color-text-strong)] rounded transition"
                       title="Nhân bản slide"
                     >
                       <Copy className="w-3 h-3" />
@@ -1005,7 +1005,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                           e.stopPropagation();
                           handleDeleteSlide(idx);
                         }}
-                        className="p-1 text-stone-500 hover:text-red-600 rounded transition"
+                        className="p-1 text-[var(--color-text-secondary)] hover:text-red-600 rounded transition"
                         title="Xóa slide"
                       >
                         <Trash2 className="w-3 h-3" />
@@ -1040,19 +1040,19 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
 
         {/* Right Curated Editorial & Design Drawer */}
         {isEditing && (
-          <div ref={inspectorRef} className="slides-inspector w-88 xl:w-96 shrink-0 bg-white rounded-2xl p-4 flex flex-col gap-3 overflow-hidden border border-[#E5E0DA] shadow-lg anim-note-panel duration-[var(--motion-normal)]">
+          <div ref={inspectorRef} className="slides-inspector w-88 xl:w-96 shrink-0 bg-[var(--color-surface)] rounded-2xl p-4 flex flex-col gap-3 overflow-hidden border border-[var(--color-border-default)] shadow-lg anim-note-panel duration-[var(--motion-normal)]">
             {/* Drawer Header */}
-            <div className="flex items-center justify-between pb-2 border-b border-[#EEEAE5] shrink-0">
+            <div className="flex items-center justify-between pb-2 border-b border-[var(--color-border-subtle)] shrink-0">
               <div className="flex items-center gap-2">
-                <Palette className="w-4 h-4 text-[#7A2938]" />
-                <h3 className="text-card-title text-[#211E1C] font-semibold">
+                <Palette className="w-4 h-4 text-[var(--color-brand-text)]" />
+                <h3 className="text-card-title text-[var(--color-text-strong)] font-semibold">
                   Biên tập Slide #{currentIndex + 1}
                 </h3>
               </div>
               <div className="flex items-center gap-1">
                 <button
                   onClick={() => handleDuplicateSlide(currentIndex)}
-                  className="p-1.5 text-stone-500 hover:text-stone-800 rounded-lg hover:bg-stone-100 transition cursor-pointer"
+                  className="p-1.5 text-[var(--color-text-secondary)] hover:text-[var(--color-text-strong)] rounded-lg hover:bg-[var(--color-surface-muted)] transition cursor-pointer"
                   title="Nhân bản slide này"
                 >
                   <Copy className="w-3.5 h-3.5" />
@@ -1060,7 +1060,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                 {slides.length > 1 && (
                   <button
                     onClick={() => handleDeleteSlide(currentIndex)}
-                    className="p-1.5 text-stone-500 hover:text-red-600 rounded-lg hover:bg-red-50 transition cursor-pointer"
+                    className="p-1.5 text-[var(--color-text-secondary)] hover:text-red-600 rounded-lg hover:bg-red-50 transition cursor-pointer"
                     title="Xóa slide này"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -1068,7 +1068,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                 )}
                 <button
                   onClick={() => setIsEditing(false)}
-                  className="p-1.5 text-stone-400 hover:text-stone-700 rounded-lg transition cursor-pointer"
+                  className="p-1.5 text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] rounded-lg transition cursor-pointer"
                   title="Đóng bảng biên tập"
                 >
                   <X className="w-4 h-4" />
@@ -1077,13 +1077,13 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
             </div>
 
             {/* Editorial Drawer 4 Tabs Header */}
-            <div className="grid grid-cols-4 gap-1 p-1 bg-[#F5F3F0] rounded-xl text-metadata shrink-0 font-medium">
+            <div className="grid grid-cols-4 gap-1 p-1 bg-[var(--color-surface-muted)] rounded-xl text-metadata shrink-0 font-medium">
               <button
                 onClick={() => setActiveEditTab('content')}
                 className={`py-1.5 px-1 rounded-lg transition flex items-center justify-center gap-1 cursor-pointer ${
                   activeEditTab === 'content'
-                    ? 'bg-white text-[#7A2938] shadow-xs font-semibold'
-                    : 'text-[#706A65] hover:text-[#211E1C]'
+                    ? 'bg-[var(--color-surface)] text-[var(--color-brand-text)] shadow-xs font-semibold'
+                    : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-strong)]'
                 }`}
               >
                 <Edit3 className="w-3 h-3" />
@@ -1093,8 +1093,8 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                 onClick={() => setActiveEditTab('theme')}
                 className={`py-1.5 px-1 rounded-lg transition flex items-center justify-center gap-1 cursor-pointer ${
                   activeEditTab === 'theme'
-                    ? 'bg-white text-[#7A2938] shadow-xs font-semibold'
-                    : 'text-[#706A65] hover:text-[#211E1C]'
+                    ? 'bg-[var(--color-surface)] text-[var(--color-brand-text)] shadow-xs font-semibold'
+                    : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-strong)]'
                 }`}
               >
                 <Palette className="w-3 h-3" />
@@ -1104,8 +1104,8 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                 onClick={() => setActiveEditTab('background')}
                 className={`py-1.5 px-1 rounded-lg transition flex items-center justify-center gap-1 cursor-pointer ${
                   activeEditTab === 'background'
-                    ? 'bg-white text-[#7A2938] shadow-xs font-semibold'
-                    : 'text-[#706A65] hover:text-[#211E1C]'
+                    ? 'bg-[var(--color-surface)] text-[var(--color-brand-text)] shadow-xs font-semibold'
+                    : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-strong)]'
                 }`}
               >
                 <ImageIcon className="w-3 h-3" />
@@ -1115,8 +1115,8 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                 onClick={() => setActiveEditTab('typography')}
                 className={`py-1.5 px-1 rounded-lg transition flex items-center justify-center gap-1 cursor-pointer ${
                   activeEditTab === 'typography'
-                    ? 'bg-white text-[#7A2938] shadow-xs font-semibold'
-                    : 'text-[#706A65] hover:text-[#211E1C]'
+                    ? 'bg-[var(--color-surface)] text-[var(--color-brand-text)] shadow-xs font-semibold'
+                    : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-strong)]'
                 }`}
               >
                 <Type className="w-3 h-3" />
@@ -1132,11 +1132,11 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
               {activeEditTab === 'content' && (
                 <div className="space-y-3">
                   <div>
-                    <label className="block font-medium text-stone-700 mb-1">Pha sư phạm</label>
+                    <label className="block font-medium text-[var(--color-text-primary)] mb-1">Pha sư phạm</label>
                     <select
                       value={currentSlide.phaseTag}
                       onChange={(e) => handleUpdateSlide({ phaseTag: e.target.value as SlideItem['phaseTag'] })}
-                      className="w-full px-3 py-1.5 border border-stone-300 rounded-xl bg-white text-body-ui text-stone-900 focus:outline-none focus:border-[#7A2938]"
+                      className="w-full px-3 py-1.5 border border-stone-300 rounded-xl bg-[var(--color-surface)] text-body-ui text-[var(--color-text-strong)] focus:outline-none focus:border-[var(--color-brand-700)]"
                     >
                       <option value="Khởi động">Khởi động</option>
                       <option value="Kiến thức mới">Kiến thức mới</option>
@@ -1147,21 +1147,21 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                   </div>
 
                   <div>
-                    <label className="block font-medium text-stone-700 mb-1">Tiêu đề Slide</label>
+                    <label className="block font-medium text-[var(--color-text-primary)] mb-1">Tiêu đề Slide</label>
                     <input
                       type="text"
                       value={currentSlide.title}
                       onChange={(e) => handleUpdateSlide({ title: normalizeVietnamese(e.target.value) })}
-                      className="w-full px-3 py-1.5 border border-stone-300 rounded-xl bg-white text-body-ui text-stone-900 focus:outline-none focus:border-[#7A2938]"
+                      className="w-full px-3 py-1.5 border border-stone-300 rounded-xl bg-[var(--color-surface)] text-body-ui text-[var(--color-text-strong)] focus:outline-none focus:border-[var(--color-brand-700)]"
                     />
                   </div>
 
                   <div>
-                    <label className="block font-medium text-stone-700 mb-1">Bố cục hiển thị</label>
+                    <label className="block font-medium text-[var(--color-text-primary)] mb-1">Bố cục hiển thị</label>
                     <select
                       value={currentSlide.layout}
                       onChange={(e) => handleUpdateSlide({ layout: e.target.value as SlideItem['layout'] })}
-                      className="w-full px-3 py-1.5 border border-stone-300 rounded-xl bg-white text-body-ui text-stone-900 focus:outline-none focus:border-[#7A2938]"
+                      className="w-full px-3 py-1.5 border border-stone-300 rounded-xl bg-[var(--color-surface)] text-body-ui text-[var(--color-text-strong)] focus:outline-none focus:border-[var(--color-brand-700)]"
                     >
                       <option value="quote">Trích đoạn nghệ thuật (Quote Focus)</option>
                       <option value="split">Song song 2 cột (Split)</option>
@@ -1174,30 +1174,30 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                   {currentSlide.layout === 'quote' && (
                     <>
                       <div>
-                        <label className="block font-medium text-stone-700 mb-1">Đoạn trích thơ / văn</label>
+                        <label className="block font-medium text-[var(--color-text-primary)] mb-1">Đoạn trích thơ / văn</label>
                         <textarea
                           rows={4}
                           value={currentSlide.quoteText || ''}
                           onChange={(e) => handleUpdateSlide({ quoteText: normalizeVietnamese(e.target.value) })}
-                          className="w-full px-3 py-2 border border-stone-300 rounded-xl bg-white text-body-ui text-stone-900 focus:outline-none focus:border-[#7A2938] font-serif"
+                          className="w-full px-3 py-2 border border-stone-300 rounded-xl bg-[var(--color-surface)] text-body-ui text-[var(--color-text-strong)] focus:outline-none focus:border-[var(--color-brand-700)] font-serif"
                         />
                       </div>
                       <div>
-                        <label className="block font-medium text-stone-700 mb-1">Tác giả / Nguồn trích</label>
+                        <label className="block font-medium text-[var(--color-text-primary)] mb-1">Tác giả / Nguồn trích</label>
                         <input
                           type="text"
                           value={currentSlide.quoteAuthor || ''}
                           onChange={(e) => handleUpdateSlide({ quoteAuthor: normalizeVietnamese(e.target.value) })}
-                          className="w-full px-3 py-1.5 border border-stone-300 rounded-xl bg-white text-body-ui text-stone-900 focus:outline-none focus:border-[#7A2938]"
+                          className="w-full px-3 py-1.5 border border-stone-300 rounded-xl bg-[var(--color-surface)] text-body-ui text-[var(--color-text-strong)] focus:outline-none focus:border-[var(--color-brand-700)]"
                         />
                       </div>
                       <div>
-                        <label className="block font-medium text-stone-700 mb-1">Câu hỏi khám phá / thảo luận</label>
+                        <label className="block font-medium text-[var(--color-text-primary)] mb-1">Câu hỏi khám phá / thảo luận</label>
                         <textarea
                           rows={2}
                           value={currentSlide.discussionQuestion || ''}
                           onChange={(e) => handleUpdateSlide({ discussionQuestion: normalizeVietnamese(e.target.value) })}
-                          className="w-full px-3 py-2 border border-stone-300 rounded-xl bg-white text-body-ui text-stone-900 focus:outline-none focus:border-[#7A2938]"
+                          className="w-full px-3 py-2 border border-stone-300 rounded-xl bg-[var(--color-surface)] text-body-ui text-[var(--color-text-strong)] focus:outline-none focus:border-[var(--color-brand-700)]"
                         />
                       </div>
                     </>
@@ -1206,21 +1206,21 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                   {currentSlide.layout === 'split' && (
                     <>
                       <div>
-                        <label className="block font-medium text-stone-700 mb-1">Nội dung cột trái</label>
+                        <label className="block font-medium text-[var(--color-text-primary)] mb-1">Nội dung cột trái</label>
                         <textarea
                           rows={3}
                           value={currentSlide.contentLeft || ''}
                           onChange={(e) => handleUpdateSlide({ contentLeft: normalizeVietnamese(e.target.value) })}
-                          className="w-full px-3 py-2 border border-stone-300 rounded-xl bg-white text-body-ui text-stone-900 focus:outline-none focus:border-[#7A2938]"
+                          className="w-full px-3 py-2 border border-stone-300 rounded-xl bg-[var(--color-surface)] text-body-ui text-[var(--color-text-strong)] focus:outline-none focus:border-[var(--color-brand-700)]"
                         />
                       </div>
                       <div>
-                        <label className="block font-medium text-stone-700 mb-1">Nội dung cột phải</label>
+                        <label className="block font-medium text-[var(--color-text-primary)] mb-1">Nội dung cột phải</label>
                         <textarea
                           rows={3}
                           value={currentSlide.contentRight || ''}
                           onChange={(e) => handleUpdateSlide({ contentRight: normalizeVietnamese(e.target.value) })}
-                          className="w-full px-3 py-2 border border-stone-300 rounded-xl bg-white text-body-ui text-stone-900 focus:outline-none focus:border-[#7A2938] font-serif"
+                          className="w-full px-3 py-2 border border-stone-300 rounded-xl bg-[var(--color-surface)] text-body-ui text-[var(--color-text-strong)] focus:outline-none focus:border-[var(--color-brand-700)] font-serif"
                         />
                       </div>
                     </>
@@ -1228,9 +1228,9 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
 
                   {currentSlide.layout === 'cards' && currentSlide.cards && (
                     <div className="space-y-2">
-                      <label className="block font-medium text-stone-700">3 Thẻ luận điểm</label>
+                      <label className="block font-medium text-[var(--color-text-primary)]">3 Thẻ luận điểm</label>
                       {currentSlide.cards.map((c, ci) => (
-                        <div key={ci} className="p-2 border border-stone-200 rounded-xl bg-[#FAF9F7] space-y-1">
+                        <div key={ci} className="p-2 border border-stone-200 rounded-xl bg-[var(--color-surface-subtle)] space-y-1">
                           <input
                             type="text"
                             value={c.title}
@@ -1240,7 +1240,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                               next[ci] = { ...next[ci], title: normalizeVietnamese(e.target.value) };
                               handleUpdateSlide({ cards: next });
                             }}
-                            className="w-full px-2 py-1 text-xs border border-stone-300 rounded-lg bg-white"
+                            className="w-full px-2 py-1 text-xs border border-stone-300 rounded-lg bg-[var(--color-surface)]"
                           />
                           <textarea
                             rows={2}
@@ -1251,7 +1251,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                               next[ci] = { ...next[ci], desc: normalizeVietnamese(e.target.value) };
                               handleUpdateSlide({ cards: next });
                             }}
-                            className="w-full px-2 py-1 text-xs border border-stone-300 rounded-lg bg-white"
+                            className="w-full px-2 py-1 text-xs border border-stone-300 rounded-lg bg-[var(--color-surface)]"
                           />
                         </div>
                       ))}
@@ -1260,12 +1260,12 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
 
                   {currentSlide.layout === 'single' && (
                     <div>
-                      <label className="block font-medium text-stone-700 mb-1">Nội dung chính</label>
+                      <label className="block font-medium text-[var(--color-text-primary)] mb-1">Nội dung chính</label>
                       <textarea
                         rows={4}
                         value={currentSlide.contentLeft || ''}
                         onChange={(e) => handleUpdateSlide({ contentLeft: normalizeVietnamese(e.target.value) })}
-                        className="w-full px-3 py-2 border border-stone-300 rounded-xl bg-white text-body-ui text-stone-900 focus:outline-none focus:border-[#7A2938]"
+                        className="w-full px-3 py-2 border border-stone-300 rounded-xl bg-[var(--color-surface)] text-body-ui text-[var(--color-text-strong)] focus:outline-none focus:border-[var(--color-brand-700)]"
                       />
                     </div>
                   )}
@@ -1273,18 +1273,18 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                   {currentSlide.layout === 'quiz' && currentSlide.quizQuestion && (
                     <div className="space-y-2">
                       <div>
-                        <label className="block font-medium text-stone-700 mb-1">Câu hỏi trắc nghiệm</label>
+                        <label className="block font-medium text-[var(--color-text-primary)] mb-1">Câu hỏi trắc nghiệm</label>
                         <textarea
                           rows={2}
                           value={currentSlide.quizQuestion.question}
                           onChange={(e) => handleUpdateSlide({ 
                             quizQuestion: { ...currentSlide.quizQuestion!, question: normalizeVietnamese(e.target.value) } 
                           })}
-                          className="w-full px-3 py-1.5 border border-stone-300 rounded-xl bg-white text-body-ui text-stone-900"
+                          className="w-full px-3 py-1.5 border border-stone-300 rounded-xl bg-[var(--color-surface)] text-body-ui text-[var(--color-text-strong)]"
                         />
                       </div>
                       <div className="space-y-1.5">
-                        <label className="block font-medium text-stone-700">4 Phương án (chọn đáp án đúng)</label>
+                        <label className="block font-medium text-[var(--color-text-primary)]">4 Phương án (chọn đáp án đúng)</label>
                         {currentSlide.quizQuestion.options.map((opt, oi) => (
                           <div key={oi} className="flex items-center gap-1.5">
                             <input
@@ -1294,9 +1294,9 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                               onChange={() => handleUpdateSlide({
                                 quizQuestion: { ...currentSlide.quizQuestion!, correctIndex: oi }
                               })}
-                              className="accent-[#7A2938]"
+                              className="accent-[var(--color-brand-700)]"
                             />
-                            <span className="w-5 font-bold text-stone-600">{String.fromCharCode(65 + oi)}.</span>
+                            <span className="w-5 font-bold text-[var(--color-text-secondary)]">{String.fromCharCode(65 + oi)}.</span>
                             <input
                               type="text"
                               value={opt}
@@ -1307,33 +1307,33 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                                   quizQuestion: { ...currentSlide.quizQuestion!, options: nextOpts }
                                 });
                               }}
-                              className="flex-1 px-2 py-1 text-xs border border-stone-300 rounded-lg bg-white"
+                              className="flex-1 px-2 py-1 text-xs border border-stone-300 rounded-lg bg-[var(--color-surface)]"
                             />
                           </div>
                         ))}
                       </div>
                       <div>
-                        <label className="block font-medium text-stone-700 mb-1">Giải thích đáp án</label>
+                        <label className="block font-medium text-[var(--color-text-primary)] mb-1">Giải thích đáp án</label>
                         <textarea
                           rows={2}
                           value={currentSlide.quizQuestion.explanation}
                           onChange={(e) => handleUpdateSlide({
                             quizQuestion: { ...currentSlide.quizQuestion!, explanation: normalizeVietnamese(e.target.value) }
                           })}
-                          className="w-full px-2 py-1 text-xs border border-stone-300 rounded-xl bg-white"
+                          className="w-full px-2 py-1 text-xs border border-stone-300 rounded-xl bg-[var(--color-surface)]"
                         />
                       </div>
                     </div>
                   )}
 
                   <div>
-                    <label className="block font-medium text-stone-700 mb-1">Ghi chú sư phạm (Speaker Notes)</label>
+                    <label className="block font-medium text-[var(--color-text-primary)] mb-1">Ghi chú sư phạm (Speaker Notes)</label>
                     <textarea
                       rows={2}
                       value={currentSlide.speakerNotes || ''}
                       onChange={(e) => handleUpdateSlide({ speakerNotes: normalizeVietnamese(e.target.value) })}
                       placeholder="Gợi ý phương pháp, định hướng thời gian thảo luận..."
-                      className="w-full px-3 py-2 border border-stone-300 rounded-xl bg-white text-body-ui text-stone-900 focus:outline-none focus:border-[#7A2938]"
+                      className="w-full px-3 py-2 border border-stone-300 rounded-xl bg-[var(--color-surface)] text-body-ui text-[var(--color-text-strong)] focus:outline-none focus:border-[var(--color-brand-700)]"
                     />
                   </div>
                 </div>
@@ -1347,7 +1347,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                   {/* Theme Presets List */}
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <span className="font-semibold text-stone-900 text-metadata flex items-center gap-1.5">
+                      <span className="font-semibold text-[var(--color-text-strong)] text-metadata flex items-center gap-1.5">
                         <Sparkles className="w-3.5 h-3.5 text-amber-600" />
                         8 CHỦ ĐỀ HỌC THUẬT CHUYÊN SÂU
                       </span>
@@ -1363,8 +1363,8 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                             key={theme.id}
                             className={`p-2.5 rounded-xl border motion-surface ${
                               isCurrentTheme
-                                ? 'border-[#7A2938] ring-2 ring-[#7A2938]/15 bg-[#FCF3F4]/50'
-                                : 'border-stone-200 hover:border-stone-300 bg-white'
+                                ? 'border-[var(--color-brand-700)] ring-2 ring-[var(--color-brand-700)]/15 bg-[var(--color-brand-soft)]/50'
+                                : 'border-stone-200 hover:border-stone-300 bg-[var(--color-surface)]'
                             }`}
                           >
                             <div className="flex items-start justify-between gap-2 mb-1.5">
@@ -1387,16 +1387,16 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                                     title="Màu điểm nhấn"
                                   />
                                 </div>
-                                <div className="font-semibold text-stone-900 text-body-ui">
+                                <div className="font-semibold text-[var(--color-text-strong)] text-body-ui">
                                   {theme.name}
                                 </div>
                               </div>
-                              <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-stone-100 text-stone-600">
+                              <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-[var(--color-surface-muted)] text-[var(--color-text-secondary)]">
                                 {theme.style}
                               </span>
                             </div>
 
-                            <p className="text-xs text-stone-500 mb-2 leading-relaxed">
+                            <p className="text-xs text-[var(--color-text-secondary)] mb-2 leading-relaxed">
                               {theme.description}
                             </p>
 
@@ -1405,15 +1405,15 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                                 onClick={() => handleApplyThemeToCurrentSlide(theme.id)}
                                 className={`flex-1 py-1 px-2 rounded-lg text-xs font-semibold border transition cursor-pointer ${
                                   isCurrentTheme
-                                    ? 'bg-[#7A2938] text-white border-[#7A2938]'
-                                    : 'bg-white hover:bg-stone-50 text-stone-700 border-stone-300'
+                                    ? 'bg-[var(--color-brand-700)] text-white border-[var(--color-brand-700)]'
+                                    : 'bg-[var(--color-surface)] hover:bg-[var(--color-surface-subtle)] text-[var(--color-text-primary)] border-stone-300'
                                 }`}
                               >
                                 {isCurrentTheme ? '✓ Đang dùng slide này' : 'Áp dụng slide này'}
                               </button>
                               <button
                                 onClick={() => handleApplyThemeToAllSlides(theme.id)}
-                                className="py-1 px-2.5 rounded-lg text-xs font-semibold bg-stone-100 hover:bg-stone-200 text-stone-700 transition cursor-pointer"
+                                className="py-1 px-2.5 rounded-lg text-xs font-semibold bg-[var(--color-surface-muted)] hover:bg-[var(--color-border-default)] text-[var(--color-text-primary)] transition cursor-pointer"
                                 title="Áp dụng chủ đề này cho tất cả slide trong bài học"
                               >
                                 Toàn bộ
@@ -1428,8 +1428,8 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                   {/* Curated Templates Section */}
                   <div className="pt-2 border-t border-stone-200">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="font-semibold text-stone-900 text-metadata flex items-center gap-1.5">
-                        <Wand2 className="w-3.5 h-3.5 text-[#7A2938]" />
+                      <span className="font-semibold text-[var(--color-text-strong)] text-metadata flex items-center gap-1.5">
+                        <Wand2 className="w-3.5 h-3.5 text-[var(--color-brand-text)]" />
                         12 MẪU TRÌNH BÀY BÀI GIẢNG SẴN
                       </span>
                     </div>
@@ -1442,8 +1442,8 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                           onClick={() => setSelectedTemplateCat(cat.id)}
                           className={`px-2 py-0.5 rounded-full text-[11px] font-medium transition cursor-pointer ${
                             selectedTemplateCat === cat.id
-                              ? 'bg-[#7A2938] text-white'
-                              : 'bg-stone-100 hover:bg-stone-200 text-stone-600'
+                              ? 'bg-[var(--color-brand-700)] text-white'
+                              : 'bg-[var(--color-surface-muted)] hover:bg-[var(--color-border-default)] text-[var(--color-text-secondary)]'
                           }`}
                         >
                           {cat.label}
@@ -1462,7 +1462,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                           return (
                             <div 
                               key={tmpl.id}
-                              className="p-2 rounded-xl border border-stone-200 hover:border-stone-300 bg-white flex flex-col gap-1.5"
+                              className="p-2 rounded-xl border border-stone-200 hover:border-stone-300 bg-[var(--color-surface)] flex flex-col gap-1.5"
                             >
                               <div className="flex items-start gap-2">
                                 {/* 16:9 Thumbnail preview snippet */}
@@ -1486,14 +1486,14 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
 
                                 <div className="min-w-0 flex-1">
                                   <div className="flex items-center justify-between">
-                                    <h5 className="font-semibold text-stone-900 text-xs truncate">
+                                    <h5 className="font-semibold text-[var(--color-text-strong)] text-xs truncate">
                                       {tmpl.name}
                                     </h5>
-                                    <span className="text-[10px] text-stone-500">
+                                    <span className="text-[10px] text-[var(--color-text-secondary)]">
                                       {tmpl.suggestedLayout}
                                     </span>
                                   </div>
-                                  <p className="text-[11px] text-stone-500 line-clamp-2 mt-0.5">
+                                  <p className="text-[11px] text-[var(--color-text-secondary)] line-clamp-2 mt-0.5">
                                     {tmpl.description}
                                   </p>
                                 </div>
@@ -1501,7 +1501,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
 
                               <button
                                 onClick={() => handleApplyTemplate(tmpl)}
-                                className="w-full py-1 rounded-lg text-xs font-semibold bg-[#FCF3F4] hover:bg-[#F8EAEB] text-[#7A2938] border border-[#7A2938]/20 transition cursor-pointer"
+                                className="w-full py-1 rounded-lg text-xs font-semibold bg-[var(--color-brand-soft)] hover:bg-[var(--color-brand-100)] text-[var(--color-brand-text)] border border-[var(--color-brand-700)]/20 transition cursor-pointer"
                               >
                                 Áp dụng mẫu này
                               </button>
@@ -1515,16 +1515,16 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                   <div className="pt-2 border-t border-stone-200 space-y-1.5">
                     <button
                       onClick={handleResetCurrentSlideStyle}
-                      className="w-full py-1.5 px-2 rounded-xl border border-stone-300 hover:bg-stone-50 text-stone-700 text-xs font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer"
+                      className="w-full py-1.5 px-2 rounded-xl border border-stone-300 hover:bg-[var(--color-surface-subtle)] text-[var(--color-text-primary)] text-xs font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer"
                     >
-                      <RotateCcw className="w-3.5 h-3.5 text-stone-500" />
+                      <RotateCcw className="w-3.5 h-3.5 text-[var(--color-text-secondary)]" />
                       <span>Đặt lại slide này về mặc định</span>
                     </button>
                     <button
                       onClick={handleResetAllSlidesToDefault}
-                      className="w-full py-1.5 px-2 rounded-xl border border-stone-300 hover:bg-stone-50 text-stone-700 text-xs font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer"
+                      className="w-full py-1.5 px-2 rounded-xl border border-stone-300 hover:bg-[var(--color-surface-subtle)] text-[var(--color-text-primary)] text-xs font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer"
                     >
-                      <RotateCcw className="w-3.5 h-3.5 text-stone-500" />
+                      <RotateCcw className="w-3.5 h-3.5 text-[var(--color-text-secondary)]" />
                       <span>Đặt lại toàn bộ bài giảng về mặc định</span>
                     </button>
                   </div>
@@ -1537,11 +1537,11 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
               {activeEditTab === 'background' && (
                 <div className="space-y-4">
                   {/* Segmented control for BG modes */}
-                  <div className="grid grid-cols-4 gap-1 p-1 bg-stone-100 rounded-xl text-metadata shrink-0">
+                  <div className="grid grid-cols-4 gap-1 p-1 bg-[var(--color-surface-muted)] rounded-xl text-metadata shrink-0">
                     <button
                       onClick={() => setBgMode('solid')}
                       className={`py-1 rounded-lg font-medium transition cursor-pointer ${
-                        bgMode === 'solid' ? 'bg-white text-stone-900 shadow-xs font-semibold' : 'text-stone-600'
+                        bgMode === 'solid' ? 'bg-[var(--color-surface)] text-[var(--color-text-strong)] shadow-xs font-semibold' : 'text-[var(--color-text-secondary)]'
                       }`}
                     >
                       Màu sắc
@@ -1549,7 +1549,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                     <button
                       onClick={() => setBgMode('gradient')}
                       className={`py-1 rounded-lg font-medium transition cursor-pointer ${
-                        bgMode === 'gradient' ? 'bg-white text-stone-900 shadow-xs font-semibold' : 'text-stone-600'
+                        bgMode === 'gradient' ? 'bg-[var(--color-surface)] text-[var(--color-text-strong)] shadow-xs font-semibold' : 'text-[var(--color-text-secondary)]'
                       }`}
                     >
                       Chuyển sắc
@@ -1557,7 +1557,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                     <button
                       onClick={() => setBgMode('image')}
                       className={`py-1 rounded-lg font-medium transition cursor-pointer ${
-                        bgMode === 'image' ? 'bg-white text-stone-900 shadow-xs font-semibold' : 'text-stone-600'
+                        bgMode === 'image' ? 'bg-[var(--color-surface)] text-[var(--color-text-strong)] shadow-xs font-semibold' : 'text-[var(--color-text-secondary)]'
                       }`}
                     >
                       Hình ảnh
@@ -1565,7 +1565,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                     <button
                       onClick={() => setBgMode('vignette')}
                       className={`py-1 rounded-lg font-medium transition cursor-pointer ${
-                        bgMode === 'vignette' ? 'bg-white text-stone-900 shadow-xs font-semibold' : 'text-stone-600'
+                        bgMode === 'vignette' ? 'bg-[var(--color-surface)] text-[var(--color-text-strong)] shadow-xs font-semibold' : 'text-[var(--color-text-secondary)]'
                       }`}
                     >
                       Khí chất
@@ -1576,7 +1576,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                   {bgMode === 'solid' && (
                     <div className="space-y-3">
                       <div>
-                        <label className="block font-semibold text-stone-800 text-xs mb-1.5">
+                        <label className="block font-semibold text-[var(--color-text-strong)] text-xs mb-1.5">
                           8 BẢNG MÀU ĐƠN SẮC CHUẨN
                         </label>
                         <div className="grid grid-cols-2 gap-1.5">
@@ -1588,15 +1588,15 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                                 onClick={() => handleApplyBackground({ type: 'solid', color: preset.hex }, false)}
                                 className={`p-2 rounded-xl border flex items-center gap-2 text-left transition cursor-pointer ${
                                   isSelected
-                                    ? 'border-[#7A2938] ring-2 ring-[#7A2938]/15 bg-[#FCF3F4]/60'
-                                    : 'border-stone-200 hover:border-stone-300 bg-white'
+                                    ? 'border-[var(--color-brand-700)] ring-2 ring-[var(--color-brand-700)]/15 bg-[var(--color-brand-soft)]/60'
+                                    : 'border-stone-200 hover:border-stone-300 bg-[var(--color-surface)]'
                                 }`}
                               >
                                 <span 
                                   className="w-4 h-4 rounded-full border border-black/20 shrink-0 shadow-xs"
                                   style={{ backgroundColor: preset.hex }}
                                 />
-                                <span className="text-xs font-medium text-stone-800 truncate">
+                                <span className="text-xs font-medium text-[var(--color-text-strong)] truncate">
                                   {preset.name}
                                 </span>
                               </button>
@@ -1607,7 +1607,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
 
                       {/* Custom Hex Color Picker */}
                       <div>
-                        <label className="block font-medium text-stone-700 text-xs mb-1">
+                        <label className="block font-medium text-[var(--color-text-primary)] text-xs mb-1">
                           Mã màu tùy chỉnh (#HEX)
                         </label>
                         <div className="flex items-center gap-2">
@@ -1618,7 +1618,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                               setCustomSolidHex(e.target.value);
                               handleApplyBackground({ type: 'solid', color: e.target.value }, false);
                             }}
-                            className="w-10 h-9 p-0.5 rounded-lg border border-stone-300 bg-white cursor-pointer shrink-0"
+                            className="w-10 h-9 p-0.5 rounded-lg border border-stone-300 bg-[var(--color-surface)] cursor-pointer shrink-0"
                           />
                           <input
                             type="text"
@@ -1631,7 +1631,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                               }
                             }}
                             placeholder="#171413"
-                            className="flex-1 px-3 py-1.5 border border-stone-300 rounded-xl bg-white text-xs font-mono text-stone-900"
+                            className="flex-1 px-3 py-1.5 border border-stone-300 rounded-xl bg-[var(--color-surface)] text-xs font-mono text-[var(--color-text-strong)]"
                           />
                         </div>
                       </div>
@@ -1641,7 +1641,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                   {/* Mode: GRADIENT */}
                   {bgMode === 'gradient' && (
                     <div className="space-y-3">
-                      <label className="block font-semibold text-stone-800 text-xs">
+                      <label className="block font-semibold text-[var(--color-text-strong)] text-xs">
                         5 BẢNG CHUYỂN SẮC TRẦM ẤM
                       </label>
                       <div className="space-y-2">
@@ -1664,8 +1664,8 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                               }, false)}
                               className={`w-full p-2.5 rounded-xl border flex items-center justify-between text-left transition cursor-pointer ${
                                 isSelected 
-                                  ? 'border-[#7A2938] ring-2 ring-[#7A2938]/15 bg-white' 
-                                  : 'border-stone-200 hover:border-stone-300 bg-white'
+                                  ? 'border-[var(--color-brand-700)] ring-2 ring-[var(--color-brand-700)]/15 bg-[var(--color-surface)]'
+                                  : 'border-stone-200 hover:border-stone-300 bg-[var(--color-surface)]'
                               }`}
                             >
                               <div className="flex items-center gap-2.5">
@@ -1674,11 +1674,11 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                                   style={{ background: gradCss }}
                                 />
                                 <div>
-                                  <div className="text-xs font-semibold text-stone-900">{preset.name}</div>
-                                  <div className="text-[10px] text-stone-500 font-mono">{preset.from} → {preset.to}</div>
+                                  <div className="text-xs font-semibold text-[var(--color-text-strong)]">{preset.name}</div>
+                                  <div className="text-[10px] text-[var(--color-text-secondary)] font-mono">{preset.from} → {preset.to}</div>
                                 </div>
                               </div>
-                              {isSelected && <Check className="w-4 h-4 text-[#7A2938]" />}
+                              {isSelected && <Check className="w-4 h-4 text-[var(--color-brand-text)]" />}
                             </button>
                           );
                         })}
@@ -1690,7 +1690,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                   {bgMode === 'image' && (
                     <div className="space-y-3">
                       <div>
-                        <label className="block font-semibold text-stone-800 text-xs mb-1.5">
+                        <label className="block font-semibold text-[var(--color-text-strong)] text-xs mb-1.5">
                           HÌNH ẢNH MINH HỌA NỀN (TỰ ĐỘNG NÉN)
                         </label>
                         <input
@@ -1703,18 +1703,18 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                         <button
                           onClick={() => imageInputRef.current?.click()}
                           disabled={isUploadingImage}
-                          className="w-full py-2.5 px-3 rounded-xl border border-dashed border-stone-300 hover:border-[#7A2938] bg-stone-50 hover:bg-[#FCF3F4]/50 text-stone-700 text-xs font-semibold flex items-center justify-center gap-2 transition cursor-pointer"
+                          className="w-full py-2.5 px-3 rounded-xl border border-dashed border-stone-300 hover:border-[var(--color-brand-700)] bg-[var(--color-surface-subtle)] hover:bg-[var(--color-brand-soft)]/50 text-[var(--color-text-primary)] text-xs font-semibold flex items-center justify-center gap-2 transition cursor-pointer"
                         >
-                          <Upload className="w-4 h-4 text-stone-500" />
+                          <Upload className="w-4 h-4 text-[var(--color-text-secondary)]" />
                           <span>{isUploadingImage ? 'Đang nén ảnh...' : 'Tải lên ảnh từ máy tính (JPEG / PNG)'}</span>
                         </button>
                       </div>
 
                       {/* If Current Slide has Image */}
                       {resolvedStyle.background.type === 'image' && resolvedStyle.background.imageUrl && (
-                        <div className="space-y-3 p-3 bg-stone-50 rounded-xl border border-stone-200">
+                        <div className="space-y-3 p-3 bg-[var(--color-surface-subtle)] rounded-xl border border-stone-200">
                           <div className="flex items-center justify-between">
-                            <span className="text-xs font-medium text-stone-700">Ảnh đang dùng:</span>
+                            <span className="text-xs font-medium text-[var(--color-text-primary)]">Ảnh đang dùng:</span>
                             <button
                               onClick={() => handleApplyBackground({ type: 'solid', color: '#171413' }, false)}
                               className="text-xs text-rose-600 hover:underline font-semibold cursor-pointer"
@@ -1743,28 +1743,28 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                           {/* Fit & Position */}
                           <div className="grid grid-cols-2 gap-2 text-xs">
                             <div>
-                              <label className="block text-stone-600 mb-1">Cách vừa khung</label>
+                              <label className="block text-[var(--color-text-secondary)] mb-1">Cách vừa khung</label>
                               <select
                                 value={resolvedStyle.background.imageFit || 'cover'}
                                 onChange={(e) => handleApplyBackground({
                                   ...resolvedStyle.background,
                                   imageFit: e.target.value as any
                                 }, false)}
-                                className="w-full px-2 py-1 border border-stone-300 rounded-lg bg-white"
+                                className="w-full px-2 py-1 border border-stone-300 rounded-lg bg-[var(--color-surface)]"
                               >
                                 <option value="cover">Phủ kín (Cover)</option>
                                 <option value="contain">Vừa vặn (Contain)</option>
                               </select>
                             </div>
                             <div>
-                              <label className="block text-stone-600 mb-1">Vị trí căn</label>
+                              <label className="block text-[var(--color-text-secondary)] mb-1">Vị trí căn</label>
                               <select
                                 value={resolvedStyle.background.imagePosition || 'center'}
                                 onChange={(e) => handleApplyBackground({
                                   ...resolvedStyle.background,
                                   imagePosition: e.target.value as any
                                 }, false)}
-                                className="w-full px-2 py-1 border border-stone-300 rounded-lg bg-white"
+                                className="w-full px-2 py-1 border border-stone-300 rounded-lg bg-[var(--color-surface)]"
                               >
                                 <option value="center">Chính giữa</option>
                                 <option value="top">Phía trên</option>
@@ -1776,8 +1776,8 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                           {/* Overlay Opacity Slider */}
                           <div>
                             <div className="flex items-center justify-between text-xs mb-1">
-                              <span className="text-stone-700 font-medium">Lớp phủ tối tương phản:</span>
-                              <span className="font-mono text-stone-600">
+                              <span className="text-[var(--color-text-primary)] font-medium">Lớp phủ tối tương phản:</span>
+                              <span className="font-mono text-[var(--color-text-secondary)]">
                                 {Math.round((resolvedStyle.background.overlay?.opacity || 0.5) * 100)}%
                               </span>
                             </div>
@@ -1794,7 +1794,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                                   opacity: parseFloat(e.target.value)
                                 }
                               }, false)}
-                              className="w-full accent-[#7A2938] cursor-pointer"
+                              className="w-full accent-[var(--color-brand-700)] cursor-pointer"
                             />
                           </div>
                         </div>
@@ -1805,7 +1805,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                   {/* Mode: VIGNETTE */}
                   {bgMode === 'vignette' && (
                     <div className="space-y-3">
-                      <label className="block font-semibold text-stone-800 text-xs">
+                      <label className="block font-semibold text-[var(--color-text-strong)] text-xs">
                         6 KHÍ CHẤT VĂN HỌC (ACADEMIC VIGNETTES)
                       </label>
                       <div className="space-y-2">
@@ -1828,8 +1828,8 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                               }, false)}
                               className={`w-full p-2.5 rounded-xl border flex items-center justify-between text-left transition cursor-pointer ${
                                 isSelected 
-                                  ? 'border-[#7A2938] ring-2 ring-[#7A2938]/15 bg-white' 
-                                  : 'border-stone-200 hover:border-stone-300 bg-white'
+                                  ? 'border-[var(--color-brand-700)] ring-2 ring-[var(--color-brand-700)]/15 bg-[var(--color-surface)]'
+                                  : 'border-stone-200 hover:border-stone-300 bg-[var(--color-surface)]'
                               }`}
                             >
                               <div className="flex items-center gap-2.5">
@@ -1840,11 +1840,11 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                                   }}
                                 />
                                 <div>
-                                  <div className="text-xs font-semibold text-stone-900">{vig.name}</div>
-                                  <div className="text-[10px] text-stone-500">{vig.category}</div>
+                                  <div className="text-xs font-semibold text-[var(--color-text-strong)]">{vig.name}</div>
+                                  <div className="text-[10px] text-[var(--color-text-secondary)]">{vig.category}</div>
                                 </div>
                               </div>
-                              {isSelected && <Check className="w-4 h-4 text-[#7A2938]" />}
+                              {isSelected && <Check className="w-4 h-4 text-[var(--color-brand-text)]" />}
                             </button>
                           );
                         })}
@@ -1856,7 +1856,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                   <div className="pt-2 border-t border-stone-200 flex items-center gap-2">
                     <button
                       onClick={() => handleApplyBackground(resolvedStyle.background, true)}
-                      className="flex-1 py-1.5 px-3 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-semibold transition cursor-pointer"
+                      className="flex-1 py-1.5 px-3 rounded-xl bg-[var(--color-surface-muted)] hover:bg-[var(--color-border-default)] text-[var(--color-text-strong)] text-xs font-semibold transition cursor-pointer"
                     >
                       Áp dụng nền cho toàn bộ bài
                     </button>
@@ -1865,7 +1865,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                         handleUpdateStyleOverrides({ background: undefined });
                         showToast('Đã khôi phục nền theo chủ đề.');
                       }}
-                      className="py-1.5 px-3 rounded-xl border border-stone-300 hover:bg-stone-50 text-stone-700 text-xs font-semibold transition cursor-pointer"
+                      className="py-1.5 px-3 rounded-xl border border-stone-300 hover:bg-[var(--color-surface-subtle)] text-[var(--color-text-primary)] text-xs font-semibold transition cursor-pointer"
                     >
                       Mặc định
                     </button>
@@ -1879,11 +1879,11 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
               {activeEditTab === 'typography' && (
                 <div className="space-y-4">
                   {/* Typography Target Switcher */}
-                  <div className="grid grid-cols-3 gap-1 p-1 bg-stone-100 rounded-xl text-metadata shrink-0">
+                  <div className="grid grid-cols-3 gap-1 p-1 bg-[var(--color-surface-muted)] rounded-xl text-metadata shrink-0">
                     <button
                       onClick={() => setTypoTarget('title')}
                       className={`py-1.5 rounded-lg font-medium transition cursor-pointer ${
-                        typoTarget === 'title' ? 'bg-white text-stone-900 shadow-xs font-semibold' : 'text-stone-600'
+                        typoTarget === 'title' ? 'bg-[var(--color-surface)] text-[var(--color-text-strong)] shadow-xs font-semibold' : 'text-[var(--color-text-secondary)]'
                       }`}
                     >
                       Tiêu đề
@@ -1891,7 +1891,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                     <button
                       onClick={() => setTypoTarget('body')}
                       className={`py-1.5 rounded-lg font-medium transition cursor-pointer ${
-                        typoTarget === 'body' ? 'bg-white text-stone-900 shadow-xs font-semibold' : 'text-stone-600'
+                        typoTarget === 'body' ? 'bg-[var(--color-surface)] text-[var(--color-text-strong)] shadow-xs font-semibold' : 'text-[var(--color-text-secondary)]'
                       }`}
                     >
                       Nội dung
@@ -1899,7 +1899,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                     <button
                       onClick={() => setTypoTarget('quote')}
                       className={`py-1.5 rounded-lg font-medium transition cursor-pointer ${
-                        typoTarget === 'quote' ? 'bg-white text-stone-900 shadow-xs font-semibold' : 'text-stone-600'
+                        typoTarget === 'quote' ? 'bg-[var(--color-surface)] text-[var(--color-text-strong)] shadow-xs font-semibold' : 'text-[var(--color-text-secondary)]'
                       }`}
                     >
                       Trích dẫn
@@ -1908,13 +1908,13 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
 
                   {/* Font Family Dropdown */}
                   <div>
-                    <label className="block font-medium text-stone-700 text-xs mb-1">
+                    <label className="block font-medium text-[var(--color-text-primary)] text-xs mb-1">
                       Phông chữ (Font Family)
                     </label>
                     <select
                       value={activeTypoStyle.fontFamily}
                       onChange={(e) => handleUpdateTypography(typoTarget, { fontFamily: e.target.value as SlideFontFamily })}
-                      className="w-full px-3 py-1.5 border border-stone-300 rounded-xl bg-white text-xs text-stone-900"
+                      className="w-full px-3 py-1.5 border border-stone-300 rounded-xl bg-[var(--color-surface)] text-xs text-[var(--color-text-strong)]"
                     >
                       <optgroup label="Serif — Học thuật & Thi ca">
                         <option value="Lora">Lora (Khuyên dùng cho Văn học)</option>
@@ -1934,15 +1934,15 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                   {/* Font Size Stepper */}
                   <div>
                     <div className="flex items-center justify-between text-xs mb-1">
-                      <span className="font-medium text-stone-700">Cỡ chữ (Font Size):</span>
-                      <span className="font-mono text-stone-800 font-bold">{activeTypoStyle.fontSize}px</span>
+                      <span className="font-medium text-[var(--color-text-primary)]">Cỡ chữ (Font Size):</span>
+                      <span className="font-mono text-[var(--color-text-strong)] font-bold">{activeTypoStyle.fontSize}px</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => handleUpdateTypography(typoTarget, { 
                           fontSize: Math.max(activeTypoStyle.fontSize - 2, typoTarget === 'title' ? 20 : typoTarget === 'body' ? 14 : 18) 
                         })}
-                        className="w-8 h-8 rounded-lg border border-stone-300 hover:bg-stone-100 flex items-center justify-center font-bold text-stone-700 cursor-pointer"
+                        className="w-8 h-8 rounded-lg border border-stone-300 hover:bg-[var(--color-surface-muted)] flex items-center justify-center font-bold text-[var(--color-text-primary)] cursor-pointer"
                       >
                         -
                       </button>
@@ -1952,13 +1952,13 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                         max={typoTarget === 'title' ? 64 : typoTarget === 'body' ? 40 : 52}
                         value={activeTypoStyle.fontSize}
                         onChange={(e) => handleUpdateTypography(typoTarget, { fontSize: parseInt(e.target.value) })}
-                        className="flex-1 accent-[#7A2938] cursor-pointer"
+                        className="flex-1 accent-[var(--color-brand-700)] cursor-pointer"
                       />
                       <button
                         onClick={() => handleUpdateTypography(typoTarget, { 
                           fontSize: Math.min(activeTypoStyle.fontSize + 2, typoTarget === 'title' ? 64 : typoTarget === 'body' ? 40 : 52) 
                         })}
-                        className="w-8 h-8 rounded-lg border border-stone-300 hover:bg-stone-100 flex items-center justify-center font-bold text-stone-700 cursor-pointer"
+                        className="w-8 h-8 rounded-lg border border-stone-300 hover:bg-[var(--color-surface-muted)] flex items-center justify-center font-bold text-[var(--color-text-primary)] cursor-pointer"
                       >
                         +
                       </button>
@@ -1968,11 +1968,11 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                   {/* Font Weight & Italic & Alignment */}
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     <div>
-                      <label className="block font-medium text-stone-700 mb-1">Độ đậm (Weight)</label>
+                      <label className="block font-medium text-[var(--color-text-primary)] mb-1">Độ đậm (Weight)</label>
                       <select
                         value={activeTypoStyle.fontWeight}
                         onChange={(e) => handleUpdateTypography(typoTarget, { fontWeight: parseInt(e.target.value) })}
-                        className="w-full px-2 py-1.5 border border-stone-300 rounded-xl bg-white text-stone-900"
+                        className="w-full px-2 py-1.5 border border-stone-300 rounded-xl bg-[var(--color-surface)] text-[var(--color-text-strong)]"
                       >
                         <option value={400}>400 - Thường</option>
                         <option value={500}>500 - Vừa</option>
@@ -1982,12 +1982,12 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                     </div>
 
                     <div>
-                      <label className="block font-medium text-stone-700 mb-1">Căn lề (Align)</label>
-                      <div className="flex items-center gap-1 bg-stone-100 p-0.5 rounded-xl border border-stone-200">
+                      <label className="block font-medium text-[var(--color-text-primary)] mb-1">Căn lề (Align)</label>
+                      <div className="flex items-center gap-1 bg-[var(--color-surface-muted)] p-0.5 rounded-xl border border-stone-200">
                         <button
                           onClick={() => handleUpdateTypography(typoTarget, { align: 'left' })}
                           className={`flex-1 py-1 rounded-lg flex items-center justify-center cursor-pointer ${
-                            activeTypoStyle.align === 'left' ? 'bg-white shadow-xs text-stone-900 font-bold' : 'text-stone-500'
+                            activeTypoStyle.align === 'left' ? 'bg-[var(--color-surface)] shadow-xs text-[var(--color-text-strong)] font-bold' : 'text-[var(--color-text-secondary)]'
                           }`}
                           title="Căn trái"
                         >
@@ -1996,7 +1996,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                         <button
                           onClick={() => handleUpdateTypography(typoTarget, { align: 'center' })}
                           className={`flex-1 py-1 rounded-lg flex items-center justify-center cursor-pointer ${
-                            activeTypoStyle.align === 'center' ? 'bg-white shadow-xs text-stone-900 font-bold' : 'text-stone-500'
+                            activeTypoStyle.align === 'center' ? 'bg-[var(--color-surface)] shadow-xs text-[var(--color-text-strong)] font-bold' : 'text-[var(--color-text-secondary)]'
                           }`}
                           title="Căn giữa"
                         >
@@ -2005,7 +2005,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                         <button
                           onClick={() => handleUpdateTypography(typoTarget, { align: 'right' })}
                           className={`flex-1 py-1 rounded-lg flex items-center justify-center cursor-pointer ${
-                            activeTypoStyle.align === 'right' ? 'bg-white shadow-xs text-stone-900 font-bold' : 'text-stone-500'
+                            activeTypoStyle.align === 'right' ? 'bg-[var(--color-surface)] shadow-xs text-[var(--color-text-strong)] font-bold' : 'text-[var(--color-text-secondary)]'
                           }`}
                           title="Căn phải"
                         >
@@ -2022,7 +2022,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                       className={`w-full py-1.5 px-3 rounded-xl border flex items-center justify-center gap-2 text-xs font-semibold transition cursor-pointer ${
                         activeTypoStyle.italic
                           ? 'bg-amber-50 text-amber-900 border-amber-300'
-                          : 'bg-white hover:bg-stone-50 text-stone-700 border-stone-300'
+                          : 'bg-[var(--color-surface)] hover:bg-[var(--color-surface-subtle)] text-[var(--color-text-primary)] border-stone-300'
                       }`}
                     >
                       <Italic className="w-3.5 h-3.5" />
@@ -2032,7 +2032,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
 
                   {/* Text Color & WCAG AA Contrast Guard */}
                   <div>
-                    <label className="block font-medium text-stone-700 text-xs mb-1">
+                    <label className="block font-medium text-[var(--color-text-primary)] text-xs mb-1">
                       Màu chữ & Độ tương phản
                     </label>
                     <div className="flex items-center gap-2 mb-2">
@@ -2043,7 +2043,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                           setCustomTypoHex(e.target.value);
                           handleUpdateTypography(typoTarget, { color: e.target.value });
                         }}
-                        className="w-10 h-9 p-0.5 rounded-lg border border-stone-300 bg-white cursor-pointer shrink-0"
+                        className="w-10 h-9 p-0.5 rounded-lg border border-stone-300 bg-[var(--color-surface)] cursor-pointer shrink-0"
                       />
                       <input
                         type="text"
@@ -2056,7 +2056,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                           }
                         }}
                         placeholder="#FAF8F5"
-                        className="flex-1 px-3 py-1.5 border border-stone-300 rounded-xl bg-white text-xs font-mono text-stone-900"
+                        className="flex-1 px-3 py-1.5 border border-stone-300 rounded-xl bg-[var(--color-surface)] text-xs font-mono text-[var(--color-text-strong)]"
                       />
                     </div>
 
@@ -2082,7 +2082,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                   <div className="pt-2 border-t border-stone-200 flex items-center gap-2">
                     <button
                       onClick={() => handleUpdateTypography(typoTarget, activeTypoStyle, true)}
-                      className="flex-1 py-1.5 px-3 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-semibold transition cursor-pointer"
+                      className="flex-1 py-1.5 px-3 rounded-xl bg-[var(--color-surface-muted)] hover:bg-[var(--color-border-default)] text-[var(--color-text-strong)] text-xs font-semibold transition cursor-pointer"
                     >
                       Áp dụng cho toàn bộ bài
                     </button>
@@ -2092,7 +2092,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                         handleUpdateStyleOverrides({ [propKey]: undefined });
                         showToast(`Đã khôi phục kiểu chữ ${typoTarget} về mặc định.`);
                       }}
-                      className="py-1.5 px-3 rounded-xl border border-stone-300 hover:bg-stone-50 text-stone-700 text-xs font-semibold transition cursor-pointer"
+                      className="py-1.5 px-3 rounded-xl border border-stone-300 hover:bg-[var(--color-surface-subtle)] text-[var(--color-text-primary)] text-xs font-semibold transition cursor-pointer"
                     >
                       Mặc định
                     </button>
@@ -2102,7 +2102,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
             </div>
 
             {/* Drawer Footer Status */}
-            <div className="pt-2 border-t border-stone-200 flex justify-between items-center text-xs text-stone-500 shrink-0">
+            <div className="pt-2 border-t border-stone-200 flex justify-between items-center text-xs text-[var(--color-text-secondary)] shrink-0">
               <span className="flex items-center gap-1">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
                 Tự động lưu vào phiên làm việc

@@ -202,24 +202,24 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
       )}
 
       {/* Header Bar */}
-      <div className="bg-white p-4 rounded-2xl border border-[#E5E0DA] shadow-[var(--shadow-xs)] flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0">
+      <div className="bg-[var(--color-surface)] p-4 rounded-2xl border border-[var(--color-border-default)] shadow-[var(--shadow-xs)] flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0">
         <div>
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full text-metadata font-semibold bg-[#FCF3F4] text-[#7A2938] border border-[#7A2938]/15 flex items-center gap-1">
+            <span className="px-2.5 py-0.5 rounded-full text-metadata font-semibold bg-[var(--color-brand-soft)] text-[var(--color-brand-text)] border border-[var(--color-brand-700)]/15 flex items-center gap-1">
               <Compass className="w-3.5 h-3.5" />
               Thi pháp học theo Thể loại
             </span>
-            <span className="text-metadata text-[#706A65] font-medium">
+            <span className="text-metadata text-[var(--color-text-secondary)] font-medium">
               Chương trình Ngữ văn GDPT 2018 · {lesson.grade}
             </span>
           </div>
-          <h1 className="text-card-title md:text-section font-bold font-serif text-[#211E1C] mt-1 leading-[1.3]">
+          <h1 className="text-card-title md:text-section font-bold font-serif text-[var(--color-text-strong)] mt-1 leading-[1.3]">
             Phân tích Thể loại: {lesson.title} ({lesson.author})
           </h1>
         </div>
 
         {/* Thể loại selector buttons */}
-        <div className="flex items-center gap-1 p-1 bg-[#F5F3F0] rounded-xl border border-[#E5E0DA] self-start md:self-auto shrink-0">
+        <div className="flex items-center gap-1 p-1 bg-[var(--color-surface-muted)] rounded-xl border border-[var(--color-border-default)] self-start md:self-auto shrink-0">
           <button
             onClick={() => {
               setSelectedGenre('poetry');
@@ -227,11 +227,11 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
             }}
             className={`px-3 py-1.5 min-h-[34px] rounded-lg text-metadata font-medium motion-surface flex items-center gap-1.5 ${
               selectedGenre === 'poetry'
-                ? 'bg-white text-[#211E1C] shadow-[var(--shadow-xs)] font-semibold'
-                : 'text-[#706A65] hover:text-[#211E1C]'
+                ? 'bg-[var(--color-surface)] text-[var(--color-text-strong)] shadow-[var(--shadow-xs)] font-semibold'
+                : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-strong)]'
             }`}
           >
-            <Feather className={`w-3.5 h-3.5 ${selectedGenre === 'poetry' ? 'text-[#7A2938]' : 'text-[#706A65]'}`} />
+            <Feather className={`w-3.5 h-3.5 ${selectedGenre === 'poetry' ? 'text-[var(--color-brand-text)]' : 'text-[var(--color-text-secondary)]'}`} />
             <span>Thơ trữ tình</span>
           </button>
 
@@ -242,11 +242,11 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
             }}
             className={`px-3 py-1.5 min-h-[34px] rounded-lg text-metadata font-medium motion-surface flex items-center gap-1.5 ${
               selectedGenre === 'story'
-                ? 'bg-white text-[#211E1C] shadow-[var(--shadow-xs)] font-semibold'
-                : 'text-[#706A65] hover:text-[#211E1C]'
+                ? 'bg-[var(--color-surface)] text-[var(--color-text-strong)] shadow-[var(--shadow-xs)] font-semibold'
+                : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-strong)]'
             }`}
           >
-            <BookOpen className={`w-3.5 h-3.5 ${selectedGenre === 'story' ? 'text-[#7A2938]' : 'text-[#706A65]'}`} />
+            <BookOpen className={`w-3.5 h-3.5 ${selectedGenre === 'story' ? 'text-[var(--color-brand-text)]' : 'text-[var(--color-text-secondary)]'}`} />
             <span>Truyện & Kí</span>
           </button>
 
@@ -257,26 +257,26 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
             }}
             className={`px-3 py-1.5 min-h-[34px] rounded-lg text-metadata font-medium motion-surface flex items-center gap-1.5 ${
               selectedGenre === 'argumentative'
-                ? 'bg-white text-[#211E1C] shadow-[var(--shadow-xs)] font-semibold'
-                : 'text-[#706A65] hover:text-[#211E1C]'
+                ? 'bg-[var(--color-surface)] text-[var(--color-text-strong)] shadow-[var(--shadow-xs)] font-semibold'
+                : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-strong)]'
             }`}
           >
-            <Network className={`w-3.5 h-3.5 ${selectedGenre === 'argumentative' ? 'text-[#7A2938]' : 'text-[#706A65]'}`} />
+            <Network className={`w-3.5 h-3.5 ${selectedGenre === 'argumentative' ? 'text-[var(--color-brand-text)]' : 'text-[var(--color-text-secondary)]'}`} />
             <span>Văn nghị luận</span>
           </button>
         </div>
       </div>
 
       {/* Top 5 Primary Tabs & Cross-module Action Toolbar */}
-      <div data-tour-id="genre-tabs" className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-[#E5E0DA] pb-2 shrink-0 bg-[#FAF9F7] p-2 rounded-xl">
+      <div data-tour-id="genre-tabs" className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-[var(--color-border-default)] pb-2 shrink-0 bg-[var(--color-surface-subtle)] p-2 rounded-xl">
         {/* 5 Primary Tabs (UI Spec Section 6) */}
         <div className="flex items-center gap-1 overflow-x-auto">
           <button
             onClick={() => setActiveTab('overview')}
             className={`px-3 py-1.5 rounded-lg text-metadata font-semibold transition-colors flex items-center gap-1.5 shrink-0 ${
               activeTab === 'overview'
-                ? 'bg-white text-[#7A2938] shadow-[var(--shadow-xs)] border border-[#E5E0DA]'
-                : 'text-[#706A65] hover:text-[#211E1C]'
+                ? 'bg-[var(--color-surface)] text-[var(--color-brand-text)] shadow-[var(--shadow-xs)] border border-[var(--color-border-default)]'
+                : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-strong)]'
             }`}
           >
             <Sparkles className="w-3.5 h-3.5" />
@@ -287,8 +287,8 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
             onClick={() => setActiveTab('art')}
             className={`px-3 py-1.5 rounded-lg text-metadata font-semibold transition-colors flex items-center gap-1.5 shrink-0 ${
               activeTab === 'art'
-                ? 'bg-white text-[#7A2938] shadow-[var(--shadow-xs)] border border-[#E5E0DA]'
-                : 'text-[#706A65] hover:text-[#211E1C]'
+                ? 'bg-[var(--color-surface)] text-[var(--color-brand-text)] shadow-[var(--shadow-xs)] border border-[var(--color-border-default)]'
+                : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-strong)]'
             }`}
           >
             <Compass className="w-3.5 h-3.5" />
@@ -299,8 +299,8 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
             onClick={() => setActiveTab('characters')}
             className={`px-3 py-1.5 rounded-lg text-metadata font-semibold transition-colors flex items-center gap-1.5 shrink-0 ${
               activeTab === 'characters'
-                ? 'bg-white text-[#7A2938] shadow-[var(--shadow-xs)] border border-[#E5E0DA]'
-                : 'text-[#706A65] hover:text-[#211E1C]'
+                ? 'bg-[var(--color-surface)] text-[var(--color-brand-text)] shadow-[var(--shadow-xs)] border border-[var(--color-border-default)]'
+                : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-strong)]'
             }`}
           >
             <Heart className="w-3.5 h-3.5" />
@@ -311,8 +311,8 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
             onClick={() => setActiveTab('argument_map')}
             className={`px-3 py-1.5 rounded-lg text-metadata font-semibold transition-colors flex items-center gap-1.5 shrink-0 ${
               activeTab === 'argument_map'
-                ? 'bg-white text-[#7A2938] shadow-[var(--shadow-xs)] border border-[#E5E0DA]'
-                : 'text-[#706A65] hover:text-[#211E1C]'
+                ? 'bg-[var(--color-surface)] text-[var(--color-brand-text)] shadow-[var(--shadow-xs)] border border-[var(--color-border-default)]'
+                : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-strong)]'
             }`}
           >
             <Network className="w-3.5 h-3.5" />
@@ -323,8 +323,8 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
             onClick={() => setActiveTab('evidence')}
             className={`px-3 py-1.5 rounded-lg text-metadata font-semibold transition-colors flex items-center gap-1.5 shrink-0 ${
               activeTab === 'evidence'
-                ? 'bg-white text-[#7A2938] shadow-[var(--shadow-xs)] border border-[#E5E0DA]'
-                : 'text-[#706A65] hover:text-[#211E1C]'
+                ? 'bg-[var(--color-surface)] text-[var(--color-brand-text)] shadow-[var(--shadow-xs)] border border-[var(--color-border-default)]'
+                : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-strong)]'
             }`}
           >
             <Quote className="w-3.5 h-3.5" />
@@ -369,7 +369,7 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
               handlePushToQuestion(passage);
               setActiveModule('question_builder');
             }}
-            className="px-2.5 py-1.5 rounded-lg text-metadata font-semibold bg-[#FCF3F4] text-[#7A2938] hover:bg-[#F8EAEB] border border-[#7A2938]/20 transition flex items-center gap-1"
+            className="px-2.5 py-1.5 rounded-lg text-metadata font-semibold bg-[var(--color-brand-soft)] text-[var(--color-brand-text)] hover:bg-[var(--color-brand-100)] border border-[var(--color-brand-700)]/20 transition flex items-center gap-1"
             title="Sử dụng ngữ liệu này để xây dựng câu hỏi đọc hiểu"
           >
             <HelpCircle className="w-3.5 h-3.5" />
@@ -384,31 +384,31 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
         {activeTab === 'overview' && (
           <div className="space-y-4">
             <div className="card-surface p-5 rounded-2xl border border-stone-200 shadow-xs space-y-3">
-              <h3 className="font-serif font-bold text-card-title text-stone-900 flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-[#7C2D37]" />
+              <h3 className="font-serif font-bold text-card-title text-[var(--color-text-strong)] flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-[var(--color-brand-text)]" />
                 Đề tài, Chủ đề & Cảm hứng chủ đạo
               </h3>
-              <p className="text-body-ui text-stone-700 leading-relaxed font-sans bg-stone-50 p-4 rounded-xl border border-stone-200">
+              <p className="text-body-ui text-[var(--color-text-primary)] leading-relaxed font-sans bg-[var(--color-surface-subtle)] p-4 rounded-xl border border-stone-200">
                 {selectedGenre === 'poetry' && (lesson.poetryAnalysis?.theme || 'Cảm hứng lãng mạn và tinh thần bi tráng ca ngợi người lính.')}
                 {selectedGenre === 'story' && (lesson.storyAnalysis?.message || 'Khát vọng sống, khát vọng hạnh phúc mãnh liệt của con người ngay bên bờ vực cái chết.')}
                 {selectedGenre === 'argumentative' && (argumentMap.thesis || 'Khẳng định quyền tự do độc lập thiêng liêng của dân tộc Việt Nam.')}
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
-                <div className="p-3.5 bg-stone-50 rounded-xl border border-stone-200">
-                  <span className="text-metadata font-bold text-stone-800 block mb-1">
+                <div className="p-3.5 bg-[var(--color-surface-subtle)] rounded-xl border border-stone-200">
+                  <span className="text-metadata font-bold text-[var(--color-text-strong)] block mb-1">
                     Bối cảnh lịch sử & Hoàn cảnh sáng tác:
                   </span>
-                  <p className="text-body-ui text-stone-600 text-[13px] leading-relaxed">
+                  <p className="text-body-ui text-[var(--color-text-secondary)] text-[13px] leading-relaxed">
                     {lesson.historicalContext || 'Sáng tác trong bối cảnh lịch sử đặc biệt của cuộc kháng chiến bảo vệ Tổ quốc.'}
                   </p>
                 </div>
 
-                <div className="p-3.5 bg-stone-50 rounded-xl border border-stone-200">
-                  <span className="text-metadata font-bold text-stone-800 block mb-1">
+                <div className="p-3.5 bg-[var(--color-surface-subtle)] rounded-xl border border-stone-200">
+                  <span className="text-metadata font-bold text-[var(--color-text-strong)] block mb-1">
                     Tác giả & Phong cách nghệ thuật:
                   </span>
-                  <p className="text-body-ui text-stone-600 text-[13px] leading-relaxed">
+                  <p className="text-body-ui text-[var(--color-text-secondary)] text-[13px] leading-relaxed">
                     {lesson.authorBio || `${lesson.author} là gương mặt tiêu biểu của nền văn học Việt Nam hiện đại.`}
                   </p>
                 </div>
@@ -422,7 +422,7 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
                   <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                   Giá trị nội dung & Tư tưởng nhân văn
                 </h4>
-                <p className="text-body-ui text-stone-700 text-[13px] leading-relaxed">
+                <p className="text-body-ui text-[var(--color-text-primary)] text-[13px] leading-relaxed">
                   {selectedGenre === 'poetry' && (lesson.poetryAnalysis?.contentValue || 'Tượng đài bất tử về người lính vệ quốc thời đầu chống Pháp.')}
                   {selectedGenre === 'story' && (lesson.storyAnalysis?.themes?.join(' · ') || 'Hiện thực nạn đói 1945 và sức sống mãnh liệt của người nông dân.')}
                   {selectedGenre === 'argumentative' && 'Văn kiện lập quốc vĩ đại, khẳng định quyền con người và quyền độc lập tự quyết của dân tộc.'}
@@ -434,7 +434,7 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
                   <Layers className="w-4 h-4 text-blue-600" />
                   Giá trị nghệ thuật & Phong cách thể loại
                 </h4>
-                <p className="text-body-ui text-stone-700 text-[13px] leading-relaxed">
+                <p className="text-body-ui text-[var(--color-text-primary)] text-[13px] leading-relaxed">
                   {selectedGenre === 'poetry' && (lesson.poetryAnalysis?.artisticValue || 'Bút pháp lãng mạn kết hợp bi tráng, ngôn ngữ tạo hình giàu nhạc điệu.')}
                   {selectedGenre === 'story' && 'Nghệ thuật xây dựng tình huống éo le, miêu tả tâm lý bậc thầy, ngôn ngữ mộc mạc đậm chất dân dã.'}
                   {selectedGenre === 'argumentative' && 'Mẫu mực tuyệt đỉnh của văn chính luận: lập luận chặt chẽ, lý lẽ đanh thép, dẫn chứng xác thực.'}
@@ -450,7 +450,7 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
             {selectedGenre === 'poetry' && (
               <div className="space-y-4">
                 <div className="card-surface p-5 rounded-2xl border border-stone-200 shadow-xs space-y-3">
-                  <h3 className="font-serif font-bold text-card-title text-stone-900 flex items-center gap-2">
+                  <h3 className="font-serif font-bold text-card-title text-[var(--color-text-strong)] flex items-center gap-2">
                     <Feather className="w-4 h-4 text-purple-600" />
                     Biện pháp tu từ & Đặc sắc ngôn từ
                   </h3>
@@ -469,10 +469,10 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
                 </div>
 
                 <div className="card-surface p-5 rounded-2xl border border-stone-200 shadow-xs space-y-3">
-                  <h3 className="font-serif font-bold text-card-title text-stone-900">
+                  <h3 className="font-serif font-bold text-card-title text-[var(--color-text-strong)]">
                     Vần điệu, Nhịp thơ & Nghệ thuật phối thanh
                   </h3>
-                  <p className="text-body-ui text-stone-700 bg-stone-50 p-4 rounded-xl border border-stone-200">
+                  <p className="text-body-ui text-[var(--color-text-primary)] bg-[var(--color-surface-subtle)] p-4 rounded-xl border border-stone-200">
                     {lesson.poetryAnalysis?.rhythmAndRhyme || 'Nhịp thơ linh hoạt 4/3, 2/2/3; phối thanh bổng - trầm độc đáo (câu nhiều thanh trắc gồ ghề xen lẫn câu toàn thanh bằng êm ả mênh mang).'}
                   </p>
                 </div>
@@ -482,7 +482,7 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
             {selectedGenre === 'story' && (
               <div className="space-y-4">
                 <div className="card-surface p-5 rounded-2xl border border-stone-200 shadow-xs space-y-3">
-                  <h3 className="font-serif font-bold text-card-title text-stone-900 flex items-center gap-2">
+                  <h3 className="font-serif font-bold text-card-title text-[var(--color-text-strong)] flex items-center gap-2">
                     <BookOpen className="w-4 h-4 text-blue-600" />
                     Tình huống truyện & Điểm nhìn trần thuật
                   </h3>
@@ -493,15 +493,15 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
                     </p>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                    <div className="p-3 bg-stone-50 rounded-xl border border-stone-200">
-                      <span className="text-metadata font-bold text-stone-800 block mb-1">Điểm nhìn trần thuật:</span>
-                      <p className="text-body-ui text-stone-600 text-[13px]">
+                    <div className="p-3 bg-[var(--color-surface-subtle)] rounded-xl border border-stone-200">
+                      <span className="text-metadata font-bold text-[var(--color-text-strong)] block mb-1">Điểm nhìn trần thuật:</span>
+                      <p className="text-body-ui text-[var(--color-text-secondary)] text-[13px]">
                         {lesson.storyAnalysis?.pointOfView || 'Ngôi kể thứ ba toàn tri kết hợp điểm nhìn bên trong của các nhân vật.'}
                       </p>
                     </div>
-                    <div className="p-3 bg-stone-50 rounded-xl border border-stone-200">
-                      <span className="text-metadata font-bold text-stone-800 block mb-1">Lời người kể & Lời nhân vật:</span>
-                      <p className="text-body-ui text-stone-600 text-[13px]">
+                    <div className="p-3 bg-[var(--color-surface-subtle)] rounded-xl border border-stone-200">
+                      <span className="text-metadata font-bold text-[var(--color-text-strong)] block mb-1">Lời người kể & Lời nhân vật:</span>
+                      <p className="text-body-ui text-[var(--color-text-secondary)] text-[13px]">
                         Ngôn ngữ đối thoại tự nhiên, hòa quyện với dòng độc thoại nội tâm tha thiết.
                       </p>
                     </div>
@@ -509,7 +509,7 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
                 </div>
 
                 <div className="card-surface p-5 rounded-2xl border border-stone-200 shadow-xs space-y-3">
-                  <h3 className="font-serif font-bold text-card-title text-stone-900">
+                  <h3 className="font-serif font-bold text-card-title text-[var(--color-text-strong)]">
                     Chi tiết nghệ thuật đắt giá
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -536,11 +536,11 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
 
             {selectedGenre === 'argumentative' && (
               <div className="card-surface p-5 rounded-2xl border border-stone-200 shadow-xs space-y-3">
-                <h3 className="font-serif font-bold text-card-title text-stone-900 flex items-center gap-2">
+                <h3 className="font-serif font-bold text-card-title text-[var(--color-text-strong)] flex items-center gap-2">
                   <Network className="w-4 h-4 text-amber-600" />
                   Nghệ thuật lập luận & Ngôn ngữ chính luận
                 </h3>
-                <p className="text-body-ui text-stone-700 bg-stone-50 p-4 rounded-xl border border-stone-200 leading-relaxed">
+                <p className="text-body-ui text-[var(--color-text-primary)] bg-[var(--color-surface-subtle)] p-4 rounded-xl border border-stone-200 leading-relaxed">
                   Lập luận vòng tròn khép kín và tiến công không ngừng: Mượn lời đối phương để khóa miệng đối phương; 
                   dẫn chứng lịch sử chân thực, điệp từ trùng điệp tạo âm hưởng đanh thép, hùng hồn như lời thề non nước.
                 </p>
@@ -554,26 +554,26 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
           <div className="space-y-4">
             {selectedGenre === 'poetry' && (
               <div className="card-surface p-5 rounded-2xl border border-stone-200 shadow-xs space-y-3">
-                <h3 className="font-serif font-bold text-card-title text-stone-900 flex items-center gap-2">
-                  <Shield className="w-4 h-4 text-[#7C2D37]" />
+                <h3 className="font-serif font-bold text-card-title text-[var(--color-text-strong)] flex items-center gap-2">
+                  <Shield className="w-4 h-4 text-[var(--color-brand-text)]" />
                   Bức tượng đài bi tráng về người lính
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  <div className="p-4 bg-stone-50 rounded-xl border border-stone-200 space-y-1">
-                    <span className="text-metadata font-bold text-stone-800">Ngoại hình gân guốc:</span>
-                    <p className="text-body-ui text-stone-600 text-[13px]">
+                  <div className="p-4 bg-[var(--color-surface-subtle)] rounded-xl border border-stone-200 space-y-1">
+                    <span className="text-metadata font-bold text-[var(--color-text-strong)]">Ngoại hình gân guốc:</span>
+                    <p className="text-body-ui text-[var(--color-text-secondary)] text-[13px]">
                       "Không mọc tóc", "quân xanh màu lá" - hiện thực tàn khốc của sốt rét rừng nhưng vẫn "dữ oai hùm".
                     </p>
                   </div>
-                  <div className="p-4 bg-stone-50 rounded-xl border border-stone-200 space-y-1">
-                    <span className="text-metadata font-bold text-stone-800">Tâm hồn hào hoa:</span>
-                    <p className="text-body-ui text-stone-600 text-[13px]">
+                  <div className="p-4 bg-[var(--color-surface-subtle)] rounded-xl border border-stone-200 space-y-1">
+                    <span className="text-metadata font-bold text-[var(--color-text-strong)]">Tâm hồn hào hoa:</span>
+                    <p className="text-body-ui text-[var(--color-text-secondary)] text-[13px]">
                       "Mắt trừng gửi mộng", "đêm mơ Hà Nội dáng kiều thơm" - chất lãng mạn của tuổi trẻ Thủ đô.
                     </p>
                   </div>
-                  <div className="p-4 bg-stone-50 rounded-xl border border-stone-200 space-y-1">
-                    <span className="text-metadata font-bold text-stone-800">Lý tưởng xả thân:</span>
-                    <p className="text-body-ui text-stone-600 text-[13px]">
+                  <div className="p-4 bg-[var(--color-surface-subtle)] rounded-xl border border-stone-200 space-y-1">
+                    <span className="text-metadata font-bold text-[var(--color-text-strong)]">Lý tưởng xả thân:</span>
+                    <p className="text-body-ui text-[var(--color-text-secondary)] text-[13px]">
                       "Chiến trường đi chẳng tiếc đời xanh", "áo bào thay chiếu anh về đất" - sự hy sinh thanh thản, bất tử.
                     </p>
                   </div>
@@ -609,28 +609,28 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
                   <div key={cIdx} className="card-surface p-4 sm:p-5 rounded-2xl border border-stone-200 shadow-xs space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <span className="w-7 h-7 rounded-lg bg-[#7C2D37]/10 text-[#7C2D37] font-bold text-xs flex items-center justify-center">
+                        <span className="w-7 h-7 rounded-lg bg-[var(--color-brand-700)]/10 text-[var(--color-brand-text)] font-bold text-xs flex items-center justify-center">
                           {cIdx + 1}
                         </span>
-                        <h4 className="font-serif font-bold text-[16px] text-stone-900">
+                        <h4 className="font-serif font-bold text-[16px] text-[var(--color-text-strong)]">
                           {char.name}
                         </h4>
-                        <span className="text-metadata text-stone-500">({char.role})</span>
+                        <span className="text-metadata text-[var(--color-text-secondary)]">({char.role})</span>
                       </div>
                       <button
                         onClick={() => handlePushToQuestion(`Phân tích nhân vật ${char.name} trong tác phẩm ${lesson.title}`)}
-                        className="text-[11px] text-[#7C2D37] hover:underline font-medium"
+                        className="text-[11px] text-[var(--color-brand-text)] hover:underline font-medium"
                       >
                         Tạo đề về nhân vật
                       </button>
                     </div>
 
-                    <p className="text-body-ui text-stone-700 text-[13px]">
-                      <span className="font-semibold text-stone-900">Diễn biến tâm lý: </span>
+                    <p className="text-body-ui text-[var(--color-text-primary)] text-[13px]">
+                      <span className="font-semibold text-[var(--color-text-strong)]">Diễn biến tâm lý: </span>
                       {char.psychologicalShift}
                     </p>
 
-                    <div className="p-2.5 bg-stone-50 rounded-xl border border-stone-200/80 text-metadata italic text-stone-600 font-serif">
+                    <div className="p-2.5 bg-[var(--color-surface-subtle)] rounded-xl border border-stone-200/80 text-metadata italic text-[var(--color-text-secondary)] font-serif">
                       "{char.quote}"
                     </div>
                   </div>
@@ -640,11 +640,11 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
 
             {selectedGenre === 'argumentative' && (
               <div className="card-surface p-5 rounded-2xl border border-stone-200 shadow-xs space-y-3">
-                <h3 className="font-serif font-bold text-card-title text-stone-900 flex items-center gap-2">
+                <h3 className="font-serif font-bold text-card-title text-[var(--color-text-strong)] flex items-center gap-2">
                   <Flame className="w-4 h-4 text-amber-600" />
                   Hình tượng Chủ tịch Hồ Chí Minh & Khí phách dân tộc
                 </h3>
-                <p className="text-body-ui text-stone-700 leading-relaxed bg-stone-50 p-4 rounded-xl border border-stone-200">
+                <p className="text-body-ui text-[var(--color-text-primary)] leading-relaxed bg-[var(--color-surface-subtle)] p-4 rounded-xl border border-stone-200">
                   Người phát ngôn thay cho toàn thể non sông gấm vóc, kết tinh tinh thần độc lập tự do và ý chí quyết tử của hàng triệu người dân Việt Nam.
                 </p>
               </div>
@@ -655,9 +655,9 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
         {/* TAB 4: ARGUMENT MAP (CÂY SƠ ĐỒ LẬP LUẬN) */}
         {activeTab === 'argument_map' && (
           <div className="space-y-4">
-            <div className="flex items-center justify-between bg-[#FAF9F7] p-3 rounded-xl border border-[#E5E0DA]">
-              <div className="flex items-center gap-2 text-metadata text-[#706A65]">
-                <Network className="w-4 h-4 text-[#7A2938]" />
+            <div className="flex items-center justify-between bg-[var(--color-surface-subtle)] p-3 rounded-xl border border-[var(--color-border-default)]">
+              <div className="flex items-center gap-2 text-metadata text-[var(--color-text-secondary)]">
+                <Network className="w-4 h-4 text-[var(--color-brand-text)]" />
                 <span>Sơ đồ cây lập luận (Argument Map) giúp chuẩn hóa hệ thống ý cho KHBD và Đề thi</span>
               </div>
               <button
@@ -670,32 +670,32 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
             </div>
 
             {/* Visual Diagram Tree */}
-            <div className="p-6 md:p-8 rounded-3xl bg-[#FAF9F7] border border-[#E5E0DA] shadow-[var(--shadow-xs)] space-y-5">
+            <div className="p-6 md:p-8 rounded-3xl bg-[var(--color-surface-subtle)] border border-[var(--color-border-default)] shadow-[var(--shadow-xs)] space-y-5">
               {/* 1. THESIS NODE (Luận đề trung tâm) */}
-              <div className="max-w-2xl mx-auto text-center p-5 rounded-2xl bg-[#FCF3F4] border-2 border-[#7A2938]/30 shadow-[var(--shadow-xs)]">
-                <span className="text-metadata font-semibold text-[#7A2938] block mb-1">
+              <div className="max-w-2xl mx-auto text-center p-5 rounded-2xl bg-[var(--color-brand-soft)] border-2 border-[var(--color-brand-700)]/30 shadow-[var(--shadow-xs)]">
+                <span className="text-metadata font-semibold text-[var(--color-brand-text)] block mb-1">
                   Luận đề trung tâm (Thesis)
                 </span>
-                <p className="text-base md:text-lg font-serif font-semibold leading-relaxed text-[#211E1C]">
+                <p className="text-base md:text-lg font-serif font-semibold leading-relaxed text-[var(--color-text-strong)]">
                   "{argumentMap.thesis}"
                 </p>
               </div>
 
               {/* Connecting lines */}
               <div className="flex justify-center">
-                <div className="w-px h-6 bg-[#D6D0C8]"></div>
+                <div className="w-px h-6 bg-[var(--color-border-strong)]"></div>
               </div>
 
               {/* 2. CLAIMS NODES (Luận điểm) */}
               <div className="space-y-4">
                 {argumentMap.claims.map((claim, cIdx) => (
-                  <div key={claim.id} className="p-5 rounded-2xl bg-white border border-[#E5E0DA] shadow-[var(--shadow-xs)]">
-                    <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#EEEAE5]">
+                  <div key={claim.id} className="p-5 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border-default)] shadow-[var(--shadow-xs)]">
+                    <div className="flex items-center justify-between pb-3 mb-3 border-b border-[var(--color-border-subtle)]">
                       <div className="flex items-center gap-2.5">
-                        <span className="w-6 h-6 rounded-full bg-[#FCF3F4] text-[#7A2938] border border-[#7A2938]/15 font-bold text-xs flex items-center justify-center tabular-nums">
+                        <span className="w-6 h-6 rounded-full bg-[var(--color-brand-soft)] text-[var(--color-brand-text)] border border-[var(--color-brand-700)]/15 font-bold text-xs flex items-center justify-center tabular-nums">
                           {cIdx + 1}
                         </span>
-                        <h4 className="font-serif font-semibold text-card-title text-[#211E1C]">
+                        <h4 className="font-serif font-semibold text-card-title text-[var(--color-text-strong)]">
                           {claim.title}
                         </h4>
                       </div>
@@ -704,12 +704,12 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
                           onClick={() => handleAddReason(cIdx)}
                           className="btn-secondary min-h-[30px] px-2.5 py-1 text-metadata font-medium flex items-center gap-1"
                         >
-                          <Plus className="w-3 h-3 text-[#706A65]" /> Thêm Lý lẽ
+                          <Plus className="w-3 h-3 text-[var(--color-text-secondary)]" /> Thêm Lý lẽ
                         </button>
                         {argumentMap.claims.length > 1 && (
                           <button
                             onClick={() => handleDeleteClaim(cIdx)}
-                            className="p-1.5 text-[#706A65] hover:text-[#B91C1C] rounded-lg hover:bg-rose-50 transition-colors"
+                            className="p-1.5 text-[var(--color-text-secondary)] hover:text-[#B91C1C] rounded-lg hover:bg-rose-50 transition-colors"
                             title="Xóa luận điểm này"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -719,24 +719,24 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
                     </div>
 
                     {/* Reasons & Evidences (Luận cứ & Dẫn chứng) */}
-                    <div className="space-y-3 pl-4 border-l-2 border-[#7A2938]/25">
+                    <div className="space-y-3 pl-4 border-l-2 border-[var(--color-brand-700)]/25">
                       {claim.reasons.map((reason, rIdx) => (
-                        <div key={reason.id} className="p-3.5 rounded-xl bg-[#FAF9F7] border border-[#E5E0DA] space-y-2">
+                        <div key={reason.id} className="p-3.5 rounded-xl bg-[var(--color-surface-subtle)] border border-[var(--color-border-default)] space-y-2">
                           <div className="flex items-start gap-2">
-                            <span className="text-metadata font-semibold text-[#7A2938] shrink-0">Lý lẽ {rIdx + 1}:</span>
-                            <p className="text-body-ui text-[#302C29] leading-relaxed font-sans">{reason.text}</p>
+                            <span className="text-metadata font-semibold text-[var(--color-brand-text)] shrink-0">Lý lẽ {rIdx + 1}:</span>
+                            <p className="text-body-ui text-[var(--color-text-primary)] leading-relaxed font-sans">{reason.text}</p>
                           </div>
 
                           {/* Evidences (Dẫn chứng trích dẫn văn bản) */}
                           <div className="space-y-2 pl-3 pt-1">
                             {reason.evidences.map((ev, eIdx) => (
-                              <div key={ev.id} className="p-3 rounded-lg bg-white border border-[#E5E0DA] text-metadata text-[#302C29] shadow-[var(--shadow-xs)]">
+                              <div key={ev.id} className="p-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border-default)] text-metadata text-[var(--color-text-primary)] shadow-[var(--shadow-xs)]">
                                 <div className="flex items-center gap-1.5 mb-1 text-emerald-800 font-semibold">
                                   <Quote className="w-3.5 h-3.5 text-emerald-700" />
                                   <span>Dẫn chứng & Ngữ liệu:</span>
-                                  <span className="font-normal text-[#706A65]">{ev.text}</span>
+                                  <span className="font-normal text-[var(--color-text-secondary)]">{ev.text}</span>
                                 </div>
-                                <div className="text-[#7A2938] italic font-serif mt-1 border-l-2 border-[#7A2938]/30 pl-2.5 bg-[#FCF3F4]/50 py-1 rounded-r">
+                                <div className="text-[var(--color-brand-text)] italic font-serif mt-1 border-l-2 border-[var(--color-brand-700)]/30 pl-2.5 bg-[var(--color-brand-soft)]/50 py-1 rounded-r">
                                   "{ev.quote}"
                                 </div>
                               </div>
@@ -751,7 +751,7 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
 
               {/* Connecting lines */}
               <div className="flex justify-center">
-                <div className="w-px h-6 bg-[#D6D0C8]"></div>
+                <div className="w-px h-6 bg-[var(--color-border-strong)]"></div>
               </div>
 
               {/* 3. CONCLUSION NODE (Kết luận) */}
@@ -771,11 +771,11 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
         {activeTab === 'evidence' && (
           <div className="space-y-4">
             <div className="flex items-center justify-between mb-1">
-              <h3 className="font-serif font-bold text-card-title text-stone-900 flex items-center gap-2">
-                <Quote className="w-4 h-4 text-[#7C2D37]" />
+              <h3 className="font-serif font-bold text-card-title text-[var(--color-text-strong)] flex items-center gap-2">
+                <Quote className="w-4 h-4 text-[var(--color-brand-text)]" />
                 Kho Dẫn chứng & Ngữ liệu trọng tâm
               </h3>
-              <span className="text-metadata text-stone-500">
+              <span className="text-metadata text-[var(--color-text-secondary)]">
                 Click nhanh để xuất sang Slide, KHBD hoặc Đề thi
               </span>
             </div>
@@ -784,26 +784,26 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
               {lesson.textSections.map((sec, sIdx) => (
                 <div key={sec.id} className="card-surface p-4 sm:p-5 rounded-2xl border border-stone-200 shadow-xs space-y-3">
                   <div className="flex items-center justify-between pb-2 border-b border-stone-200">
-                    <span className="font-serif font-bold text-[14px] text-[#7C2D37]">
+                    <span className="font-serif font-bold text-[14px] text-[var(--color-brand-text)]">
                       {sec.title}
                     </span>
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => handlePushToSlide(sec.content, `${lesson.title} - ${sec.title}`)}
-                        className="px-2 py-1 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-lg text-[11px] font-semibold transition"
+                        className="px-2 py-1 bg-[var(--color-surface-muted)] hover:bg-[var(--color-border-default)] text-[var(--color-text-primary)] rounded-lg text-[11px] font-semibold transition"
                       >
                         Đưa vào Slide
                       </button>
                       <button
                         onClick={() => handlePushToQuestion(sec.content)}
-                        className="px-2 py-1 bg-[#7C2D37]/10 hover:bg-[#7C2D37]/20 text-[#7C2D37] rounded-lg text-[11px] font-semibold transition"
+                        className="px-2 py-1 bg-[var(--color-brand-700)]/10 hover:bg-[var(--color-brand-700)]/20 text-[var(--color-brand-text)] rounded-lg text-[11px] font-semibold transition"
                       >
                         Tạo câu hỏi
                       </button>
                     </div>
                   </div>
 
-                  <p className="font-serif text-stone-800 leading-relaxed text-body-reading whitespace-pre-line bg-stone-50/70 p-3.5 rounded-xl border border-stone-200/60">
+                  <p className="font-serif text-[var(--color-text-strong)] leading-relaxed text-body-reading whitespace-pre-line bg-[var(--color-surface-subtle)]/70 p-3.5 rounded-xl border border-stone-200/60">
                     {sec.content}
                   </p>
                 </div>

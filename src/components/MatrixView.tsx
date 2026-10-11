@@ -136,43 +136,43 @@ export const MatrixView: React.FC<MatrixViewProps> = ({ exam, khbd }) => {
   return (
     <div className="responsive-workspace matrix-workspace h-full min-h-0 flex flex-col p-4 md:p-6 space-y-3 overflow-hidden">
       {/* Top Banner (shrink-0) */}
-      <div className="workspace-header bg-white p-3.5 md:p-4 rounded-2xl border border-[#E5E0DA] shadow-[var(--shadow-xs)] flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0 no-print">
+      <div className="workspace-header bg-[var(--color-surface)] p-3.5 md:p-4 rounded-2xl border border-[var(--color-border-default)] shadow-[var(--shadow-xs)] flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0 no-print">
         <div>
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full text-metadata font-semibold bg-[#FCF3F4] text-[#7A2938] border border-[#7A2938]/15 flex items-center gap-1">
+            <span className="px-2.5 py-0.5 rounded-full text-metadata font-semibold bg-[var(--color-brand-soft)] text-[var(--color-brand-text)] border border-[var(--color-brand-700)]/15 flex items-center gap-1">
               <Grid3X3 className="w-3.5 h-3.5" />
               Công văn 7991/BGDĐT-GDTrH
             </span>
-            <span className="text-metadata text-[#706A65] font-medium hidden sm:inline">Bảng Ma trận & Bản đặc tả môn Ngữ văn</span>
+            <span className="text-metadata text-[var(--color-text-secondary)] font-medium hidden sm:inline">Bảng Ma trận & Bản đặc tả môn Ngữ văn</span>
           </div>
-          <h1 className="text-section md:text-page-title font-semibold text-[#211E1C] mt-1 leading-[1.3]">
+          <h1 className="text-section md:text-page-title font-semibold text-[var(--color-text-strong)] mt-1 leading-[1.3]">
             Ma trận Đề kiểm tra Định kỳ 2 Chiều
           </h1>
         </div>
 
         {/* Tab Switcher & Actions */}
         <div className="flex flex-wrap items-center gap-2 shrink-0">
-          <div className="bg-[#F5F3F0] p-1 rounded-xl border border-[#E5E0DA] flex text-metadata font-semibold">
+          <div className="bg-[var(--color-surface-muted)] p-1 rounded-xl border border-[var(--color-border-default)] flex text-metadata font-semibold">
             <button
               onClick={() => setActiveMatrixTab('matrix_table')}
               className={`min-h-[36px] px-3.5 py-1 rounded-lg flex items-center gap-1.5 motion-surface ${
                 activeMatrixTab === 'matrix_table'
-                  ? 'bg-white text-[#211E1C] shadow-[var(--shadow-xs)]'
-                  : 'text-[#706A65] hover:text-[#211E1C]'
+                  ? 'bg-[var(--color-surface)] text-[var(--color-text-strong)] shadow-[var(--shadow-xs)]'
+                  : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-strong)]'
               }`}
             >
-              <Grid3X3 className={`w-3.5 h-3.5 ${activeMatrixTab === 'matrix_table' ? 'text-[#7A2938]' : 'text-[#706A65]'}`} />
+              <Grid3X3 className={`w-3.5 h-3.5 ${activeMatrixTab === 'matrix_table' ? 'text-[var(--color-brand-text)]' : 'text-[var(--color-text-secondary)]'}`} />
               <span>Khung Ma trận</span>
             </button>
             <button
               onClick={() => setActiveMatrixTab('spec_table')}
               className={`min-h-[36px] px-3.5 py-1 rounded-lg flex items-center gap-1.5 motion-surface ${
                 activeMatrixTab === 'spec_table'
-                  ? 'bg-white text-[#211E1C] shadow-[var(--shadow-xs)]'
-                  : 'text-[#706A65] hover:text-[#211E1C]'
+                  ? 'bg-[var(--color-surface)] text-[var(--color-text-strong)] shadow-[var(--shadow-xs)]'
+                  : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-strong)]'
               }`}
             >
-              <FileSpreadsheet className={`w-3.5 h-3.5 ${activeMatrixTab === 'spec_table' ? 'text-[#7A2938]' : 'text-[#706A65]'}`} />
+              <FileSpreadsheet className={`w-3.5 h-3.5 ${activeMatrixTab === 'spec_table' ? 'text-[var(--color-brand-text)]' : 'text-[var(--color-text-secondary)]'}`} />
               <span>Bản đặc tả YCCĐ</span>
             </button>
           </div>
@@ -191,7 +191,7 @@ export const MatrixView: React.FC<MatrixViewProps> = ({ exam, khbd }) => {
             onClick={() => window.print()}
             className="btn-secondary min-h-[36px] px-3.5 py-1.5 rounded-xl text-metadata font-semibold flex items-center gap-1.5"
           >
-            <Printer className="w-3.5 h-3.5 text-[#706A65]" />
+            <Printer className="w-3.5 h-3.5 text-[var(--color-text-secondary)]" />
             <span className="hidden sm:inline">In A4</span>
           </button>
         </div>
@@ -199,47 +199,47 @@ export const MatrixView: React.FC<MatrixViewProps> = ({ exam, khbd }) => {
 
       {/* Visual Percentage Distribution Ribbon (shrink-0) */}
       <div data-tour-id="matrix-summary" className="grid grid-cols-1 md:grid-cols-4 gap-3 shrink-0">
-        <div className="p-3 rounded-xl bg-white border border-[#E5E0DA] shadow-[var(--shadow-xs)]">
+        <div className="p-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-default)] shadow-[var(--shadow-xs)]">
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-metadata font-semibold text-[#302C29]">Mức 1: Nhận biết</span>
+            <span className="text-metadata font-semibold text-[var(--color-text-primary)]">Mức 1: Nhận biết</span>
             <span className="text-metadata font-semibold text-sky-800 bg-sky-50 border border-sky-200/60 px-2 py-0.5 rounded tabular-nums">
               {nbPercent}% ({nbPts.toFixed(1)} đ)
             </span>
           </div>
-          <div className="w-full bg-[#F5F3F0] h-1.5 rounded-full overflow-hidden mb-1.5">
+          <div className="w-full bg-[var(--color-surface-muted)] h-1.5 rounded-full overflow-hidden mb-1.5">
             <div className="bg-sky-600 h-full rounded-full motion-progress" style={{ width: `${Math.min(nbPercent, 100)}%` }}></div>
           </div>
-          <p className="text-xs text-[#706A65] leading-snug line-clamp-1 font-serif">
+          <p className="text-xs text-[var(--color-text-secondary)] leading-snug line-clamp-1 font-serif">
             Phần I: {partINB.length} câu · Phần II: {partIINB.length} câu
           </p>
         </div>
 
-        <div className="p-3 rounded-xl bg-white border border-[#E5E0DA] shadow-[var(--shadow-xs)]">
+        <div className="p-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-default)] shadow-[var(--shadow-xs)]">
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-metadata font-semibold text-[#302C29]">Mức 2: Thông hiểu</span>
+            <span className="text-metadata font-semibold text-[var(--color-text-primary)]">Mức 2: Thông hiểu</span>
             <span className="text-metadata font-semibold text-[#166534] bg-emerald-50 border border-emerald-200/60 px-2 py-0.5 rounded tabular-nums">
               {thPercent}% ({thPts.toFixed(1)} đ)
             </span>
           </div>
-          <div className="w-full bg-[#F5F3F0] h-1.5 rounded-full overflow-hidden mb-1.5">
+          <div className="w-full bg-[var(--color-surface-muted)] h-1.5 rounded-full overflow-hidden mb-1.5">
             <div className="bg-[#166534] h-full rounded-full motion-progress" style={{ width: `${Math.min(thPercent, 100)}%` }}></div>
           </div>
-          <p className="text-xs text-[#706A65] leading-snug line-clamp-1 font-serif">
+          <p className="text-xs text-[var(--color-text-secondary)] leading-snug line-clamp-1 font-serif">
             Phần I: {partITH.length} câu · Phần II: {partIITH.length} câu · Phần III: {partIIITH.length} câu
           </p>
         </div>
 
-        <div className="p-3 rounded-xl bg-white border border-[#E5E0DA] shadow-[var(--shadow-xs)]">
+        <div className="p-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-default)] shadow-[var(--shadow-xs)]">
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-metadata font-semibold text-[#302C29]">Mức 3: Vận dụng</span>
+            <span className="text-metadata font-semibold text-[var(--color-text-primary)]">Mức 3: Vận dụng</span>
             <span className="text-metadata font-semibold text-[#B45309] bg-amber-50 border border-amber-200/60 px-2 py-0.5 rounded tabular-nums">
               {vdPercent}% ({vdPts.toFixed(1)} đ)
             </span>
           </div>
-          <div className="w-full bg-[#F5F3F0] h-1.5 rounded-full overflow-hidden mb-1.5">
+          <div className="w-full bg-[var(--color-surface-muted)] h-1.5 rounded-full overflow-hidden mb-1.5">
             <div className="bg-[#B45309] h-full rounded-full motion-progress" style={{ width: `${Math.min(vdPercent, 100)}%` }}></div>
           </div>
-          <p className="text-xs text-[#706A65] leading-snug line-clamp-1 font-serif">
+          <p className="text-xs text-[var(--color-text-secondary)] leading-snug line-clamp-1 font-serif">
             Phần I/II/III ({partIVD.length + partIIVD.length + partIIIVD.length} câu) · Phần IV: {exam.partIV.length} câu
           </p>
         </div>
@@ -248,7 +248,7 @@ export const MatrixView: React.FC<MatrixViewProps> = ({ exam, khbd }) => {
           isMatched ? 'bg-emerald-50/60 border-emerald-200/80' : 'bg-amber-50/60 border-amber-200/80'
         }`}>
           <div className="flex items-center justify-between mb-1">
-            <span className="text-metadata font-semibold text-[#211E1C]">Chuẩn hóa Ma trận</span>
+            <span className="text-metadata font-semibold text-[var(--color-text-strong)]">Chuẩn hóa Ma trận</span>
             {isMatched ? (
               <span className="flex items-center gap-1 text-[11px] font-semibold text-[#166534] bg-emerald-100/70 px-2 py-0.5 rounded-full">
                 <CheckCircle2 className="w-3 h-3" /> Đạt 10.0 đ
@@ -259,7 +259,7 @@ export const MatrixView: React.FC<MatrixViewProps> = ({ exam, khbd }) => {
               </span>
             )}
           </div>
-          <div className="text-xs text-[#706A65] leading-tight">
+          <div className="text-xs text-[var(--color-text-secondary)] leading-tight">
             {isMatched 
               ? `Khớp tỉ lệ ${nbPercent}:${thPercent}:${vdPercent} (${totalQuestions} câu hỏi)`
               : `Chưa khớp chuẩn 10.0đ. Hiện có ${totalQuestions} câu (${grandTotalPts.toFixed(1)} đ).`}
@@ -268,84 +268,84 @@ export const MatrixView: React.FC<MatrixViewProps> = ({ exam, khbd }) => {
       </div>
 
       {/* Tabbed Table Container */}
-      <div data-tour-id="matrix-grid" className="flex-1 min-h-0 bg-white rounded-2xl border border-[#E5E0DA] p-4 shadow-[var(--shadow-xs)] overflow-auto table-scroll">
+      <div data-tour-id="matrix-grid" className="flex-1 min-h-0 bg-[var(--color-surface)] rounded-2xl border border-[var(--color-border-default)] p-4 shadow-[var(--shadow-xs)] overflow-auto table-scroll">
         {activeMatrixTab === 'matrix_table' ? (
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h3 className="font-semibold text-card-title text-[#211E1C] flex items-center gap-2">
-                <Grid3X3 className="w-4 h-4 text-[#7A2938]" />
+              <h3 className="font-semibold text-card-title text-[var(--color-text-strong)] flex items-center gap-2">
+                <Grid3X3 className="w-4 h-4 text-[var(--color-brand-text)]" />
                 Khung Ma trận Đề kiểm tra Định kỳ môn Ngữ văn (CV 7991)
               </h3>
-              <span className="text-metadata tabular-nums font-semibold text-[#706A65] bg-[#FAF9F7] border border-[#E5E0DA] px-2.5 py-0.5 rounded-lg">
+              <span className="text-metadata tabular-nums font-semibold text-[var(--color-text-secondary)] bg-[var(--color-surface-subtle)] border border-[var(--color-border-default)] px-2.5 py-0.5 rounded-lg">
                 Tổng: {grandTotalPts.toFixed(1)} đ · Tỉ lệ {nbPercent}:{thPercent}:{vdPercent}
               </span>
             </div>
 
-            <table className="w-full text-metadata border border-[#E5E0DA] rounded-xl overflow-hidden border-collapse">
+            <table className="w-full text-metadata border border-[var(--color-border-default)] rounded-xl overflow-hidden border-collapse">
               <thead>
-                <tr className="bg-[#FAF9F7] text-[#302C29] font-semibold border-b border-[#E5E0DA]">
-                  <th rowSpan={2} className="py-2.5 px-3 text-center border-r border-[#E5E0DA] w-12 sticky top-0 bg-[#FAF9F7] z-10">TT</th>
-                  <th rowSpan={2} className="py-2.5 px-4 text-left border-r border-[#E5E0DA] min-w-[180px] sticky top-0 bg-[#FAF9F7] z-10">
+                <tr className="bg-[var(--color-surface-subtle)] text-[var(--color-text-primary)] font-semibold border-b border-[var(--color-border-default)]">
+                  <th rowSpan={2} className="py-2.5 px-3 text-center border-r border-[var(--color-border-default)] w-12 sticky top-0 bg-[var(--color-surface-subtle)] z-10">TT</th>
+                  <th rowSpan={2} className="py-2.5 px-4 text-left border-r border-[var(--color-border-default)] min-w-[180px] sticky top-0 bg-[var(--color-surface-subtle)] z-10">
                     Kỹ năng & Ngữ liệu
                   </th>
-                  <th colSpan={3} className="py-2 px-3 text-center border-r border-[#E5E0DA] bg-sky-50/70 text-sky-950 sticky top-0 z-10">
+                  <th colSpan={3} className="py-2 px-3 text-center border-r border-[var(--color-border-default)] bg-sky-50/70 text-sky-950 sticky top-0 z-10">
                     Nhận biết ({nbPercent}%)
                   </th>
-                  <th colSpan={3} className="py-2 px-3 text-center border-r border-[#E5E0DA] bg-emerald-50/70 text-emerald-950 sticky top-0 z-10">
+                  <th colSpan={3} className="py-2 px-3 text-center border-r border-[var(--color-border-default)] bg-emerald-50/70 text-emerald-950 sticky top-0 z-10">
                     Thông hiểu ({thPercent}%)
                   </th>
-                  <th colSpan={3} className="py-2 px-3 text-center border-r border-[#E5E0DA] bg-amber-50/70 text-amber-950 sticky top-0 z-10">
+                  <th colSpan={3} className="py-2 px-3 text-center border-r border-[var(--color-border-default)] bg-amber-50/70 text-amber-950 sticky top-0 z-10">
                     Vận dụng ({vdPercent}%)
                   </th>
-                  <th rowSpan={2} className="py-2.5 px-3 text-center border-r border-[#E5E0DA] w-16 sticky top-0 bg-[#FAF9F7] z-10">Tổng câu</th>
-                  <th rowSpan={2} className="py-2.5 px-3 text-center border-r border-[#E5E0DA] w-16 sticky top-0 bg-[#FAF9F7] z-10">Tổng điểm</th>
-                  <th rowSpan={2} className="py-2.5 px-3 text-center w-16 sticky top-0 bg-[#FAF9F7] z-10">Tỉ lệ</th>
+                  <th rowSpan={2} className="py-2.5 px-3 text-center border-r border-[var(--color-border-default)] w-16 sticky top-0 bg-[var(--color-surface-subtle)] z-10">Tổng câu</th>
+                  <th rowSpan={2} className="py-2.5 px-3 text-center border-r border-[var(--color-border-default)] w-16 sticky top-0 bg-[var(--color-surface-subtle)] z-10">Tổng điểm</th>
+                  <th rowSpan={2} className="py-2.5 px-3 text-center w-16 sticky top-0 bg-[var(--color-surface-subtle)] z-10">Tỉ lệ</th>
                 </tr>
-                <tr className="bg-[#FAF9F7] text-metadata font-medium text-[#706A65] border-b border-[#E5E0DA]">
-                  <th className="py-1.5 px-2 text-center border-r border-[#E5E0DA] sticky top-[37px] bg-sky-50/80 z-10">Phần I</th>
-                  <th className="py-1.5 px-2 text-center border-r border-[#E5E0DA] sticky top-[37px] bg-sky-50/80 z-10">Phần II</th>
-                  <th className="py-1.5 px-2 text-center border-r border-[#E5E0DA] sticky top-[37px] bg-sky-50/80 z-10">Phần III</th>
-                  <th className="py-1.5 px-2 text-center border-r border-[#E5E0DA] sticky top-[37px] bg-emerald-50/80 z-10">Phần I</th>
-                  <th className="py-1.5 px-2 text-center border-r border-[#E5E0DA] sticky top-[37px] bg-emerald-50/80 z-10">Phần II</th>
-                  <th className="py-1.5 px-2 text-center border-r border-[#E5E0DA] sticky top-[37px] bg-emerald-50/80 z-10">Phần III</th>
-                  <th className="py-1.5 px-2 text-center border-r border-[#E5E0DA] sticky top-[37px] bg-amber-50/80 z-10">Phần II</th>
-                  <th className="py-1.5 px-2 text-center border-r border-[#E5E0DA] sticky top-[37px] bg-amber-50/80 z-10">Phần III</th>
-                  <th className="py-1.5 px-2 text-center border-r border-[#E5E0DA] sticky top-[37px] bg-amber-50/80 z-10">Phần IV (TL)</th>
+                <tr className="bg-[var(--color-surface-subtle)] text-metadata font-medium text-[var(--color-text-secondary)] border-b border-[var(--color-border-default)]">
+                  <th className="py-1.5 px-2 text-center border-r border-[var(--color-border-default)] sticky top-[37px] bg-sky-50/80 z-10">Phần I</th>
+                  <th className="py-1.5 px-2 text-center border-r border-[var(--color-border-default)] sticky top-[37px] bg-sky-50/80 z-10">Phần II</th>
+                  <th className="py-1.5 px-2 text-center border-r border-[var(--color-border-default)] sticky top-[37px] bg-sky-50/80 z-10">Phần III</th>
+                  <th className="py-1.5 px-2 text-center border-r border-[var(--color-border-default)] sticky top-[37px] bg-emerald-50/80 z-10">Phần I</th>
+                  <th className="py-1.5 px-2 text-center border-r border-[var(--color-border-default)] sticky top-[37px] bg-emerald-50/80 z-10">Phần II</th>
+                  <th className="py-1.5 px-2 text-center border-r border-[var(--color-border-default)] sticky top-[37px] bg-emerald-50/80 z-10">Phần III</th>
+                  <th className="py-1.5 px-2 text-center border-r border-[var(--color-border-default)] sticky top-[37px] bg-amber-50/80 z-10">Phần II</th>
+                  <th className="py-1.5 px-2 text-center border-r border-[var(--color-border-default)] sticky top-[37px] bg-amber-50/80 z-10">Phần III</th>
+                  <th className="py-1.5 px-2 text-center border-r border-[var(--color-border-default)] sticky top-[37px] bg-amber-50/80 z-10">Phần IV (TL)</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#EEEAE5] text-[#302C29]">
-                <tr className="hover:bg-[#FAF9F7] transition-colors">
-                  <td className="py-3 px-3 text-center font-semibold border-r border-[#E5E0DA] tabular-nums">1</td>
-                  <td className="py-3 px-4 font-medium text-[#211E1C] border-r border-[#E5E0DA] font-serif">
+              <tbody className="divide-y divide-[var(--color-border-subtle)] text-[var(--color-text-primary)]">
+                <tr className="hover:bg-[var(--color-surface-subtle)] transition-colors">
+                  <td className="py-3 px-3 text-center font-semibold border-r border-[var(--color-border-default)] tabular-nums">1</td>
+                  <td className="py-3 px-4 font-medium text-[var(--color-text-strong)] border-r border-[var(--color-border-default)] font-serif">
                     Đọc hiểu văn bản & Tiếng Việt ({khbd.info.lessonTitle})
                   </td>
-                  <td className="py-3 px-2 text-center border-r border-[#E5E0DA] tabular-nums">
+                  <td className="py-3 px-2 text-center border-r border-[var(--color-border-default)] tabular-nums">
                     {partINB.length > 0 ? `${partINB.length} câu (${(partINB.length * 0.25).toFixed(2)} đ)` : '-'}
                   </td>
-                  <td className="py-3 px-2 text-center border-r border-[#E5E0DA] tabular-nums">
+                  <td className="py-3 px-2 text-center border-r border-[var(--color-border-default)] tabular-nums">
                     {partIINB.length > 0 ? `${partIINB.length} câu (${(partIINB.length * 1.0).toFixed(1)} đ)` : '-'}
                   </td>
-                  <td className="py-3 px-2 text-center border-r border-[#E5E0DA] tabular-nums text-[#99918A]">-</td>
-                  <td className="py-3 px-2 text-center border-r border-[#E5E0DA] tabular-nums">
+                  <td className="py-3 px-2 text-center border-r border-[var(--color-border-default)] tabular-nums text-[var(--color-text-muted)]">-</td>
+                  <td className="py-3 px-2 text-center border-r border-[var(--color-border-default)] tabular-nums">
                     {partITH.length > 0 ? `${partITH.length} câu (${(partITH.length * 0.25).toFixed(2)} đ)` : '-'}
                   </td>
-                  <td className="py-3 px-2 text-center border-r border-[#E5E0DA] tabular-nums">
+                  <td className="py-3 px-2 text-center border-r border-[var(--color-border-default)] tabular-nums">
                     {partIITH.length > 0 ? `${partIITH.length} câu (${(partIITH.length * 1.0).toFixed(1)} đ)` : '-'}
                   </td>
-                  <td className="py-3 px-2 text-center border-r border-[#E5E0DA] tabular-nums">
+                  <td className="py-3 px-2 text-center border-r border-[var(--color-border-default)] tabular-nums">
                     {partIIITH.length > 0 ? `${partIIITH.length} câu (${(partIIITH.length * 0.5).toFixed(1)} đ)` : '-'}
                   </td>
-                  <td className="py-3 px-2 text-center border-r border-[#E5E0DA] tabular-nums">
+                  <td className="py-3 px-2 text-center border-r border-[var(--color-border-default)] tabular-nums">
                     {partIIVD.length > 0 ? `${partIIVD.length} câu (${(partIIVD.length * 1.0).toFixed(1)} đ)` : '-'}
                   </td>
-                  <td className="py-3 px-2 text-center border-r border-[#E5E0DA] tabular-nums">
+                  <td className="py-3 px-2 text-center border-r border-[var(--color-border-default)] tabular-nums">
                     {partIIIVD.length > 0 ? `${partIIIVD.length} câu (${(partIIIVD.length * 0.5).toFixed(1)} đ)` : '-'}
                   </td>
-                  <td className="py-3 px-2 text-center border-r border-[#E5E0DA] tabular-nums text-[#99918A]">-</td>
-                  <td className="py-3 px-3 text-center font-semibold border-r border-[#E5E0DA] tabular-nums">
+                  <td className="py-3 px-2 text-center border-r border-[var(--color-border-default)] tabular-nums text-[var(--color-text-muted)]">-</td>
+                  <td className="py-3 px-3 text-center font-semibold border-r border-[var(--color-border-default)] tabular-nums">
                     {exam.partI.length + exam.partII.length + exam.partIII.length} câu
                   </td>
-                  <td className="py-3 px-3 text-center font-semibold text-[#7A2938] border-r border-[#E5E0DA] tabular-nums">
+                  <td className="py-3 px-3 text-center font-semibold text-[var(--color-brand-text)] border-r border-[var(--color-border-default)] tabular-nums">
                     {(totalPartIPts + totalPartIIPts + totalPartIIIPts).toFixed(1)} đ
                   </td>
                   <td className="py-3 px-3 text-center font-semibold text-[#166534] tabular-nums">
@@ -353,26 +353,26 @@ export const MatrixView: React.FC<MatrixViewProps> = ({ exam, khbd }) => {
                   </td>
                 </tr>
 
-                <tr className="hover:bg-[#FAF9F7] transition-colors">
-                  <td className="py-3 px-3 text-center font-semibold border-r border-[#E5E0DA] tabular-nums">2</td>
-                  <td className="py-3 px-4 font-medium text-[#211E1C] border-r border-[#E5E0DA] font-serif">
+                <tr className="hover:bg-[var(--color-surface-subtle)] transition-colors">
+                  <td className="py-3 px-3 text-center font-semibold border-r border-[var(--color-border-default)] tabular-nums">2</td>
+                  <td className="py-3 px-4 font-medium text-[var(--color-text-strong)] border-r border-[var(--color-border-default)] font-serif">
                     Viết bài văn nghị luận (Phần IV Tự luận)
                   </td>
-                  <td className="py-3 px-2 text-center border-r border-[#E5E0DA] tabular-nums text-[#99918A]">-</td>
-                  <td className="py-3 px-2 text-center border-r border-[#E5E0DA] tabular-nums text-[#99918A]">-</td>
-                  <td className="py-3 px-2 text-center border-r border-[#E5E0DA] tabular-nums text-[#99918A]">-</td>
-                  <td className="py-3 px-2 text-center border-r border-[#E5E0DA] tabular-nums text-[#99918A]">-</td>
-                  <td className="py-3 px-2 text-center border-r border-[#E5E0DA] tabular-nums text-[#99918A]">-</td>
-                  <td className="py-3 px-2 text-center border-r border-[#E5E0DA] tabular-nums text-[#99918A]">-</td>
-                  <td className="py-3 px-2 text-center border-r border-[#E5E0DA] tabular-nums text-[#99918A]">-</td>
-                  <td className="py-3 px-2 text-center border-r border-[#E5E0DA] tabular-nums text-[#99918A]">-</td>
-                  <td className="py-3 px-2 text-center border-r border-[#E5E0DA] tabular-nums font-semibold text-[#B45309]">
+                  <td className="py-3 px-2 text-center border-r border-[var(--color-border-default)] tabular-nums text-[var(--color-text-muted)]">-</td>
+                  <td className="py-3 px-2 text-center border-r border-[var(--color-border-default)] tabular-nums text-[var(--color-text-muted)]">-</td>
+                  <td className="py-3 px-2 text-center border-r border-[var(--color-border-default)] tabular-nums text-[var(--color-text-muted)]">-</td>
+                  <td className="py-3 px-2 text-center border-r border-[var(--color-border-default)] tabular-nums text-[var(--color-text-muted)]">-</td>
+                  <td className="py-3 px-2 text-center border-r border-[var(--color-border-default)] tabular-nums text-[var(--color-text-muted)]">-</td>
+                  <td className="py-3 px-2 text-center border-r border-[var(--color-border-default)] tabular-nums text-[var(--color-text-muted)]">-</td>
+                  <td className="py-3 px-2 text-center border-r border-[var(--color-border-default)] tabular-nums text-[var(--color-text-muted)]">-</td>
+                  <td className="py-3 px-2 text-center border-r border-[var(--color-border-default)] tabular-nums text-[var(--color-text-muted)]">-</td>
+                  <td className="py-3 px-2 text-center border-r border-[var(--color-border-default)] tabular-nums font-semibold text-[#B45309]">
                     {exam.partIV.length} câu ({totalPartIVPts.toFixed(1)} đ)
                   </td>
-                  <td className="py-3 px-3 text-center font-semibold border-r border-[#E5E0DA] tabular-nums">
+                  <td className="py-3 px-3 text-center font-semibold border-r border-[var(--color-border-default)] tabular-nums">
                     {exam.partIV.length} câu
                   </td>
-                  <td className="py-3 px-3 text-center font-semibold text-[#7A2938] border-r border-[#E5E0DA] tabular-nums">
+                  <td className="py-3 px-3 text-center font-semibold text-[var(--color-brand-text)] border-r border-[var(--color-border-default)] tabular-nums">
                     {totalPartIVPts.toFixed(1)} đ
                   </td>
                   <td className="py-3 px-3 text-center font-semibold text-[#166534] tabular-nums">
@@ -380,23 +380,23 @@ export const MatrixView: React.FC<MatrixViewProps> = ({ exam, khbd }) => {
                   </td>
                 </tr>
 
-                <tr className="bg-[#FAF9F7] font-semibold text-[#211E1C]">
-                  <td colSpan={2} className="py-3 px-4 text-right border-r border-[#E5E0DA]">
+                <tr className="bg-[var(--color-surface-subtle)] font-semibold text-[var(--color-text-strong)]">
+                  <td colSpan={2} className="py-3 px-4 text-right border-r border-[var(--color-border-default)]">
                     Tổng hợp theo mức độ
                   </td>
-                  <td colSpan={3} className="py-3 px-3 text-center border-r border-[#E5E0DA] text-sky-800 tabular-nums">
+                  <td colSpan={3} className="py-3 px-3 text-center border-r border-[var(--color-border-default)] text-sky-800 tabular-nums">
                     {nbPts.toFixed(1)} đ ({nbPercent}%)
                   </td>
-                  <td colSpan={3} className="py-3 px-3 text-center border-r border-[#E5E0DA] text-[#166534] tabular-nums">
+                  <td colSpan={3} className="py-3 px-3 text-center border-r border-[var(--color-border-default)] text-[#166534] tabular-nums">
                     {thPts.toFixed(1)} đ ({thPercent}%)
                   </td>
-                  <td colSpan={3} className="py-3 px-3 text-center border-r border-[#E5E0DA] text-[#B45309] tabular-nums">
+                  <td colSpan={3} className="py-3 px-3 text-center border-r border-[var(--color-border-default)] text-[#B45309] tabular-nums">
                     {vdPts.toFixed(1)} đ ({vdPercent}%)
                   </td>
-                  <td className="py-3 px-3 text-center border-r border-[#E5E0DA] tabular-nums">
+                  <td className="py-3 px-3 text-center border-r border-[var(--color-border-default)] tabular-nums">
                     {totalQuestions} câu
                   </td>
-                  <td className="py-3 px-3 text-center text-[#7A2938] border-r border-[#E5E0DA] tabular-nums">
+                  <td className="py-3 px-3 text-center text-[var(--color-brand-text)] border-r border-[var(--color-border-default)] tabular-nums">
                     {grandTotalPts.toFixed(1)} đ
                   </td>
                   <td className="py-3 px-3 text-center text-[#166534] tabular-nums">100%</td>
@@ -406,26 +406,26 @@ export const MatrixView: React.FC<MatrixViewProps> = ({ exam, khbd }) => {
           </div>
         ) : (
           <div>
-            <h3 className="font-semibold text-card-title text-[#211E1C] mb-3 flex items-center gap-2">
-              <FileSpreadsheet className="w-4 h-4 text-[#7A2938]" />
+            <h3 className="font-semibold text-card-title text-[var(--color-text-strong)] mb-3 flex items-center gap-2">
+              <FileSpreadsheet className="w-4 h-4 text-[var(--color-brand-text)]" />
               Bản đặc tả Ma trận Đề kiểm tra Định kỳ môn Ngữ văn
             </h3>
-            <table className="w-full text-metadata border border-[#E5E0DA] rounded-xl border-collapse">
+            <table className="w-full text-metadata border border-[var(--color-border-default)] rounded-xl border-collapse">
               <thead>
-                <tr className="bg-[#FAF9F7] text-[#302C29] font-semibold border-b border-[#E5E0DA]">
-                  <th className="py-2.5 px-3 text-center w-12 border-r border-[#E5E0DA] sticky top-0 bg-[#FAF9F7] z-10">TT</th>
-                  <th className="py-2.5 px-4 text-left border-r border-[#E5E0DA] w-1/4 sticky top-0 bg-[#FAF9F7] z-10">Đơn vị kiến thức</th>
-                  <th className="py-2.5 px-4 text-left border-r border-[#E5E0DA] w-1/2 sticky top-0 bg-[#FAF9F7] z-10">Yêu cầu cần đạt (YCCĐ)</th>
-                  <th className="py-2.5 px-3 text-center w-1/4 sticky top-0 bg-[#FAF9F7] z-10">Vị trí trong đề</th>
+                <tr className="bg-[var(--color-surface-subtle)] text-[var(--color-text-primary)] font-semibold border-b border-[var(--color-border-default)]">
+                  <th className="py-2.5 px-3 text-center w-12 border-r border-[var(--color-border-default)] sticky top-0 bg-[var(--color-surface-subtle)] z-10">TT</th>
+                  <th className="py-2.5 px-4 text-left border-r border-[var(--color-border-default)] w-1/4 sticky top-0 bg-[var(--color-surface-subtle)] z-10">Đơn vị kiến thức</th>
+                  <th className="py-2.5 px-4 text-left border-r border-[var(--color-border-default)] w-1/2 sticky top-0 bg-[var(--color-surface-subtle)] z-10">Yêu cầu cần đạt (YCCĐ)</th>
+                  <th className="py-2.5 px-3 text-center w-1/4 sticky top-0 bg-[var(--color-surface-subtle)] z-10">Vị trí trong đề</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#EEEAE5] text-[#302C29]">
-                <tr className="hover:bg-[#FAF9F7] transition-colors">
-                  <td className="py-3 px-3 text-center font-semibold border-r border-[#E5E0DA] tabular-nums">1</td>
-                  <td className="py-3 px-4 font-medium text-[#211E1C] border-r border-[#E5E0DA] font-serif">
+              <tbody className="divide-y divide-[var(--color-border-subtle)] text-[var(--color-text-primary)]">
+                <tr className="hover:bg-[var(--color-surface-subtle)] transition-colors">
+                  <td className="py-3 px-3 text-center font-semibold border-r border-[var(--color-border-default)] tabular-nums">1</td>
+                  <td className="py-3 px-4 font-medium text-[var(--color-text-strong)] border-r border-[var(--color-border-default)] font-serif">
                     Đọc hiểu văn bản ({khbd.info.lessonTitle})
                   </td>
-                  <td className="py-3 px-4 border-r border-[#E5E0DA] leading-relaxed font-serif text-body-ui">
+                  <td className="py-3 px-4 border-r border-[var(--color-border-default)] leading-relaxed font-serif text-body-ui">
                     <p><strong>Nhận biết:</strong> Nhận diện thể loại, hoàn cảnh sáng tác, từ ngữ, hình ảnh, ngôi kể, điểm nhìn trần thuật và biện pháp tu từ.</p>
                     <p className="mt-1"><strong>Thông hiểu:</strong> Giải thích ý nghĩa hình tượng nghệ thuật, mối quan hệ giữa người kể chuyện và nhân vật, cảm hứng tư tưởng.</p>
                     <p className="mt-1"><strong>Vận dụng:</strong> Rút ra bài học nhân sinh, lý giải thông điệp thẩm mỹ và liên hệ thực tiễn đời sống.</p>
@@ -436,12 +436,12 @@ export const MatrixView: React.FC<MatrixViewProps> = ({ exam, khbd }) => {
                     Phần III (Câu 1 - {exam.partIII.length})
                   </td>
                 </tr>
-                <tr className="hover:bg-[#FAF9F7] transition-colors">
-                  <td className="py-3 px-3 text-center font-semibold border-r border-[#E5E0DA] tabular-nums">2</td>
-                  <td className="py-3 px-4 font-medium text-[#211E1C] border-r border-[#E5E0DA] font-serif">
+                <tr className="hover:bg-[var(--color-surface-subtle)] transition-colors">
+                  <td className="py-3 px-3 text-center font-semibold border-r border-[var(--color-border-default)] tabular-nums">2</td>
+                  <td className="py-3 px-4 font-medium text-[var(--color-text-strong)] border-r border-[var(--color-border-default)] font-serif">
                     Viết Nghị luận Văn học / Xã hội
                   </td>
-                  <td className="py-3 px-4 border-r border-[#E5E0DA] leading-relaxed font-serif text-body-ui">
+                  <td className="py-3 px-4 border-r border-[var(--color-border-default)] leading-relaxed font-serif text-body-ui">
                     <p><strong>Vận dụng:</strong> Viết bài văn nghị luận phân tích một đoạn trích / khía cạnh nội dung nghệ thuật của tác phẩm; kết hợp các thao tác lập luận, dẫn chứng thuyết phục và biểu cảm.</p>
                   </td>
                   <td className="py-3 px-3 text-center font-semibold text-[#B45309] tabular-nums">

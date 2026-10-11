@@ -67,7 +67,7 @@ export const TourPopover: React.FC<TourPopoverProps> = ({
       aria-modal="true"
       aria-labelledby="tour-popover-title"
       aria-describedby="tour-popover-description"
-      className="fixed z-[9995] w-[360px] max-w-[calc(100vw-32px)] bg-white border border-[#E5E0DA] rounded-2xl p-4 sm:p-5 shadow-[0_16px_40px_rgba(41,37,36,0.12),0_4px_12px_rgba(41,37,36,0.06)] text-[#302C29] select-none motion-surface"
+      className="fixed z-[9995] w-[360px] max-w-[calc(100vw-32px)] bg-[var(--color-surface)] border border-[var(--color-border-default)] rounded-2xl p-4 sm:p-5 shadow-[0_16px_40px_rgba(41,37,36,0.12),0_4px_12px_rgba(41,37,36,0.06)] text-[var(--color-text-primary)] select-none motion-surface"
       style={{
         left: `${x}px`,
         top: `${y}px`,
@@ -77,19 +77,19 @@ export const TourPopover: React.FC<TourPopoverProps> = ({
       }}
     >
       {/* Popover Header: Chapter, Step counter & Close/Stop */}
-      <div className="flex items-center justify-between pb-2 mb-2 border-b border-[#EEEAE5] gap-2">
+      <div className="flex items-center justify-between pb-2 mb-2 border-b border-[var(--color-border-subtle)] gap-2">
         <div className="flex items-center gap-1.5 min-w-0">
-          <span className="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-[#FCF3F4] text-[#7A2938] border border-[#7A2938]/15 truncate">
+          <span className="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-[var(--color-brand-soft)] text-[var(--color-brand-text)] border border-[var(--color-brand-700)]/15 truncate">
             {step.chapterTitle || step.chapter}
           </span>
-          <span className="text-[12px] font-medium text-[#706A65] shrink-0 tabular-nums">
+          <span className="text-[12px] font-medium text-[var(--color-text-secondary)] shrink-0 tabular-nums">
             Bước {currentStepIndex + 1} / {totalSteps}
           </span>
         </div>
 
         <button
           onClick={onStop}
-          className="p-1 text-[#99918A] hover:text-[#211E1C] hover:bg-[#FAF9F7] rounded-lg transition-colors shrink-0"
+          className="p-1 text-[var(--color-text-muted)] hover:text-[var(--color-text-strong)] hover:bg-[var(--color-surface-subtle)] rounded-lg transition-colors shrink-0"
           title="Dừng hướng dẫn"
           aria-label="Dừng hướng dẫn"
         >
@@ -101,26 +101,26 @@ export const TourPopover: React.FC<TourPopoverProps> = ({
       <div className="space-y-1.5 mb-4">
         <h3
           id="tour-popover-title"
-          className="font-sans font-semibold text-[16px] text-[#211E1C] leading-snug"
+          className="font-sans font-semibold text-[16px] text-[var(--color-text-strong)] leading-snug"
         >
           {step.title}
         </h3>
         <p
           id="tour-popover-description"
-          className="text-[14px] text-[#302C29] leading-[1.6]"
+          className="text-[14px] text-[var(--color-text-primary)] leading-[1.6]"
         >
           {step.description}
         </p>
       </div>
 
       {/* Popover Action Buttons */}
-      <div className="flex items-center justify-between pt-2 border-t border-[#EEEAE5] gap-2">
+      <div className="flex items-center justify-between pt-2 border-t border-[var(--color-border-subtle)] gap-2">
         {/* Left: Ghost Skip step */}
         <div>
           {!isLastStep && (
             <button
               onClick={onSkip}
-              className="text-xs font-medium text-[#706A65] hover:text-[#211E1C] hover:bg-[#FAF9F7] px-2 py-1.5 rounded-lg transition-colors"
+              className="text-xs font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-strong)] hover:bg-[var(--color-surface-subtle)] px-2 py-1.5 rounded-lg transition-colors"
               title="Bỏ qua bước này và đi tiếp bước sau"
             >
               Bỏ qua
@@ -133,7 +133,7 @@ export const TourPopover: React.FC<TourPopoverProps> = ({
           {!isFirstStep && (
             <button
               onClick={onBack}
-              className="px-3 py-1.5 text-xs font-semibold text-[#706A65] hover:text-[#211E1C] hover:bg-[#FAF9F7] border border-[#E5E0DA] rounded-xl transition-colors flex items-center gap-1"
+              className="px-3 py-1.5 text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-strong)] hover:bg-[var(--color-surface-subtle)] border border-[var(--color-border-default)] rounded-xl transition-colors flex items-center gap-1"
             >
               <ChevronLeft className="w-3.5 h-3.5" />
               <span>Quay lại</span>
@@ -143,7 +143,7 @@ export const TourPopover: React.FC<TourPopoverProps> = ({
           <button
             ref={nextButtonRef}
             onClick={onNext}
-            className="px-3.5 py-1.5 text-xs font-semibold bg-[#7A2938] hover:bg-[#68222E] text-white rounded-xl shadow-xs transition-colors flex items-center gap-1"
+            className="px-3.5 py-1.5 text-xs font-semibold bg-[var(--color-brand-700)] hover:bg-[var(--color-brand-800)] text-white rounded-xl shadow-xs transition-colors flex items-center gap-1"
           >
             {isLastStep ? (
               <>

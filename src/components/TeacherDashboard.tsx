@@ -664,15 +664,15 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="font-serif font-bold text-2xl md:text-[26px] text-[#211E1C] tracking-tight">
+            <h1 className="font-serif font-bold text-2xl md:text-[26px] text-[var(--color-text-strong)] tracking-tight">
               Bàn làm việc Giáo viên
             </h1>
             <Badge variant="burgundy" size="sm">
               GDPT 2018
             </Badge>
           </div>
-          <p className="text-body-ui text-[#706A65] mt-0.5">
-            Không gian thiết kế bài dạy & khảo thí chuyên sâu · <span className="font-medium text-[#211E1C]">{ownerProfile.fullName}</span> · {ownerProfile.role} ({ownerProfile.institution})
+          <p className="text-body-ui text-[var(--color-text-secondary)] mt-0.5">
+            Không gian thiết kế bài dạy & khảo thí chuyên sâu · <span className="font-medium text-[var(--color-text-strong)]">{ownerProfile.fullName}</span> · {ownerProfile.role} ({ownerProfile.institution})
           </p>
         </div>
 
@@ -694,11 +694,11 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 shrink-0">
         {/* Main Resume Card (7 / 12 cols) */}
         <section data-tour-id="dashboard-resume" className="lg:col-span-7 flex flex-col">
-          <div className="p-5 h-full flex flex-col justify-between relative overflow-hidden bg-gradient-to-br from-white via-white to-[#FCF6F7] border border-[#E5E0DA] rounded-2xl shadow-[var(--shadow-xs)]">
+          <div className="p-5 h-full flex flex-col justify-between relative overflow-hidden bg-gradient-to-br from-[var(--color-surface)] via-[var(--color-surface)] to-[var(--color-brand-25)] border border-[var(--color-border-default)] rounded-2xl shadow-[var(--shadow-xs)]">
             {/* Top metadata */}
             <div>
               <div className="flex items-center justify-between gap-2 mb-2.5">
-                <div className="flex items-center gap-1.5 text-xs font-semibold text-[#7A2938]">
+                <div className="flex items-center gap-1.5 text-xs font-semibold text-[var(--color-brand-text)]">
                   <Sparkles className="w-3.5 h-3.5" />
                   <span>Tác phẩm đang soạn thảo</span>
                 </div>
@@ -717,45 +717,45 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
 
               {/* Title & Author */}
               <div>
-                <h2 className="font-serif text-2xl font-bold text-[#211E1C] tracking-tight">
+                <h2 className="font-serif text-2xl font-bold text-[var(--color-text-strong)] tracking-tight">
                   {currentLesson.title}
                 </h2>
-                <p className="text-body-ui text-[#706A65] mt-1">
-                  Tác giả: <span className="font-medium text-[#211E1C]">{currentLesson.author}</span> · Thể loại:{' '}
-                  <span className="font-medium text-[#211E1C]">
+                <p className="text-body-ui text-[var(--color-text-secondary)] mt-1">
+                  Tác giả: <span className="font-medium text-[var(--color-text-strong)]">{currentLesson.author}</span> · Thể loại:{' '}
+                  <span className="font-medium text-[var(--color-text-strong)]">
                     {currentLesson.genre === 'poetry' ? 'Thơ trữ tình' : currentLesson.genre === 'story' ? 'Truyện ngắn hiện đại' : 'Văn chính luận'}
                   </span>
                 </p>
               </div>
 
               {/* Package Status Badges (KHBD, Slide, Exam) */}
-              <div className="grid grid-cols-3 gap-2.5 mt-4 pt-3.5 border-t border-[#EEEAE5]">
-                <div className="bg-[#FAF9F7] p-2.5 rounded-xl border border-[#EEEAE5] flex flex-col">
-                  <div className="flex items-center gap-1.5 text-[11px] text-[#706A65]">
-                    <FileCheck2 className="w-3.5 h-3.5 text-emerald-600" />
+              <div className="grid grid-cols-3 gap-2.5 mt-4 pt-3.5 border-t border-[var(--color-border-subtle)]">
+                <div className="bg-[var(--color-surface-subtle)] p-2.5 rounded-xl border border-[var(--color-border-subtle)] flex flex-col">
+                  <div className="flex items-center gap-1.5 text-[11px] text-[var(--color-text-secondary)]">
+                    <FileCheck2 className="w-3.5 h-3.5 text-[var(--color-status-success)]" />
                     <span>Giáo án 5512</span>
                   </div>
-                  <span className="text-[12px] font-semibold mt-1 text-emerald-700">
+                  <span className="text-[12px] font-semibold mt-1 text-[var(--color-status-success)]">
                     {currentLesson.khbdStatus === 'ready' ? 'Đã hoàn tất' : 'Đang soạn thảo'}
                   </span>
                 </div>
 
-                <div className="bg-[#FAF9F7] p-2.5 rounded-xl border border-[#EEEAE5] flex flex-col">
-                  <div className="flex items-center gap-1.5 text-[11px] text-[#706A65]">
-                    <Presentation className="w-3.5 h-3.5 text-[#1E40AF]" />
+                <div className="bg-[var(--color-surface-subtle)] p-2.5 rounded-xl border border-[var(--color-border-subtle)] flex flex-col">
+                  <div className="flex items-center gap-1.5 text-[11px] text-[var(--color-text-secondary)]">
+                    <Presentation className="w-3.5 h-3.5 text-[var(--color-status-info)]" />
                     <span>Slide bài giảng</span>
                   </div>
-                  <span className="text-[12px] font-semibold mt-1 text-[#1E40AF]">
+                  <span className="text-[12px] font-semibold mt-1 text-[var(--color-status-info)]">
                     {currentLesson.slideStatus === 'ready' ? 'Sẵn sàng dạy' : 'Bản thảo'}
                   </span>
                 </div>
 
-                <div className="bg-[#FAF9F7] p-2.5 rounded-xl border border-[#EEEAE5] flex flex-col">
-                  <div className="flex items-center gap-1.5 text-[11px] text-[#706A65]">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-[#7A2938]" />
+                <div className="bg-[var(--color-surface-subtle)] p-2.5 rounded-xl border border-[var(--color-border-subtle)] flex flex-col">
+                  <div className="flex items-center gap-1.5 text-[11px] text-[var(--color-text-secondary)]">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[var(--color-brand-text)]" />
                     <span>Đề & Ma trận</span>
                   </div>
-                  <span className="text-[12px] font-semibold mt-1 text-[#7A2938]">
+                  <span className="text-[12px] font-semibold mt-1 text-[var(--color-brand-text)]">
                     {currentLesson.examStatus === 'ready' ? 'Chuẩn hóa 7991' : 'Đang hoàn thiện'}
                   </span>
                 </div>
@@ -763,15 +763,15 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
             </div>
 
             {/* Bottom: Progress bar & Primary CTA Button */}
-            <div className="pt-4 mt-4 flex items-center justify-between gap-4 border-t border-[#EEEAE5]">
+            <div className="pt-4 mt-4 flex items-center justify-between gap-4 border-t border-[var(--color-border-subtle)]">
               <div className="flex-1 flex items-center gap-3">
-                <div className="flex-1 bg-[#F5F3F0] h-2 rounded-full overflow-hidden">
+                <div className="flex-1 bg-[var(--color-surface-muted)] h-2 rounded-full overflow-hidden">
                   <div 
-                    className="bg-[#7A2938] h-full rounded-full motion-progress"
+                    className="bg-[var(--color-brand-700)] h-full rounded-full motion-progress"
                     style={{ width: `${currentLesson.progress || 75}%` }}
                   />
                 </div>
-                <span className="text-xs font-semibold text-[#706A65] tabular-nums">
+                <span className="text-xs font-semibold text-[var(--color-text-secondary)] tabular-nums">
                   {currentLesson.progress || 75}% hoàn thiện
                 </span>
               </div>
@@ -797,24 +797,24 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                   key={qa.id}
                   onClick={qa.action}
                   className={`card-interactive p-3 text-left group flex flex-col justify-between min-h-[96px] rounded-xl motion-surface duration-[var(--motion-hover)] ${
-                    qa.isPrimary ? 'border-[#ECC2C9] bg-[#FCF3F4]/60 hover:bg-[#FCF3F4]' : 'bg-white'
+                    qa.isPrimary ? 'border-[var(--color-brand-200)] bg-[var(--color-brand-soft)]/60 hover:bg-[var(--color-brand-soft)]' : 'bg-[var(--color-surface)]'
                   }`}
                 >
                   <div className="flex items-center gap-2">
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors shrink-0 ${
                       qa.isPrimary 
-                        ? 'bg-[#7A2938] text-white' 
-                        : 'bg-[#FAF9F7] border border-[#EEEAE5] group-hover:bg-[#FCF3F4] text-[#706A65] group-hover:text-[#7A2938]'
+                        ? 'bg-[var(--color-brand-700)] text-white'
+                        : 'bg-[var(--color-surface-subtle)] border border-[var(--color-border-subtle)] group-hover:bg-[var(--color-brand-soft)] text-[var(--color-text-secondary)] group-hover:text-[var(--color-brand-text)]'
                     }`}>
                       <Icon className="w-4 h-4" strokeWidth={1.75} />
                     </div>
                     <h3 className={`text-[12.5px] font-semibold transition-colors truncate ${
-                      qa.isPrimary ? 'text-[#7A2938]' : 'text-[#211E1C] group-hover:text-[#7A2938]'
+                      qa.isPrimary ? 'text-[var(--color-brand-text)]' : 'text-[var(--color-text-strong)] group-hover:text-[var(--color-brand-text)]'
                     }`}>
                       {qa.title}
                     </h3>
                   </div>
-                  <p className="text-[11px] text-[#706A65] line-clamp-2 mt-1 leading-snug">
+                  <p className="text-[11px] text-[var(--color-text-secondary)] line-clamp-2 mt-1 leading-snug">
                     {qa.desc}
                   </p>
                 </button>
@@ -829,7 +829,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
         {/* Table Filter Bar (Screenshots 010, 025, 039) */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-2.5 shrink-0">
           <div className="flex items-center gap-2">
-            <h2 className="font-serif font-bold text-base text-[#211E1C]">
+            <h2 className="font-serif font-bold text-base text-[var(--color-text-strong)]">
               Danh mục bài học
             </h2>
             <Badge variant="stone" size="sm">
@@ -840,13 +840,13 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
           <div className="flex items-center gap-2">
             {/* Search input */}
             <div className="relative">
-              <Search className="w-3.5 h-3.5 text-[#99918A] absolute left-2.5 top-1/2 -translate-y-1/2" />
+              <Search className="w-3.5 h-3.5 text-[var(--color-text-muted)] absolute left-2.5 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Tìm tác phẩm, tác giả..."
-                className="pl-8 pr-3 py-1 text-xs border border-[#E5E0DA] rounded-lg bg-white focus:outline-none focus:border-[#7A2938] w-48 text-[#302C29]"
+                className="pl-8 pr-3 py-1 text-xs border border-[var(--color-border-default)] rounded-lg bg-[var(--color-surface)] focus:outline-none focus:border-[var(--color-brand-700)] w-48 text-[var(--color-text-primary)]"
               />
             </div>
 
@@ -854,7 +854,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
             <select
               value={selectedGenreFilter}
               onChange={(e) => setSelectedGenreFilter(e.target.value as any)}
-              className="py-1 px-2.5 text-xs border border-[#E5E0DA] rounded-lg bg-white focus:outline-none focus:border-[#7A2938] text-[#706A65]"
+              className="py-1 px-2.5 text-xs border border-[var(--color-border-default)] rounded-lg bg-[var(--color-surface)] focus:outline-none focus:border-[var(--color-brand-700)] text-[var(--color-text-secondary)]"
             >
               <option value="all">Tất cả thể loại</option>
               <option value="poetry">Thơ trữ tình</option>
@@ -865,7 +865,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
         </div>
 
         {/* Data Table Container */}
-        <div className="card-surface divide-y divide-[#EEEAE5] rounded-xl flex-1 min-h-0 overflow-y-auto">
+        <div className="card-surface divide-y divide-[var(--color-border-subtle)] rounded-xl flex-1 min-h-0 overflow-y-auto">
           {filteredLessons.map((lesson) => {
             const isSelected = lesson.id === currentLessonId;
             return (
@@ -875,21 +875,21 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                   onSelectLesson(lesson.id);
                   setActiveModule('workspace');
                 }}
-                className={`px-4 py-3 flex items-center justify-between gap-4 cursor-pointer hover:bg-[#FAF9F7] transition-colors relative ${
-                  isSelected ? 'bg-[#FCF3F4]/70 font-medium' : ''
+                className={`px-4 py-3 flex items-center justify-between gap-4 cursor-pointer hover:bg-[var(--color-surface-subtle)] transition-colors relative ${
+                  isSelected ? 'bg-[var(--color-brand-soft)]/70 font-medium' : ''
                 }`}
               >
                 {isSelected && (
-                  <span className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r bg-[#7A2938]" />
+                  <span className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r bg-[var(--color-brand-700)]" />
                 )}
                 <div className="min-w-0 flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg flex items-center justify-center font-serif font-bold text-xs shrink-0 bg-[#FAF9F7] border border-[#E5E0DA] text-[#706A65]">
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center font-serif font-bold text-xs shrink-0 bg-[var(--color-surface-subtle)] border border-[var(--color-border-default)] text-[var(--color-text-secondary)]">
                     {lesson.genre === 'poetry' ? 'Thơ' : lesson.genre === 'story' ? 'Tr' : 'NL'}
                   </div>
 
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
-                      <h3 className="font-serif text-sm font-semibold text-[#211E1C] truncate">
+                      <h3 className="font-serif text-sm font-semibold text-[var(--color-text-strong)] truncate">
                         {lesson.title}
                       </h3>
                       {isSelected && (
@@ -898,7 +898,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                         </Badge>
                       )}
                     </div>
-                    <div className="text-[12px] text-[#706A65] flex items-center gap-2 mt-0.5">
+                    <div className="text-[12px] text-[var(--color-text-secondary)] flex items-center gap-2 mt-0.5">
                       <span>{lesson.author}</span>
                       <span>·</span>
                       <span>{lesson.grade} ({lesson.textbook})</span>
@@ -909,7 +909,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                 </div>
 
                 <div className="flex items-center gap-3 shrink-0">
-                  <div className="hidden md:flex items-center gap-1.5 text-xs text-[#706A65]">
+                  <div className="hidden md:flex items-center gap-1.5 text-xs text-[var(--color-text-secondary)]">
                     <Badge variant={lesson.khbdStatus === 'ready' ? 'emerald' : 'amber'} size="sm">
                       KHBD
                     </Badge>
@@ -921,21 +921,21 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                     </Badge>
                   </div>
 
-                  <div className="w-16 bg-[#F5F3F0] h-1.5 rounded-full overflow-hidden hidden sm:block">
+                  <div className="w-16 bg-[var(--color-surface-muted)] h-1.5 rounded-full overflow-hidden hidden sm:block">
                     <div 
-                      className="bg-[#7A2938] h-full rounded-full" 
+                      className="bg-[var(--color-brand-700)] h-full rounded-full"
                       style={{ width: `${lesson.progress || 70}%` }}
                     />
                   </div>
 
-                  <ArrowRight className="w-4 h-4 text-[#99918A] group-hover:text-[#211E1C] transition-colors" />
+                  <ArrowRight className="w-4 h-4 text-[var(--color-text-muted)] group-hover:text-[var(--color-text-strong)] transition-colors" />
                 </div>
               </div>
             );
           })}
 
           {filteredLessons.length === 0 && (
-            <div className="py-8 text-center text-xs text-[#99918A] italic">
+            <div className="py-8 text-center text-xs text-[var(--color-text-muted)] italic">
               Không tìm thấy bài học nào phù hợp với bộ lọc.
             </div>
           )}
@@ -945,19 +945,19 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
       {/* 4. Modal Tạo bài dạy mới */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-[rgba(28,25,23,0.32)] backdrop-blur-[2px] flex items-center justify-center p-4 anim-modal-backdrop">
-          <div className="bg-white rounded-2xl border border-[#E5E0DA] max-w-2xl w-full p-6 shadow-[var(--shadow-lg)] space-y-4 max-h-[90vh] overflow-y-auto anim-modal-dialog">
-            <div className="flex items-center justify-between pb-3 border-b border-[#EEEAE5]">
+          <div className="bg-[var(--color-surface)] rounded-2xl border border-[var(--color-border-default)] max-w-2xl w-full p-6 shadow-[var(--shadow-lg)] space-y-4 max-h-[90vh] overflow-y-auto anim-modal-dialog">
+            <div className="flex items-center justify-between pb-3 border-b border-[var(--color-border-subtle)]">
               <div>
-                <h3 className="font-serif font-bold text-lg text-[#211E1C]">
+                <h3 className="font-serif font-bold text-lg text-[var(--color-text-strong)]">
                   Thiết lập Bài dạy Ngữ văn mới
                 </h3>
-                <p className="text-xs text-[#706A65] mt-0.5">
+                <p className="text-xs text-[var(--color-text-secondary)] mt-0.5">
                   Tự động đồng bộ sang KHBD 5512, Slide bài giảng, Ngân hàng câu hỏi và Đề 7991
                 </p>
               </div>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="text-[#99918A] hover:text-[#211E1C] p-1 rounded-lg transition-colors"
+                className="text-[var(--color-text-muted)] hover:text-[var(--color-text-strong)] p-1 rounded-lg transition-colors"
                 aria-label="Đóng hộp thoại"
               >
                 <X className="w-4 h-4" />
@@ -967,11 +967,11 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
             <form onSubmit={handleCreateSubmit} className="space-y-4 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label className="block font-medium text-[#706A65] mb-1">Khối lớp</label>
+                  <label className="block font-medium text-[var(--color-text-secondary)] mb-1">Khối lớp</label>
                   <select
                     value={formGrade}
                     onChange={(e) => setFormGrade(e.target.value as any)}
-                    className="w-full px-3 py-2 border border-[#E5E0DA] rounded-lg bg-white focus:outline-none focus:border-[#7A2938] text-[#211E1C]"
+                    className="w-full px-3 py-2 border border-[var(--color-border-default)] rounded-lg bg-[var(--color-surface)] focus:outline-none focus:border-[var(--color-brand-700)] text-[var(--color-text-strong)]"
                   >
                     <option value="Lớp 10">Lớp 10</option>
                     <option value="Lớp 11">Lớp 11</option>
@@ -979,11 +979,11 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                   </select>
                 </div>
                 <div>
-                  <label className="block font-medium text-[#706A65] mb-1">Bộ sách giáo khoa</label>
+                  <label className="block font-medium text-[var(--color-text-secondary)] mb-1">Bộ sách giáo khoa</label>
                   <select
                     value={formTextbook}
                     onChange={(e) => setFormTextbook(e.target.value as any)}
-                    className="w-full px-3 py-2 border border-[#E5E0DA] rounded-lg bg-white focus:outline-none focus:border-[#7A2938] text-[#211E1C]"
+                    className="w-full px-3 py-2 border border-[var(--color-border-default)] rounded-lg bg-[var(--color-surface)] focus:outline-none focus:border-[var(--color-brand-700)] text-[var(--color-text-strong)]"
                   >
                     <option value="Kết nối tri thức">Kết nối tri thức với cuộc sống</option>
                     <option value="Cánh diều">Cánh diều</option>
@@ -991,11 +991,11 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                   </select>
                 </div>
                 <div>
-                  <label className="block font-medium text-[#706A65] mb-1">Thể loại</label>
+                  <label className="block font-medium text-[var(--color-text-secondary)] mb-1">Thể loại</label>
                   <select
                     value={formGenre}
                     onChange={(e) => setFormGenre(e.target.value as any)}
-                    className="w-full px-3 py-2 border border-[#E5E0DA] rounded-lg bg-white focus:outline-none focus:border-[#7A2938] text-[#211E1C]"
+                    className="w-full px-3 py-2 border border-[var(--color-border-default)] rounded-lg bg-[var(--color-surface)] focus:outline-none focus:border-[var(--color-brand-700)] text-[var(--color-text-strong)]"
                   >
                     <option value="poetry">Thơ trữ tình</option>
                     <option value="story">Truyện ngắn hiện đại</option>
@@ -1006,7 +1006,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="sm:col-span-2">
-                  <label className="block font-medium text-[#706A65] mb-1">
+                  <label className="block font-medium text-[var(--color-text-secondary)] mb-1">
                     Tên tác phẩm / Bài học <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -1014,12 +1014,12 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                     value={formTitle}
                     onChange={(e) => setFormTitle(e.target.value)}
                     placeholder="VD: Tây Tiến, Vợ nhặt, Tuyên ngôn Độc lập..."
-                    className="w-full px-3 py-2 border border-[#E5E0DA] rounded-lg focus:outline-none focus:border-[#7A2938] text-[#211E1C]"
+                    className="w-full px-3 py-2 border border-[var(--color-border-default)] rounded-lg focus:outline-none focus:border-[var(--color-brand-700)] text-[var(--color-text-strong)]"
                   />
                   {formErrors.title && <p className="text-red-500 mt-1">{formErrors.title}</p>}
                 </div>
                 <div>
-                  <label className="block font-medium text-[#706A65] mb-1">
+                  <label className="block font-medium text-[var(--color-text-secondary)] mb-1">
                     Tác giả <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -1027,24 +1027,24 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                     value={formAuthor}
                     onChange={(e) => setFormAuthor(e.target.value)}
                     placeholder="VD: Quang Dũng, Kim Lân..."
-                    className="w-full px-3 py-2 border border-[#E5E0DA] rounded-lg focus:outline-none focus:border-[#7A2938] text-[#211E1C]"
+                    className="w-full px-3 py-2 border border-[var(--color-border-default)] rounded-lg focus:outline-none focus:border-[var(--color-brand-700)] text-[var(--color-text-strong)]"
                   />
                   {formErrors.author && <p className="text-red-500 mt-1">{formErrors.author}</p>}
                 </div>
               </div>
 
               <div>
-                <label className="block font-medium text-[#706A65] mb-1">Chủ đề bài học</label>
+                <label className="block font-medium text-[var(--color-text-secondary)] mb-1">Chủ đề bài học</label>
                 <input
                   type="text"
                   value={formTheme}
                   onChange={(e) => setFormTheme(e.target.value)}
-                  className="w-full px-3 py-2 border border-[#E5E0DA] rounded-lg focus:outline-none focus:border-[#7A2938] text-[#211E1C]"
+                  className="w-full px-3 py-2 border border-[var(--color-border-default)] rounded-lg focus:outline-none focus:border-[var(--color-brand-700)] text-[var(--color-text-strong)]"
                 />
               </div>
 
               <div>
-                <label className="block font-medium text-[#706A65] mb-1">
+                <label className="block font-medium text-[var(--color-text-secondary)] mb-1">
                   Yêu cầu cần đạt trọng tâm (YCCĐ) <span className="text-red-500">*</span>
                 </label>
                 <textarea
@@ -1052,13 +1052,13 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                   onChange={(e) => setFormObjectives(e.target.value)}
                   rows={2}
                   placeholder="Học sinh nhận biết và phân tích được đặc trưng thể loại, hình tượng trung tâm và tư tưởng thẩm mỹ..."
-                  className="w-full px-3 py-2 border border-[#E5E0DA] rounded-lg focus:outline-none focus:border-[#7A2938] text-[#211E1C]"
+                  className="w-full px-3 py-2 border border-[var(--color-border-default)] rounded-lg focus:outline-none focus:border-[var(--color-brand-700)] text-[var(--color-text-strong)]"
                 />
                 {formErrors.objectives && <p className="text-red-500 mt-1">{formErrors.objectives}</p>}
               </div>
 
               <div>
-                <label className="block font-medium text-[#706A65] mb-1">
+                <label className="block font-medium text-[var(--color-text-secondary)] mb-1">
                   Ngữ liệu tác phẩm (Trích đoạn hoặc toàn văn) <span className="text-red-500">*</span>
                 </label>
                 <textarea
@@ -1066,12 +1066,12 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                   onChange={(e) => setFormSourceText(e.target.value)}
                   rows={5}
                   placeholder="Dán toàn văn bài thơ hoặc đoạn trích truyện/nghị luận tại đây..."
-                  className="w-full px-3 py-2 border border-[#E5E0DA] rounded-lg font-serif text-sm focus:outline-none focus:border-[#7A2938] text-[#211E1C]"
+                  className="w-full px-3 py-2 border border-[var(--color-border-default)] rounded-lg font-serif text-sm focus:outline-none focus:border-[var(--color-brand-700)] text-[var(--color-text-strong)]"
                 />
                 {formErrors.sourceText && <p className="text-red-500 mt-1">{formErrors.sourceText}</p>}
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-3 border-t border-[#EEEAE5]">
+              <div className="flex items-center justify-end gap-2 pt-3 border-t border-[var(--color-border-subtle)]">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}

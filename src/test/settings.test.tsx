@@ -126,7 +126,7 @@ describe('Personal Workspace Center & Settings Engine', () => {
       applyWorkspaceSettingsToDom(customSettings);
 
       const root = document.documentElement;
-      expect(root.dataset.theme).toBe('dark');
+      expect(root.dataset.theme).toBe('light'); // The selected surface determines the visible mode.
       expect(root.style.getPropertyValue('--color-brand-700')).toBe('#18352B');
       expect(root.style.getPropertyValue('--font-ui')).toContain('Be Vietnam Pro');
       expect(root.style.getPropertyValue('--font-literary')).toContain('Lora');

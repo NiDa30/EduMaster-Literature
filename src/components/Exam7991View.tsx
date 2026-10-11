@@ -214,29 +214,29 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
   return (
     <div className="responsive-workspace exam-workspace h-full min-h-0 flex flex-col p-4 md:p-6 space-y-3 overflow-hidden">
       {/* Top Banner & Control Bar */}
-      <div className="workspace-header bg-white p-3.5 md:p-4 rounded-2xl border border-stone-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0 no-print">
+      <div className="workspace-header bg-[var(--color-surface)] p-3.5 md:p-4 rounded-2xl border border-stone-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0 no-print">
         <div>
           <div className="flex items-center gap-2">
             <span className="px-2.5 py-0.5 rounded-full text-metadata font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1">
               <Award className="w-3.5 h-3.5" />
               Công văn 7991/BGDĐT-GDTrH (17/12/2024)
             </span>
-            <span className="text-metadata text-stone-500 font-medium hidden sm:inline">Cấu trúc 4 phần · Barem 10.0 điểm</span>
+            <span className="text-metadata text-[var(--color-text-secondary)] font-medium hidden sm:inline">Cấu trúc 4 phần · Barem 10.0 điểm</span>
           </div>
-          <h1 className="text-section md:text-page-title font-semibold text-stone-900 mt-1 leading-[1.3]">
+          <h1 className="text-section md:text-page-title font-semibold text-[var(--color-text-strong)] mt-1 leading-[1.3]">
             Đề kiểm tra Định kỳ Ngữ văn & Hướng dẫn Chấm
           </h1>
         </div>
 
         {/* View Switcher & Action buttons */}
         <div className="flex items-center gap-2 shrink-0">
-          <div className="bg-stone-100 p-1 rounded-xl border border-stone-200 flex text-metadata font-semibold">
+          <div className="bg-[var(--color-surface-muted)] p-1 rounded-xl border border-stone-200 flex text-metadata font-semibold">
             <button
               onClick={() => setViewMode('exam_paper')}
               className={`min-h-[36px] px-3 py-1 rounded-lg flex items-center gap-1.5 transition ${
                 viewMode === 'exam_paper'
-                  ? 'bg-white text-stone-900 shadow-xs'
-                  : 'text-stone-600 hover:text-stone-900'
+                  ? 'bg-[var(--color-surface)] text-[var(--color-text-strong)] shadow-xs'
+                  : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-strong)]'
               }`}
             >
               <FileText className="w-3.5 h-3.5" />
@@ -246,8 +246,8 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
               onClick={() => setViewMode('marking_guide')}
               className={`min-h-[36px] px-3 py-1 rounded-lg flex items-center gap-1.5 transition ${
                 viewMode === 'marking_guide'
-                  ? 'bg-white text-stone-900 shadow-xs'
-                  : 'text-stone-600 hover:text-stone-900'
+                  ? 'bg-[var(--color-surface)] text-[var(--color-text-strong)] shadow-xs'
+                  : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-strong)]'
               }`}
             >
               <CheckSquare className="w-3.5 h-3.5 text-emerald-600" />
@@ -259,7 +259,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
           <div className="relative">
             <button
               onClick={() => setIsExportDropdownOpen(!isExportDropdownOpen)}
-              className="btn-primary min-h-[36px] px-3.5 py-1.5 bg-[#7A2938] hover:bg-[#68232F] text-white rounded-xl text-metadata font-semibold flex items-center gap-1.5 shadow-sm transition"
+              className="btn-primary min-h-[36px] px-3.5 py-1.5 bg-[var(--color-brand-700)] hover:bg-[var(--color-brand-800)] text-white rounded-xl text-metadata font-semibold flex items-center gap-1.5 shadow-sm transition"
             >
               <Download className="w-3.5 h-3.5" />
               <span>Xuất Word (.docx)</span>
@@ -267,19 +267,19 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
             </button>
 
             {isExportDropdownOpen && (
-              <div className="absolute right-0 mt-1 w-64 bg-white border border-stone-200 rounded-xl shadow-lg py-1 z-50 anim-dropdown">
+              <div className="absolute right-0 mt-1 w-64 bg-[var(--color-surface)] border border-stone-200 rounded-xl shadow-lg py-1 z-50 anim-dropdown">
                 <button
                   onClick={() => {
                     exportDocxExam(exam, khbd);
                     setIsExportDropdownOpen(false);
                     showToast('Đang tải file Word (.docx) chuẩn OpenXML...');
                   }}
-                  className="w-full text-left px-3 py-2 text-body-ui text-stone-900 hover:bg-stone-50 flex items-center gap-2 font-medium"
+                  className="w-full text-left px-3 py-2 text-body-ui text-[var(--color-text-strong)] hover:bg-[var(--color-surface-subtle)] flex items-center gap-2 font-medium"
                 >
-                  <FileText className="w-4 h-4 text-[#7A2938]" />
+                  <FileText className="w-4 h-4 text-[var(--color-brand-text)]" />
                   <div>
                     <div>Xuất Word (.docx) — Khuyên dùng</div>
-                    <div className="text-[11px] text-stone-500">Chuẩn OpenXML A4, bảng biểu rõ ràng</div>
+                    <div className="text-[11px] text-[var(--color-text-secondary)]">Chuẩn OpenXML A4, bảng biểu rõ ràng</div>
                   </div>
                 </button>
                 <button
@@ -287,12 +287,12 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                     exportWordExam7991(exam, khbd);
                     setIsExportDropdownOpen(false);
                   }}
-                  className="w-full text-left px-3 py-2 text-body-ui text-stone-700 hover:bg-stone-50 flex items-center gap-2"
+                  className="w-full text-left px-3 py-2 text-body-ui text-[var(--color-text-primary)] hover:bg-[var(--color-surface-subtle)] flex items-center gap-2"
                 >
-                  <FileText className="w-4 h-4 text-stone-400" />
+                  <FileText className="w-4 h-4 text-[var(--color-text-muted)]" />
                   <div>
                     <div>Xuất Word (.doc cũ)</div>
-                    <div className="text-[11px] text-stone-500">Định dạng HTML Blob tương thích cũ</div>
+                    <div className="text-[11px] text-[var(--color-text-secondary)]">Định dạng HTML Blob tương thích cũ</div>
                   </div>
                 </button>
               </div>
@@ -301,7 +301,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
 
           <button
             onClick={() => window.print()}
-            className="btn-secondary min-h-[36px] px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 border border-stone-300 rounded-xl text-metadata font-semibold flex items-center gap-1.5 transition"
+            className="btn-secondary min-h-[36px] px-3 py-1.5 bg-[var(--color-surface-muted)] hover:bg-[var(--color-border-default)] text-[var(--color-text-primary)] border border-stone-300 rounded-xl text-metadata font-semibold flex items-center gap-1.5 transition"
           >
             <Printer className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">In A4</span>
@@ -315,7 +315,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
         <div className="exam-navigation w-64 xl:w-72 shrink-0 flex flex-col gap-3 overflow-hidden no-print">
           {/* Navigation Card */}
           <div data-tour-id="exam-validation" className="card-surface p-3.5 flex flex-col gap-2 shrink-0">
-            <div className="flex items-center justify-between text-metadata font-semibold text-stone-700 pb-1 border-b border-stone-100">
+            <div className="flex items-center justify-between text-metadata font-semibold text-[var(--color-text-primary)] pb-1 border-b border-stone-100">
               <span>Cấu trúc đề kiểm tra</span>
               <span className="px-2 py-0.5 rounded bg-stone-900 text-amber-300 font-bold tabular-nums">
                 {grandTotal.toFixed(1)} / 10.0 đ
@@ -327,13 +327,13 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                 onClick={() => setSelectedPart('all')}
                 className={`w-full text-left p-2.5 rounded-xl border motion-surface duration-[var(--motion-hover)] flex items-center justify-between text-metadata ${
                   selectedPart === 'all'
-                    ? 'bg-[#FCF3F4] text-[#7A2938] border-[#ECC2C9] font-semibold shadow-xs'
-                    : 'bg-white text-[#706A65] border-[#E5E0DA] hover:bg-[#FAF9F7] hover:text-[#211E1C]'
+                    ? 'bg-[var(--color-brand-soft)] text-[var(--color-brand-text)] border-[var(--color-brand-200)] font-semibold shadow-xs'
+                    : 'bg-[var(--color-surface)] text-[var(--color-text-secondary)] border-[var(--color-border-default)] hover:bg-[var(--color-surface-subtle)] hover:text-[var(--color-text-strong)]'
                 }`}
               >
                 <span>Tất cả các phần</span>
                 <span className={`tabular-nums px-1.5 py-0.5 rounded text-xs font-semibold ${
-                  selectedPart === 'all' ? 'bg-[#7A2938] text-white' : 'bg-[#F5F3F0] text-[#706A65]'
+                  selectedPart === 'all' ? 'bg-[var(--color-brand-700)] text-white' : 'bg-[var(--color-surface-muted)] text-[var(--color-text-secondary)]'
                 }`}>
                   {grandTotal.toFixed(1)} đ
                 </span>
@@ -343,23 +343,23 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                 onClick={() => setSelectedPart('partI')}
                 className={`w-full text-left p-2.5 rounded-xl border motion-surface duration-[var(--motion-hover)] flex items-center justify-between text-metadata ${
                   selectedPart === 'partI'
-                    ? 'bg-[#FCF3F4] text-[#7A2938] border-[#ECC2C9] font-semibold shadow-xs'
-                    : 'bg-white text-[#706A65] border-[#E5E0DA] hover:bg-[#FAF9F7] hover:text-[#211E1C]'
+                    ? 'bg-[var(--color-brand-soft)] text-[var(--color-brand-text)] border-[var(--color-brand-200)] font-semibold shadow-xs'
+                    : 'bg-[var(--color-surface)] text-[var(--color-text-secondary)] border-[var(--color-border-default)] hover:bg-[var(--color-surface-subtle)] hover:text-[var(--color-text-strong)]'
                 }`}
               >
                 <div>
                   <div className="font-medium">Phần I: TN Nhiều lựa chọn</div>
-                  <div className="text-xs text-[#99918A] tabular-nums">{exam.partI.length} câu (0.25 đ/câu)</div>
+                  <div className="text-xs text-[var(--color-text-muted)] tabular-nums">{exam.partI.length} câu (0.25 đ/câu)</div>
                 </div>
-                <span className="tabular-nums font-semibold text-[#302C29]">{totalPartIPoints.toFixed(1)} đ</span>
+                <span className="tabular-nums font-semibold text-[var(--color-text-primary)]">{totalPartIPoints.toFixed(1)} đ</span>
               </button>
 
               <button
                 onClick={() => setSelectedPart('partII')}
                 className={`w-full text-left p-2.5 rounded-xl border motion-surface duration-[var(--motion-hover)] flex items-center justify-between text-metadata ${
                   selectedPart === 'partII'
-                    ? 'bg-[#FCF3F4] text-[#7A2938] border-[#ECC2C9] font-semibold shadow-xs'
-                    : 'bg-white text-[#706A65] border-[#E5E0DA] hover:bg-[#FAF9F7] hover:text-[#211E1C]'
+                    ? 'bg-[var(--color-brand-soft)] text-[var(--color-brand-text)] border-[var(--color-brand-200)] font-semibold shadow-xs'
+                    : 'bg-[var(--color-surface)] text-[var(--color-text-secondary)] border-[var(--color-border-default)] hover:bg-[var(--color-surface-subtle)] hover:text-[var(--color-text-strong)]'
                 }`}
               >
                 <div>
@@ -367,54 +367,54 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                     <span>Phần II: Đúng / Sai</span>
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
                   </div>
-                  <div className="text-xs text-[#99918A] tabular-nums">{exam.partII.length} câu (4 lệnh a-b-c-d)</div>
+                  <div className="text-xs text-[var(--color-text-muted)] tabular-nums">{exam.partII.length} câu (4 lệnh a-b-c-d)</div>
                 </div>
-                <span className="tabular-nums font-semibold text-[#302C29]">{totalPartIIPoints.toFixed(1)} đ</span>
+                <span className="tabular-nums font-semibold text-[var(--color-text-primary)]">{totalPartIIPoints.toFixed(1)} đ</span>
               </button>
 
               <button
                 onClick={() => setSelectedPart('partIII')}
                 className={`w-full text-left p-2.5 rounded-xl border motion-surface duration-[var(--motion-hover)] flex items-center justify-between text-metadata ${
                   selectedPart === 'partIII'
-                    ? 'bg-[#FCF3F4] text-[#7A2938] border-[#ECC2C9] font-semibold shadow-xs'
-                    : 'bg-white text-[#706A65] border-[#E5E0DA] hover:bg-[#FAF9F7] hover:text-[#211E1C]'
+                    ? 'bg-[var(--color-brand-soft)] text-[var(--color-brand-text)] border-[var(--color-brand-200)] font-semibold shadow-xs'
+                    : 'bg-[var(--color-surface)] text-[var(--color-text-secondary)] border-[var(--color-border-default)] hover:bg-[var(--color-surface-subtle)] hover:text-[var(--color-text-strong)]'
                 }`}
               >
                 <div>
                   <div className="font-medium">Phần III: Trả lời ngắn</div>
-                  <div className="text-xs text-[#99918A] tabular-nums">{exam.partIII.length} câu (0.5 đ/câu)</div>
+                  <div className="text-xs text-[var(--color-text-muted)] tabular-nums">{exam.partIII.length} câu (0.5 đ/câu)</div>
                 </div>
-                <span className="tabular-nums font-semibold text-[#302C29]">{totalPartIIIPoints.toFixed(1)} đ</span>
+                <span className="tabular-nums font-semibold text-[var(--color-text-primary)]">{totalPartIIIPoints.toFixed(1)} đ</span>
               </button>
 
               <button
                 onClick={() => setSelectedPart('partIV')}
                 className={`w-full text-left p-2.5 rounded-xl border motion-surface duration-[var(--motion-hover)] flex items-center justify-between text-metadata ${
                   selectedPart === 'partIV'
-                    ? 'bg-[#FCF3F4] text-[#7A2938] border-[#ECC2C9] font-semibold shadow-xs'
-                    : 'bg-white text-[#706A65] border-[#E5E0DA] hover:bg-[#FAF9F7] hover:text-[#211E1C]'
+                    ? 'bg-[var(--color-brand-soft)] text-[var(--color-brand-text)] border-[var(--color-brand-200)] font-semibold shadow-xs'
+                    : 'bg-[var(--color-surface)] text-[var(--color-text-secondary)] border-[var(--color-border-default)] hover:bg-[var(--color-surface-subtle)] hover:text-[var(--color-text-strong)]'
                 }`}
               >
                 <div>
                   <div className="font-medium">Phần IV: Tự luận</div>
-                  <div className="text-xs text-[#99918A] tabular-nums">{exam.partIV.length} câu nghị luận</div>
+                  <div className="text-xs text-[var(--color-text-muted)] tabular-nums">{exam.partIV.length} câu nghị luận</div>
                 </div>
-                <span className="tabular-nums font-semibold text-[#302C29]">{totalPartIVPoints.toFixed(1)} đ</span>
+                <span className="tabular-nums font-semibold text-[var(--color-text-primary)]">{totalPartIVPoints.toFixed(1)} đ</span>
               </button>
             </div>
           </div>
 
           {/* Part II Simulator */}
           <div className="card-surface p-3.5 flex-1 min-h-0 flex flex-col gap-2 overflow-y-auto panel-scroll">
-            <span className="text-metadata font-semibold text-stone-700">Mô phỏng chấm Phần II:</span>
+            <span className="text-metadata font-semibold text-[var(--color-text-primary)]">Mô phỏng chấm Phần II:</span>
             {exam.partII.map((q, qIdx) => {
               const currentScore = calculatePartIIScore(qIdx);
               const userAns = simulatedAnswers[q.id] || { a: false, b: false, c: false, d: false };
 
               return (
-                <div key={q.id} className="p-2.5 rounded-xl border border-stone-200 bg-stone-50/50 space-y-2 text-xs">
+                <div key={q.id} className="p-2.5 rounded-xl border border-stone-200 bg-[var(--color-surface-subtle)]/50 space-y-2 text-xs">
                   <div className="flex items-center justify-between font-medium">
-                    <span className="text-stone-800">{q.code || `Câu ${qIdx + 1}`}</span>
+                    <span className="text-[var(--color-text-strong)]">{q.code || `Câu ${qIdx + 1}`}</span>
                     <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-900 font-bold tabular-nums">
                       {currentScore.toFixed(2)} đ
                     </span>
@@ -437,7 +437,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                           className={`p-1 rounded text-center font-semibold transition border ${
                             isSimTrue
                               ? 'bg-emerald-600 text-white border-emerald-600'
-                              : 'bg-white text-stone-600 border-stone-200 hover:bg-stone-100'
+                              : 'bg-[var(--color-surface)] text-[var(--color-text-secondary)] border-stone-200 hover:bg-[var(--color-surface-muted)]'
                           }`}
                         >
                           {key.toUpperCase()}: {isSimTrue ? 'Đ' : 'S'}
@@ -453,25 +453,25 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
 
         {/* Right Column: Scrollable Exam Paper Document */}
         <div data-tour-id="exam-builder" className="exam-document min-w-0 flex-1 min-h-0 overflow-y-auto panel-scroll pr-1">
-          <div className="bg-white rounded-2xl border border-stone-300 p-8 md:p-12 shadow-md max-w-4xl mx-auto text-stone-900">
+          <div className="bg-[var(--color-surface)] rounded-2xl border border-stone-300 p-8 md:p-12 shadow-md max-w-4xl mx-auto text-[var(--color-text-strong)]">
             {/* Exam Header */}
             <div className="grid grid-cols-2 gap-4 pb-6 border-b border-stone-300">
               <div className="text-center font-serif text-metadata">
-                <p className="uppercase text-stone-700 tracking-normal">{khbd.info.department}</p>
-                <p className="font-semibold uppercase text-stone-900 tracking-normal">{khbd.info.school}</p>
-                <p className="font-semibold text-[#7A2938] mt-1 tabular-nums">{exam.examHeader.examCode}</p>
+                <p className="uppercase text-[var(--color-text-primary)] tracking-normal">{khbd.info.department}</p>
+                <p className="font-semibold uppercase text-[var(--color-text-strong)] tracking-normal">{khbd.info.school}</p>
+                <p className="font-semibold text-[var(--color-brand-text)] mt-1 tabular-nums">{exam.examHeader.examCode}</p>
               </div>
               <div className="text-center font-serif text-metadata">
-                <p className="font-semibold uppercase text-stone-900 tracking-normal">{exam.examHeader.title}</p>
-                <p className="font-semibold text-stone-800 font-serif">Môn: {khbd.info.subject} - {khbd.info.grade}</p>
-                <p className="italic text-metadata text-stone-500 mt-1 tabular-nums">Thời gian làm bài: {exam.examHeader.duration}</p>
+                <p className="font-semibold uppercase text-[var(--color-text-strong)] tracking-normal">{exam.examHeader.title}</p>
+                <p className="font-semibold text-[var(--color-text-strong)] font-serif">Môn: {khbd.info.subject} - {khbd.info.grade}</p>
+                <p className="italic text-metadata text-[var(--color-text-secondary)] mt-1 tabular-nums">Thời gian làm bài: {exam.examHeader.duration}</p>
               </div>
             </div>
 
             {/* Reading Passage */}
             {exam.passageRef && (
-              <div className="my-6 p-4 rounded-xl bg-[#FAF8F5] border-l-4 border-l-[#7A2938] border border-stone-200 font-serif text-body-ui leading-[1.8] text-stone-900 whitespace-pre-line max-w-[760px]">
-                <strong className="font-sans font-semibold text-stone-700 block mb-1 text-metadata">Ngữ liệu đọc hiểu:</strong>
+              <div className="my-6 p-4 rounded-xl bg-[var(--color-canvas)] border-l-4 border-l-[var(--color-brand-700)] border border-stone-200 font-serif text-body-ui leading-[1.8] text-[var(--color-text-strong)] whitespace-pre-line max-w-[760px]">
+                <strong className="font-sans font-semibold text-[var(--color-text-primary)] block mb-1 text-metadata">Ngữ liệu đọc hiểu:</strong>
                 {exam.passageRef}
               </div>
             )}
@@ -479,12 +479,12 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
             {/* ----------------- PHẦN I ----------------- */}
             {(selectedPart === 'all' || selectedPart === 'partI') && (
               <section className="mt-4 mb-8">
-                <div className="bg-[#FAF9F7] p-3 rounded-xl border border-[#E5E0DA] mb-4 flex items-center justify-between">
-                  <h2 className="font-semibold text-card-title text-[#211E1C] uppercase font-serif tracking-normal">
+                <div className="bg-[var(--color-surface-subtle)] p-3 rounded-xl border border-[var(--color-border-default)] mb-4 flex items-center justify-between">
+                  <h2 className="font-semibold text-card-title text-[var(--color-text-strong)] uppercase font-serif tracking-normal">
                     PHẦN I. CÂU TRẮC NGHIỆM NHIỀU PHƯƠNG ÁN LỰA CHỌN ({totalPartIPoints.toFixed(1)} ĐIỂM)
                   </h2>
                   <div className="flex items-center gap-2">
-                    <span className="text-metadata font-medium px-2.5 py-0.5 bg-[#F5F3F0] text-[#706A65] rounded tabular-nums">
+                    <span className="text-metadata font-medium px-2.5 py-0.5 bg-[var(--color-surface-muted)] text-[var(--color-text-secondary)] rounded tabular-nums">
                       {exam.partI.length} câu
                     </span>
                     <button
@@ -496,25 +496,25 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                     </button>
                   </div>
                 </div>
-                <p className="text-metadata italic text-[#706A65] mb-4">
+                <p className="text-metadata italic text-[var(--color-text-secondary)] mb-4">
                   Thí sinh trả lời từ câu 1 đến câu {exam.partI.length}. Mỗi câu đúng được 0.25 điểm.
                 </p>
 
                 <div className="space-y-4">
                   {exam.partI.map((q, idx) => (
-                    <div key={q.id} className="p-4 rounded-xl bg-white border border-[#E5E0DA] hover:border-[#D6D0C8] shadow-[var(--shadow-xs)] relative group motion-surface duration-[var(--motion-hover)]">
+                    <div key={q.id} className="p-4 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-default)] hover:border-[var(--color-border-strong)] shadow-[var(--shadow-xs)] relative group motion-surface duration-[var(--motion-hover)]">
                       <div className="flex flex-col sm:flex-row items-start justify-between gap-2 mb-2">
-                        <p className="text-body-ui text-[#211E1C] font-medium">
-                          <span className="font-semibold text-[#7A2938] tabular-nums">{q.code || `Câu ${idx + 1}`}: </span>
+                        <p className="text-body-ui text-[var(--color-text-strong)] font-medium">
+                          <span className="font-semibold text-[var(--color-brand-text)] tabular-nums">{q.code || `Câu ${idx + 1}`}: </span>
                           {q.question}
                         </p>
                         <div className="flex items-center gap-1.5 shrink-0">
-                          <span className="text-metadata font-medium px-2 py-0.5 rounded bg-[#F5F3F0] text-[#706A65]">
+                          <span className="text-metadata font-medium px-2 py-0.5 rounded bg-[var(--color-surface-muted)] text-[var(--color-text-secondary)]">
                             {q.level === 'NB' ? 'Nhận biết' : 'Thông hiểu'}
                           </span>
                           <button
                             onClick={() => setEditingQuestion({ part: 'partI', data: { ...q } })}
-                            className="p-1 text-[#99918A] hover:text-[#211E1C] rounded hover:bg-[#FAF9F7] transition"
+                            className="p-1 text-[var(--color-text-muted)] hover:text-[var(--color-text-strong)] rounded hover:bg-[var(--color-surface-subtle)] transition"
                             title="Sửa câu hỏi"
                           >
                             <Edit3 className="w-3.5 h-3.5" />
@@ -522,7 +522,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                           {exam.partI.length > 1 && (
                             <button
                               onClick={() => handleDeletePartI(q.id)}
-                              className="p-1 text-[#99918A] hover:text-[#991B1B] rounded hover:bg-[#FEF2F2] transition"
+                              className="p-1 text-[var(--color-text-muted)] hover:text-[#991B1B] rounded hover:bg-[#FEF2F2] transition"
                               title="Xóa câu hỏi"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -541,10 +541,10 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                               className={`p-2.5 min-h-[38px] rounded-lg border flex items-start gap-1.5 transition-colors ${
                                 showKeyAnswer && isCorrectAnswer
                                   ? 'bg-[#F0FDF4] border-[#BBF7D0] font-semibold text-[#166534]'
-                                  : 'bg-[#FAF9F7] border-[#EEEAE5] text-[#302C29]'
+                                  : 'bg-[var(--color-surface-subtle)] border-[var(--color-border-subtle)] text-[var(--color-text-primary)]'
                               }`}
                             >
-                              <span className="font-semibold text-[#706A65] tabular-nums">{key}.</span>
+                              <span className="font-semibold text-[var(--color-text-secondary)] tabular-nums">{key}.</span>
                               <span className="leading-snug">{q.options[key]}</span>
                             </div>
                           );
@@ -552,7 +552,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                       </div>
 
                       {viewMode === 'marking_guide' && q.explanation && (
-                        <div className="mt-2.5 pt-2 border-t border-[#EEEAE5] text-metadata text-[#706A65] flex items-start gap-1.5">
+                        <div className="mt-2.5 pt-2 border-t border-[var(--color-border-subtle)] text-metadata text-[var(--color-text-secondary)] flex items-start gap-1.5">
                           <span className="font-semibold text-emerald-800">Giải thích đáp án:</span>
                           <span>{q.explanation}</span>
                         </div>
@@ -566,12 +566,12 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
             {/* ----------------- PHẦN II ----------------- */}
             {(selectedPart === 'all' || selectedPart === 'partII') && (
               <section className="mb-8">
-                <div className="bg-[#FAF9F7] p-3 rounded-xl border border-[#E5E0DA] mb-4 flex items-center justify-between">
-                  <h2 className="font-semibold text-card-title text-[#211E1C] uppercase font-serif tracking-normal">
+                <div className="bg-[var(--color-surface-subtle)] p-3 rounded-xl border border-[var(--color-border-default)] mb-4 flex items-center justify-between">
+                  <h2 className="font-semibold text-card-title text-[var(--color-text-strong)] uppercase font-serif tracking-normal">
                     PHẦN II. CÂU TRẮC NGHIỆM ĐÚNG / SAI ({totalPartIIPoints.toFixed(1)} ĐIỂM)
                   </h2>
                   <div className="flex items-center gap-2">
-                    <span className="text-metadata font-medium px-2.5 py-0.5 bg-[#F5F3F0] text-[#706A65] rounded tabular-nums">
+                    <span className="text-metadata font-medium px-2.5 py-0.5 bg-[var(--color-surface-muted)] text-[var(--color-text-secondary)] rounded tabular-nums">
                       {exam.partII.length} câu
                     </span>
                     <button
@@ -583,22 +583,22 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                     </button>
                   </div>
                 </div>
-                <p className="text-metadata italic text-[#706A65] mb-4">
+                <p className="text-metadata italic text-[var(--color-text-secondary)] mb-4">
                   Thí sinh trả lời từ câu 1 đến câu {exam.partII.length}. Trong mỗi ý a), b), c), d), chọn đúng hoặc sai. (1 ý: 0.1đ | 2 ý: 0.25đ | 3 ý: 0.5đ | 4 ý: 1.0đ)
                 </p>
 
                 <div className="space-y-6">
                   {exam.partII.map((q, idx) => (
-                    <div key={q.id} className="p-4 rounded-xl bg-stone-50/60 border border-stone-200">
+                    <div key={q.id} className="p-4 rounded-xl bg-[var(--color-surface-subtle)]/60 border border-stone-200">
                       <div className="flex flex-col sm:flex-row items-start justify-between gap-2 mb-2">
-                        <p className="text-body-ui text-stone-900 font-medium leading-relaxed font-serif">
+                        <p className="text-body-ui text-[var(--color-text-strong)] font-medium leading-relaxed font-serif">
                           <span className="font-semibold text-emerald-900 tabular-nums">{q.code || `Câu ${idx + 1}`}: </span>
                           {q.stem}
                         </p>
                         <div className="flex items-center gap-1 shrink-0">
                           <button
                             onClick={() => setEditingQuestion({ part: 'partII', data: { ...q } })}
-                            className="p-1 text-stone-400 hover:text-stone-800 rounded hover:bg-stone-200 transition"
+                            className="p-1 text-[var(--color-text-muted)] hover:text-[var(--color-text-strong)] rounded hover:bg-[var(--color-border-default)] transition"
                             title="Sửa câu hỏi"
                           >
                             <Edit3 className="w-3.5 h-3.5" />
@@ -606,7 +606,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                           {exam.partII.length > 1 && (
                             <button
                               onClick={() => handleDeletePartII(q.id)}
-                              className="p-1 text-stone-400 hover:text-red-600 rounded hover:bg-red-50 transition"
+                              className="p-1 text-[var(--color-text-muted)] hover:text-red-600 rounded hover:bg-red-50 transition"
                               title="Xóa câu hỏi"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -616,9 +616,9 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                       </div>
 
                       <div className="overflow-x-auto">
-                        <table className="w-full text-body-ui border border-stone-300 rounded-lg overflow-hidden bg-white">
+                        <table className="w-full text-body-ui border border-stone-300 rounded-lg overflow-hidden bg-[var(--color-surface)]">
                           <thead>
-                            <tr className="bg-stone-100/70 border-b border-stone-300 text-metadata text-stone-700">
+                            <tr className="bg-[var(--color-surface-muted)]/70 border-b border-stone-300 text-metadata text-[var(--color-text-primary)]">
                               <th className="py-2 px-3 text-center w-12">Lệnh</th>
                               <th className="py-2 px-3 text-left">Phát biểu khẳng định</th>
                               <th className="py-2 px-3 text-center w-20">Đúng</th>
@@ -627,9 +627,9 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                           </thead>
                           <tbody className="divide-y divide-stone-200">
                             {q.statements.map((st) => (
-                              <tr key={st.subId} className="hover:bg-stone-50/50">
-                                <td className="py-2.5 px-3 text-center font-bold text-stone-800 tabular-nums">{st.subId})</td>
-                                <td className="py-2.5 px-3 text-stone-800 leading-snug">{st.text}</td>
+                              <tr key={st.subId} className="hover:bg-[var(--color-surface-subtle)]/50">
+                                <td className="py-2.5 px-3 text-center font-bold text-[var(--color-text-strong)] tabular-nums">{st.subId})</td>
+                                <td className="py-2.5 px-3 text-[var(--color-text-strong)] leading-snug">{st.text}</td>
                                 <td className="py-2.5 px-3 text-center">
                                   {viewMode === 'marking_guide' && st.isCorrect && (
                                     <span className="font-bold text-emerald-600">✓ ĐÚNG</span>
@@ -654,12 +654,12 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
             {/* ----------------- PHẦN III ----------------- */}
             {(selectedPart === 'all' || selectedPart === 'partIII') && (
               <section className="mb-8">
-                <div className="bg-[#FAF9F7] p-3 rounded-xl border border-[#E5E0DA] mb-4 flex items-center justify-between">
-                  <h2 className="font-semibold text-card-title text-[#211E1C] uppercase font-serif tracking-normal">
+                <div className="bg-[var(--color-surface-subtle)] p-3 rounded-xl border border-[var(--color-border-default)] mb-4 flex items-center justify-between">
+                  <h2 className="font-semibold text-card-title text-[var(--color-text-strong)] uppercase font-serif tracking-normal">
                     PHẦN III. CÂU TRẮC NGHIỆM TRẢ LỜI NGẮN ({totalPartIIIPoints.toFixed(1)} ĐIỂM)
                   </h2>
                   <div className="flex items-center gap-2">
-                    <span className="text-metadata font-medium px-2.5 py-0.5 bg-[#F5F3F0] text-[#706A65] rounded tabular-nums">
+                    <span className="text-metadata font-medium px-2.5 py-0.5 bg-[var(--color-surface-muted)] text-[var(--color-text-secondary)] rounded tabular-nums">
                       {exam.partIII.length} câu
                     </span>
                     <button
@@ -674,19 +674,19 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
 
                 <div className="space-y-4">
                   {exam.partIII.map((q, idx) => (
-                    <div key={q.id} className="p-4 rounded-xl bg-white border border-[#E5E0DA] hover:border-[#D6D0C8] shadow-[var(--shadow-xs)] motion-surface duration-[var(--motion-hover)]">
+                    <div key={q.id} className="p-4 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-default)] hover:border-[var(--color-border-strong)] shadow-[var(--shadow-xs)] motion-surface duration-[var(--motion-hover)]">
                       <div className="flex flex-col sm:flex-row items-start justify-between gap-2 mb-2">
-                        <p className="text-body-ui font-medium text-[#211E1C]">
-                          <span className="font-semibold text-[#7A2938] tabular-nums">{q.code || `Câu ${idx + 1}`}: </span>
+                        <p className="text-body-ui font-medium text-[var(--color-text-strong)]">
+                          <span className="font-semibold text-[var(--color-brand-text)] tabular-nums">{q.code || `Câu ${idx + 1}`}: </span>
                           {q.question}
                         </p>
                         <div className="flex items-center gap-1.5 shrink-0">
-                          <span className="text-metadata font-semibold px-2 py-0.5 rounded bg-[#F5F3F0] text-[#706A65] tabular-nums">
+                          <span className="text-metadata font-semibold px-2 py-0.5 rounded bg-[var(--color-surface-muted)] text-[var(--color-text-secondary)] tabular-nums">
                             {q.points || 0.5} đ
                           </span>
                           <button
                             onClick={() => setEditingQuestion({ part: 'partIII', data: { ...q } })}
-                            className="p-1 text-[#99918A] hover:text-[#211E1C] rounded hover:bg-[#FAF9F7] transition"
+                            className="p-1 text-[var(--color-text-muted)] hover:text-[var(--color-text-strong)] rounded hover:bg-[var(--color-surface-subtle)] transition"
                             title="Sửa câu hỏi"
                           >
                             <Edit3 className="w-3.5 h-3.5" />
@@ -694,7 +694,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                           {exam.partIII.length > 1 && (
                             <button
                               onClick={() => handleDeletePartIII(q.id)}
-                              className="p-1 text-[#99918A] hover:text-[#991B1B] rounded hover:bg-[#FEF2F2] transition"
+                              className="p-1 text-[var(--color-text-muted)] hover:text-[#991B1B] rounded hover:bg-[#FEF2F2] transition"
                               title="Xóa câu hỏi"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -704,20 +704,20 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                       </div>
 
                       {viewMode === 'marking_guide' ? (
-                        <div className="mt-2 p-2.5 bg-[#FAF9F7] rounded-lg border border-[#EEEAE5] text-metadata">
-                          <div className="font-semibold text-[#211E1C] flex items-center gap-1.5">
+                        <div className="mt-2 p-2.5 bg-[var(--color-surface-subtle)] rounded-lg border border-[var(--color-border-subtle)] text-metadata">
+                          <div className="font-semibold text-[var(--color-text-strong)] flex items-center gap-1.5">
                             <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                             <span>Đáp án chuẩn: <span className="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-serif">{q.correctAnswer}</span></span>
                           </div>
-                          {q.explanation && <p className="text-[#706A65] mt-1 leading-relaxed">{q.explanation}</p>}
+                          {q.explanation && <p className="text-[var(--color-text-secondary)] mt-1 leading-relaxed">{q.explanation}</p>}
                         </div>
                       ) : (
                         <div className="mt-2 flex items-center gap-2">
-                          <span className="text-metadata text-[#706A65] font-medium">Trả lời:</span>
+                          <span className="text-metadata text-[var(--color-text-secondary)] font-medium">Trả lời:</span>
                           <input
                             type="text"
                             placeholder="Ghi câu trả lời ngắn..."
-                            className="min-h-[38px] px-3 py-1.5 bg-white border border-[#E5E0DA] rounded-lg text-body-ui w-64 font-serif text-[#211E1C] focus:border-[#7A2938]"
+                            className="min-h-[38px] px-3 py-1.5 bg-[var(--color-surface)] border border-[var(--color-border-default)] rounded-lg text-body-ui w-64 font-serif text-[var(--color-text-strong)] focus:border-[var(--color-brand-700)]"
                           />
                         </div>
                       )}
@@ -730,12 +730,12 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
             {/* ----------------- PHẦN IV ----------------- */}
             {(selectedPart === 'all' || selectedPart === 'partIV') && (
               <section className="mb-6">
-                <div className="bg-[#FAF9F7] p-3 rounded-xl border border-[#E5E0DA] mb-4 flex items-center justify-between">
-                  <h2 className="font-semibold text-card-title text-[#211E1C] uppercase font-serif tracking-normal">
+                <div className="bg-[var(--color-surface-subtle)] p-3 rounded-xl border border-[var(--color-border-default)] mb-4 flex items-center justify-between">
+                  <h2 className="font-semibold text-card-title text-[var(--color-text-strong)] uppercase font-serif tracking-normal">
                     PHẦN IV. TỰ LUẬN NGHỊ LUẬN VĂN HỌC ({totalPartIVPoints.toFixed(1)} ĐIỂM)
                   </h2>
                   <div className="flex items-center gap-2">
-                    <span className="text-metadata font-medium px-2.5 py-0.5 bg-[#F5F3F0] text-[#706A65] rounded tabular-nums">
+                    <span className="text-metadata font-medium px-2.5 py-0.5 bg-[var(--color-surface-muted)] text-[var(--color-text-secondary)] rounded tabular-nums">
                       {exam.partIV.length} câu
                     </span>
                     <button
@@ -750,16 +750,16 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
 
                 <div className="space-y-4">
                   {exam.partIV.map((q, idx) => (
-                    <div key={q.id} className="p-5 rounded-2xl bg-white border border-[#E5E0DA] hover:border-[#D6D0C8] shadow-[var(--shadow-xs)] motion-surface duration-[var(--motion-hover)]">
+                    <div key={q.id} className="p-5 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border-default)] hover:border-[var(--color-border-strong)] shadow-[var(--shadow-xs)] motion-surface duration-[var(--motion-hover)]">
                       <div className="flex flex-col sm:flex-row items-start justify-between gap-2 mb-2">
-                        <p className="text-body-ui font-medium text-stone-900 leading-[1.8] font-serif">
+                        <p className="text-body-ui font-medium text-[var(--color-text-strong)] leading-[1.8] font-serif">
                           <span className="font-semibold text-amber-900 tabular-nums">{q.code || `Câu ${idx + 1}`}: </span>
                           {q.question}
                         </p>
                         <div className="flex items-center gap-1 shrink-0">
                           <button
                             onClick={() => setEditingQuestion({ part: 'partIV', data: { ...q } })}
-                            className="p-1 text-stone-400 hover:text-stone-800 rounded hover:bg-stone-200 transition"
+                            className="p-1 text-[var(--color-text-muted)] hover:text-[var(--color-text-strong)] rounded hover:bg-[var(--color-border-default)] transition"
                             title="Sửa câu hỏi"
                           >
                             <Edit3 className="w-3.5 h-3.5" />
@@ -767,7 +767,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                           {exam.partIV.length > 1 && (
                             <button
                               onClick={() => handleDeletePartIV(q.id)}
-                              className="p-1 text-stone-400 hover:text-red-600 rounded hover:bg-red-50 transition"
+                              className="p-1 text-[var(--color-text-muted)] hover:text-red-600 rounded hover:bg-red-50 transition"
                               title="Xóa câu hỏi"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -781,7 +781,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                           <h4 className="text-metadata font-semibold text-amber-900 uppercase mb-2 tracking-normal">
                             Hướng dẫn chấm & Barem điểm chi tiết:
                           </h4>
-                          <table className="w-full text-metadata border border-stone-300 rounded-lg overflow-hidden bg-white">
+                          <table className="w-full text-metadata border border-stone-300 rounded-lg overflow-hidden bg-[var(--color-surface)]">
                             <thead>
                               <tr className="bg-amber-100/60 font-semibold border-b border-stone-300">
                                 <th className="py-2 px-3 text-left w-4/5">Tiêu chí phân tích</th>
@@ -791,7 +791,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                             <tbody className="divide-y divide-stone-200">
                               {q.rubric.map((r, rIdx) => (
                                 <tr key={rIdx}>
-                                  <td className="py-2 px-3 text-stone-800 leading-relaxed font-serif text-body-ui">{r.step}</td>
+                                  <td className="py-2 px-3 text-[var(--color-text-strong)] leading-relaxed font-serif text-body-ui">{r.step}</td>
                                   <td className="py-2 px-3 text-center font-semibold text-amber-800 tabular-nums">{r.points} đ</td>
                                 </tr>
                               ))}
@@ -807,8 +807,8 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
 
             {/* Footer */}
             <div className="text-center pt-8 border-t border-stone-200">
-              <p className="font-semibold text-stone-800 text-body-ui">---------- HẾT ----------</p>
-              <p className="text-metadata italic text-stone-500 mt-1">Cán bộ coi thi không giải thích gì thêm.</p>
+              <p className="font-semibold text-[var(--color-text-strong)] text-body-ui">---------- HẾT ----------</p>
+              <p className="text-metadata italic text-[var(--color-text-secondary)] mt-1">Cán bộ coi thi không giải thích gì thêm.</p>
             </div>
           </div>
         </div>
@@ -817,7 +817,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
         <div className="w-64 xl:w-72 shrink-0 hidden 2xl:flex flex-col gap-3 overflow-hidden no-print">
           <div className="card-surface p-4 flex flex-col gap-3 shrink-0">
             <div className="flex items-center justify-between pb-2 border-b border-stone-100">
-              <span className="font-serif font-bold text-sm text-stone-800">Thống kê Đề 7991</span>
+              <span className="font-serif font-bold text-sm text-[var(--color-text-strong)]">Thống kê Đề 7991</span>
               <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${
                 Math.abs(grandTotal - 10.0) < 0.05 
                   ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' 
@@ -828,15 +828,15 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
             </div>
 
             <div className="grid grid-cols-2 gap-2 text-xs">
-              <div className="p-2.5 rounded-xl bg-stone-50 border border-stone-200/80">
-                <span className="text-stone-500 block text-[11px]">Tổng số câu</span>
-                <span className="text-base font-bold font-serif text-stone-900 tabular-nums">
+              <div className="p-2.5 rounded-xl bg-[var(--color-surface-subtle)] border border-stone-200/80">
+                <span className="text-[var(--color-text-secondary)] block text-[11px]">Tổng số câu</span>
+                <span className="text-base font-bold font-serif text-[var(--color-text-strong)] tabular-nums">
                   {exam.partI.length + exam.partII.length + exam.partIII.length + exam.partIV.length} câu
                 </span>
               </div>
-              <div className="p-2.5 rounded-xl bg-stone-50 border border-stone-200/80">
-                <span className="text-stone-500 block text-[11px]">Thời lượng</span>
-                <span className="text-base font-bold font-serif text-stone-900">
+              <div className="p-2.5 rounded-xl bg-[var(--color-surface-subtle)] border border-stone-200/80">
+                <span className="text-[var(--color-text-secondary)] block text-[11px]">Thời lượng</span>
+                <span className="text-base font-bold font-serif text-[var(--color-text-strong)]">
                   {exam.timeLimit || '90 phút'}
                 </span>
               </div>
@@ -844,19 +844,19 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
 
             {/* Phân bổ Mức độ nhận thức */}
             <div className="space-y-2 pt-1 border-t border-stone-100 text-xs">
-              <span className="font-medium text-stone-700 block text-[11px] uppercase tracking-wider">
+              <span className="font-medium text-[var(--color-text-primary)] block text-[11px] uppercase tracking-wider">
                 Phân bổ Mức độ nhận thức
               </span>
 
               <div className="space-y-1.5">
                 <div>
-                  <div className="flex justify-between text-stone-600 mb-0.5 text-[11px]">
+                  <div className="flex justify-between text-[var(--color-text-secondary)] mb-0.5 text-[11px]">
                     <span>Nhận biết (NB)</span>
                     <span className="font-semibold text-blue-700 tabular-nums">
                       {((exam.partI.filter(q => q.level === 'NB').length * 0.25) + (exam.partII.filter(q => q.level === 'NB').length * 1.0)).toFixed(1)} đ
                     </span>
                   </div>
-                  <div className="w-full bg-stone-100 h-1.5 rounded-full overflow-hidden">
+                  <div className="w-full bg-[var(--color-surface-muted)] h-1.5 rounded-full overflow-hidden">
                     <div 
                       className="bg-blue-600 h-full rounded-full" 
                       style={{ width: `${Math.min(100, Math.round(((exam.partI.filter(q => q.level === 'NB').length * 0.25) + (exam.partII.filter(q => q.level === 'NB').length * 1.0)) / (grandTotal || 1) * 100))}%` }} 
@@ -865,13 +865,13 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                 </div>
 
                 <div>
-                  <div className="flex justify-between text-stone-600 mb-0.5 text-[11px]">
+                  <div className="flex justify-between text-[var(--color-text-secondary)] mb-0.5 text-[11px]">
                     <span>Thông hiểu (TH)</span>
                     <span className="font-semibold text-emerald-700 tabular-nums">
                       {((exam.partI.filter(q => q.level === 'TH').length * 0.25) + (exam.partII.filter(q => q.level === 'TH').length * 1.0) + (exam.partIII.filter(q => q.level === 'TH').length * 0.5)).toFixed(1)} đ
                     </span>
                   </div>
-                  <div className="w-full bg-stone-100 h-1.5 rounded-full overflow-hidden">
+                  <div className="w-full bg-[var(--color-surface-muted)] h-1.5 rounded-full overflow-hidden">
                     <div 
                       className="bg-emerald-600 h-full rounded-full" 
                       style={{ width: `${Math.min(100, Math.round(((exam.partI.filter(q => q.level === 'TH').length * 0.25) + (exam.partII.filter(q => q.level === 'TH').length * 1.0) + (exam.partIII.filter(q => q.level === 'TH').length * 0.5)) / (grandTotal || 1) * 100))}%` }} 
@@ -880,13 +880,13 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                 </div>
 
                 <div>
-                  <div className="flex justify-between text-stone-600 mb-0.5 text-[11px]">
+                  <div className="flex justify-between text-[var(--color-text-secondary)] mb-0.5 text-[11px]">
                     <span>Vận dụng (VD)</span>
                     <span className="font-semibold text-amber-700 tabular-nums">
                       {((exam.partI.filter(q => q.level === 'VD').length * 0.25) + (exam.partII.filter(q => q.level === 'VD').length * 1.0) + (exam.partIII.filter(q => q.level === 'VD').length * 0.5) + totalPartIVPoints).toFixed(1)} đ
                     </span>
                   </div>
-                  <div className="w-full bg-stone-100 h-1.5 rounded-full overflow-hidden">
+                  <div className="w-full bg-[var(--color-surface-muted)] h-1.5 rounded-full overflow-hidden">
                     <div 
                       className="bg-amber-600 h-full rounded-full" 
                       style={{ width: `${Math.min(100, Math.round(((exam.partI.filter(q => q.level === 'VD').length * 0.25) + (exam.partII.filter(q => q.level === 'VD').length * 1.0) + (exam.partIII.filter(q => q.level === 'VD').length * 0.5) + totalPartIVPoints) / (grandTotal || 1) * 100))}%` }} 
@@ -898,10 +898,10 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
 
             {/* Phân bố 4 Phần */}
             <div className="pt-2 border-t border-stone-100 space-y-1.5 text-xs">
-              <span className="font-medium text-stone-700 block text-[11px] uppercase tracking-wider">
+              <span className="font-medium text-[var(--color-text-primary)] block text-[11px] uppercase tracking-wider">
                 Điểm số 4 Phần
               </span>
-              <div className="space-y-1 text-[11px] text-stone-600">
+              <div className="space-y-1 text-[11px] text-[var(--color-text-secondary)]">
                 <div className="flex justify-between">
                   <span>Phần I: TN nhiều lựa chọn</span>
                   <span className="font-semibold tabular-nums">{totalPartIPoints.toFixed(2)} đ</span>
@@ -927,10 +927,10 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
       {/* Question Edit Modal */}
       {editingQuestion && (
         <div className="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-2xs flex items-center justify-center p-4 anim-modal-backdrop">
-          <div className="bg-white rounded-2xl border border-stone-200 max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] flex flex-col anim-modal-dialog">
+          <div className="bg-[var(--color-surface)] rounded-2xl border border-stone-200 max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] flex flex-col anim-modal-dialog">
             <div className="flex items-center justify-between pb-3 border-b border-stone-200 shrink-0">
-              <h3 className="text-card-title text-stone-900 flex items-center gap-2">
-                <Edit3 className="w-4 h-4 text-[#7A2938]" />
+              <h3 className="text-card-title text-[var(--color-text-strong)] flex items-center gap-2">
+                <Edit3 className="w-4 h-4 text-[var(--color-brand-text)]" />
                 <span>
                   Chỉnh sửa câu hỏi — {
                     editingQuestion.part === 'partI' ? 'Phần I (Nhiều lựa chọn)' :
@@ -942,7 +942,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
               </h3>
               <button
                 onClick={() => setEditingQuestion(null)}
-                className="text-stone-400 hover:text-stone-700 p-1 rounded-lg"
+                className="text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] p-1 rounded-lg"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -953,7 +953,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
               {editingQuestion.part === 'partI' && (
                 <>
                   <div>
-                    <label className="block font-medium text-stone-700 mb-1">Mã câu hỏi & Tiêu đề</label>
+                    <label className="block font-medium text-[var(--color-text-primary)] mb-1">Mã câu hỏi & Tiêu đề</label>
                     <div className="grid grid-cols-4 gap-2">
                       <input
                         type="text"
@@ -991,7 +991,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                   </div>
 
                   <div>
-                    <label className="block font-medium text-stone-700 mb-1">Nội dung câu hỏi</label>
+                    <label className="block font-medium text-[var(--color-text-primary)] mb-1">Nội dung câu hỏi</label>
                     <textarea
                       rows={3}
                       value={editingQuestion.data.question}
@@ -1004,7 +1004,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                   </div>
 
                   <div className="space-y-2">
-                    <label className="block font-medium text-stone-700">Các phương án trả lời & Chọn đáp án đúng</label>
+                    <label className="block font-medium text-[var(--color-text-primary)]">Các phương án trả lời & Chọn đáp án đúng</label>
                     {(['A', 'B', 'C', 'D'] as const).map(optKey => (
                       <div key={optKey} className="flex items-center gap-2">
                         <input
@@ -1015,9 +1015,9 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                             ...editingQuestion,
                             data: { ...editingQuestion.data, correctAnswer: optKey }
                           })}
-                          className="accent-[#7A2938] w-4 h-4 shrink-0"
+                          className="accent-[var(--color-brand-700)] w-4 h-4 shrink-0"
                         />
-                        <span className="font-bold text-stone-700 w-4">{optKey}.</span>
+                        <span className="font-bold text-[var(--color-text-primary)] w-4">{optKey}.</span>
                         <input
                           type="text"
                           value={editingQuestion.data.options[optKey]}
@@ -1038,7 +1038,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                   </div>
 
                   <div>
-                    <label className="block font-medium text-stone-700 mb-1">Giải thích đáp án</label>
+                    <label className="block font-medium text-[var(--color-text-primary)] mb-1">Giải thích đáp án</label>
                     <textarea
                       rows={2}
                       value={editingQuestion.data.explanation || ''}
@@ -1056,7 +1056,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
               {editingQuestion.part === 'partII' && (
                 <>
                   <div>
-                    <label className="block font-medium text-stone-700 mb-1">Mã câu hỏi</label>
+                    <label className="block font-medium text-[var(--color-text-primary)] mb-1">Mã câu hỏi</label>
                     <input
                       type="text"
                       value={editingQuestion.data.code}
@@ -1069,7 +1069,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                   </div>
 
                   <div>
-                    <label className="block font-medium text-stone-700 mb-1">Lời dẫn câu hỏi</label>
+                    <label className="block font-medium text-[var(--color-text-primary)] mb-1">Lời dẫn câu hỏi</label>
                     <textarea
                       rows={3}
                       value={editingQuestion.data.stem}
@@ -1082,10 +1082,10 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                   </div>
 
                   <div className="space-y-3">
-                    <label className="block font-medium text-stone-700">4 lệnh khẳng định a), b), c), d) và đáp án</label>
+                    <label className="block font-medium text-[var(--color-text-primary)]">4 lệnh khẳng định a), b), c), d) và đáp án</label>
                     {editingQuestion.data.statements.map((st, sIdx) => (
-                      <div key={st.subId} className="flex items-center gap-2 p-2 rounded-lg bg-stone-50 border border-stone-200">
-                        <span className="font-bold text-stone-800 w-6 text-center">{st.subId})</span>
+                      <div key={st.subId} className="flex items-center gap-2 p-2 rounded-lg bg-[var(--color-surface-subtle)] border border-stone-200">
+                        <span className="font-bold text-[var(--color-text-strong)] w-6 text-center">{st.subId})</span>
                         <input
                           type="text"
                           value={st.text}
@@ -1097,7 +1097,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                               data: { ...editingQuestion.data, statements: newStmts as any }
                             });
                           }}
-                          className="flex-1 px-3 py-1.5 border border-stone-300 rounded-lg text-body-ui bg-white"
+                          className="flex-1 px-3 py-1.5 border border-stone-300 rounded-lg text-body-ui bg-[var(--color-surface)]"
                         />
                         <select
                           value={st.isCorrect ? 'true' : 'false'}
@@ -1127,7 +1127,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                 <>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block font-medium text-stone-700 mb-1">Mã câu</label>
+                      <label className="block font-medium text-[var(--color-text-primary)] mb-1">Mã câu</label>
                       <input
                         type="text"
                         value={editingQuestion.data.code}
@@ -1139,7 +1139,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                       />
                     </div>
                     <div>
-                      <label className="block font-medium text-stone-700 mb-1">Điểm số</label>
+                      <label className="block font-medium text-[var(--color-text-primary)] mb-1">Điểm số</label>
                       <input
                         type="number"
                         step="0.25"
@@ -1154,7 +1154,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                   </div>
 
                   <div>
-                    <label className="block font-medium text-stone-700 mb-1">Nội dung câu hỏi</label>
+                    <label className="block font-medium text-[var(--color-text-primary)] mb-1">Nội dung câu hỏi</label>
                     <textarea
                       rows={3}
                       value={editingQuestion.data.question}
@@ -1167,7 +1167,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                   </div>
 
                   <div>
-                    <label className="block font-medium text-stone-700 mb-1">Đáp án chuẩn</label>
+                    <label className="block font-medium text-[var(--color-text-primary)] mb-1">Đáp án chuẩn</label>
                     <input
                       type="text"
                       value={editingQuestion.data.correctAnswer}
@@ -1180,7 +1180,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                   </div>
 
                   <div>
-                    <label className="block font-medium text-stone-700 mb-1">Hướng dẫn chấm</label>
+                    <label className="block font-medium text-[var(--color-text-primary)] mb-1">Hướng dẫn chấm</label>
                     <textarea
                       rows={2}
                       value={editingQuestion.data.explanation || ''}
@@ -1199,7 +1199,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                 <>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block font-medium text-stone-700 mb-1">Mã câu</label>
+                      <label className="block font-medium text-[var(--color-text-primary)] mb-1">Mã câu</label>
                       <input
                         type="text"
                         value={editingQuestion.data.code}
@@ -1211,7 +1211,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                       />
                     </div>
                     <div>
-                      <label className="block font-medium text-stone-700 mb-1">Điểm số</label>
+                      <label className="block font-medium text-[var(--color-text-primary)] mb-1">Điểm số</label>
                       <input
                         type="number"
                         step="0.5"
@@ -1226,7 +1226,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                   </div>
 
                   <div>
-                    <label className="block font-medium text-stone-700 mb-1">Đề bài tự luận</label>
+                    <label className="block font-medium text-[var(--color-text-primary)] mb-1">Đề bài tự luận</label>
                     <textarea
                       rows={4}
                       value={editingQuestion.data.question}
@@ -1239,7 +1239,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                   </div>
 
                   <div className="space-y-2">
-                    <label className="block font-medium text-stone-700">Các bước chấm Rubric</label>
+                    <label className="block font-medium text-[var(--color-text-primary)]">Các bước chấm Rubric</label>
                     {editingQuestion.data.rubric.map((r, rIdx) => (
                       <div key={rIdx} className="flex items-center gap-2">
                         <input
@@ -1269,7 +1269,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                           }}
                           className="w-20 px-2 py-1.5 border border-stone-300 rounded-lg text-body-ui text-center"
                         />
-                        <span className="text-xs text-stone-500">đ</span>
+                        <span className="text-xs text-[var(--color-text-secondary)]">đ</span>
                       </div>
                     ))}
                   </div>

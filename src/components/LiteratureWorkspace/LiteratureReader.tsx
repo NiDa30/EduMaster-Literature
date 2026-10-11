@@ -158,7 +158,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
   };
 
   return (
-    <div data-reader-panel={activePanel || undefined} className={`reader-workspace relative h-full min-h-0 flex flex-col ${isFocusMode ? 'bg-[#FAF8F5]' : ''}`}>
+    <div data-reader-panel={activePanel || undefined} className={`reader-workspace relative h-full min-h-0 flex flex-col ${isFocusMode ? 'bg-[var(--color-canvas)]' : ''}`}>
       {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed bottom-6 right-6 z-50 bg-[#292524] text-white text-[13px] px-4 py-2.5 rounded-xl shadow-xl flex items-center gap-2 border border-stone-700 anim-toast">
@@ -169,11 +169,11 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
 
       {/* Floating Toolbar when Focus Mode is active */}
       {isFocusMode && (
-        <div className="fixed top-4 right-6 z-40 bg-white/95 backdrop-blur-xs border border-[#E7E5E4] rounded-full px-4 py-1.5 shadow-md flex items-center gap-2 text-[13px]">
-          <span className="text-[#78716C] font-serif italic text-[12px]">Focus Mode</span>
+        <div className="fixed top-4 right-6 z-40 bg-[var(--color-surface)]/95 backdrop-blur-xs border border-[var(--color-border-default)] rounded-full px-4 py-1.5 shadow-md flex items-center gap-2 text-[13px]">
+          <span className="text-[var(--color-text-secondary)] font-serif italic text-[12px]">Focus Mode</span>
           <button
             onClick={toggleFocusMode}
-            className="btn-ghost py-1 px-2.5 text-[12px] h-auto flex items-center gap-1 font-medium text-[#7C2D37]"
+            className="btn-ghost py-1 px-2.5 text-[12px] h-auto flex items-center gap-1 font-medium text-[var(--color-brand-text)]"
             title="Thoát chế độ tập trung"
           >
             <Minimize2 className="w-3.5 h-3.5" strokeWidth={1.75} />
@@ -195,11 +195,11 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
           >
             {activePanel === 'outline' && <button className="btn-secondary mb-2 px-3 py-2" onClick={() => setActivePanel(null)}>Đóng bảng cấu trúc</button>}
             {/* Outline / Annotations Tab Selector */}
-            <div className="reader-outline-tabs flex p-0.5 bg-stone-100 rounded-lg mb-3 shrink-0">
+            <div className="reader-outline-tabs flex p-0.5 bg-[var(--color-surface-muted)] rounded-lg mb-3 shrink-0">
               <button
                 onClick={() => setOutlineTab('outline')}
                 className={`flex-1 py-1 rounded-md text-[12px] font-medium transition-colors ${
-                  outlineTab === 'outline' ? 'bg-white text-[#292524] shadow-2xs font-semibold' : 'text-[#78716C]'
+                  outlineTab === 'outline' ? 'bg-[var(--color-surface)] text-[var(--color-text-strong)] shadow-2xs font-semibold' : 'text-[var(--color-text-secondary)]'
                 }`}
               >
                 Cấu trúc ({outlineList.length})
@@ -207,7 +207,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
               <button
                 onClick={() => setOutlineTab('annotations')}
                 className={`flex-1 py-1 rounded-md text-[12px] font-medium transition-colors ${
-                  outlineTab === 'annotations' ? 'bg-white text-[#7C2D37] shadow-2xs font-semibold' : 'text-[#78716C]'
+                  outlineTab === 'annotations' ? 'bg-[var(--color-surface)] text-[var(--color-brand-text)] shadow-2xs font-semibold' : 'text-[var(--color-text-secondary)]'
                 }`}
               >
                 Chú thích ({lesson.annotations.length})
@@ -225,12 +225,12 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
                         onClick={() => handleSelectOutline(item.id)}
                         className={`w-full text-left px-2.5 py-1.5 rounded-lg transition-colors flex items-center gap-2 text-metadata ${
                           isActive
-                            ? 'bg-[#FBF4F5] text-[#7C2D37] font-semibold border-l-2 border-[#7C2D37]'
-                            : 'text-[#57534E] hover:text-[#292524] hover:bg-stone-50 font-normal'
+                            ? 'bg-[var(--color-brand-soft)] text-[var(--color-brand-text)] font-semibold border-l-2 border-[var(--color-brand-700)]'
+                            : 'text-[var(--color-text-primary)] hover:text-[var(--color-text-strong)] hover:bg-[var(--color-surface-subtle)] font-normal'
                         }`}
                         title={item.label}
                       >
-                        <span className="text-[11px] text-[#78716C] w-4 shrink-0 tabular-nums">{index + 1}.</span>
+                        <span className="text-[11px] text-[var(--color-text-secondary)] w-4 shrink-0 tabular-nums">{index + 1}.</span>
                         <span className="truncate">{item.label}</span>
                       </button>
                     );
@@ -239,14 +239,14 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
               ) : (
                 <div className="space-y-2">
                   {lesson.annotations.length === 0 ? (
-                    <p className="text-[12px] text-[#78716C] italic p-2 text-center">
+                    <p className="text-[12px] text-[var(--color-text-secondary)] italic p-2 text-center">
                       Chưa có chú thích. Bôi đen văn bản để thêm ghi chú hoặc highlight.
                     </p>
                   ) : (
                     lesson.annotations.map((anno) => (
                       <div
                         key={anno.id}
-                        className="p-2.5 rounded-lg border border-[#E7E5E4] bg-stone-50/70 hover:bg-white text-[12px] group transition-colors"
+                        className="p-2.5 rounded-lg border border-[var(--color-border-default)] bg-[var(--color-surface-subtle)]/70 hover:bg-[var(--color-surface)] text-[12px] group transition-colors"
                       >
                         <div className="flex items-start justify-between gap-1">
                           <span className={`font-serif font-medium line-clamp-1 ${
@@ -259,13 +259,13 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
                           </span>
                           <button
                             onClick={() => handleDeleteAnnotation(anno.id)}
-                            className="text-stone-400 hover:text-red-700 opacity-0 group-hover:opacity-100 transition-opacity p-0.5"
+                            className="text-[var(--color-text-muted)] hover:text-red-700 opacity-0 group-hover:opacity-100 transition-opacity p-0.5"
                             title="Xóa chú thích"
                           >
                             <Trash2 className="w-3.5 h-3.5" strokeWidth={1.75} />
                           </button>
                         </div>
-                        <p className="text-[#57534E] mt-1 line-clamp-2">
+                        <p className="text-[var(--color-text-primary)] mt-1 line-clamp-2">
                           {anno.note}
                         </p>
                       </div>
@@ -282,17 +282,17 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
         {/* ========================================================================= */}
         <section className="reader-column min-w-0 flex-1 h-full min-h-0 overflow-y-auto flex flex-col items-center px-1 md:px-2 panel-scroll">
           {/* Action Bar: Read / Edit Mode Toggle */}
-          <div data-tour-id="reader-tools" className="reader-toolbar w-full max-w-[760px] flex items-center justify-between bg-white px-4 py-2.5 rounded-xl border border-[#E5E0DA] shadow-[var(--shadow-xs)] mb-3 shrink-0">
+          <div data-tour-id="reader-tools" className="reader-toolbar w-full max-w-[760px] flex items-center justify-between bg-[var(--color-surface)] px-4 py-2.5 rounded-xl border border-[var(--color-border-default)] shadow-[var(--shadow-xs)] mb-3 shrink-0">
             <div className="flex items-center gap-2">
               <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold flex items-center gap-1.5 ${
                 isEditingDoc 
                   ? 'bg-amber-50 text-amber-900 border border-amber-300' 
-                  : 'bg-[#FCF3F4] text-[#7A2938] border border-[#7A2938]/15'
+                  : 'bg-[var(--color-brand-soft)] text-[var(--color-brand-text)] border border-[var(--color-brand-700)]/15'
               }`}>
                 {isEditingDoc ? <Edit3 className="w-3.5 h-3.5" /> : <BookOpen className="w-3.5 h-3.5" />}
                 <span>{isEditingDoc ? 'Chế độ Chỉnh sửa Văn bản' : 'Chế độ Đọc & Chú giải'}</span>
               </span>
-              <span className="text-xs text-[#706A65] hidden sm:inline">
+              <span className="text-xs text-[var(--color-text-secondary)] hidden sm:inline">
                 {isEditingDoc 
                   ? 'Sửa tiêu đề, bối cảnh, câu chữ và các đoạn trích' 
                   : 'Bôi đen văn bản để đánh dấu màu hoặc tạo chú thích'}
@@ -309,7 +309,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
               className={`min-h-[34px] px-3.5 py-1.5 rounded-lg text-metadata font-semibold flex items-center gap-1.5 motion-surface ${
                 isEditingDoc
                   ? 'btn-primary text-white shadow-xs'
-                  : 'btn-secondary text-[#302C29]'
+                  : 'btn-secondary text-[var(--color-text-primary)]'
               }`}
               title={isEditingDoc ? 'Lưu và chuyển về chế độ đọc' : 'Nhập hoặc sửa trực tiếp nội dung tác phẩm'}
             >
@@ -320,7 +320,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
                 </>
               ) : (
                 <>
-                  <Edit3 className="w-3.5 h-3.5 text-[#7A2938]" />
+                  <Edit3 className="w-3.5 h-3.5 text-[var(--color-brand-text)]" />
                   <span>Chỉnh sửa văn bản</span>
                 </>
               )}
@@ -337,7 +337,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
             ref={documentContainerRef}
             data-tour-id="reader-content"
             onMouseUp={handleSelection}
-            className={`w-full max-w-[760px] bg-[#FFFEFC] border border-[#EEEAE5] rounded-2xl p-6 md:p-10 motion-surface duration-[var(--motion-normal)] select-text my-auto md:my-0 shadow-[var(--shadow-paper)] ${
+            className={`w-full max-w-[760px] bg-[var(--color-reader-paper)] border border-[var(--color-border-subtle)] rounded-2xl p-6 md:p-10 motion-surface duration-[var(--motion-normal)] select-text my-auto md:my-0 shadow-[var(--shadow-paper)] ${
               isFocusMode ? 'shadow-md' : ''
             }`}
           >
@@ -346,51 +346,51 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
               <div className="space-y-6 text-metadata">
                 {/* Author context edit */}
                 <div className="card-highlight p-5 space-y-3">
-                  <h4 className="font-semibold text-metadata text-[#7A2938] flex items-center gap-1.5">
+                  <h4 className="font-semibold text-metadata text-[var(--color-brand-text)] flex items-center gap-1.5">
                     <BookOpen className="w-4 h-4" />
                     <span>Tác giả & Bối cảnh lịch sử</span>
                   </h4>
                   <div>
-                    <label className="block text-xs font-semibold text-[#706A65] mb-1">Tiểu sử tác giả & phong cách:</label>
+                    <label className="block text-xs font-semibold text-[var(--color-text-secondary)] mb-1">Tiểu sử tác giả & phong cách:</label>
                     <textarea
                       rows={3}
                       value={lesson.authorBio || ''}
                       onChange={(e) => onUpdateLesson({ authorBio: normalizeVietnamese(e.target.value) })}
-                      className="w-full p-2.5 bg-white border border-[#E5E0DA] rounded-lg text-body-ui text-[#211E1C] focus:border-[#7A2938] focus:outline-none"
+                      className="w-full p-2.5 bg-[var(--color-surface)] border border-[var(--color-border-default)] rounded-lg text-body-ui text-[var(--color-text-strong)] focus:border-[var(--color-brand-700)] focus:outline-none"
                       placeholder="Nhập tiểu sử tác giả..."
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-[#706A65] mb-1">Hoàn cảnh sáng tác:</label>
+                    <label className="block text-xs font-semibold text-[var(--color-text-secondary)] mb-1">Hoàn cảnh sáng tác:</label>
                     <textarea
                       rows={2}
                       value={lesson.historicalContext || ''}
                       onChange={(e) => onUpdateLesson({ historicalContext: normalizeVietnamese(e.target.value) })}
-                      className="w-full p-2.5 bg-white border border-[#E5E0DA] rounded-lg text-body-ui text-[#211E1C] focus:border-[#7A2938] focus:outline-none"
+                      className="w-full p-2.5 bg-[var(--color-surface)] border border-[var(--color-border-default)] rounded-lg text-body-ui text-[var(--color-text-strong)] focus:border-[var(--color-brand-700)] focus:outline-none"
                       placeholder="Nhập hoàn cảnh ra đời tác phẩm..."
                     />
                   </div>
                 </div>
 
                 {/* Header Edit */}
-                <div className="space-y-3 p-4 rounded-xl border border-[#E5E0DA] bg-[#FAF9F7]">
+                <div className="space-y-3 p-4 rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-subtle)]">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-semibold text-[#706A65] mb-1">Tên tác phẩm / Bài dạy:</label>
+                      <label className="block text-xs font-semibold text-[var(--color-text-secondary)] mb-1">Tên tác phẩm / Bài dạy:</label>
                       <input
                         type="text"
                         value={lesson.title || ''}
                         onChange={(e) => onUpdateLesson({ title: normalizeVietnamese(e.target.value) })}
-                        className="w-full p-2 bg-white border border-[#E5E0DA] rounded-lg font-serif font-bold text-[#211E1C] focus:border-[#7A2938] focus:outline-none text-card-title"
+                        className="w-full p-2 bg-[var(--color-surface)] border border-[var(--color-border-default)] rounded-lg font-serif font-bold text-[var(--color-text-strong)] focus:border-[var(--color-brand-700)] focus:outline-none text-card-title"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-[#706A65] mb-1">Tác giả:</label>
+                      <label className="block text-xs font-semibold text-[var(--color-text-secondary)] mb-1">Tác giả:</label>
                       <input
                         type="text"
                         value={lesson.author || ''}
                         onChange={(e) => onUpdateLesson({ author: normalizeVietnamese(e.target.value) })}
-                        className="w-full p-2 bg-white border border-[#E5E0DA] rounded-lg text-body-ui text-[#211E1C] focus:border-[#7A2938] focus:outline-none"
+                        className="w-full p-2 bg-[var(--color-surface)] border border-[var(--color-border-default)] rounded-lg text-body-ui text-[var(--color-text-strong)] focus:border-[var(--color-brand-700)] focus:outline-none"
                       />
                     </div>
                   </div>
@@ -400,7 +400,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
                 {lesson.textSections && lesson.textSections.length > 0 ? (
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="font-semibold text-metadata text-[#211E1C]">Các đoạn văn bản ({lesson.textSections.length})</span>
+                      <span className="font-semibold text-metadata text-[var(--color-text-strong)]">Các đoạn văn bản ({lesson.textSections.length})</span>
                       <button
                         type="button"
                         onClick={() => {
@@ -413,7 +413,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
                             textSections: [...lesson.textSections!, newSec]
                           });
                         }}
-                        className="btn-secondary px-2.5 py-1 text-xs font-semibold flex items-center gap-1 text-[#7A2938]"
+                        className="btn-secondary px-2.5 py-1 text-xs font-semibold flex items-center gap-1 text-[var(--color-brand-text)]"
                       >
                         <Plus className="w-3.5 h-3.5" />
                         <span>Thêm đoạn mới</span>
@@ -421,7 +421,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
                     </div>
 
                     {lesson.textSections.map((sec, sIdx) => (
-                      <div key={sec.id} className="p-4 rounded-xl border border-[#E5E0DA] bg-white space-y-2">
+                      <div key={sec.id} className="p-4 rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface)] space-y-2">
                         <div className="flex items-center justify-between gap-2">
                           <input
                             type="text"
@@ -432,7 +432,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
                               );
                               onUpdateLesson({ textSections: updatedSecs });
                             }}
-                            className="font-serif font-semibold text-metadata text-[#7A2938] border-b border-transparent hover:border-[#E5E0DA] focus:border-[#7A2938] bg-transparent outline-none px-1"
+                            className="font-serif font-semibold text-metadata text-[var(--color-brand-text)] border-b border-transparent hover:border-[var(--color-border-default)] focus:border-[var(--color-brand-700)] bg-transparent outline-none px-1"
                             placeholder="Tiêu đề đoạn..."
                           />
                           {lesson.textSections!.length > 1 && (
@@ -443,7 +443,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
                                   textSections: lesson.textSections!.filter((_, idx) => idx !== sIdx)
                                 });
                               }}
-                              className="p-1 text-[#99918A] hover:text-red-600 rounded transition"
+                              className="p-1 text-[var(--color-text-muted)] hover:text-red-600 rounded transition"
                               title="Xóa đoạn này"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -459,7 +459,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
                             );
                             onUpdateLesson({ textSections: updatedSecs });
                           }}
-                          className="w-full p-3 font-serif text-body-ui text-[#302C29] leading-[1.85] border border-[#E5E0DA] rounded-lg focus:border-[#7A2938] focus:outline-none"
+                          className="w-full p-3 font-serif text-body-ui text-[var(--color-text-primary)] leading-[1.85] border border-[var(--color-border-default)] rounded-lg focus:border-[var(--color-brand-700)] focus:outline-none"
                           placeholder="Dán hoặc gõ nội dung thơ / văn bản đoạn này..."
                         />
                       </div>
@@ -467,12 +467,12 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
                   </div>
                 ) : (
                   <div className="space-y-2">
-                    <label className="block text-xs font-semibold text-[#706A65]">Nội dung toàn văn tác phẩm:</label>
+                    <label className="block text-xs font-semibold text-[var(--color-text-secondary)]">Nội dung toàn văn tác phẩm:</label>
                     <textarea
                       rows={14}
                       value={lesson.fullText || ''}
                       onChange={(e) => onUpdateLesson({ fullText: normalizeVietnamese(e.target.value) })}
-                      className="w-full p-3 font-serif text-body-ui text-[#302C29] leading-[1.85] border border-[#E5E0DA] rounded-lg focus:border-[#7A2938] focus:outline-none"
+                      className="w-full p-3 font-serif text-body-ui text-[var(--color-text-primary)] leading-[1.85] border border-[var(--color-border-default)] rounded-lg focus:border-[var(--color-brand-700)] focus:outline-none"
                       placeholder="Dán hoặc gõ nội dung toàn văn bài học..."
                     />
                   </div>
@@ -497,56 +497,56 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
               <>
                 {/* Outline: Context Box for Author & Historical Background */}
                 <div id="author-context" className="card-highlight p-5 mb-8 text-body-ui scroll-mt-6">
-                  <h3 className="text-metadata font-semibold text-[#7A2938] mb-1 flex items-center gap-1.5">
+                  <h3 className="text-metadata font-semibold text-[var(--color-brand-text)] mb-1 flex items-center gap-1.5">
                     <BookOpen className="w-4 h-4" />
                     <span>Tác giả & Bối cảnh lịch sử</span>
                   </h3>
-                  <p className="text-[#211E1C] text-body-ui font-serif leading-relaxed">
+                  <p className="text-[var(--color-text-strong)] text-body-ui font-serif leading-relaxed">
                     {lesson.authorBio}
                   </p>
-                  <div className="mt-2.5 pt-2 border-t border-[#EEEAE5] text-metadata text-[#706A65] font-sans">
+                  <div className="mt-2.5 pt-2 border-t border-[var(--color-border-subtle)] text-metadata text-[var(--color-text-secondary)] font-sans">
                     <strong>Hoàn cảnh sáng tác:</strong> {lesson.historicalContext}
                   </div>
                 </div>
 
                 {/* Document Book Header */}
-                <header className="text-center pb-8 mb-8 border-b border-[#EEEAE5]">
-                  <div className="text-metadata text-[#706A65] font-medium mb-1">
+                <header className="text-center pb-8 mb-8 border-b border-[var(--color-border-subtle)]">
+                  <div className="text-metadata text-[var(--color-text-secondary)] font-medium mb-1">
                     {lesson.genre === 'poetry' ? 'Văn bản thơ' : lesson.genre === 'story' ? 'Văn bản truyện' : 'Văn bản nghị luận'} · {lesson.grade} ({lesson.textbook})
                   </div>
-                  <h1 className="text-page-title font-serif text-[#211E1C]">
+                  <h1 className="text-page-title font-serif text-[var(--color-text-strong)]">
                     {lesson.title}
                   </h1>
-                  <p className="font-serif italic text-card-title text-[#706A65] mt-1">
+                  <p className="font-serif italic text-card-title text-[var(--color-text-secondary)] mt-1">
                     {lesson.author}
                   </p>
                 </header>
 
                 {/* Document Body */}
-                <div className="text-document space-y-8 font-serif leading-[1.85] text-[#302C29]">
+                <div className="text-document space-y-8 font-serif leading-[1.85] text-[var(--color-text-primary)]">
                   {lesson.textSections && lesson.textSections.length > 0 ? (
                     lesson.textSections.map((sec, idx) => (
                       <section key={sec.id} id={sec.id} className="relative scroll-mt-6 pt-2">
                         {sec.title && (
-                          <h3 className="font-serif font-semibold text-card-title text-[#7A2938] mb-2.5 border-b border-[#EEEAE5] pb-1.5 flex items-center justify-between">
+                          <h3 className="font-serif font-semibold text-card-title text-[var(--color-brand-text)] mb-2.5 border-b border-[var(--color-border-subtle)] pb-1.5 flex items-center justify-between">
                             <span>{sec.title}</span>
-                            <span className="text-[11px] font-sans text-[#99918A] font-normal">#{idx + 1}</span>
+                            <span className="text-[11px] font-sans text-[var(--color-text-muted)] font-normal">#{idx + 1}</span>
                           </h3>
                         )}
-                        <p className="whitespace-pre-line text-[#302C29] leading-[1.85]">
+                        <p className="whitespace-pre-line text-[var(--color-text-primary)] leading-[1.85]">
                           {sec.content}
                         </p>
                       </section>
                     ))
                   ) : (
-                    <p id="full-text" className="whitespace-pre-line text-[#302C29] leading-[1.85]">
+                    <p id="full-text" className="whitespace-pre-line text-[var(--color-text-primary)] leading-[1.85]">
                       {lesson.fullText}
                     </p>
                   )}
                 </div>
 
                 {/* Book Page Footer / Source */}
-                <footer id="lesson-footer" className="mt-12 pt-6 border-t border-[#EEEAE5] flex flex-col sm:flex-row items-center justify-between text-metadata text-[#706A65] gap-2 scroll-mt-6">
+                <footer id="lesson-footer" className="mt-12 pt-6 border-t border-[var(--color-border-subtle)] flex flex-col sm:flex-row items-center justify-between text-metadata text-[var(--color-text-secondary)] gap-2 scroll-mt-6">
                   <span>Theo SGK Ngữ văn {lesson.grade}, {lesson.textbook}</span>
                   <span><span className="tabular-nums font-semibold">{lesson.annotations.length}</span> chú thích đang lưu</span>
                 </footer>
@@ -566,9 +566,9 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
           >
             {activePanel === 'research' && <button className="btn-secondary mb-2 px-3 py-2" onClick={() => setActivePanel(null)}>Đóng bảng nghiên cứu</button>}
             {/* Header with ONE Primary Action: "Chú thích" */}
-            <div className="flex items-center justify-between pb-2 border-b border-[#E7E5E4] shrink-0">
-              <span className="font-semibold text-card-title text-[#292524] flex items-center gap-1.5">
-                <Compass className="w-4 h-4 text-[#7C2D37]" />
+            <div className="flex items-center justify-between pb-2 border-b border-[var(--color-border-default)] shrink-0">
+              <span className="font-semibold text-card-title text-[var(--color-text-strong)] flex items-center gap-1.5">
+                <Compass className="w-4 h-4 text-[var(--color-brand-text)]" />
                 <span>Nghiên cứu văn bản</span>
               </span>
               <button
@@ -581,7 +581,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
             </div>
 
             {/* 5 Tabs Sư phạm: Thi pháp · Hình tượng · Từ khóa · Dẫn chứng · Ghi chú */}
-            <div className="reader-research-tabs flex p-0.5 bg-stone-100 rounded-lg shrink-0 my-2.5">
+            <div className="reader-research-tabs flex p-0.5 bg-[var(--color-surface-muted)] rounded-lg shrink-0 my-2.5">
               {[
                 { id: 'poetics' as const, label: 'Thi pháp' },
                 { id: 'imagery' as const, label: 'Hình tượng' },
@@ -594,8 +594,8 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
                   onClick={() => setActiveRightTab(tab.id as any)}
                   className={`flex-1 min-w-[54px] py-1.5 px-1 min-h-[32px] rounded-md text-[11.5px] font-medium transition-colors text-center whitespace-nowrap ${
                     (activeRightTab as string) === tab.id
-                      ? 'bg-white text-stone-900 shadow-2xs font-semibold'
-                      : 'text-stone-500 hover:text-stone-800'
+                      ? 'bg-[var(--color-surface)] text-[var(--color-text-strong)] shadow-2xs font-semibold'
+                      : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-strong)]'
                   }`}
                 >
                   {tab.label}
@@ -611,32 +611,32 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
                   {/* TRUYỆN NGẮN */}
                   {lesson.genre === 'story' && lesson.storyAnalysis && (
                     <div className="space-y-2.5">
-                      <div className="p-3 bg-stone-50 rounded-xl border border-[#E7E5E4]">
-                        <span className="font-semibold text-[#7C2D37] block mb-1">
+                      <div className="p-3 bg-[var(--color-surface-subtle)] rounded-xl border border-[var(--color-border-default)]">
+                        <span className="font-semibold text-[var(--color-brand-text)] block mb-1">
                           ✦ Tình huống truyện éo le
                         </span>
-                        <p className="text-stone-800 leading-relaxed">
+                        <p className="text-[var(--color-text-strong)] leading-relaxed">
                           {lesson.storyAnalysis.storySituation}
                         </p>
                       </div>
 
-                      <div className="p-3 bg-stone-50 rounded-xl border border-[#E7E5E4]">
-                        <span className="font-semibold text-[#7C2D37] block mb-1">
+                      <div className="p-3 bg-[var(--color-surface-subtle)] rounded-xl border border-[var(--color-border-default)]">
+                        <span className="font-semibold text-[var(--color-brand-text)] block mb-1">
                           ✦ Điểm nhìn & Ngôi kể
                         </span>
-                        <p className="text-stone-800 leading-relaxed">
+                        <p className="text-[var(--color-text-strong)] leading-relaxed">
                           <strong>Điểm nhìn:</strong> {lesson.storyAnalysis.pointOfView}
                         </p>
-                        <p className="text-stone-600 mt-1">
+                        <p className="text-[var(--color-text-secondary)] mt-1">
                           <strong>Người kể chuyện:</strong> {lesson.storyAnalysis.narrator}
                         </p>
                       </div>
 
-                      <div className="p-3 bg-stone-50 rounded-xl border border-[#E7E5E4]">
-                        <span className="font-semibold text-[#7C2D37] block mb-1">
+                      <div className="p-3 bg-[var(--color-surface-subtle)] rounded-xl border border-[var(--color-border-default)]">
+                        <span className="font-semibold text-[var(--color-brand-text)] block mb-1">
                           ✦ Thông điệp nhân văn
                         </span>
-                        <p className="text-stone-600 leading-relaxed">
+                        <p className="text-[var(--color-text-secondary)] leading-relaxed">
                           {lesson.storyAnalysis.message}
                         </p>
                       </div>
@@ -646,38 +646,38 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
                   {/* THƠ TRỮ TÌNH */}
                   {lesson.genre === 'poetry' && (
                     <div className="space-y-2.5">
-                      <div className="p-3 bg-stone-50 rounded-xl border border-[#E7E5E4]">
-                        <span className="font-semibold text-[#7C2D37] block mb-1">
+                      <div className="p-3 bg-[var(--color-surface-subtle)] rounded-xl border border-[var(--color-border-default)]">
+                        <span className="font-semibold text-[var(--color-brand-text)] block mb-1">
                           ✦ Chủ đề & Cảm hứng
                         </span>
-                        <p className="text-stone-800 leading-relaxed">
+                        <p className="text-[var(--color-text-strong)] leading-relaxed">
                           {lesson.poetryAnalysis?.theme || 'Vẻ đẹp hào hoa, bi tráng của người lính trong kháng chiến.'}
                         </p>
                       </div>
 
-                      <div className="p-3 bg-stone-50 rounded-xl border border-[#E7E5E4]">
-                        <span className="font-semibold text-[#7C2D37] block mb-1">
+                      <div className="p-3 bg-[var(--color-surface-subtle)] rounded-xl border border-[var(--color-border-default)]">
+                        <span className="font-semibold text-[var(--color-brand-text)] block mb-1">
                           ✦ Bút pháp & Biện pháp tu từ
                         </span>
-                        <ul className="space-y-1 text-stone-700">
+                        <ul className="space-y-1 text-[var(--color-text-primary)]">
                           {(lesson.poetryAnalysis?.rhetoricalDevices || [
                             'Nhân hóa: súng ngửi trời, thác gầm thét',
                             'Nói giảm nói tránh: anh về đất, không bước nữa',
                             'Tương phản: rải rác biên cương >< chẳng tiếc đời xanh'
                           ]).map((dev, i) => (
                             <li key={i} className="flex items-start gap-1.5">
-                              <span className="text-[#7C2D37]">•</span>
+                              <span className="text-[var(--color-brand-text)]">•</span>
                               <span>{dev}</span>
                             </li>
                           ))}
                         </ul>
                       </div>
 
-                      <div className="p-3 bg-stone-50 rounded-xl border border-[#E7E5E4]">
-                        <span className="font-semibold text-[#7C2D37] block mb-1">
+                      <div className="p-3 bg-[var(--color-surface-subtle)] rounded-xl border border-[var(--color-border-default)]">
+                        <span className="font-semibold text-[var(--color-brand-text)] block mb-1">
                           ✦ Nhịp điệu & Mạch cảm xúc
                         </span>
-                        <p className="text-stone-600 leading-relaxed">
+                        <p className="text-[var(--color-text-secondary)] leading-relaxed">
                           {lesson.poetryAnalysis?.emotionalFlow || 'Nỗi nhớ da diết chơi vơi → Hành quân gian lao → Đêm hội quân dân → Bức tượng đài bi tráng.'}
                         </p>
                       </div>
@@ -687,20 +687,20 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
                   {/* NGHỊ LUẬN */}
                   {lesson.genre === 'argumentative' && lesson.argumentMap && (
                     <div className="space-y-2.5">
-                      <div className="p-3 bg-stone-50 rounded-xl border border-[#E7E5E4]">
-                        <span className="font-semibold text-[#7C2D37] block mb-1">
+                      <div className="p-3 bg-[var(--color-surface-subtle)] rounded-xl border border-[var(--color-border-default)]">
+                        <span className="font-semibold text-[var(--color-brand-text)] block mb-1">
                           ✦ Luận đề chính
                         </span>
-                        <p className="text-stone-800 font-medium leading-relaxed">
+                        <p className="text-[var(--color-text-strong)] font-medium leading-relaxed">
                           {lesson.argumentMap.thesis}
                         </p>
                       </div>
 
-                      <div className="p-3 bg-stone-50 rounded-xl border border-[#E7E5E4]">
-                        <span className="font-semibold text-[#7C2D37] block mb-1">
+                      <div className="p-3 bg-[var(--color-surface-subtle)] rounded-xl border border-[var(--color-border-default)]">
+                        <span className="font-semibold text-[var(--color-brand-text)] block mb-1">
                           ✦ Kết luận & Ý nghĩa
                         </span>
-                        <p className="text-stone-600 leading-relaxed">
+                        <p className="text-[var(--color-text-secondary)] leading-relaxed">
                           {lesson.argumentMap.conclusion}
                         </p>
                       </div>
@@ -714,18 +714,18 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
                 <div className="space-y-2.5 text-xs">
                   {lesson.genre === 'story' && lesson.storyAnalysis ? (
                     <div className="space-y-2">
-                      <span className="font-semibold text-stone-700 block">
+                      <span className="font-semibold text-[var(--color-text-primary)] block">
                         ✦ Nhân vật & Số phận:
                       </span>
                       {lesson.storyAnalysis.characters.map((c, i) => (
-                        <div key={i} className="p-3 bg-stone-50 rounded-xl border border-[#E7E5E4] space-y-1.5">
+                        <div key={i} className="p-3 bg-[var(--color-surface-subtle)] rounded-xl border border-[var(--color-border-default)] space-y-1.5">
                           <div className="flex items-center justify-between">
-                            <span className="font-serif font-bold text-stone-900 text-sm">{c.name}</span>
-                            <span className="text-[11px] text-stone-500 bg-white px-2 py-0.5 rounded border border-stone-200">{c.role}</span>
+                            <span className="font-serif font-bold text-[var(--color-text-strong)] text-sm">{c.name}</span>
+                            <span className="text-[11px] text-[var(--color-text-secondary)] bg-[var(--color-surface)] px-2 py-0.5 rounded border border-stone-200">{c.role}</span>
                           </div>
-                          <p className="text-stone-600 leading-relaxed">{c.psychologicalShift}</p>
+                          <p className="text-[var(--color-text-secondary)] leading-relaxed">{c.psychologicalShift}</p>
                           {c.quote && (
-                            <div className="p-2 bg-white rounded border border-stone-200 text-stone-700 font-serif italic text-[11px]">
+                            <div className="p-2 bg-[var(--color-surface)] rounded border border-stone-200 text-[var(--color-text-primary)] font-serif italic text-[11px]">
                               "{c.quote}"
                             </div>
                           )}
@@ -734,7 +734,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
                     </div>
                   ) : lesson.genre === 'poetry' ? (
                     <div className="space-y-2">
-                      <span className="font-semibold text-stone-700 block">
+                      <span className="font-semibold text-[var(--color-text-primary)] block">
                         ✦ Hệ thống Hình tượng nghệ thuật:
                       </span>
                       {(lesson.poetryAnalysis?.imagery || [
@@ -743,19 +743,19 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
                         'Đêm hội đuốc hoa ấm tình quân dân',
                         'Hình tượng người lính Tây Tiến bi tráng'
                       ]).map((img, i) => (
-                        <div key={i} className="p-2.5 bg-stone-50 rounded-xl border border-[#E7E5E4] text-stone-800 font-serif leading-relaxed">
+                        <div key={i} className="p-2.5 bg-[var(--color-surface-subtle)] rounded-xl border border-[var(--color-border-default)] text-[var(--color-text-strong)] font-serif leading-relaxed">
                           ✦ {img}
                         </div>
                       ))}
                     </div>
                   ) : (
                     <div className="space-y-2">
-                      <span className="font-semibold text-stone-700 block">
+                      <span className="font-semibold text-[var(--color-text-primary)] block">
                         ✦ Hệ thống Luận điểm:
                       </span>
                       {lesson.argumentMap?.claims.map((c, i) => (
-                        <div key={i} className="p-2.5 bg-stone-50 rounded-xl border border-[#E7E5E4]">
-                          <span className="font-semibold text-[#7C2D37]">{c.title}</span>
+                        <div key={i} className="p-2.5 bg-[var(--color-surface-subtle)] rounded-xl border border-[var(--color-border-default)]">
+                          <span className="font-semibold text-[var(--color-brand-text)]">{c.title}</span>
                         </div>
                       ))}
                     </div>
@@ -766,7 +766,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
               {/* TAB 3: TỪ KHÓA */}
               {(activeRightTab as string) === 'keywords' && (
                 <div className="space-y-3 text-xs">
-                  <span className="font-semibold text-stone-700 block">
+                  <span className="font-semibold text-[var(--color-text-primary)] block">
                     ✦ Từ khóa thẩm mỹ & Khái niệm then chốt:
                   </span>
                   <div className="flex flex-wrap gap-1.5">
@@ -782,7 +782,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
                     ]).map((kw, i) => (
                       <span 
                         key={i} 
-                        className="px-2.5 py-1 rounded-full bg-[#FBF4F5] text-[#7C2D37] border border-[#7C2D37]/20 font-medium text-[11px]"
+                        className="px-2.5 py-1 rounded-full bg-[var(--color-brand-soft)] text-[var(--color-brand-text)] border border-[var(--color-brand-700)]/20 font-medium text-[11px]"
                       >
                         #{kw}
                       </span>
@@ -790,7 +790,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
                   </div>
 
                   <div className="pt-2 border-t border-stone-200">
-                    <span className="font-semibold text-stone-700 block mb-1.5">
+                    <span className="font-semibold text-[var(--color-text-primary)] block mb-1.5">
                       ✦ Chi tiết nghệ thuật tiêu biểu:
                     </span>
                     <div className="space-y-1.5">
@@ -799,7 +799,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
                         'Âm điệu hùng tráng của sông Mã',
                         'Nhịp thơ biến hóa linh hoạt'
                       ]).map((item, i) => (
-                        <div key={i} className="p-2 bg-stone-50 rounded-lg border border-stone-200 text-stone-700 text-[11px]">
+                        <div key={i} className="p-2 bg-[var(--color-surface-subtle)] rounded-lg border border-stone-200 text-[var(--color-text-primary)] text-[11px]">
                           • {item}
                         </div>
                       ))}
@@ -811,7 +811,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
               {/* TAB 4: DẪN CHỨNG */}
               {(activeRightTab as string) === 'evidence' && (
                 <div className="space-y-2.5 text-xs">
-                  <div className="flex items-center justify-between text-stone-500 text-[11px]">
+                  <div className="flex items-center justify-between text-[var(--color-text-secondary)] text-[11px]">
                     <span>Dẫn chứng then chốt phục vụ giảng dạy & ra đề</span>
                   </div>
 
@@ -821,8 +821,8 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
                       'Heo hút cồn mây súng ngửi trời\nNgàn thước lên cao, ngàn thước xuống',
                       'Chiến trường đi chẳng tiếc đời xanh\nÁo bào thay chiếu anh về đất\nSông Mã gầm lên khúc độc hành'
                     ]).map((verse, i) => (
-                      <div key={i} className="p-3 bg-stone-50 rounded-xl border border-[#E7E5E4] space-y-2">
-                        <p className="font-serif italic text-stone-800 whitespace-pre-line leading-relaxed text-[12px]">
+                      <div key={i} className="p-3 bg-[var(--color-surface-subtle)] rounded-xl border border-[var(--color-border-default)] space-y-2">
+                        <p className="font-serif italic text-[var(--color-text-strong)] whitespace-pre-line leading-relaxed text-[12px]">
                           "{verse}"
                         </p>
                         <div className="flex items-center justify-end gap-1.5 pt-1 border-t border-stone-200/60">
@@ -856,18 +856,18 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
               {/* TAB 5: GHI CHÚ */}
               {(activeRightTab as string) === 'notes' && (
                 <div className="space-y-2.5">
-                  <div className="flex items-center justify-between text-xs text-stone-500">
-                    <span>Tổng số: <span className="tabular-nums font-semibold text-stone-800">{lesson.annotations.length}</span> ghi chú</span>
+                  <div className="flex items-center justify-between text-xs text-[var(--color-text-secondary)]">
+                    <span>Tổng số: <span className="tabular-nums font-semibold text-[var(--color-text-strong)]">{lesson.annotations.length}</span> ghi chú</span>
                     <button
                       onClick={() => setShowAnnotationModal(true)}
-                      className="text-[#7C2D37] hover:underline font-semibold"
+                      className="text-[var(--color-brand-text)] hover:underline font-semibold"
                     >
                       + Thêm mới
                     </button>
                   </div>
                   <div className="space-y-2 max-h-[420px] overflow-y-auto pr-1">
                     {lesson.annotations.map((a) => (
-                      <div key={a.id} className="p-2.5 rounded-xl border border-[#E7E5E4] bg-stone-50/70 hover:bg-white text-xs group transition-colors">
+                      <div key={a.id} className="p-2.5 rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-subtle)]/70 hover:bg-[var(--color-surface)] text-xs group transition-colors">
                         <div className="flex items-start justify-between">
                           <span className={`font-serif font-medium line-clamp-1 ${
                             a.color === 'amber' ? 'text-amber-800' :
@@ -879,16 +879,16 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
                           </span>
                           <button
                             onClick={() => handleDeleteAnnotation(a.id)}
-                            className="text-stone-400 hover:text-red-700 opacity-0 group-hover:opacity-100 transition-opacity p-0.5"
+                            className="text-[var(--color-text-muted)] hover:text-red-700 opacity-0 group-hover:opacity-100 transition-opacity p-0.5"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
                         </div>
-                        <p className="text-stone-600 mt-1 leading-relaxed">{a.note}</p>
+                        <p className="text-[var(--color-text-secondary)] mt-1 leading-relaxed">{a.note}</p>
                       </div>
                     ))}
                     {lesson.annotations.length === 0 && (
-                      <p className="text-center text-xs text-stone-400 py-6 italic">
+                      <p className="text-center text-xs text-[var(--color-text-muted)] py-6 italic">
                         Chưa có ghi chú nào. Bôi đen văn bản để thêm ghi chú mới.
                       </p>
                     )}
@@ -910,13 +910,13 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
         >
           {/* Action 1: 5 Highlight Color Dots (Soft Non-fluorescent Tints) */}
           <div className="flex items-center gap-1 px-1">
-            <span className="text-[11px] text-[#99918A] mr-0.5 font-medium">Màu:</span>
+            <span className="text-[11px] text-[var(--color-text-muted)] mr-0.5 font-medium">Màu:</span>
             {[
               { id: 'amber' as const, bg: 'bg-[#FDE68A]', border: 'border-[#F59E0B]/40', label: 'Vàng ấm' },
               { id: 'emerald' as const, bg: 'bg-[#BBF7D0]', border: 'border-[#10B981]/40', label: 'Xanh êm' },
               { id: 'blue' as const, bg: 'bg-[#BFDBFE]', border: 'border-[#3B82F6]/40', label: 'Xanh dịu' },
               { id: 'rose' as const, bg: 'bg-[#FECDD3]', border: 'border-[#F43F5E]/40', label: 'Hồng nhạt' },
-              { id: 'stone' as const, bg: 'bg-[#E7E5E4]', border: 'border-[#A8A29E]/40', label: 'Xám nhẹ' },
+              { id: 'stone' as const, bg: 'bg-[var(--color-border-default)]', border: 'border-[var(--color-text-muted)]/40', label: 'Xám nhẹ' },
             ].map((c) => (
               <button
                 key={c.id}
@@ -927,12 +927,12 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
             ))}
           </div>
 
-          <div className="w-px h-3.5 bg-white/15 mx-0.5" />
+          <div className="w-px h-3.5 bg-[var(--color-surface)]/15 mx-0.5" />
 
           {/* Action 2: Ghi chú */}
           <button
             onClick={() => setShowAnnotationModal(true)}
-            className="px-2 py-1 min-h-[30px] hover:bg-white/8 active:bg-white/12 text-[#FAF9F7] rounded-lg flex items-center gap-1.5 transition-colors duration-[var(--motion-hover)]"
+            className="px-2 py-1 min-h-[30px] hover:bg-[var(--color-surface)]/8 active:bg-[var(--color-surface)]/12 text-[var(--color-surface-subtle)] rounded-lg flex items-center gap-1.5 transition-colors duration-[var(--motion-hover)]"
             title="Thêm ghi chú sư phạm"
           >
             <MessageSquarePlus className="w-3.5 h-3.5 text-rose-300" strokeWidth={1.75} />
@@ -946,7 +946,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
               setToolbarPos(null);
               showToast('Đã tạo Slide trích đoạn từ ngữ liệu!');
             }}
-            className="px-2 py-1 min-h-[30px] hover:bg-white/8 active:bg-white/12 text-[#FAF9F7] rounded-lg flex items-center gap-1.5 transition-colors duration-[var(--motion-hover)]"
+            className="px-2 py-1 min-h-[30px] hover:bg-[var(--color-surface)]/8 active:bg-[var(--color-surface)]/12 text-[var(--color-surface-subtle)] rounded-lg flex items-center gap-1.5 transition-colors duration-[var(--motion-hover)]"
             title="Tạo Slide trích đoạn khám phá"
           >
             <Presentation className="w-3.5 h-3.5 text-amber-300" strokeWidth={1.75} />
@@ -959,7 +959,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
               onAddQuestionFromPassage(selectedText);
               setToolbarPos(null);
             }}
-            className="px-2 py-1 min-h-[30px] hover:bg-white/8 active:bg-white/12 text-[#FAF9F7] rounded-lg flex items-center gap-1.5 transition-colors duration-[var(--motion-hover)]"
+            className="px-2 py-1 min-h-[30px] hover:bg-[var(--color-surface)]/8 active:bg-[var(--color-surface)]/12 text-[var(--color-surface-subtle)] rounded-lg flex items-center gap-1.5 transition-colors duration-[var(--motion-hover)]"
             title="Tạo câu hỏi từ ngữ liệu này"
           >
             <HelpCircle className="w-3.5 h-3.5 text-blue-300" strokeWidth={1.75} />
@@ -973,7 +973,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
               setToolbarPos(null);
               showToast('Đã đặt đoạn trích làm ngữ liệu Đề kiểm tra!');
             }}
-            className="px-2 py-1 min-h-[30px] hover:bg-white/8 active:bg-white/12 text-[#FAF9F7] rounded-lg flex items-center gap-1.5 transition-colors duration-[var(--motion-hover)]"
+            className="px-2 py-1 min-h-[30px] hover:bg-[var(--color-surface)]/8 active:bg-[var(--color-surface)]/12 text-[var(--color-surface-subtle)] rounded-lg flex items-center gap-1.5 transition-colors duration-[var(--motion-hover)]"
             title="Đặt làm ngữ liệu Đề 7991"
           >
             <CheckSquare className="w-3.5 h-3.5 text-emerald-300" strokeWidth={1.75} />
@@ -987,14 +987,14 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
       {/* ========================================================================= */}
       {showAnnotationModal && (
         <div className="fixed inset-0 z-50 bg-stone-900/40 backdrop-blur-2xs flex items-center justify-center p-4 anim-modal-backdrop">
-          <div className="bg-white rounded-2xl border border-[#E7E5E4] max-w-md w-full p-5 shadow-xl space-y-4 anim-modal-dialog">
-            <div className="flex items-center justify-between pb-2 border-b border-[#E7E5E4]">
-              <h3 className="text-card-title text-[#292524] font-semibold">
+          <div className="bg-[var(--color-surface)] rounded-2xl border border-[var(--color-border-default)] max-w-md w-full p-5 shadow-xl space-y-4 anim-modal-dialog">
+            <div className="flex items-center justify-between pb-2 border-b border-[var(--color-border-default)]">
+              <h3 className="text-card-title text-[var(--color-text-strong)] font-semibold">
                 Thêm chú thích học thuật
               </h3>
               <button
                 onClick={() => setShowAnnotationModal(false)}
-                className="text-[#78716C] hover:text-[#292524] p-1.5 rounded-lg transition-colors"
+                className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-strong)] p-1.5 rounded-lg transition-colors"
                 aria-label="Đóng modal"
               >
                 <X className="w-4 h-4" strokeWidth={1.75} />
@@ -1002,13 +1002,13 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
             </div>
 
             {selectedText && (
-              <div className="p-3 bg-stone-50 rounded-lg border border-[#E7E5E4] font-serif text-metadata text-[#292524] italic max-h-24 overflow-y-auto">
+              <div className="p-3 bg-[var(--color-surface-subtle)] rounded-lg border border-[var(--color-border-default)] font-serif text-metadata text-[var(--color-text-strong)] italic max-h-24 overflow-y-auto">
                 "{selectedText}"
               </div>
             )}
 
             <div>
-              <label className="block text-metadata font-medium text-[#57534E] mb-1">
+              <label className="block text-metadata font-medium text-[var(--color-text-primary)] mb-1">
                 Nội dung chú giải / Cảm thụ / Định hướng phân tích:
               </label>
               <textarea
@@ -1016,14 +1016,14 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
                 placeholder="Nhập cảm thụ ngôn từ, thi pháp hoặc câu hỏi dẫn dắt học sinh..."
                 value={annotationInputNote}
                 onChange={(e) => setAnnotationInputNote(normalizeVietnamese(e.target.value))}
-                className="w-full text-body-ui p-2.5 border border-[#E7E5E4] rounded-lg focus:outline-none focus:border-[#7C2D37] text-[#292524]"
+                className="w-full text-body-ui p-2.5 border border-[var(--color-border-default)] rounded-lg focus:outline-none focus:border-[var(--color-brand-700)] text-[var(--color-text-strong)]"
                 autoFocus
               />
             </div>
 
             <div className="flex items-center justify-between pt-2">
               <div className="flex items-center gap-1.5">
-                <span className="text-[11px] text-stone-500">Màu gán:</span>
+                <span className="text-[11px] text-[var(--color-text-secondary)]">Màu gán:</span>
                 {[
                   { id: 'amber' as const, bg: 'bg-amber-400' },
                   { id: 'emerald' as const, bg: 'bg-emerald-400' },

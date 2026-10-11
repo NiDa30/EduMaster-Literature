@@ -35,7 +35,7 @@ export const StatCard: React.FC<StatCardProps> = ({
     >
       {/* Top row: Label + Badge/Icon */}
       <div className="flex items-start justify-between gap-2 mb-2">
-        <span className="text-metadata font-medium text-stone-500 line-clamp-1">
+        <span className="text-metadata font-medium text-[var(--color-text-secondary)] line-clamp-1">
           {label}
         </span>
         <div className="flex items-center gap-1.5 shrink-0">
@@ -44,17 +44,17 @@ export const StatCard: React.FC<StatCardProps> = ({
               {badgeText}
             </Badge>
           )}
-          {icon && <span className="text-stone-400">{icon}</span>}
+          {icon && <span className="text-[var(--color-text-muted)]">{icon}</span>}
         </div>
       </div>
 
       {/* Main value */}
       <div className="flex items-baseline gap-2">
-        <span className="text-2xl font-bold font-serif text-[#211E1C] tracking-tight tabular-nums">
+        <span className="text-2xl font-bold font-serif text-[var(--color-text-strong)] tracking-tight tabular-nums">
           {value}
         </span>
         {subtitle && (
-          <span className="text-metadata text-stone-500 font-normal truncate">
+          <span className="text-metadata text-[var(--color-text-secondary)] font-normal truncate">
             {subtitle}
           </span>
         )}
@@ -62,7 +62,7 @@ export const StatCard: React.FC<StatCardProps> = ({
 
       {/* Progress or Accent line */}
       {progressPercent !== undefined ? (
-        <div className="mt-3 w-full bg-[#F5F3F0] h-1.5 rounded-full overflow-hidden">
+        <div className="mt-3 w-full bg-[var(--color-surface-muted)] h-1.5 rounded-full overflow-hidden">
           <div
             className="h-full rounded-full motion-progress"
             style={{ width: `${Math.min(100, Math.max(0, progressPercent))}%`, backgroundColor: accentBarColor }}

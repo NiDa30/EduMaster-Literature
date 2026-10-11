@@ -27,14 +27,14 @@ export const TourResumeModal: React.FC<TourResumeModalProps> = ({
       aria-modal="true"
       aria-labelledby="tour-resume-title"
     >
-      <div className="bg-white rounded-2xl border border-[#E5E0DA] max-w-sm w-full p-5 shadow-xl space-y-3 modal-motion-enter">
+      <div className="bg-[var(--color-surface)] rounded-2xl border border-[var(--color-border-default)] max-w-sm w-full p-5 shadow-xl space-y-3 modal-motion-enter">
         <div className="flex items-start justify-between gap-3">
-          <div className="w-9 h-9 rounded-xl bg-[#FCF3F4] text-[#7A2938] border border-[#7A2938]/15 flex items-center justify-center shrink-0">
+          <div className="w-9 h-9 rounded-xl bg-[var(--color-brand-soft)] text-[var(--color-brand-text)] border border-[var(--color-brand-700)]/15 flex items-center justify-center shrink-0">
             <History className="w-5 h-5" />
           </div>
           <button
             onClick={onClose}
-            className="text-[#99918A] hover:text-[#211E1C] p-1 rounded-lg transition-colors"
+            className="text-[var(--color-text-muted)] hover:text-[var(--color-text-strong)] p-1 rounded-lg transition-colors"
             aria-label="Đóng"
           >
             <X className="w-4 h-4" />
@@ -42,25 +42,25 @@ export const TourResumeModal: React.FC<TourResumeModalProps> = ({
         </div>
 
         <div>
-          <h3 id="tour-resume-title" className="font-semibold text-[15px] text-[#211E1C]">
+          <h3 id="tour-resume-title" className="font-semibold text-[15px] text-[var(--color-text-strong)]">
             Tiếp tục hướng dẫn?
           </h3>
-          <p className="text-xs text-[#706A65] mt-1 leading-relaxed">
-            Bạn đã xem đến <span className="font-semibold text-[#211E1C]">Bước {savedStepIndex + 1} / {totalSteps}</span> trong lần trước. Bạn muốn tiếp tục từ bước này hay bắt đầu lại từ đầu?
+          <p className="text-xs text-[var(--color-text-secondary)] mt-1 leading-relaxed">
+            Bạn đã xem đến <span className="font-semibold text-[var(--color-text-strong)]">Bước {savedStepIndex + 1} / {totalSteps}</span> trong lần trước. Bạn muốn tiếp tục từ bước này hay bắt đầu lại từ đầu?
           </p>
         </div>
 
-        <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#EEEAE5]">
+        <div className="flex items-center justify-end gap-2 pt-2 border-t border-[var(--color-border-subtle)]">
           <button
             onClick={onRestart}
-            className="px-3 py-1.5 text-xs font-medium text-[#706A65] hover:text-[#211E1C] hover:bg-[#FAF9F7] border border-[#E5E0DA] rounded-xl transition-colors flex items-center gap-1"
+            className="px-3 py-1.5 text-xs font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-strong)] hover:bg-[var(--color-surface-subtle)] border border-[var(--color-border-default)] rounded-xl transition-colors flex items-center gap-1"
           >
             <RotateCcw className="w-3 h-3" />
             <span>Bắt đầu lại</span>
           </button>
           <button
             onClick={onResume}
-            className="px-3.5 py-1.5 text-xs font-semibold bg-[#7A2938] hover:bg-[#68222E] text-white rounded-xl shadow-xs transition-colors flex items-center gap-1"
+            className="px-3.5 py-1.5 text-xs font-semibold bg-[var(--color-brand-700)] hover:bg-[var(--color-brand-800)] text-white rounded-xl shadow-xs transition-colors flex items-center gap-1"
           >
             <Play className="w-3 h-3" />
             <span>Tiếp tục</span>

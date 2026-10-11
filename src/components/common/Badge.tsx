@@ -29,7 +29,7 @@ const dotColors: Record<BadgeVariant, string> = {
   blue: 'bg-blue-600',
   purple: 'bg-slate-500',
   stone: 'bg-stone-400',
-  burgundy: 'bg-[#7A2938]'
+  burgundy: 'bg-[var(--color-brand-700)]'
 };
 
 export const Badge: React.FC<BadgeProps> = ({

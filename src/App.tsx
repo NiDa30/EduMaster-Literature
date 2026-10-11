@@ -414,7 +414,7 @@ export default function App() {
     >
       <TourConsumerShell>
         {(openTour) => (
-          <div className="h-screen w-screen overflow-hidden flex bg-[#FAF8F5] text-[#292524] antialiased app-shell">
+          <div className="h-screen w-screen overflow-hidden flex bg-[var(--color-canvas)] text-[var(--color-text-strong)] antialiased app-shell">
             {/* Mobile Backdrop */}
             {isSidebarOpen && (
               <div 
