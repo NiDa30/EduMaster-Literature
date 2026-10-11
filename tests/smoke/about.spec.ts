@@ -10,6 +10,13 @@ test('About: owner, contact, copy, footer/settings navigation and unchanged less
   await expect(page.locator('main')).toBeVisible();
   await expect.poll(() => page.evaluate(() => localStorage.getItem('edumaster_app_state_v3'))).not.toBeNull();
   const before = await page.evaluate(() => JSON.parse(localStorage.getItem('edumaster_app_state_v3')!));
+  const ownerLink = page.locator('aside[data-tour-id="sidebar"]').getByRole('link', { name: /Chủ sở hữu & quản lý: Trầm Thị Đổi/ });
+  await expect(ownerLink).toContainText('Giáo viên');
+  await expect(ownerLink).toContainText('Trung tâm GDNN - GDTX Duyên Hải');
+  await expect(ownerLink).toContainText('Ấp Rạch, xã Hiệp Mỹ, Vĩnh Long');
+  await ownerLink.click();
+  await expect(page).toHaveURL(/#\/about/);
+  await page.goBack();
   await page.locator('footer.app-owner-footer').getByRole('link').click();
   await expect(page.getByRole('heading', { name: 'Giới thiệu & Chủ sở hữu', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Trầm Thị Đổi' })).toBeVisible();

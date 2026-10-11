@@ -1,4 +1,5 @@
 import React from 'react';
+import { ownerProfile } from '../config/ownerProfile';
 import { 
   Home,
   BookOpen, 
@@ -38,7 +39,6 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({
   activeModule,
   setActiveModule,
-  khbd,
   isSidebarOpen,
   setIsSidebarOpen,
   onOpenHandover,
@@ -59,8 +59,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'export_handover' as ActiveModule, label: 'Xuất bản', icon: Share2 },
   ];
 
-  const teacherName = khbd.info.teacherName || 'Giáo viên Ngữ văn';
-  const schoolName = khbd.info.school || 'THPT Chuyên';
 
   return (
     <aside 
@@ -187,30 +185,26 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </button>
       </nav>
 
-      {/* Compact Teacher Identity (Bottom Area) */}
-      <div className="p-3 border-t border-[#EEEAE5] bg-[#FAF9F7] shrink-0">
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-7 h-7 rounded-full bg-[#FCF3F4] border border-[#ECC2C9] flex items-center justify-center text-[#7A2938] shrink-0 font-serif font-bold text-xs">
-              {teacherName.slice(0, 1).toUpperCase()}
-            </div>
-            <div className="min-w-0">
-              <span className="text-[12px] font-semibold text-[#211E1C] block truncate">
-                {teacherName}
-              </span>
-              <span className="text-[11px] text-[#706A65] block truncate leading-none mt-0.5">
-                {schoolName}
-              </span>
-            </div>
-          </div>
-          <button
-            onClick={() => onOpenSettings && onOpenSettings()}
-            className="p-1 rounded-md text-[#99918A] hover:text-[#211E1C] hover:bg-[#F5F3F0] transition-colors"
-            title="Sửa thông tin giáo viên"
-          >
-            <Settings className="w-3.5 h-3.5" strokeWidth={1.75} />
-          </button>
-        </div>
+      {/* Global owner identity; lesson-specific teacher data stays in the lesson. */}
+      <div className="p-3 border-t border-[var(--color-border-default)] bg-[var(--color-surface-subtle)] shrink-0">
+        <a
+          href="#/about"
+          onClick={() => setIsSidebarOpen(false)}
+          aria-label={`Chủ sở hữu & quản lý: ${ownerProfile.fullName}. Xem thông tin chủ sở hữu`}
+          className="block rounded-lg p-1 text-[var(--color-text-primary)] hover:bg-[var(--color-brand-50)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand-700)]"
+        >
+          <span className="block text-[10px] font-semibold uppercase tracking-wide text-[var(--color-text-secondary)] mb-2">Chủ sở hữu &amp; quản lý</span>
+          <span className="flex items-start gap-2.5">
+            <span aria-hidden="true" className="w-8 h-8 rounded-full bg-[var(--color-brand-50)] border border-[var(--color-brand-200)] flex items-center justify-center text-[var(--color-brand-700)] shrink-0 font-serif font-bold text-xs">TĐ</span>
+            <span className="min-w-0">
+              <span className="text-[13px] font-semibold block">{ownerProfile.fullName}</span>
+              <span className="text-[11px] text-[var(--color-text-secondary)] block mt-0.5">{ownerProfile.role}</span>
+              <span className="text-[11px] text-[var(--color-text-secondary)] block mt-1 leading-relaxed">{ownerProfile.institution}</span>
+              <span className="text-[11px] text-[var(--color-text-secondary)] block mt-1 leading-relaxed">{ownerProfile.address}</span>
+              <span className="text-[11px] text-[var(--color-brand-700)] block mt-2">Xem thông tin chủ sở hữu →</span>
+            </span>
+          </span>
+        </a>
       </div>
     </aside>
   );
