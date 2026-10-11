@@ -195,42 +195,43 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
     <div className="h-full min-h-0 flex flex-col p-4 md:p-6 space-y-3 overflow-hidden max-w-6xl w-full mx-auto relative">
       {/* Toast Alert */}
       {toastMessage && (
-        <div className="fixed top-5 right-5 z-50 bg-stone-900 text-white px-4 py-2.5 rounded-xl shadow-lg text-metadata flex items-center gap-2 border border-stone-700 animate-in fade-in">
+        <div className="fixed top-5 right-5 z-50 bg-stone-900 text-white px-4 py-2.5 rounded-xl shadow-lg text-metadata flex items-center gap-2 border border-stone-700 anim-toast">
           <CheckCircle2 className="w-4 h-4 text-emerald-400" />
           <span>{toastMessage}</span>
         </div>
       )}
 
       {/* Header Bar */}
-      <div className="bg-white p-4 rounded-2xl border border-stone-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0">
+      <div className="bg-white p-4 rounded-2xl border border-[#E5E0DA] shadow-[var(--shadow-xs)] flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0">
         <div>
           <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-[#7C2D37]/10 text-[#7C2D37] border border-[#7C2D37]/20">
+            <span className="px-2.5 py-0.5 rounded-full text-metadata font-semibold bg-[#FCF3F4] text-[#7A2938] border border-[#7A2938]/15 flex items-center gap-1">
+              <Compass className="w-3.5 h-3.5" />
               Thi pháp học theo Thể loại
             </span>
-            <span className="text-metadata text-stone-500 font-medium">
+            <span className="text-metadata text-[#706A65] font-medium">
               Chương trình Ngữ văn GDPT 2018 · {lesson.grade}
             </span>
           </div>
-          <h1 className="text-card-title md:text-section-title font-bold font-serif text-stone-900 mt-1">
+          <h1 className="text-card-title md:text-section font-bold font-serif text-[#211E1C] mt-1 leading-[1.3]">
             Phân tích Thể loại: {lesson.title} ({lesson.author})
           </h1>
         </div>
 
         {/* Thể loại selector buttons */}
-        <div className="flex items-center gap-1.5 p-1 bg-stone-100 rounded-xl border border-stone-200 self-start md:self-auto shrink-0">
+        <div className="flex items-center gap-1 p-1 bg-[#F5F3F0] rounded-xl border border-[#E5E0DA] self-start md:self-auto shrink-0">
           <button
             onClick={() => {
               setSelectedGenre('poetry');
               onUpdateLesson({ genre: 'poetry' });
             }}
-            className={`px-3 py-1.5 min-h-[34px] rounded-lg text-metadata font-medium transition flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 min-h-[34px] rounded-lg text-metadata font-medium transition-all flex items-center gap-1.5 ${
               selectedGenre === 'poetry'
-                ? 'bg-white text-stone-900 shadow-xs font-semibold'
-                : 'text-stone-600 hover:text-stone-900'
+                ? 'bg-white text-[#211E1C] shadow-[var(--shadow-xs)] font-semibold'
+                : 'text-[#706A65] hover:text-[#211E1C]'
             }`}
           >
-            <Feather className="w-3.5 h-3.5 text-purple-600" />
+            <Feather className={`w-3.5 h-3.5 ${selectedGenre === 'poetry' ? 'text-[#7A2938]' : 'text-[#706A65]'}`} />
             <span>Thơ trữ tình</span>
           </button>
 
@@ -239,13 +240,13 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
               setSelectedGenre('story');
               onUpdateLesson({ genre: 'story' });
             }}
-            className={`px-3 py-1.5 min-h-[34px] rounded-lg text-metadata font-medium transition flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 min-h-[34px] rounded-lg text-metadata font-medium transition-all flex items-center gap-1.5 ${
               selectedGenre === 'story'
-                ? 'bg-white text-stone-900 shadow-xs font-semibold'
-                : 'text-stone-600 hover:text-stone-900'
+                ? 'bg-white text-[#211E1C] shadow-[var(--shadow-xs)] font-semibold'
+                : 'text-[#706A65] hover:text-[#211E1C]'
             }`}
           >
-            <BookOpen className="w-3.5 h-3.5 text-blue-600" />
+            <BookOpen className={`w-3.5 h-3.5 ${selectedGenre === 'story' ? 'text-[#7A2938]' : 'text-[#706A65]'}`} />
             <span>Truyện & Kí</span>
           </button>
 
@@ -254,28 +255,28 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
               setSelectedGenre('argumentative');
               onUpdateLesson({ genre: 'argumentative' });
             }}
-            className={`px-3 py-1.5 min-h-[34px] rounded-lg text-metadata font-medium transition flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 min-h-[34px] rounded-lg text-metadata font-medium transition-all flex items-center gap-1.5 ${
               selectedGenre === 'argumentative'
-                ? 'bg-white text-stone-900 shadow-xs font-semibold'
-                : 'text-stone-600 hover:text-stone-900'
+                ? 'bg-white text-[#211E1C] shadow-[var(--shadow-xs)] font-semibold'
+                : 'text-[#706A65] hover:text-[#211E1C]'
             }`}
           >
-            <Network className="w-3.5 h-3.5 text-amber-600" />
+            <Network className={`w-3.5 h-3.5 ${selectedGenre === 'argumentative' ? 'text-[#7A2938]' : 'text-[#706A65]'}`} />
             <span>Văn nghị luận</span>
           </button>
         </div>
       </div>
 
       {/* Top 5 Primary Tabs & Cross-module Action Toolbar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-[#E7E5E4] pb-2 shrink-0 bg-stone-50/50 p-2 rounded-xl">
+      <div data-tour-id="genre-tabs" className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-[#E5E0DA] pb-2 shrink-0 bg-[#FAF9F7] p-2 rounded-xl">
         {/* 5 Primary Tabs (UI Spec Section 6) */}
         <div className="flex items-center gap-1 overflow-x-auto">
           <button
             onClick={() => setActiveTab('overview')}
             className={`px-3 py-1.5 rounded-lg text-metadata font-semibold transition-colors flex items-center gap-1.5 shrink-0 ${
               activeTab === 'overview'
-                ? 'bg-white text-[#7C2D37] shadow-xs border border-stone-200'
-                : 'text-stone-600 hover:text-stone-900'
+                ? 'bg-white text-[#7A2938] shadow-[var(--shadow-xs)] border border-[#E5E0DA]'
+                : 'text-[#706A65] hover:text-[#211E1C]'
             }`}
           >
             <Sparkles className="w-3.5 h-3.5" />
@@ -286,8 +287,8 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
             onClick={() => setActiveTab('art')}
             className={`px-3 py-1.5 rounded-lg text-metadata font-semibold transition-colors flex items-center gap-1.5 shrink-0 ${
               activeTab === 'art'
-                ? 'bg-white text-[#7C2D37] shadow-xs border border-stone-200'
-                : 'text-stone-600 hover:text-stone-900'
+                ? 'bg-white text-[#7A2938] shadow-[var(--shadow-xs)] border border-[#E5E0DA]'
+                : 'text-[#706A65] hover:text-[#211E1C]'
             }`}
           >
             <Compass className="w-3.5 h-3.5" />
@@ -298,8 +299,8 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
             onClick={() => setActiveTab('characters')}
             className={`px-3 py-1.5 rounded-lg text-metadata font-semibold transition-colors flex items-center gap-1.5 shrink-0 ${
               activeTab === 'characters'
-                ? 'bg-white text-[#7C2D37] shadow-xs border border-stone-200'
-                : 'text-stone-600 hover:text-stone-900'
+                ? 'bg-white text-[#7A2938] shadow-[var(--shadow-xs)] border border-[#E5E0DA]'
+                : 'text-[#706A65] hover:text-[#211E1C]'
             }`}
           >
             <Heart className="w-3.5 h-3.5" />
@@ -310,8 +311,8 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
             onClick={() => setActiveTab('argument_map')}
             className={`px-3 py-1.5 rounded-lg text-metadata font-semibold transition-colors flex items-center gap-1.5 shrink-0 ${
               activeTab === 'argument_map'
-                ? 'bg-white text-[#7C2D37] shadow-xs border border-stone-200'
-                : 'text-stone-600 hover:text-stone-900'
+                ? 'bg-white text-[#7A2938] shadow-[var(--shadow-xs)] border border-[#E5E0DA]'
+                : 'text-[#706A65] hover:text-[#211E1C]'
             }`}
           >
             <Network className="w-3.5 h-3.5" />
@@ -322,8 +323,8 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
             onClick={() => setActiveTab('evidence')}
             className={`px-3 py-1.5 rounded-lg text-metadata font-semibold transition-colors flex items-center gap-1.5 shrink-0 ${
               activeTab === 'evidence'
-                ? 'bg-white text-[#7C2D37] shadow-xs border border-stone-200'
-                : 'text-stone-600 hover:text-stone-900'
+                ? 'bg-white text-[#7A2938] shadow-[var(--shadow-xs)] border border-[#E5E0DA]'
+                : 'text-[#706A65] hover:text-[#211E1C]'
             }`}
           >
             <Quote className="w-3.5 h-3.5" />
@@ -342,7 +343,7 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
               handlePushToKhbd(content, 'Tri thức thể loại');
               setActiveModule('khbd');
             }}
-            className="px-2.5 py-1.5 rounded-lg text-[12px] font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 transition flex items-center gap-1"
+            className="px-2.5 py-1.5 rounded-lg text-metadata font-semibold bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200/60 transition flex items-center gap-1"
             title="Đưa kiến thức thi pháp này vào Kế hoạch bài dạy 5512"
           >
             <FileText className="w-3.5 h-3.5" />
@@ -355,7 +356,7 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
               handlePushToSlide(quote, `${lesson.title} - ${lesson.author}`);
               setActiveModule('slides');
             }}
-            className="px-2.5 py-1.5 rounded-lg text-[12px] font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 transition flex items-center gap-1"
+            className="px-2.5 py-1.5 rounded-lg text-metadata font-semibold bg-sky-50 text-sky-800 hover:bg-sky-100 border border-sky-200/60 transition flex items-center gap-1"
             title="Tạo slide giảng dạy từ trích đoạn phân tích này"
           >
             <Presentation className="w-3.5 h-3.5" />
@@ -368,7 +369,7 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
               handlePushToQuestion(passage);
               setActiveModule('question_builder');
             }}
-            className="px-2.5 py-1.5 rounded-lg text-[12px] font-semibold bg-[#7C2D37]/10 text-[#7C2D37] hover:bg-[#7C2D37]/20 border border-[#7C2D37]/30 transition flex items-center gap-1"
+            className="px-2.5 py-1.5 rounded-lg text-metadata font-semibold bg-[#FCF3F4] text-[#7A2938] hover:bg-[#F8EAEB] border border-[#7A2938]/20 transition flex items-center gap-1"
             title="Sử dụng ngữ liệu này để xây dựng câu hỏi đọc hiểu"
           >
             <HelpCircle className="w-3.5 h-3.5" />
@@ -654,9 +655,9 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
         {/* TAB 4: ARGUMENT MAP (CÂY SƠ ĐỒ LẬP LUẬN) */}
         {activeTab === 'argument_map' && (
           <div className="space-y-4">
-            <div className="flex items-center justify-between bg-stone-100 p-3 rounded-xl border border-stone-200">
-              <div className="flex items-center gap-2 text-metadata text-stone-700">
-                <Network className="w-4 h-4 text-amber-600" />
+            <div className="flex items-center justify-between bg-[#FAF9F7] p-3 rounded-xl border border-[#E5E0DA]">
+              <div className="flex items-center gap-2 text-metadata text-[#706A65]">
+                <Network className="w-4 h-4 text-[#7A2938]" />
                 <span>Sơ đồ cây lập luận (Argument Map) giúp chuẩn hóa hệ thống ý cho KHBD và Đề thi</span>
               </div>
               <button
@@ -669,46 +670,46 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
             </div>
 
             {/* Visual Diagram Tree */}
-            <div className="p-6 md:p-8 rounded-3xl bg-stone-900 text-white shadow-xl space-y-6">
-              {/* 1. THESIS NODE */}
-              <div className="max-w-2xl mx-auto text-center p-5 rounded-2xl bg-amber-500/20 border-2 border-amber-400 text-white shadow-lg">
-                <span className="text-metadata font-medium text-amber-300 block mb-1">
+            <div className="p-6 md:p-8 rounded-3xl bg-[#FAF9F7] border border-[#E5E0DA] shadow-[var(--shadow-xs)] space-y-5">
+              {/* 1. THESIS NODE (Luận đề trung tâm) */}
+              <div className="max-w-2xl mx-auto text-center p-5 rounded-2xl bg-[#FCF3F4] border-2 border-[#7A2938]/30 shadow-[var(--shadow-xs)]">
+                <span className="text-metadata font-semibold text-[#7A2938] block mb-1">
                   Luận đề trung tâm (Thesis)
                 </span>
-                <p className="text-base md:text-lg font-serif font-semibold leading-relaxed text-amber-100">
+                <p className="text-base md:text-lg font-serif font-semibold leading-relaxed text-[#211E1C]">
                   "{argumentMap.thesis}"
                 </p>
               </div>
 
               {/* Connecting lines */}
               <div className="flex justify-center">
-                <div className="w-px h-6 bg-stone-700"></div>
+                <div className="w-px h-6 bg-[#D6D0C8]"></div>
               </div>
 
-              {/* 2. CLAIMS NODES */}
-              <div className="space-y-5">
+              {/* 2. CLAIMS NODES (Luận điểm) */}
+              <div className="space-y-4">
                 {argumentMap.claims.map((claim, cIdx) => (
-                  <div key={claim.id} className="p-5 rounded-2xl bg-stone-800/90 border border-stone-700 shadow-md">
-                    <div className="flex items-center justify-between pb-3 mb-3 border-b border-stone-700">
-                      <div className="flex items-center gap-2">
-                        <span className="w-6 h-6 rounded-full bg-amber-500 text-stone-950 font-bold text-xs flex items-center justify-center tabular-nums">
+                  <div key={claim.id} className="p-5 rounded-2xl bg-white border border-[#E5E0DA] shadow-[var(--shadow-xs)]">
+                    <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#EEEAE5]">
+                      <div className="flex items-center gap-2.5">
+                        <span className="w-6 h-6 rounded-full bg-[#FCF3F4] text-[#7A2938] border border-[#7A2938]/15 font-bold text-xs flex items-center justify-center tabular-nums">
                           {cIdx + 1}
                         </span>
-                        <h4 className="font-serif font-semibold text-card-title text-amber-200">
+                        <h4 className="font-serif font-semibold text-card-title text-[#211E1C]">
                           {claim.title}
                         </h4>
                       </div>
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => handleAddReason(cIdx)}
-                          className="px-2.5 py-1 min-h-[30px] bg-stone-700 hover:bg-stone-600 text-stone-200 rounded-lg text-metadata font-medium flex items-center gap-1 transition"
+                          className="btn-secondary min-h-[30px] px-2.5 py-1 text-metadata font-medium flex items-center gap-1"
                         >
-                          <Plus className="w-3 h-3" /> Thêm Lý lẽ
+                          <Plus className="w-3 h-3 text-[#706A65]" /> Thêm Lý lẽ
                         </button>
                         {argumentMap.claims.length > 1 && (
                           <button
                             onClick={() => handleDeleteClaim(cIdx)}
-                            className="p-1.5 text-stone-400 hover:text-red-400 rounded-lg"
+                            className="p-1.5 text-[#706A65] hover:text-[#B91C1C] rounded-lg hover:bg-rose-50 transition-colors"
                             title="Xóa luận điểm này"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -717,22 +718,25 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
                       </div>
                     </div>
 
-                    {/* Reasons & Evidences */}
-                    <div className="space-y-3 pl-4 border-l-2 border-amber-500/30">
+                    {/* Reasons & Evidences (Luận cứ & Dẫn chứng) */}
+                    <div className="space-y-3 pl-4 border-l-2 border-[#7A2938]/25">
                       {claim.reasons.map((reason, rIdx) => (
-                        <div key={reason.id} className="p-3 rounded-xl bg-stone-900/80 border border-stone-700/80 space-y-2">
+                        <div key={reason.id} className="p-3.5 rounded-xl bg-[#FAF9F7] border border-[#E5E0DA] space-y-2">
                           <div className="flex items-start gap-2">
-                            <span className="text-metadata font-semibold text-blue-400 shrink-0">Lý lẽ {rIdx + 1}:</span>
-                            <p className="text-body-ui text-stone-200 leading-relaxed font-sans">{reason.text}</p>
+                            <span className="text-metadata font-semibold text-[#7A2938] shrink-0">Lý lẽ {rIdx + 1}:</span>
+                            <p className="text-body-ui text-[#302C29] leading-relaxed font-sans">{reason.text}</p>
                           </div>
 
-                          {/* Evidences */}
-                          <div className="space-y-1.5 pl-3 pt-1">
+                          {/* Evidences (Dẫn chứng trích dẫn văn bản) */}
+                          <div className="space-y-2 pl-3 pt-1">
                             {reason.evidences.map((ev, eIdx) => (
-                              <div key={ev.id} className="p-2.5 rounded-lg bg-stone-950 border border-stone-800 text-metadata text-stone-300">
-                                <span className="font-semibold text-emerald-400">Dẫn chứng & Ngữ liệu: </span>
-                                <span>{ev.text}</span>
-                                <div className="text-amber-200/80 italic font-serif mt-1">
+                              <div key={ev.id} className="p-3 rounded-lg bg-white border border-[#E5E0DA] text-metadata text-[#302C29] shadow-[var(--shadow-xs)]">
+                                <div className="flex items-center gap-1.5 mb-1 text-emerald-800 font-semibold">
+                                  <Quote className="w-3.5 h-3.5 text-emerald-700" />
+                                  <span>Dẫn chứng & Ngữ liệu:</span>
+                                  <span className="font-normal text-[#706A65]">{ev.text}</span>
+                                </div>
+                                <div className="text-[#7A2938] italic font-serif mt-1 border-l-2 border-[#7A2938]/30 pl-2.5 bg-[#FCF3F4]/50 py-1 rounded-r">
                                   "{ev.quote}"
                                 </div>
                               </div>
@@ -747,15 +751,15 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
 
               {/* Connecting lines */}
               <div className="flex justify-center">
-                <div className="w-px h-6 bg-stone-700"></div>
+                <div className="w-px h-6 bg-[#D6D0C8]"></div>
               </div>
 
-              {/* 3. CONCLUSION NODE */}
-              <div className="max-w-2xl mx-auto text-center p-4 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 text-white">
-                <span className="text-metadata font-medium text-emerald-300 block mb-1">
+              {/* 3. CONCLUSION NODE (Kết luận) */}
+              <div className="max-w-2xl mx-auto text-center p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200/80">
+                <span className="text-metadata font-semibold text-emerald-800 block mb-1">
                   Kết luận & Thông điệp tổng thể
                 </span>
-                <p className="text-body-ui font-serif leading-relaxed text-emerald-100">
+                <p className="text-body-ui font-serif leading-relaxed text-emerald-950">
                   "{argumentMap.conclusion}"
                 </p>
               </div>

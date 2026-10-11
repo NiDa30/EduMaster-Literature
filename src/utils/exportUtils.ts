@@ -1,4 +1,5 @@
-import { LessonPlan5512, Exam7991Data, SlideItem, RubricData } from '../types';
+import { LessonPlan5512, Exam7991Data, SlideItem, RubricData, SlidesPresentationSettings } from '../types';
+import { resolveSlideStyle, getPptxFontName, getSlideCssFontFamily, getEffectiveBackgroundHex } from './slideStyleUtils';
 import PptxGenJS from 'pptxgenjs';
 import { 
   Document, 
@@ -14,7 +15,7 @@ import {
   PageOrientation 
 } from 'docx';
 
-function sanitizeFilename(name: string): string {
+export function sanitizeFilename(name: string): string {
   return name
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
@@ -41,7 +42,11 @@ function downloadLegacyBlob(content: string, filename: string, mimeType: string)
 // =========================================================================
 // 1. POWERPOINT EXPORT (.pptx) - VIA PPTXGENJS (REAL 16:9 PRESENTATION)
 // =========================================================================
-export async function exportPptxSlides(slides: SlideItem[], title: string): Promise<void> {
+export async function exportPptxSlides(
+  slides: SlideItem[], 
+  title: string,
+  presentationSettings?: SlidesPresentationSettings
+): Promise<void> {
   const pres = new PptxGenJS();
   pres.layout = 'LAYOUT_16x9';
   pres.author = 'EduMaster Văn';
@@ -50,29 +55,84 @@ export async function exportPptxSlides(slides: SlideItem[], title: string): Prom
 
   slides.forEach((s, idx) => {
     const slide = pres.addSlide();
-    slide.background = { color: '1C1817' };
+    const resolved = resolveSlideStyle(s, presentationSettings);
+
+    const cleanHex = (hex: string, fallback = '1C1817'): string => {
+      if (!hex) return fallback;
+      const stripped = hex.replace('#', '').trim();
+      return stripped.length === 3
+        ? stripped[0] + stripped[0] + stripped[1] + stripped[1] + stripped[2] + stripped[2]
+        : (stripped || fallback);
+    };
+
+    const titleColor = cleanHex(resolved.titleStyle.color, 'FFFFFF');
+    const bodyColor = cleanHex(resolved.bodyStyle.color, 'E7E5E4');
+    const quoteColor = cleanHex(resolved.quoteStyle.color, 'FEF3C7');
+    const accentColor = cleanHex(resolved.accentColor, 'D97706');
+    const secondaryColor = cleanHex(resolved.secondaryTextColor, 'A8A29E');
+
+    const titleFontFace = getPptxFontName(resolved.titleStyle.fontFamily);
+    const bodyFontFace = getPptxFontName(resolved.bodyStyle.fontFamily);
+    const quoteFontFace = getPptxFontName(resolved.quoteStyle.fontFamily);
+
+    // Background setup
+    if (resolved.background.type === 'image' && resolved.background.imageUrl) {
+      slide.addImage({
+        data: resolved.background.imageUrl,
+        x: 0,
+        y: 0,
+        w: 13.33,
+        h: 7.5
+      });
+      if (resolved.background.overlay && resolved.background.overlay.opacity > 0) {
+        const overlayColor = cleanHex(resolved.background.overlay.color, '000000');
+        const overlayAlpha = Math.round(resolved.background.overlay.opacity * 100);
+        slide.addShape(pres.ShapeType.rect, {
+          x: 0,
+          y: 0,
+          w: 13.33,
+          h: 7.5,
+          fill: { color: overlayColor, transparency: 100 - overlayAlpha },
+          line: { color: overlayColor, width: 0 }
+        });
+      }
+    } else {
+      const bgHex = cleanHex(getEffectiveBackgroundHex(resolved.background), '1C1817');
+      slide.background = { color: bgHex };
+    }
 
     // Phase tag & counter
     slide.addText(
       [
-        { text: (s.phaseTag || 'BÀI HỌC').toUpperCase(), options: { bold: true, color: 'D97706', fontSize: 10 } },
-        { text: `  |  Slide ${idx + 1}/${slides.length}`, options: { color: 'A8A29E', fontSize: 10 } }
+        { text: (s.phaseTag || 'BÀI HỌC').toUpperCase(), options: { bold: true, color: accentColor, fontSize: 10 } },
+        { text: `  |  Slide ${idx + 1}/${slides.length}`, options: { color: secondaryColor, fontSize: 10 } }
       ],
-      { x: 0.8, y: 0.4, w: 10.0, h: 0.35, fontFace: 'Arial' }
+      { x: 0.8, y: 0.4, w: 10.0, h: 0.35, fontFace: bodyFontFace }
     );
 
     // Slide Title
+    const calcTitleSize = Math.min(Math.max(Math.round(resolved.titleStyle.fontSize * 0.72), 18), 34);
     slide.addText(s.title || 'Tiêu đề Slide', {
       x: 0.8,
       y: 0.8,
       w: 11.7,
       h: 0.9,
-      fontFace: 'Arial',
-      fontSize: 22,
-      color: 'FFFFFF',
-      bold: true,
+      fontFace: titleFontFace,
+      fontSize: calcTitleSize,
+      color: titleColor,
+      bold: resolved.titleStyle.fontWeight >= 600,
+      italic: resolved.titleStyle.italic,
+      align: resolved.titleStyle.align,
       wrap: true
     });
+
+    const cardFill = resolved.cardBackground.startsWith('#')
+      ? cleanHex(resolved.cardBackground)
+      : (resolved.isDark ? '272221' : 'FFFFFF');
+
+    const cardLine = resolved.cardBorder.startsWith('#')
+      ? cleanHex(resolved.cardBorder)
+      : (resolved.isDark ? '44403C' : 'E5E0DA');
 
     // Body content by layout
     if (s.layout === 'quote' && s.quoteText) {
@@ -81,21 +141,22 @@ export async function exportPptxSlides(slides: SlideItem[], title: string): Prom
         y: 1.8,
         w: 11.3,
         h: 4.4,
-        fill: { color: '272221' },
-        line: { color: 'B45309', width: 1.5 },
+        fill: { color: cardFill },
+        line: { color: accentColor, width: 1.5 },
         rectRadius: 0.2
       });
 
+      const quoteSize = Math.min(Math.max(Math.round(resolved.quoteStyle.fontSize * 0.8), 16), 26);
       slide.addText(`“${s.quoteText}”`, {
         x: 1.4,
         y: 2.1,
         w: 10.5,
         h: 2.0,
-        fontFace: 'Georgia',
-        fontSize: 18,
-        color: 'FEF3C7',
-        italic: true,
-        align: 'center',
+        fontFace: quoteFontFace,
+        fontSize: quoteSize,
+        color: quoteColor,
+        italic: resolved.quoteStyle.italic,
+        align: resolved.quoteStyle.align,
         wrap: true
       });
 
@@ -105,32 +166,31 @@ export async function exportPptxSlides(slides: SlideItem[], title: string): Prom
           y: 4.2,
           w: 10.5,
           h: 0.4,
-          fontFace: 'Arial',
+          fontFace: bodyFontFace,
           fontSize: 14,
-          color: 'F59E0B',
+          color: accentColor,
           bold: true,
-          align: 'center'
+          align: resolved.quoteStyle.align
         });
       }
 
       if (s.discussionQuestion) {
         slide.addText(
           [
-            { text: 'Câu hỏi khám phá: ', options: { bold: true, color: 'FBBF24', fontSize: 13 } },
-            { text: s.discussionQuestion, options: { color: 'E7E5E4', fontSize: 13 } }
+            { text: 'Câu hỏi khám phá: ', options: { bold: true, color: accentColor, fontSize: 13 } },
+            { text: s.discussionQuestion, options: { color: bodyColor, fontSize: 13 } }
           ],
-          { x: 1.4, y: 4.8, w: 10.5, h: 1.1, fontFace: 'Arial', wrap: true }
+          { x: 1.4, y: 4.8, w: 10.5, h: 1.1, fontFace: bodyFontFace, wrap: true }
         );
       }
     } else if (s.layout === 'split') {
-      // Left box
       slide.addShape(pres.ShapeType.roundRect, {
         x: 0.8,
         y: 1.9,
         w: 5.6,
         h: 4.3,
-        fill: { color: '272221' },
-        line: { color: '44403C', width: 1 },
+        fill: { color: cardFill },
+        line: { color: cardLine, width: 1 },
         rectRadius: 0.15
       });
       slide.addText(s.contentLeft || '', {
@@ -138,34 +198,35 @@ export async function exportPptxSlides(slides: SlideItem[], title: string): Prom
         y: 2.1,
         w: 5.2,
         h: 1.4,
-        fontFace: 'Arial',
-        fontSize: 14,
-        color: 'F5F5F4',
+        fontFace: bodyFontFace,
+        fontSize: Math.min(resolved.bodyStyle.fontSize, 16),
+        color: bodyColor,
+        align: resolved.bodyStyle.align,
         wrap: true
       });
       if (s.bullets && s.bullets.length > 0) {
         const bulletRuns = s.bullets.map(b => ({
           text: b,
-          options: { bullet: true, color: 'D6D3D1', fontSize: 13 }
+          options: { bullet: true, color: bodyColor, fontSize: 13 }
         }));
         slide.addText(bulletRuns, {
           x: 1.0,
           y: 3.6,
           w: 5.2,
           h: 2.4,
-          fontFace: 'Arial',
+          fontFace: bodyFontFace,
+          align: resolved.bodyStyle.align,
           wrap: true
         });
       }
 
-      // Right box
       slide.addShape(pres.ShapeType.roundRect, {
         x: 6.8,
         y: 1.9,
         w: 5.6,
         h: 4.3,
-        fill: { color: '272221' },
-        line: { color: '44403C', width: 1 },
+        fill: { color: cardFill },
+        line: { color: cardLine, width: 1 },
         rectRadius: 0.15
       });
       slide.addText(s.contentRight || '', {
@@ -173,9 +234,10 @@ export async function exportPptxSlides(slides: SlideItem[], title: string): Prom
         y: 2.1,
         w: 5.2,
         h: 3.9,
-        fontFace: 'Georgia',
-        fontSize: 14,
-        color: 'FAFAF9',
+        fontFace: quoteFontFace,
+        fontSize: Math.min(resolved.bodyStyle.fontSize, 16),
+        color: bodyColor,
+        align: resolved.bodyStyle.align,
         wrap: true
       });
     } else if (s.layout === 'cards' && s.cards) {
@@ -189,8 +251,8 @@ export async function exportPptxSlides(slides: SlideItem[], title: string): Prom
           y: 2.0,
           w: cardW,
           h: 4.2,
-          fill: { color: '272221' },
-          line: { color: 'B45309', width: 1 },
+          fill: { color: cardFill },
+          line: { color: accentColor, width: 1 },
           rectRadius: 0.15
         });
         slide.addText(card.title, {
@@ -198,9 +260,9 @@ export async function exportPptxSlides(slides: SlideItem[], title: string): Prom
           y: 2.2,
           w: cardW - 0.4,
           h: 0.6,
-          fontFace: 'Georgia',
+          fontFace: titleFontFace,
           fontSize: 15,
-          color: 'FBBF24',
+          color: accentColor,
           bold: true,
           wrap: true
         });
@@ -209,9 +271,10 @@ export async function exportPptxSlides(slides: SlideItem[], title: string): Prom
           y: 2.9,
           w: cardW - 0.4,
           h: 3.1,
-          fontFace: 'Arial',
+          fontFace: bodyFontFace,
           fontSize: 13,
-          color: 'E7E5E4',
+          color: bodyColor,
+          align: resolved.bodyStyle.align,
           wrap: true
         });
       });
@@ -221,8 +284,8 @@ export async function exportPptxSlides(slides: SlideItem[], title: string): Prom
         y: 1.9,
         w: 11.3,
         h: 4.4,
-        fill: { color: '272221' },
-        line: { color: '7C2D37', width: 1.5 },
+        fill: { color: cardFill },
+        line: { color: accentColor, width: 1.5 },
         rectRadius: 0.2
       });
       slide.addText(s.quizQuestion.question, {
@@ -230,9 +293,9 @@ export async function exportPptxSlides(slides: SlideItem[], title: string): Prom
         y: 2.1,
         w: 10.7,
         h: 1.2,
-        fontFace: 'Georgia',
+        fontFace: titleFontFace,
         fontSize: 16,
-        color: 'FFFFFF',
+        color: titleColor,
         bold: true,
         wrap: true
       });
@@ -249,8 +312,8 @@ export async function exportPptxSlides(slides: SlideItem[], title: string): Prom
           y: oy,
           w: optW,
           h: optH,
-          fill: { color: isCorrect ? '064E3B' : '1C1917' },
-          line: { color: isCorrect ? '10B981' : '57534E', width: 1 },
+          fill: { color: isCorrect ? '064E3B' : (resolved.isDark ? '1C1917' : 'F5F5F4') },
+          line: { color: isCorrect ? '10B981' : cardLine, width: 1 },
           rectRadius: 0.1
         });
         slide.addText(opt, {
@@ -258,9 +321,9 @@ export async function exportPptxSlides(slides: SlideItem[], title: string): Prom
           y: oy + 0.1,
           w: optW - 0.4,
           h: optH - 0.2,
-          fontFace: 'Arial',
+          fontFace: bodyFontFace,
           fontSize: 12,
-          color: isCorrect ? 'A7F3D0' : 'E7E5E4',
+          color: isCorrect ? 'A7F3D0' : bodyColor,
           wrap: true
         });
       });
@@ -270,8 +333,8 @@ export async function exportPptxSlides(slides: SlideItem[], title: string): Prom
         y: 1.9,
         w: 10.9,
         h: 4.3,
-        fill: { color: '272221' },
-        line: { color: '44403C', width: 1 },
+        fill: { color: cardFill },
+        line: { color: cardLine, width: 1 },
         rectRadius: 0.2
       });
       slide.addText(s.contentLeft || '', {
@@ -279,22 +342,24 @@ export async function exportPptxSlides(slides: SlideItem[], title: string): Prom
         y: 2.2,
         w: 10.1,
         h: 1.4,
-        fontFace: 'Georgia',
-        fontSize: 16,
-        color: 'F5F5F4',
+        fontFace: bodyFontFace,
+        fontSize: Math.min(resolved.bodyStyle.fontSize, 18),
+        color: bodyColor,
+        align: resolved.bodyStyle.align,
         wrap: true
       });
       if (s.bullets && s.bullets.length > 0) {
         const bulletRuns = s.bullets.map(b => ({
           text: b,
-          options: { bullet: true, color: 'D6D3D1', fontSize: 14 }
+          options: { bullet: true, color: bodyColor, fontSize: 14 }
         }));
         slide.addText(bulletRuns, {
           x: 1.6,
           y: 3.7,
           w: 10.1,
           h: 2.2,
-          fontFace: 'Arial',
+          fontFace: bodyFontFace,
+          align: resolved.bodyStyle.align,
           wrap: true
         });
       }
@@ -307,9 +372,9 @@ export async function exportPptxSlides(slides: SlideItem[], title: string): Prom
         y: 6.7,
         w: 11.7,
         h: 0.4,
-        fontFace: 'Arial',
+        fontFace: bodyFontFace,
         fontSize: 10,
-        color: 'A8A29E',
+        color: secondaryColor,
         italic: true,
         wrap: true
       });
@@ -1393,54 +1458,134 @@ export function exportWordExam7991(exam: Exam7991Data, khbd: LessonPlan5512) {
   downloadLegacyBlob(content, `DE_THI_7991_${sanitizeFilename(exam.examHeader.title)}.doc`, 'application/msword');
 }
 
-export function exportHtmlSlides(slides: SlideItem[], title: string) {
+export function exportHtmlSlides(
+  slides: SlideItem[], 
+  title: string,
+  presentationSettings?: SlidesPresentationSettings
+) {
   const content = `<!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
   <title>Slide Bài Giảng: ${title}</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Be+Vietnam+Pro:wght@400;500;600;700&subset=vietnamese&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Noto+Sans:wght@400;600&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Be Vietnam Pro', sans-serif; background-color: #1A1615; color: #FAF8F5; margin: 0; }
-    .font-serif { font-family: 'Lora', Georgia, serif; }
-    .slide-page { min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; padding: 3rem; border-bottom: 4px solid #2D2422; box-sizing: border-box; }
+    body { font-family: 'Be Vietnam Pro', sans-serif; background-color: #171413; color: #FAF8F5; margin: 0; padding: 0; }
+    .slide-page { min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; padding: 3.5rem; border-bottom: 2px solid rgba(255,255,255,0.1); box-sizing: border-box; position: relative; }
+    @media print {
+      .no-print { display: none !important; }
+      .slide-page { page-break-after: always; height: 100vh; min-height: 100vh; }
+    }
   </style>
 </head>
-<body class="bg-[#171413] text-stone-100">
-  <div class="fixed top-4 right-4 z-50 bg-stone-900/95 px-4 py-2 rounded-xl text-sm border border-stone-800 shadow-xl flex gap-3 items-center">
-    <span class="text-amber-400 font-semibold font-serif">EduMaster Văn</span>
-    <button onclick="window.print()" class="bg-[#7C2D37] hover:bg-[#993A46] text-white px-3 py-1 rounded text-xs font-medium">In ấn / Xuất PDF</button>
+<body>
+  <div class="fixed top-4 right-4 z-50 bg-stone-900/95 px-4 py-2 rounded-xl text-sm border border-stone-700 shadow-2xl flex gap-3 items-center no-print backdrop-blur">
+    <span class="text-amber-400 font-semibold">EduMaster Văn</span>
+    <button onclick="window.print()" class="bg-[#7A2938] hover:bg-[#68232F] text-white px-3 py-1.5 rounded-lg text-xs font-medium cursor-pointer transition">In ấn / Xuất PDF</button>
   </div>
-  ${slides.map((s, idx) => `
-    <section class="slide-page">
-      <div>
-        <div class="flex items-center justify-between mb-4">
-          <span class="px-3 py-1 text-xs font-semibold rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">${s.phaseTag}</span>
-          <span class="text-sm font-mono text-stone-400">Slide ${idx + 1} / ${slides.length}</span>
+  ${slides.map((s, idx) => {
+    const style = resolveSlideStyle(s, presentationSettings);
+    let bgCss = '';
+    if (style.background.type === 'solid') {
+      bgCss = `background-color: ${style.background.color || '#171413'};`;
+    } else if (style.background.type === 'gradient') {
+      const angle = style.background.gradient?.angle ?? 135;
+      const from = style.background.gradient?.from || '#171413';
+      const to = style.background.gradient?.to || '#29201D';
+      bgCss = `background: linear-gradient(${angle}deg, ${from}, ${to});`;
+    } else if (style.background.type === 'image') {
+      bgCss = `background-image: url('${style.background.imageUrl || ''}'); background-size: ${style.background.imageFit || 'cover'}; background-position: ${style.background.imagePosition || 'center'}; background-repeat: no-repeat; background-color: #171413;`;
+    } else if (style.background.type === 'vignette') {
+      const base = style.background.vignette?.baseColor || '#171413';
+      const glow = style.background.vignette?.glowColor || 'rgba(245, 158, 11, 0.12)';
+      bgCss = `background-color: ${base}; background-image: radial-gradient(circle at 50% 30%, ${glow} 0%, transparent 72%);`;
+    }
+
+    const titleCss = `font-family: ${getSlideCssFontFamily(style.titleStyle.fontFamily)}; font-size: ${style.titleStyle.fontSize}px; color: ${style.titleStyle.color}; font-weight: ${style.titleStyle.fontWeight}; text-align: ${style.titleStyle.align}; ${style.titleStyle.italic ? 'font-style: italic;' : ''}`;
+    const bodyCss = `font-family: ${getSlideCssFontFamily(style.bodyStyle.fontFamily)}; font-size: ${style.bodyStyle.fontSize}px; color: ${style.bodyStyle.color}; font-weight: ${style.bodyStyle.fontWeight}; text-align: ${style.bodyStyle.align}; ${style.bodyStyle.italic ? 'font-style: italic;' : ''}`;
+    const quoteCss = `font-family: ${getSlideCssFontFamily(style.quoteStyle.fontFamily)}; font-size: ${style.quoteStyle.fontSize}px; color: ${style.quoteStyle.color}; font-weight: ${style.quoteStyle.fontWeight}; text-align: ${style.quoteStyle.align}; ${style.quoteStyle.italic ? 'font-style: italic;' : ''}`;
+    const cardBoxStyle = `background: ${style.cardBackground}; border: 1px solid ${style.cardBorder}; border-radius: ${style.radius}px;`;
+
+    let bodyHtml = '';
+    if (s.layout === 'quote' && s.quoteText) {
+      bodyHtml = `
+        <div class="max-w-4xl mx-auto p-10 text-center" style="${cardBoxStyle}">
+          <p style="${quoteCss} line-height: 1.6; margin-bottom: 1.5rem;" class="whitespace-pre-line">“${s.quoteText}”</p>
+          ${s.quoteAuthor ? `<div style="color: ${style.accentColor}; font-weight: 600; font-size: 1.1rem; margin-bottom: 1.5rem;">— ${s.quoteAuthor}</div>` : ''}
+          ${s.discussionQuestion ? `<div class="p-5 text-left rounded-xl" style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08);"><strong style="color: ${style.accentColor}; display: block; margin-bottom: 0.5rem;">Câu hỏi khám phá:</strong><span style="${bodyCss}">${s.discussionQuestion}</span></div>` : ''}
         </div>
-        <h1 class="text-3xl font-semibold font-serif text-white mb-6">${s.title}</h1>
-      </div>
-      <div class="my-auto py-6">
-        ${s.layout === 'quote' && s.quoteText ? `
-          <div class="max-w-[760px] mx-auto p-10 rounded-2xl bg-stone-900/80 border border-amber-900/40 text-center">
-            <p class="text-2xl font-serif italic text-amber-100 mb-4 whitespace-pre-line">"${s.quoteText}"</p>
-            <div class="text-sm text-amber-400 font-medium mb-4">— ${s.quoteAuthor || ''}</div>
-            ${s.discussionQuestion ? `<div class="p-4 rounded-xl bg-stone-800/80 border border-stone-700 text-sm text-stone-300 text-left"><strong class="text-amber-300 block mb-1">Câu hỏi thảo luận:</strong> ${s.discussionQuestion}</div>` : ''}
+      `;
+    } else if (s.layout === 'split') {
+      bodyHtml = `
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+          <div class="p-8" style="${cardBoxStyle}">
+            <p style="${bodyCss} margin-bottom: 1.25rem;">${s.contentLeft || ''}</p>
+            ${s.bullets ? `<ul class="space-y-2.5" style="${bodyCss}">${s.bullets.map(b => `<li>✦ ${b}</li>`).join('')}</ul>` : ''}
           </div>
-        ` : `
-          <div class="bg-stone-900/70 p-8 rounded-2xl border border-stone-800 max-w-4xl mx-auto">
-            <p class="text-xl text-stone-200 leading-[1.8] mb-4 font-serif">${s.contentLeft || ''}</p>
-            ${s.bullets ? `<ul class="space-y-2 text-stone-300">${s.bullets.map(b => `<li>✦ ${b}</li>`).join('')}</ul>` : ''}
+          <div class="p-8" style="${cardBoxStyle}">
+            <p style="${quoteCss} margin-bottom: 1.25rem;">${s.contentRight || ''}</p>
           </div>
-        `}
-      </div>
-      <div class="pt-4 border-t border-stone-800 flex justify-between items-center text-xs text-stone-400">
-        <div><span class="font-semibold text-stone-300">Ghi chú sư phạm:</span> ${s.speakerNotes || ''}</div>
-        <div>EduMaster Văn THPT</div>
-      </div>
-    </section>
-  `).join('')}
+        </div>
+      `;
+    } else if (s.layout === 'cards' && s.cards) {
+      bodyHtml = `
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          ${s.cards.map(c => `
+            <div class="p-7 flex flex-col justify-between" style="${cardBoxStyle}">
+              <h3 style="color: ${style.accentColor}; font-family: ${getSlideCssFontFamily(style.titleStyle.fontFamily)}; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem;">${c.title}</h3>
+              <p style="${bodyCss}">${c.desc}</p>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    } else if (s.layout === 'quiz' && s.quizQuestion) {
+      bodyHtml = `
+        <div class="max-w-4xl mx-auto p-8" style="${cardBoxStyle}">
+          <h3 style="${titleCss} font-size: 1.4rem; margin-bottom: 1.5rem;">${s.quizQuestion.question}</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            ${s.quizQuestion.options.map((opt, oi) => {
+              const isCorrect = oi === s.quizQuestion?.correctIndex;
+              return `
+                <div class="p-4 rounded-xl border flex items-center gap-3" style="background: ${isCorrect ? 'rgba(16, 185, 129, 0.15)' : 'rgba(0,0,0,0.15)'}; border-color: ${isCorrect ? '#10B981' : style.cardBorder};">
+                  <span class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold" style="background: ${isCorrect ? '#10B981' : 'rgba(255,255,255,0.1)'}; color: #fff;">${String.fromCharCode(65 + oi)}</span>
+                  <span style="${bodyCss}">${opt}</span>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    } else {
+      bodyHtml = `
+        <div class="max-w-4xl mx-auto p-10" style="${cardBoxStyle}">
+          <p style="${bodyCss} line-height: 1.8; margin-bottom: 1.5rem;">${s.contentLeft || ''}</p>
+          ${s.bullets ? `<ul class="space-y-3" style="${bodyCss}">${s.bullets.map(b => `<li>✦ ${b}</li>`).join('')}</ul>` : ''}
+        </div>
+      `;
+    }
+
+    return `
+      <section class="slide-page" style="${bgCss}">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-3 py-1 text-xs font-semibold rounded-full uppercase tracking-wider" style="background: ${style.accentColor}25; color: ${style.accentColor}; border: 1px solid ${style.accentColor}40;">${s.phaseTag || 'BÀI HỌC'}</span>
+            <span class="text-sm font-mono" style="color: ${style.secondaryTextColor};">Slide ${idx + 1} / ${slides.length}</span>
+          </div>
+          <h1 style="${titleCss} margin-bottom: 1.5rem;">${s.title}</h1>
+        </div>
+        <div class="my-auto py-4">
+          ${bodyHtml}
+        </div>
+        <div class="pt-4 border-t flex justify-between items-center text-xs" style="border-color: rgba(255,255,255,0.1); color: ${style.secondaryTextColor};">
+          <div><strong style="color: ${style.titleStyle.color};">Ghi chú sư phạm:</strong> ${s.speakerNotes || 'Không có ghi chú'}</div>
+          <div>EduMaster Văn • Thiết kế bài giảng chuyên sâu</div>
+        </div>
+      </section>
+    `;
+  }).join('')}
 </body>
 </html>`;
   downloadLegacyBlob(content, `SLIDE_NGU_VAN_${sanitizeFilename(title)}.html`, 'text/html');

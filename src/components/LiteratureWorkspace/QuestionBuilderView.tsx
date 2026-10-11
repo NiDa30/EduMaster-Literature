@@ -36,6 +36,101 @@ interface QuestionBuilderViewProps {
   defaultPassage?: string;
 }
 
+export function filterQuestions(
+  questions: LiteratureQuestionItem[],
+  filterType: QuestionType | 'all',
+  filterLevel: CognitiveLevel | 'all'
+): LiteratureQuestionItem[] {
+  return questions.filter(q => {
+    if (filterType !== 'all' && q.type !== filterType) return false;
+    if (filterLevel !== 'all' && q.level !== filterLevel) return false;
+    return true;
+  });
+}
+
+export function pushQuestionToExam(
+  exam: Exam7991Data,
+  q: LiteratureQuestionItem,
+  customId?: string
+): { updatedExam: Exam7991Data; targetPart: 'partI' | 'partII' | 'partIII' | 'partIV'; message: string } {
+  const ts = customId || Date.now().toString();
+  if (q.linkedPart === 'partII') {
+    const newPartII: PartIITrueFalseQuestion = {
+      id: `p2-${ts}`,
+      code: `Câu ${exam.partII.length + 1} (Đúng/Sai)`,
+      level: q.level,
+      stem: q.question,
+      statements: [
+        { subId: 'a', text: q.answer || 'Nhận định a về chi tiết nghệ thuật hoặc nội dung.', isCorrect: true, explanation: q.guide || 'Đúng theo ngữ liệu.' },
+        { subId: 'b', text: 'Nhận định b có ý phủ định hoặc suy diễn chưa chính xác.', isCorrect: false, explanation: 'Chưa phù hợp ngữ cảnh tác phẩm.' },
+        { subId: 'c', text: 'Nhận định c mở rộng liên hệ tư tưởng thẩm mỹ.', isCorrect: true, explanation: 'Đúng theo đặc trưng thể loại.' },
+        { subId: 'd', text: 'Nhận định d áp đặt góc nhìn phiến diện.', isCorrect: false, explanation: 'Không có căn cứ trong văn bản.' }
+      ],
+      points: 1.0
+    };
+    return {
+      updatedExam: { ...exam, partII: [...exam.partII, newPartII] },
+      targetPart: 'partII',
+      message: 'Đã chuyển câu hỏi vào Phần II (Trắc nghiệm Đúng/Sai) của Đề 7991!'
+    };
+  } else if (q.linkedPart === 'partIII' || (!q.linkedPart && q.type === 'tieng_viet')) {
+    const newPartIII: PartIIIShortAnswerQuestion = {
+      id: `p3-${ts}`,
+      code: `Câu ${exam.partIII.length + 1}`,
+      level: q.level === 'NB' ? 'TH' : q.level,
+      question: q.question,
+      correctAnswer: q.answer || 'Từ ngữ / Khái niệm chuẩn',
+      points: 0.5,
+      explanation: q.guide || 'Căn cứ ngữ liệu và chuẩn kiến thức tiếng Việt.'
+    };
+    return {
+      updatedExam: { ...exam, partIII: [...exam.partIII, newPartIII] },
+      targetPart: 'partIII',
+      message: 'Đã chuyển câu hỏi vào Phần III (Trả lời ngắn) của Đề 7991!'
+    };
+  } else if (q.linkedPart === 'partIV' || (!q.linkedPart && (q.type === 'nl_xa_hoi' || q.type === 'nl_van_hoc'))) {
+    const newPartIV = {
+      id: `p4-${ts}`,
+      code: `Câu ${exam.partIV.length + 1} (Tự luận)`,
+      level: 'VD' as const,
+      question: q.question,
+      rubric: [
+        { step: '1. Đảm bảo cấu trúc bài văn nghị luận, xác định đúng vấn đề', points: 0.5 },
+        { step: q.answer ? `2. Phân tích luận điểm cốt lõi: ${q.answer.slice(0, 100)}` : '2. Triển khai hệ thống luận điểm sáng rõ', points: 1.5 },
+        { step: '3. Chính tả, ngữ pháp và sáng tạo liên hệ', points: 1.0 }
+      ],
+      points: q.points || 3.0
+    };
+    return {
+      updatedExam: { ...exam, partIV: [...exam.partIV, newPartIV] },
+      targetPart: 'partIV',
+      message: 'Đã chuyển câu hỏi vào Phần IV (Tự luận) của Đề 7991!'
+    };
+  } else {
+    // Default to Part I (linkedPart === 'partI' or type === 'doc_hieu')
+    const newPartI = {
+      id: `p1-${ts}`,
+      code: `Câu ${exam.partI.length + 1}`,
+      level: q.level,
+      question: q.question,
+      options: {
+        A: q.answer || 'Phương án A (Chính xác)',
+        B: 'Phương án B (Phương án nhiễu 1)',
+        C: 'Phương án C (Phương án nhiễu 2)',
+        D: 'Phương án D (Phương án nhiễu 3)'
+      },
+      correctAnswer: 'A' as const,
+      points: 0.25,
+      explanation: q.guide || 'Căn cứ vào ngữ liệu đọc hiểu bài học.'
+    };
+    return {
+      updatedExam: { ...exam, partI: [...exam.partI, newPartI] },
+      targetPart: 'partI',
+      message: 'Đã chuyển câu hỏi vào Phần I (Trắc nghiệm nhiều lựa chọn) của Đề 7991!'
+    };
+  }
+}
+
 export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
   questions,
   setQuestions,
@@ -76,11 +171,7 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
   const [newPoints, setNewPoints] = useState<number>(0.5);
   const [linkedPart, setLinkedPart] = useState<'partI' | 'partII' | 'partIII' | 'partIV'>('partI');
 
-  const filteredQuestions = questions.filter(q => {
-    if (filterType !== 'all' && q.type !== filterType) return false;
-    if (filterLevel !== 'all' && q.level !== filterLevel) return false;
-    return true;
-  });
+  const filteredQuestions = filterQuestions(questions, filterType, filterLevel);
 
   const handleCreateQuestion = (e: React.FormEvent) => {
     e.preventDefault();
@@ -115,76 +206,17 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
   };
 
   const handlePushToExam = (q: LiteratureQuestionItem) => {
-    if (q.linkedPart === 'partI' || q.type === 'doc_hieu') {
-      const newPartI = {
-        id: `p1-${Date.now()}`,
-        code: `Câu ${exam.partI.length + 1}`,
-        level: q.level,
-        question: q.question,
-        options: {
-          A: q.answer || 'Phương án A (Chính xác)',
-          B: 'Phương án B (Phương án nhiễu 1)',
-          C: 'Phương án C (Phương án nhiễu 2)',
-          D: 'Phương án D (Phương án nhiễu 3)'
-        },
-        correctAnswer: 'A' as const,
-        points: 0.25,
-        explanation: q.guide || 'Căn cứ vào ngữ liệu đọc hiểu bài học.'
-      };
-      setExam({ ...exam, partI: [...exam.partI, newPartI] });
-      showToast('Đã chuyển câu hỏi vào Phần I (Trắc nghiệm nhiều lựa chọn) của Đề 7991!');
-    } else if (q.linkedPart === 'partII') {
-      const newPartII: PartIITrueFalseQuestion = {
-        id: `p2-${Date.now()}`,
-        code: `Câu ${exam.partII.length + 1} (Đúng/Sai)`,
-        level: q.level,
-        stem: q.question,
-        statements: [
-          { subId: 'a', text: q.answer || 'Nhận định a về chi tiết nghệ thuật hoặc nội dung.', isCorrect: true, explanation: q.guide || 'Đúng theo ngữ liệu.' },
-          { subId: 'b', text: 'Nhận định b có ý phủ định hoặc suy diễn chưa chính xác.', isCorrect: false, explanation: 'Chưa phù hợp ngữ cảnh tác phẩm.' },
-          { subId: 'c', text: 'Nhận định c mở rộng liên hệ tư tưởng thẩm mỹ.', isCorrect: true, explanation: 'Đúng theo đặc trưng thể loại.' },
-          { subId: 'd', text: 'Nhận định d áp đặt góc nhìn phiến diện.', isCorrect: false, explanation: 'Không có căn cứ trong văn bản.' }
-        ],
-        points: 1.0
-      };
-      setExam({ ...exam, partII: [...exam.partII, newPartII] });
-      showToast('Đã chuyển câu hỏi vào Phần II (Trắc nghiệm Đúng/Sai) của Đề 7991!');
-    } else if (q.linkedPart === 'partIII' || q.type === 'tieng_viet') {
-      const newPartIII: PartIIIShortAnswerQuestion = {
-        id: `p3-${Date.now()}`,
-        code: `Câu ${exam.partIII.length + 1}`,
-        level: q.level === 'NB' ? 'TH' : q.level,
-        question: q.question,
-        correctAnswer: q.answer || 'Từ ngữ / Khái niệm chuẩn',
-        points: 0.5,
-        explanation: q.guide || 'Căn cứ ngữ liệu và chuẩn kiến thức tiếng Việt.'
-      };
-      setExam({ ...exam, partIII: [...exam.partIII, newPartIII] });
-      showToast('Đã chuyển câu hỏi vào Phần III (Trả lời ngắn) của Đề 7991!');
-    } else {
-      const newPartIV = {
-        id: `p4-${Date.now()}`,
-        code: `Câu ${exam.partIV.length + 1} (Tự luận)`,
-        level: 'VD' as const,
-        question: q.question,
-        rubric: [
-          { step: '1. Đảm bảo cấu trúc bài văn nghị luận, xác định đúng vấn đề', points: 0.5 },
-          { step: q.answer ? `2. Phân tích luận điểm cốt lõi: ${q.answer.slice(0, 100)}` : '2. Triển khai hệ thống luận điểm sáng rõ', points: 1.5 },
-          { step: '3. Chính tả, ngữ pháp và sáng tạo liên hệ', points: 1.0 }
-        ],
-        points: q.points || 3.0
-      };
-      setExam({ ...exam, partIV: [...exam.partIV, newPartIV] });
-      showToast('Đã chuyển câu hỏi vào Phần IV (Tự luận) của Đề 7991!');
-    }
+    const { updatedExam, message } = pushQuestionToExam(exam, q);
+    setExam(updatedExam);
+    showToast(message);
   };
 
   const getTypeBadge = (type: QuestionType) => {
     switch (type) {
-      case 'doc_hieu': return 'bg-blue-100 text-blue-900 border-blue-200';
-      case 'tieng_viet': return 'bg-purple-100 text-purple-900 border-purple-200';
-      case 'nl_xa_hoi': return 'bg-amber-100 text-amber-900 border-amber-200';
-      case 'nl_van_hoc': return 'bg-rose-100 text-rose-900 border-rose-200';
+      case 'doc_hieu': return 'bg-sky-50 text-sky-900 border-sky-200/60';
+      case 'tieng_viet': return 'bg-[#FCF3F4] text-[#7A2938] border-[#7A2938]/20';
+      case 'nl_xa_hoi': return 'bg-amber-50 text-amber-900 border-amber-200/60';
+      case 'nl_van_hoc': return 'bg-rose-50 text-rose-900 border-rose-200/60';
     }
   };
 
@@ -199,9 +231,9 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
 
   const getLevelBadge = (level: CognitiveLevel) => {
     switch (level) {
-      case 'NB': return 'bg-stone-200 text-stone-800';
-      case 'TH': return 'bg-blue-100 text-blue-800';
-      case 'VD': return 'bg-emerald-100 text-emerald-800';
+      case 'NB': return 'bg-[#F5F3F0] text-[#706A65] border border-[#E5E0DA]';
+      case 'TH': return 'bg-sky-50 text-sky-800 border border-sky-200/60';
+      case 'VD': return 'bg-emerald-50 text-emerald-800 border border-emerald-200/60';
     }
   };
 
@@ -216,16 +248,16 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
   return (
     <div className="h-full min-h-0 flex flex-col p-4 md:p-6 space-y-3 overflow-hidden max-w-7xl w-full mx-auto">
       {/* Header Bar */}
-      <div className="bg-white p-4 rounded-2xl border border-stone-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0">
+      <div className="bg-white p-3.5 md:p-4 rounded-2xl border border-[#E5E0DA] shadow-[var(--shadow-xs)] flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0">
         <div>
           <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1">
+            <span className="px-2.5 py-0.5 rounded-full text-metadata font-semibold bg-[#FCF3F4] text-[#7A2938] border border-[#7A2938]/15 flex items-center gap-1">
               <Sparkles className="w-3.5 h-3.5" />
               Ngân hàng Câu hỏi Ngữ văn
             </span>
-            <span className="text-metadata text-stone-500 font-medium">Theo chuẩn Ma trận Đánh giá Năng lực</span>
+            <span className="text-metadata text-[#706A65] font-medium hidden sm:inline">Theo chuẩn Ma trận Đánh giá Năng lực</span>
           </div>
-          <h1 className="text-card-title md:text-section-title font-semibold text-stone-900 mt-1">
+          <h1 className="text-section md:text-page-title font-semibold text-[#211E1C] mt-1 leading-[1.3]">
             Question Builder Chuyên sâu: Ngữ liệu · Câu hỏi · Barem
           </h1>
         </div>
@@ -233,16 +265,16 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
         <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={handleStartCreate}
-            className="btn-primary min-h-[38px] px-3.5 py-1.5 bg-[#7C2D37] hover:bg-[#68232D] text-white rounded-xl text-metadata font-semibold flex items-center gap-1.5 shadow-sm transition"
+            className="btn-primary min-h-[36px] px-3.5 py-1.5 rounded-xl text-metadata font-semibold flex items-center gap-1.5"
           >
             <Plus className="w-4 h-4" />
             <span>Tạo câu hỏi</span>
           </button>
           <button
             onClick={() => setActiveModule('matrix')}
-            className="btn-secondary min-h-[38px] px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-800 rounded-xl text-metadata font-semibold flex items-center gap-1.5 border border-stone-300 transition"
+            className="btn-secondary min-h-[36px] px-3.5 py-1.5 rounded-xl text-metadata font-semibold flex items-center gap-1.5"
           >
-            <Grid3X3 className="w-4 h-4 text-purple-700" />
+            <Grid3X3 className="w-4 h-4 text-[#7A2938]" />
             <span>Xem Ma trận</span>
           </button>
         </div>
@@ -251,7 +283,7 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
       {/* 2-Column Split Workspace (Rule 29.14) */}
       <div className="flex-1 min-h-0 flex flex-col lg:flex-row gap-4 overflow-hidden">
         {/* LEFT COLUMN: Questions List + Search/Filter */}
-        <aside className="w-full lg:w-[380px] xl:w-[420px] shrink-0 h-full min-h-0 flex flex-col card-surface p-3 overflow-hidden">
+        <aside data-tour-id="question-bank" className="w-full lg:w-[380px] xl:w-[420px] shrink-0 h-full min-h-0 flex flex-col card-surface p-3 overflow-hidden">
           {/* Filters Bar */}
           <div className="space-y-2 pb-3 border-b border-[#E7E5E4] shrink-0">
             <div className="flex items-center justify-between text-metadata">
@@ -261,7 +293,7 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
               </span>
               <button
                 onClick={handleStartCreate}
-                className="text-[#7C2D37] hover:underline font-medium text-[12px]"
+                className="text-[#7A2938] hover:underline font-medium text-[12px]"
               >
                 + Thêm mới
               </button>
@@ -311,31 +343,31 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
                     }}
                     className={`p-3 rounded-xl border cursor-pointer transition-all ${
                       isSelected
-                        ? 'bg-[#FBF4F5] border-[#7C2D37] shadow-xs'
-                        : 'bg-white border-stone-200 hover:border-stone-300 hover:bg-stone-50/60'
+                        ? 'bg-[#FCF3F4] border-[#7A2938] shadow-[var(--shadow-xs)]'
+                        : 'bg-white border-[#E5E0DA] hover:border-[#D6D0C8] hover:bg-[#FAF9F7]'
                     }`}
                   >
                     <div className="flex items-center justify-between gap-1 mb-1">
                       <div className="flex items-center gap-1.5">
-                        <span className="font-semibold text-metadata text-stone-900 bg-stone-100 px-2 py-0.5 rounded text-[11px] tabular-nums">
+                        <span className="font-semibold text-metadata text-[#211E1C] bg-[#F5F3F0] border border-[#E5E0DA] px-2 py-0.5 rounded text-[11px] tabular-nums">
                           {q.code || `Câu ${idx + 1}`}
                         </span>
                         <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded border ${getTypeBadge(q.type)}`}>
                           {getTypeLabel(q.type)}
                         </span>
                       </div>
-                      <span className="text-[11px] font-semibold text-[#7C2D37] tabular-nums">
+                      <span className="text-[11px] font-semibold text-[#7A2938] tabular-nums">
                         {q.points}đ
                       </span>
                     </div>
 
-                    <p className="text-metadata text-stone-800 line-clamp-2 leading-snug">
+                    <p className="text-metadata text-[#302C29] line-clamp-2 leading-snug">
                       {q.question}
                     </p>
 
-                    <div className="flex items-center justify-between text-[11px] text-stone-500 mt-2 pt-1 border-t border-stone-100">
+                    <div className="flex items-center justify-between text-[11px] text-[#706A65] mt-2 pt-1 border-t border-[#EEEAE5]">
                       <span>{getLevelLabel(q.level)} · {q.skill}</span>
-                      <ArrowRight className="w-3.5 h-3.5 text-stone-400" />
+                      <ArrowRight className="w-3.5 h-3.5 text-[#99918A]" />
                     </div>
                   </div>
                 );
@@ -345,14 +377,14 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
         </aside>
 
         {/* RIGHT COLUMN: Question Editor or Detailed Preview */}
-        <section className="flex-1 h-full min-h-0 flex flex-col card-surface p-5 overflow-hidden">
+        <section data-tour-id="question-editor" className="flex-1 h-full min-h-0 flex flex-col card-surface p-5 overflow-hidden">
           {isCreatingNew ? (
             /* CREATE FORM */
             <form onSubmit={handleCreateQuestion} className="h-full min-h-0 flex flex-col space-y-3 overflow-hidden">
               <div className="flex items-center justify-between pb-2 border-b border-[#E7E5E4] shrink-0">
                 <div>
                   <h3 className="font-semibold text-card-title text-stone-900 flex items-center gap-2">
-                    <Plus className="w-4 h-4 text-[#7C2D37]" />
+                    <Plus className="w-4 h-4 text-[#7A2938]" />
                     Soạn câu hỏi mới
                   </h3>
                   <span className="text-metadata text-stone-500">Quy trình chuẩn hóa 4 bước Ngữ văn</span>
@@ -478,13 +510,13 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setIsCreatingNew(false)}
-                  className="min-h-[38px] px-4 py-1.5 text-metadata font-medium text-stone-600 hover:bg-stone-100 rounded-xl transition"
+                  className="btn-secondary min-h-[36px] px-4 py-1.5 text-metadata font-medium rounded-xl"
                 >
                   Hủy
                 </button>
                 <button
                   type="submit"
-                  className="btn-primary min-h-[38px] px-5 py-1.5 bg-[#7C2D37] hover:bg-[#68232D] text-white font-medium text-metadata rounded-xl shadow transition"
+                  className="btn-primary min-h-[36px] px-5 py-1.5 font-medium text-metadata rounded-xl"
                 >
                   Lưu vào Ngân hàng
                 </button>
@@ -494,9 +526,9 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
             /* DETAILED VIEW / EDIT OF SELECTED QUESTION */
             <div className="h-full min-h-0 flex flex-col space-y-4 overflow-hidden">
               {/* Header with badges and Action buttons */}
-              <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-[#E7E5E4] shrink-0">
+              <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-[#EEEAE5] shrink-0">
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold text-card-title text-stone-900 bg-stone-100 px-3 py-1 rounded-lg tabular-nums">
+                  <span className="font-semibold text-card-title text-[#211E1C] bg-[#F5F3F0] border border-[#E5E0DA] px-3 py-1 rounded-lg tabular-nums">
                     {selectedQuestion.code}
                   </span>
                   <span className={`text-metadata font-medium px-2.5 py-1 rounded-full border ${getTypeBadge(selectedQuestion.type)}`}>
@@ -505,18 +537,18 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
                   <span className={`text-metadata font-medium px-2.5 py-1 rounded ${getLevelBadge(selectedQuestion.level)}`}>
                     {getLevelLabel(selectedQuestion.level)}
                   </span>
-                  <span className="text-metadata font-medium px-2.5 py-1 rounded bg-amber-50 text-amber-800 border border-amber-200">
+                  <span className="text-metadata font-medium px-2.5 py-1 rounded bg-[#FAF9F7] text-[#302C29] border border-[#E5E0DA]">
                     Kỹ năng: {selectedQuestion.skill}
                   </span>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="text-metadata tabular-nums font-semibold text-[#7C2D37] bg-rose-50 px-2.5 py-1 rounded border border-rose-100">
+                  <span className="text-metadata tabular-nums font-semibold text-[#7A2938] bg-[#FCF3F4] px-2.5 py-1 rounded border border-[#7A2938]/15">
                     {selectedQuestion.points} điểm
                   </span>
                   <button
                     onClick={() => handlePushToExam(selectedQuestion)}
-                    className="min-h-[36px] px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-lg text-metadata font-medium flex items-center gap-1 transition"
+                    className="min-h-[34px] px-3 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200/60 rounded-lg text-metadata font-medium flex items-center gap-1 transition-colors"
                     title="Chuyển câu hỏi này sang Đề 7991"
                   >
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -524,7 +556,7 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
                   </button>
                   <button
                     onClick={() => handleDeleteQuestion(selectedQuestion.id)}
-                    className="p-2 text-stone-400 hover:text-red-600 rounded-lg transition"
+                    className="p-1.5 text-[#706A65] hover:text-[#B91C1C] rounded-lg hover:bg-rose-50 transition-colors min-h-[32px] min-w-[32px] flex items-center justify-center"
                     title="Xóa câu hỏi này"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -536,8 +568,8 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
               <div className="flex-1 min-h-0 overflow-y-auto space-y-4 pr-1">
                 {/* Passage Snippet */}
                 {selectedQuestion.passageSnippet && (
-                  <div className="p-4 bg-[#FAF8F5] rounded-xl border border-stone-200 text-body-ui font-serif italic text-stone-800 whitespace-pre-line border-l-4 border-l-[#7C2D37] leading-[1.8]">
-                    <strong className="font-sans not-italic text-stone-600 block mb-1 text-metadata font-semibold">
+                  <div className="p-4 bg-[#FAF9F7] rounded-xl border border-[#E5E0DA] text-body-ui font-serif italic text-[#211E1C] whitespace-pre-line border-l-4 border-l-[#7A2938] leading-[1.8]">
+                    <strong className="font-sans not-italic text-[#706A65] block mb-1 text-metadata font-semibold">
                       Ngữ liệu tham chiếu:
                     </strong>
                     {selectedQuestion.passageSnippet}
@@ -545,27 +577,27 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
                 )}
 
                 {/* Question */}
-                <div className="p-4 rounded-xl bg-stone-50 border border-stone-200">
-                  <span className="font-semibold text-stone-700 text-metadata block mb-1">
+                <div className="p-4 rounded-xl bg-[#FAF9F7] border border-[#E5E0DA]">
+                  <span className="font-semibold text-[#706A65] text-metadata block mb-1">
                     Lệnh hỏi:
                   </span>
-                  <p className="text-body-ui font-medium text-stone-900 leading-normal">
+                  <p className="text-body-ui font-medium text-[#211E1C] leading-normal">
                     {selectedQuestion.question}
                   </p>
                 </div>
 
                 {/* Answer & Guide */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="p-4 bg-white rounded-xl border border-stone-200 shadow-2xs">
-                    <span className="font-semibold text-stone-800 block mb-1 text-metadata">
+                  <div className="p-4 bg-white rounded-xl border border-[#E5E0DA] shadow-[var(--shadow-xs)]">
+                    <span className="font-semibold text-[#211E1C] block mb-1 text-metadata">
                       Đáp án gợi ý:
                     </span>
-                    <p className="text-stone-700 whitespace-pre-line leading-relaxed text-body-ui">
+                    <p className="text-[#302C29] whitespace-pre-line leading-relaxed text-body-ui">
                       {selectedQuestion.answer || 'Chưa cập nhật'}
                     </p>
                   </div>
-                  <div className="p-4 bg-white rounded-xl border border-stone-200 shadow-2xs">
-                    <span className="font-semibold text-stone-800 block mb-1 text-metadata">
+                  <div className="p-4 bg-white rounded-xl border border-[#E5E0DA] shadow-[var(--shadow-xs)]">
+                    <span className="font-semibold text-[#211E1C] block mb-1 text-metadata">
                       Hướng dẫn chấm & Barem:
                     </span>
                     <p className="text-stone-600 whitespace-pre-line leading-relaxed text-body-ui">
@@ -585,7 +617,7 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
 
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 bg-[#292524] text-white text-[13px] px-3.5 py-2 rounded-lg shadow-lg flex items-center gap-2 border border-stone-700 animate-fade-in">
+        <div className="fixed bottom-6 right-6 z-50 bg-[#211E1C] text-white text-[13px] px-3.5 py-2 rounded-lg shadow-[var(--shadow-lg)] flex items-center gap-2 border border-stone-800 anim-toast">
           <Sparkles className="w-3.5 h-3.5 text-amber-400" strokeWidth={1.75} />
           <span>{toastMessage}</span>
         </div>

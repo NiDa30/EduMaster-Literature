@@ -259,7 +259,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
           <div className="relative">
             <button
               onClick={() => setIsExportDropdownOpen(!isExportDropdownOpen)}
-              className="btn-primary min-h-[36px] px-3.5 py-1.5 bg-[#7C2D37] hover:bg-[#68232D] text-white rounded-xl text-metadata font-semibold flex items-center gap-1.5 shadow-sm transition"
+              className="btn-primary min-h-[36px] px-3.5 py-1.5 bg-[#7A2938] hover:bg-[#68232F] text-white rounded-xl text-metadata font-semibold flex items-center gap-1.5 shadow-sm transition"
             >
               <Download className="w-3.5 h-3.5" />
               <span>Xuất Word (.docx)</span>
@@ -267,7 +267,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
             </button>
 
             {isExportDropdownOpen && (
-              <div className="absolute right-0 mt-1 w-64 bg-white border border-stone-200 rounded-xl shadow-lg py-1 z-50">
+              <div className="absolute right-0 mt-1 w-64 bg-white border border-stone-200 rounded-xl shadow-lg py-1 z-50 anim-dropdown">
                 <button
                   onClick={() => {
                     exportDocxExam(exam, khbd);
@@ -276,7 +276,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                   }}
                   className="w-full text-left px-3 py-2 text-body-ui text-stone-900 hover:bg-stone-50 flex items-center gap-2 font-medium"
                 >
-                  <FileText className="w-4 h-4 text-[#7C2D37]" />
+                  <FileText className="w-4 h-4 text-[#7A2938]" />
                   <div>
                     <div>Xuất Word (.docx) — Khuyên dùng</div>
                     <div className="text-[11px] text-stone-500">Chuẩn OpenXML A4, bảng biểu rõ ràng</div>
@@ -314,7 +314,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
         {/* Left Column: 4 Parts Navigation & Matrix Summary */}
         <div className="w-64 xl:w-72 shrink-0 flex flex-col gap-3 overflow-hidden no-print">
           {/* Navigation Card */}
-          <div className="card-surface p-3.5 flex flex-col gap-2 shrink-0">
+          <div data-tour-id="exam-validation" className="card-surface p-3.5 flex flex-col gap-2 shrink-0">
             <div className="flex items-center justify-between text-metadata font-semibold text-stone-700 pb-1 border-b border-stone-100">
               <span>Cấu trúc đề kiểm tra</span>
               <span className="px-2 py-0.5 rounded bg-stone-900 text-amber-300 font-bold tabular-nums">
@@ -325,15 +325,15 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
             <div className="space-y-1.5 pt-1">
               <button
                 onClick={() => setSelectedPart('all')}
-                className={`w-full text-left p-2.5 rounded-xl border transition flex items-center justify-between text-metadata ${
+                className={`w-full text-left p-2.5 rounded-xl border transition-all duration-150 flex items-center justify-between text-metadata ${
                   selectedPart === 'all'
-                    ? 'bg-stone-900 text-white border-stone-900 font-semibold shadow-xs'
-                    : 'bg-white text-stone-700 border-stone-200 hover:bg-stone-50'
+                    ? 'bg-[#FCF3F4] text-[#7A2938] border-[#ECC2C9] font-semibold shadow-xs'
+                    : 'bg-white text-[#706A65] border-[#E5E0DA] hover:bg-[#FAF9F7] hover:text-[#211E1C]'
                 }`}
               >
                 <span>Tất cả các phần</span>
-                <span className={`tabular-nums px-1.5 py-0.5 rounded text-xs ${
-                  selectedPart === 'all' ? 'bg-stone-800 text-amber-300' : 'bg-stone-100 text-stone-600'
+                <span className={`tabular-nums px-1.5 py-0.5 rounded text-xs font-semibold ${
+                  selectedPart === 'all' ? 'bg-[#7A2938] text-white' : 'bg-[#F5F3F0] text-[#706A65]'
                 }`}>
                   {grandTotal.toFixed(1)} đ
                 </span>
@@ -341,65 +341,65 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
 
               <button
                 onClick={() => setSelectedPart('partI')}
-                className={`w-full text-left p-2.5 rounded-xl border transition flex items-center justify-between text-metadata ${
+                className={`w-full text-left p-2.5 rounded-xl border transition-all duration-150 flex items-center justify-between text-metadata ${
                   selectedPart === 'partI'
-                    ? 'bg-blue-50 border-blue-400 text-blue-950 font-semibold shadow-xs'
-                    : 'bg-white text-stone-700 border-stone-200 hover:bg-stone-50'
+                    ? 'bg-[#FCF3F4] text-[#7A2938] border-[#ECC2C9] font-semibold shadow-xs'
+                    : 'bg-white text-[#706A65] border-[#E5E0DA] hover:bg-[#FAF9F7] hover:text-[#211E1C]'
                 }`}
               >
                 <div>
                   <div className="font-medium">Phần I: TN Nhiều lựa chọn</div>
-                  <div className="text-xs text-stone-500 tabular-nums">{exam.partI.length} câu (0.25 đ/câu)</div>
+                  <div className="text-xs text-[#99918A] tabular-nums">{exam.partI.length} câu (0.25 đ/câu)</div>
                 </div>
-                <span className="tabular-nums font-semibold text-blue-700">{totalPartIPoints.toFixed(1)} đ</span>
+                <span className="tabular-nums font-semibold text-[#302C29]">{totalPartIPoints.toFixed(1)} đ</span>
               </button>
 
               <button
                 onClick={() => setSelectedPart('partII')}
-                className={`w-full text-left p-2.5 rounded-xl border transition flex items-center justify-between text-metadata ${
+                className={`w-full text-left p-2.5 rounded-xl border transition-all duration-150 flex items-center justify-between text-metadata ${
                   selectedPart === 'partII'
-                    ? 'bg-emerald-50 border-emerald-400 text-emerald-950 font-semibold shadow-xs'
-                    : 'bg-white text-stone-700 border-stone-200 hover:bg-stone-50'
+                    ? 'bg-[#FCF3F4] text-[#7A2938] border-[#ECC2C9] font-semibold shadow-xs'
+                    : 'bg-white text-[#706A65] border-[#E5E0DA] hover:bg-[#FAF9F7] hover:text-[#211E1C]'
                 }`}
               >
                 <div>
-                  <div className="font-medium flex items-center gap-1">
+                  <div className="font-medium flex items-center gap-1.5">
                     <span>Phần II: Đúng / Sai</span>
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
                   </div>
-                  <div className="text-xs text-stone-500 tabular-nums">{exam.partII.length} câu (4 lệnh a-b-c-d)</div>
+                  <div className="text-xs text-[#99918A] tabular-nums">{exam.partII.length} câu (4 lệnh a-b-c-d)</div>
                 </div>
-                <span className="tabular-nums font-semibold text-emerald-700">{totalPartIIPoints.toFixed(1)} đ</span>
+                <span className="tabular-nums font-semibold text-[#302C29]">{totalPartIIPoints.toFixed(1)} đ</span>
               </button>
 
               <button
                 onClick={() => setSelectedPart('partIII')}
-                className={`w-full text-left p-2.5 rounded-xl border transition flex items-center justify-between text-metadata ${
+                className={`w-full text-left p-2.5 rounded-xl border transition-all duration-150 flex items-center justify-between text-metadata ${
                   selectedPart === 'partIII'
-                    ? 'bg-purple-50 border-purple-400 text-purple-950 font-semibold shadow-xs'
-                    : 'bg-white text-stone-700 border-stone-200 hover:bg-stone-50'
+                    ? 'bg-[#FCF3F4] text-[#7A2938] border-[#ECC2C9] font-semibold shadow-xs'
+                    : 'bg-white text-[#706A65] border-[#E5E0DA] hover:bg-[#FAF9F7] hover:text-[#211E1C]'
                 }`}
               >
                 <div>
                   <div className="font-medium">Phần III: Trả lời ngắn</div>
-                  <div className="text-xs text-stone-500 tabular-nums">{exam.partIII.length} câu (0.5 đ/câu)</div>
+                  <div className="text-xs text-[#99918A] tabular-nums">{exam.partIII.length} câu (0.5 đ/câu)</div>
                 </div>
-                <span className="tabular-nums font-semibold text-purple-700">{totalPartIIIPoints.toFixed(1)} đ</span>
+                <span className="tabular-nums font-semibold text-[#302C29]">{totalPartIIIPoints.toFixed(1)} đ</span>
               </button>
 
               <button
                 onClick={() => setSelectedPart('partIV')}
-                className={`w-full text-left p-2.5 rounded-xl border transition flex items-center justify-between text-metadata ${
+                className={`w-full text-left p-2.5 rounded-xl border transition-all duration-150 flex items-center justify-between text-metadata ${
                   selectedPart === 'partIV'
-                    ? 'bg-amber-50 border-amber-400 text-amber-950 font-semibold shadow-xs'
-                    : 'bg-white text-stone-700 border-stone-200 hover:bg-stone-50'
+                    ? 'bg-[#FCF3F4] text-[#7A2938] border-[#ECC2C9] font-semibold shadow-xs'
+                    : 'bg-white text-[#706A65] border-[#E5E0DA] hover:bg-[#FAF9F7] hover:text-[#211E1C]'
                 }`}
               >
                 <div>
                   <div className="font-medium">Phần IV: Tự luận</div>
-                  <div className="text-xs text-stone-500 tabular-nums">{exam.partIV.length} câu nghị luận</div>
+                  <div className="text-xs text-[#99918A] tabular-nums">{exam.partIV.length} câu nghị luận</div>
                 </div>
-                <span className="tabular-nums font-semibold text-amber-700">{totalPartIVPoints.toFixed(1)} đ</span>
+                <span className="tabular-nums font-semibold text-[#302C29]">{totalPartIVPoints.toFixed(1)} đ</span>
               </button>
             </div>
           </div>
@@ -452,14 +452,14 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
         </div>
 
         {/* Right Column: Scrollable Exam Paper Document */}
-        <div className="flex-1 min-h-0 overflow-y-auto panel-scroll pr-1">
+        <div data-tour-id="exam-builder" className="flex-1 min-h-0 overflow-y-auto panel-scroll pr-1">
           <div className="bg-white rounded-2xl border border-stone-300 p-8 md:p-12 shadow-md max-w-4xl mx-auto text-stone-900">
             {/* Exam Header */}
             <div className="grid grid-cols-2 gap-4 pb-6 border-b border-stone-300">
               <div className="text-center font-serif text-metadata">
                 <p className="uppercase text-stone-700 tracking-normal">{khbd.info.department}</p>
                 <p className="font-semibold uppercase text-stone-900 tracking-normal">{khbd.info.school}</p>
-                <p className="font-semibold text-[#7C2D37] mt-1 tabular-nums">{exam.examHeader.examCode}</p>
+                <p className="font-semibold text-[#7A2938] mt-1 tabular-nums">{exam.examHeader.examCode}</p>
               </div>
               <div className="text-center font-serif text-metadata">
                 <p className="font-semibold uppercase text-stone-900 tracking-normal">{exam.examHeader.title}</p>
@@ -470,7 +470,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
 
             {/* Reading Passage */}
             {exam.passageRef && (
-              <div className="my-6 p-4 rounded-xl bg-[#FAF8F5] border-l-4 border-l-[#7C2D37] border border-stone-200 font-serif text-body-ui leading-[1.8] text-stone-900 whitespace-pre-line max-w-[760px]">
+              <div className="my-6 p-4 rounded-xl bg-[#FAF8F5] border-l-4 border-l-[#7A2938] border border-stone-200 font-serif text-body-ui leading-[1.8] text-stone-900 whitespace-pre-line max-w-[760px]">
                 <strong className="font-sans font-semibold text-stone-700 block mb-1 text-metadata">Ngữ liệu đọc hiểu:</strong>
                 {exam.passageRef}
               </div>
@@ -479,42 +479,42 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
             {/* ----------------- PHẦN I ----------------- */}
             {(selectedPart === 'all' || selectedPart === 'partI') && (
               <section className="mt-4 mb-8">
-                <div className="bg-stone-100 p-3 rounded-xl border border-stone-200 mb-4 flex items-center justify-between">
-                  <h2 className="font-semibold text-card-title text-stone-900 uppercase font-serif tracking-normal">
+                <div className="bg-[#FAF9F7] p-3 rounded-xl border border-[#E5E0DA] mb-4 flex items-center justify-between">
+                  <h2 className="font-semibold text-card-title text-[#211E1C] uppercase font-serif tracking-normal">
                     PHẦN I. CÂU TRẮC NGHIỆM NHIỀU PHƯƠNG ÁN LỰA CHỌN ({totalPartIPoints.toFixed(1)} ĐIỂM)
                   </h2>
                   <div className="flex items-center gap-2">
-                    <span className="text-metadata font-medium px-2.5 py-0.5 bg-blue-100 text-blue-900 rounded tabular-nums">
+                    <span className="text-metadata font-medium px-2.5 py-0.5 bg-[#F5F3F0] text-[#706A65] rounded tabular-nums">
                       {exam.partI.length} câu
                     </span>
                     <button
                       onClick={handleAddPartI}
-                      className="p-1 px-2 text-xs font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-1 transition"
+                      className="btn-primary btn-compact"
                     >
-                      <Plus className="w-3 h-3" />
+                      <Plus className="w-3.5 h-3.5" />
                       <span>Thêm câu</span>
                     </button>
                   </div>
                 </div>
-                <p className="text-metadata italic text-stone-600 mb-4">
+                <p className="text-metadata italic text-[#706A65] mb-4">
                   Thí sinh trả lời từ câu 1 đến câu {exam.partI.length}. Mỗi câu đúng được 0.25 điểm.
                 </p>
 
                 <div className="space-y-4">
                   {exam.partI.map((q, idx) => (
-                    <div key={q.id} className="p-4 rounded-xl bg-stone-50/60 border border-stone-200 relative group">
+                    <div key={q.id} className="p-4 rounded-xl bg-white border border-[#E5E0DA] hover:border-[#D6D0C8] shadow-[var(--shadow-xs)] relative group transition-all duration-150">
                       <div className="flex items-start justify-between gap-2 mb-2">
-                        <p className="text-body-ui text-stone-900 font-medium">
-                          <span className="font-semibold text-[#7C2D37] tabular-nums">{q.code || `Câu ${idx + 1}`}: </span>
+                        <p className="text-body-ui text-[#211E1C] font-medium">
+                          <span className="font-semibold text-[#7A2938] tabular-nums">{q.code || `Câu ${idx + 1}`}: </span>
                           {q.question}
                         </p>
                         <div className="flex items-center gap-1.5 shrink-0">
-                          <span className="text-metadata font-medium px-2 py-0.5 rounded bg-stone-200 text-stone-700">
+                          <span className="text-metadata font-medium px-2 py-0.5 rounded bg-[#F5F3F0] text-[#706A65]">
                             {q.level === 'NB' ? 'Nhận biết' : 'Thông hiểu'}
                           </span>
                           <button
                             onClick={() => setEditingQuestion({ part: 'partI', data: { ...q } })}
-                            className="p-1 text-stone-400 hover:text-stone-800 rounded hover:bg-stone-200 transition"
+                            className="p-1 text-[#99918A] hover:text-[#211E1C] rounded hover:bg-[#FAF9F7] transition"
                             title="Sửa câu hỏi"
                           >
                             <Edit3 className="w-3.5 h-3.5" />
@@ -522,7 +522,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                           {exam.partI.length > 1 && (
                             <button
                               onClick={() => handleDeletePartI(q.id)}
-                              className="p-1 text-stone-400 hover:text-red-600 rounded hover:bg-red-50 transition"
+                              className="p-1 text-[#99918A] hover:text-[#991B1B] rounded hover:bg-[#FEF2F2] transition"
                               title="Xóa câu hỏi"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -538,13 +538,13 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                           return (
                             <div
                               key={key}
-                              className={`p-2.5 min-h-[38px] rounded-lg border flex items-start gap-1.5 ${
+                              className={`p-2.5 min-h-[38px] rounded-lg border flex items-start gap-1.5 transition-colors ${
                                 showKeyAnswer && isCorrectAnswer
-                                  ? 'bg-emerald-100 border-emerald-500 font-semibold text-emerald-900'
-                                  : 'bg-white border-stone-200 text-stone-800'
+                                  ? 'bg-[#F0FDF4] border-[#BBF7D0] font-semibold text-[#166534]'
+                                  : 'bg-[#FAF9F7] border-[#EEEAE5] text-[#302C29]'
                               }`}
                             >
-                              <span className="font-semibold text-stone-500 tabular-nums">{key}.</span>
+                              <span className="font-semibold text-[#706A65] tabular-nums">{key}.</span>
                               <span className="leading-snug">{q.options[key]}</span>
                             </div>
                           );
@@ -552,7 +552,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                       </div>
 
                       {viewMode === 'marking_guide' && q.explanation && (
-                        <div className="mt-2.5 pt-2 border-t border-stone-200 text-metadata text-stone-600 flex items-start gap-1.5">
+                        <div className="mt-2.5 pt-2 border-t border-[#EEEAE5] text-metadata text-[#706A65] flex items-start gap-1.5">
                           <span className="font-semibold text-emerald-800">Giải thích đáp án:</span>
                           <span>{q.explanation}</span>
                         </div>
@@ -566,24 +566,24 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
             {/* ----------------- PHẦN II ----------------- */}
             {(selectedPart === 'all' || selectedPart === 'partII') && (
               <section className="mb-8">
-                <div className="bg-emerald-50 p-3 rounded-xl border border-emerald-200 mb-4 flex items-center justify-between">
-                  <h2 className="font-semibold text-card-title text-emerald-950 uppercase font-serif tracking-normal">
+                <div className="bg-[#FAF9F7] p-3 rounded-xl border border-[#E5E0DA] mb-4 flex items-center justify-between">
+                  <h2 className="font-semibold text-card-title text-[#211E1C] uppercase font-serif tracking-normal">
                     PHẦN II. CÂU TRẮC NGHIỆM ĐÚNG / SAI ({totalPartIIPoints.toFixed(1)} ĐIỂM)
                   </h2>
                   <div className="flex items-center gap-2">
-                    <span className="text-metadata font-medium px-2.5 py-0.5 bg-emerald-200 text-emerald-900 rounded tabular-nums">
+                    <span className="text-metadata font-medium px-2.5 py-0.5 bg-[#F5F3F0] text-[#706A65] rounded tabular-nums">
                       {exam.partII.length} câu
                     </span>
                     <button
                       onClick={handleAddPartII}
-                      className="p-1 px-2 text-xs font-semibold rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white flex items-center gap-1 transition"
+                      className="btn-primary btn-compact"
                     >
-                      <Plus className="w-3 h-3" />
+                      <Plus className="w-3.5 h-3.5" />
                       <span>Thêm câu</span>
                     </button>
                   </div>
                 </div>
-                <p className="text-metadata italic text-stone-600 mb-4">
+                <p className="text-metadata italic text-[#706A65] mb-4">
                   Thí sinh trả lời từ câu 1 đến câu {exam.partII.length}. Trong mỗi ý a), b), c), d), chọn đúng hoặc sai. (1 ý: 0.1đ | 2 ý: 0.25đ | 3 ý: 0.5đ | 4 ý: 1.0đ)
                 </p>
 
@@ -654,19 +654,19 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
             {/* ----------------- PHẦN III ----------------- */}
             {(selectedPart === 'all' || selectedPart === 'partIII') && (
               <section className="mb-8">
-                <div className="bg-purple-50 p-3 rounded-xl border border-purple-200 mb-4 flex items-center justify-between">
-                  <h2 className="font-semibold text-card-title text-purple-950 uppercase font-serif tracking-normal">
+                <div className="bg-[#FAF9F7] p-3 rounded-xl border border-[#E5E0DA] mb-4 flex items-center justify-between">
+                  <h2 className="font-semibold text-card-title text-[#211E1C] uppercase font-serif tracking-normal">
                     PHẦN III. CÂU TRẮC NGHIỆM TRẢ LỜI NGẮN ({totalPartIIIPoints.toFixed(1)} ĐIỂM)
                   </h2>
                   <div className="flex items-center gap-2">
-                    <span className="text-metadata font-medium px-2.5 py-0.5 bg-purple-200 text-purple-900 rounded tabular-nums">
+                    <span className="text-metadata font-medium px-2.5 py-0.5 bg-[#F5F3F0] text-[#706A65] rounded tabular-nums">
                       {exam.partIII.length} câu
                     </span>
                     <button
                       onClick={handleAddPartIII}
-                      className="p-1 px-2 text-xs font-semibold rounded-lg bg-purple-700 hover:bg-purple-800 text-white flex items-center gap-1 transition"
+                      className="btn-primary btn-compact"
                     >
-                      <Plus className="w-3 h-3" />
+                      <Plus className="w-3.5 h-3.5" />
                       <span>Thêm câu</span>
                     </button>
                   </div>
@@ -674,19 +674,19 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
 
                 <div className="space-y-4">
                   {exam.partIII.map((q, idx) => (
-                    <div key={q.id} className="p-4 rounded-xl bg-purple-50/30 border border-purple-100">
+                    <div key={q.id} className="p-4 rounded-xl bg-white border border-[#E5E0DA] hover:border-[#D6D0C8] shadow-[var(--shadow-xs)] transition-all duration-150">
                       <div className="flex items-start justify-between gap-2 mb-2">
-                        <p className="text-body-ui font-medium text-stone-900">
-                          <span className="font-semibold text-purple-900 tabular-nums">{q.code || `Câu ${idx + 1}`}: </span>
+                        <p className="text-body-ui font-medium text-[#211E1C]">
+                          <span className="font-semibold text-[#7A2938] tabular-nums">{q.code || `Câu ${idx + 1}`}: </span>
                           {q.question}
                         </p>
                         <div className="flex items-center gap-1.5 shrink-0">
-                          <span className="text-metadata font-semibold px-2 py-0.5 rounded bg-purple-100 text-purple-800 tabular-nums">
+                          <span className="text-metadata font-semibold px-2 py-0.5 rounded bg-[#F5F3F0] text-[#706A65] tabular-nums">
                             {q.points || 0.5} đ
                           </span>
                           <button
                             onClick={() => setEditingQuestion({ part: 'partIII', data: { ...q } })}
-                            className="p-1 text-stone-400 hover:text-stone-800 rounded hover:bg-stone-200 transition"
+                            className="p-1 text-[#99918A] hover:text-[#211E1C] rounded hover:bg-[#FAF9F7] transition"
                             title="Sửa câu hỏi"
                           >
                             <Edit3 className="w-3.5 h-3.5" />
@@ -694,7 +694,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                           {exam.partIII.length > 1 && (
                             <button
                               onClick={() => handleDeletePartIII(q.id)}
-                              className="p-1 text-stone-400 hover:text-red-600 rounded hover:bg-red-50 transition"
+                              className="p-1 text-[#99918A] hover:text-[#991B1B] rounded hover:bg-[#FEF2F2] transition"
                               title="Xóa câu hỏi"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -704,20 +704,20 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                       </div>
 
                       {viewMode === 'marking_guide' ? (
-                        <div className="mt-2 p-2.5 bg-white rounded-lg border border-purple-200 text-metadata">
-                          <div className="font-semibold text-purple-900 flex items-center gap-1.5">
-                            <CheckCircle2 className="w-4 h-4 text-purple-600" />
+                        <div className="mt-2 p-2.5 bg-[#FAF9F7] rounded-lg border border-[#EEEAE5] text-metadata">
+                          <div className="font-semibold text-[#211E1C] flex items-center gap-1.5">
+                            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                             <span>Đáp án chuẩn: <span className="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-serif">{q.correctAnswer}</span></span>
                           </div>
-                          {q.explanation && <p className="text-stone-600 mt-1 leading-relaxed">{q.explanation}</p>}
+                          {q.explanation && <p className="text-[#706A65] mt-1 leading-relaxed">{q.explanation}</p>}
                         </div>
                       ) : (
                         <div className="mt-2 flex items-center gap-2">
-                          <span className="text-metadata text-stone-500 font-medium">Trả lời:</span>
+                          <span className="text-metadata text-[#706A65] font-medium">Trả lời:</span>
                           <input
                             type="text"
                             placeholder="Ghi câu trả lời ngắn..."
-                            className="min-h-[38px] px-3 py-1.5 bg-white border border-stone-300 rounded-lg text-body-ui w-64 font-serif"
+                            className="min-h-[38px] px-3 py-1.5 bg-white border border-[#E5E0DA] rounded-lg text-body-ui w-64 font-serif text-[#211E1C] focus:border-[#7A2938]"
                           />
                         </div>
                       )}
@@ -730,19 +730,19 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
             {/* ----------------- PHẦN IV ----------------- */}
             {(selectedPart === 'all' || selectedPart === 'partIV') && (
               <section className="mb-6">
-                <div className="bg-amber-50 p-3 rounded-xl border border-amber-200 mb-4 flex items-center justify-between">
-                  <h2 className="font-semibold text-card-title text-amber-950 uppercase font-serif tracking-normal">
+                <div className="bg-[#FAF9F7] p-3 rounded-xl border border-[#E5E0DA] mb-4 flex items-center justify-between">
+                  <h2 className="font-semibold text-card-title text-[#211E1C] uppercase font-serif tracking-normal">
                     PHẦN IV. TỰ LUẬN NGHỊ LUẬN VĂN HỌC ({totalPartIVPoints.toFixed(1)} ĐIỂM)
                   </h2>
                   <div className="flex items-center gap-2">
-                    <span className="text-metadata font-medium px-2.5 py-0.5 bg-amber-200 text-amber-900 rounded tabular-nums">
+                    <span className="text-metadata font-medium px-2.5 py-0.5 bg-[#F5F3F0] text-[#706A65] rounded tabular-nums">
                       {exam.partIV.length} câu
                     </span>
                     <button
                       onClick={handleAddPartIV}
-                      className="p-1 px-2 text-xs font-semibold rounded-lg bg-amber-700 hover:bg-amber-800 text-white flex items-center gap-1 transition"
+                      className="btn-primary btn-compact"
                     >
-                      <Plus className="w-3 h-3" />
+                      <Plus className="w-3.5 h-3.5" />
                       <span>Thêm câu</span>
                     </button>
                   </div>
@@ -750,7 +750,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
 
                 <div className="space-y-4">
                   {exam.partIV.map((q, idx) => (
-                    <div key={q.id} className="p-5 rounded-2xl bg-amber-50/30 border border-amber-200">
+                    <div key={q.id} className="p-5 rounded-2xl bg-white border border-[#E5E0DA] hover:border-[#D6D0C8] shadow-[var(--shadow-xs)] transition-all duration-150">
                       <div className="flex items-start justify-between gap-2 mb-2">
                         <p className="text-body-ui font-medium text-stone-900 leading-[1.8] font-serif">
                           <span className="font-semibold text-amber-900 tabular-nums">{q.code || `Câu ${idx + 1}`}: </span>
@@ -812,15 +812,125 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
             </div>
           </div>
         </div>
+
+        {/* Right Column: Exam Statistics & Matrix Alignment (Cột 3 - Desktop >= 1280px) */}
+        <div className="w-64 xl:w-72 shrink-0 hidden 2xl:flex flex-col gap-3 overflow-hidden no-print">
+          <div className="card-surface p-4 flex flex-col gap-3 shrink-0">
+            <div className="flex items-center justify-between pb-2 border-b border-stone-100">
+              <span className="font-serif font-bold text-sm text-stone-800">Thống kê Đề 7991</span>
+              <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${
+                Math.abs(grandTotal - 10.0) < 0.05 
+                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' 
+                  : 'bg-amber-50 text-amber-800 border border-amber-200'
+              }`}>
+                {Math.abs(grandTotal - 10.0) < 0.05 ? 'Chuẩn 10.0 đ' : `${grandTotal.toFixed(1)}/10.0 đ`}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <div className="p-2.5 rounded-xl bg-stone-50 border border-stone-200/80">
+                <span className="text-stone-500 block text-[11px]">Tổng số câu</span>
+                <span className="text-base font-bold font-serif text-stone-900 tabular-nums">
+                  {exam.partI.length + exam.partII.length + exam.partIII.length + exam.partIV.length} câu
+                </span>
+              </div>
+              <div className="p-2.5 rounded-xl bg-stone-50 border border-stone-200/80">
+                <span className="text-stone-500 block text-[11px]">Thời lượng</span>
+                <span className="text-base font-bold font-serif text-stone-900">
+                  {exam.timeLimit || '90 phút'}
+                </span>
+              </div>
+            </div>
+
+            {/* Phân bổ Mức độ nhận thức */}
+            <div className="space-y-2 pt-1 border-t border-stone-100 text-xs">
+              <span className="font-medium text-stone-700 block text-[11px] uppercase tracking-wider">
+                Phân bổ Mức độ nhận thức
+              </span>
+
+              <div className="space-y-1.5">
+                <div>
+                  <div className="flex justify-between text-stone-600 mb-0.5 text-[11px]">
+                    <span>Nhận biết (NB)</span>
+                    <span className="font-semibold text-blue-700 tabular-nums">
+                      {((exam.partI.filter(q => q.level === 'NB').length * 0.25) + (exam.partII.filter(q => q.level === 'NB').length * 1.0)).toFixed(1)} đ
+                    </span>
+                  </div>
+                  <div className="w-full bg-stone-100 h-1.5 rounded-full overflow-hidden">
+                    <div 
+                      className="bg-blue-600 h-full rounded-full" 
+                      style={{ width: `${Math.min(100, Math.round(((exam.partI.filter(q => q.level === 'NB').length * 0.25) + (exam.partII.filter(q => q.level === 'NB').length * 1.0)) / (grandTotal || 1) * 100))}%` }} 
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex justify-between text-stone-600 mb-0.5 text-[11px]">
+                    <span>Thông hiểu (TH)</span>
+                    <span className="font-semibold text-emerald-700 tabular-nums">
+                      {((exam.partI.filter(q => q.level === 'TH').length * 0.25) + (exam.partII.filter(q => q.level === 'TH').length * 1.0) + (exam.partIII.filter(q => q.level === 'TH').length * 0.5)).toFixed(1)} đ
+                    </span>
+                  </div>
+                  <div className="w-full bg-stone-100 h-1.5 rounded-full overflow-hidden">
+                    <div 
+                      className="bg-emerald-600 h-full rounded-full" 
+                      style={{ width: `${Math.min(100, Math.round(((exam.partI.filter(q => q.level === 'TH').length * 0.25) + (exam.partII.filter(q => q.level === 'TH').length * 1.0) + (exam.partIII.filter(q => q.level === 'TH').length * 0.5)) / (grandTotal || 1) * 100))}%` }} 
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex justify-between text-stone-600 mb-0.5 text-[11px]">
+                    <span>Vận dụng (VD)</span>
+                    <span className="font-semibold text-amber-700 tabular-nums">
+                      {((exam.partI.filter(q => q.level === 'VD').length * 0.25) + (exam.partII.filter(q => q.level === 'VD').length * 1.0) + (exam.partIII.filter(q => q.level === 'VD').length * 0.5) + totalPartIVPoints).toFixed(1)} đ
+                    </span>
+                  </div>
+                  <div className="w-full bg-stone-100 h-1.5 rounded-full overflow-hidden">
+                    <div 
+                      className="bg-amber-600 h-full rounded-full" 
+                      style={{ width: `${Math.min(100, Math.round(((exam.partI.filter(q => q.level === 'VD').length * 0.25) + (exam.partII.filter(q => q.level === 'VD').length * 1.0) + (exam.partIII.filter(q => q.level === 'VD').length * 0.5) + totalPartIVPoints) / (grandTotal || 1) * 100))}%` }} 
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Phân bố 4 Phần */}
+            <div className="pt-2 border-t border-stone-100 space-y-1.5 text-xs">
+              <span className="font-medium text-stone-700 block text-[11px] uppercase tracking-wider">
+                Điểm số 4 Phần
+              </span>
+              <div className="space-y-1 text-[11px] text-stone-600">
+                <div className="flex justify-between">
+                  <span>Phần I: TN nhiều lựa chọn</span>
+                  <span className="font-semibold tabular-nums">{totalPartIPoints.toFixed(2)} đ</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Phần II: Đúng / Sai</span>
+                  <span className="font-semibold tabular-nums">{totalPartIIPoints.toFixed(2)} đ</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Phần III: Trả lời ngắn</span>
+                  <span className="font-semibold tabular-nums">{totalPartIIIPoints.toFixed(2)} đ</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Phần IV: Tự luận</span>
+                  <span className="font-semibold tabular-nums">{totalPartIVPoints.toFixed(2)} đ</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Question Edit Modal */}
       {editingQuestion && (
-        <div className="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-2xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl border border-stone-200 max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] flex flex-col">
+        <div className="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-2xs flex items-center justify-center p-4 anim-modal-backdrop">
+          <div className="bg-white rounded-2xl border border-stone-200 max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] flex flex-col anim-modal-dialog">
             <div className="flex items-center justify-between pb-3 border-b border-stone-200 shrink-0">
               <h3 className="text-card-title text-stone-900 flex items-center gap-2">
-                <Edit3 className="w-4 h-4 text-[#7C2D37]" />
+                <Edit3 className="w-4 h-4 text-[#7A2938]" />
                 <span>
                   Chỉnh sửa câu hỏi — {
                     editingQuestion.part === 'partI' ? 'Phần I (Nhiều lựa chọn)' :
@@ -905,7 +1015,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
                             ...editingQuestion,
                             data: { ...editingQuestion.data, correctAnswer: optKey }
                           })}
-                          className="accent-[#7C2D37] w-4 h-4 shrink-0"
+                          className="accent-[#7A2938] w-4 h-4 shrink-0"
                         />
                         <span className="font-bold text-stone-700 w-4">{optKey}.</span>
                         <input

@@ -6,22 +6,19 @@ import {
   Printer, 
   FileText, 
   Presentation, 
-  FileCode2, 
+  Check, 
   Maximize2,
   Minimize2,
-  MoreHorizontal,
-  Check,
-  FileSpreadsheet
+  Share2,
+  FileSpreadsheet,
+  HelpCircle
 } from 'lucide-react';
 import { LiteratureLesson, LessonPlan5512, Exam7991Data, SlideItem } from '../types';
 import { 
   exportDocxKHBD, 
   exportDocxExam, 
   exportPptxSlides, 
-  exportDocxMatrix,
-  exportWordKHBD, 
-  exportWordExam7991, 
-  exportHtmlSlides 
+  exportDocxMatrix 
 } from '../utils/exportUtils';
 
 interface TopBarProps {
@@ -36,6 +33,7 @@ interface TopBarProps {
   exam: Exam7991Data;
   slides: SlideItem[];
   onOpenHandover: () => void;
+  onOpenTour?: () => void;
   lastUpdated?: string;
 }
 
@@ -51,14 +49,13 @@ export const TopBar: React.FC<TopBarProps> = ({
   exam,
   slides,
   onOpenHandover,
+  onOpenTour,
   lastUpdated
 }) => {
   const [isExportOpen, setIsExportOpen] = useState(false);
-  const [isMoreOpen, setIsMoreOpen] = useState(false);
   const [isLessonSwitcherOpen, setIsLessonSwitcherOpen] = useState(false);
 
   const exportRef = useRef<HTMLDivElement>(null);
-  const moreRef = useRef<HTMLDivElement>(null);
   const lessonSwitcherRef = useRef<HTMLDivElement>(null);
 
   // Close dropdowns on outside click
@@ -66,9 +63,6 @@ export const TopBar: React.FC<TopBarProps> = ({
     const handleClickOutside = (event: MouseEvent) => {
       if (exportRef.current && !exportRef.current.contains(event.target as Node)) {
         setIsExportOpen(false);
-      }
-      if (moreRef.current && !moreRef.current.contains(event.target as Node)) {
-        setIsMoreOpen(false);
       }
       if (lessonSwitcherRef.current && !lessonSwitcherRef.current.contains(event.target as Node)) {
         setIsLessonSwitcherOpen(false);
@@ -79,239 +73,222 @@ export const TopBar: React.FC<TopBarProps> = ({
   }, []);
 
   const formatSavedTime = (iso?: string) => {
-    if (!iso) return '14:30';
+    if (!iso) return 'Vừa xong';
     try {
       const d = new Date(iso);
       return d.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
     } catch {
-      return '14:30';
+      return 'Vừa xong';
     }
   };
 
-    return (
-      <header className="h-14 bg-white border-b border-[#E7E5E4] px-4 md:px-6 flex items-center justify-between sticky top-0 z-30 select-none no-print">
-        {/* Left: Breadcrumbs & Current Text Context */}
-        <div className="flex items-center gap-3">
-          <button
-            onClick={onOpenSidebar}
-            className="lg:hidden p-1.5 rounded-lg text-[#57534E] hover:text-[#292524] hover:bg-stone-100 transition-colors"
-            aria-label="Mở menu"
-          >
-            <Menu className="w-5 h-5" strokeWidth={1.75} />
-          </button>
-
-          {/* Lesson Switcher Dropdown */}
-          <div className="relative" ref={lessonSwitcherRef}>
-            <button
-              onClick={() => setIsLessonSwitcherOpen(!isLessonSwitcherOpen)}
-              className="flex items-center gap-2 py-1 px-2 -ml-2 rounded-lg hover:bg-stone-50 transition-colors text-left group"
-              title="Đổi tác phẩm giảng dạy"
-            >
-              <span className="font-serif font-literary-inline font-semibold text-card-title text-[#292524] group-hover:text-[#7C2D37] transition-colors">
-                {currentLesson.title}
-              </span>
-              <span className="text-[#78716C] text-body-ui">/</span>
-              <span className="text-body-ui text-[#57534E]">
-                {currentLesson.author}
-              </span>
-              <ChevronDown className="w-3.5 h-3.5 text-[#78716C] ml-0.5" strokeWidth={1.75} />
-            </button>
-
-            {isLessonSwitcherOpen && (
-              <div className="absolute left-0 mt-1 w-64 bg-white border border-[#E7E5E4] rounded-xl shadow-lg py-1 z-50">
-                <div className="px-3 py-1.5 text-metadata font-medium text-[#78716C]">
-                  Chọn tác phẩm mẫu
-                </div>
-                {lessons.map((l) => (
-                  <button
-                    key={l.id}
-                    onClick={() => {
-                      onSelectLesson(l.id);
-                      setIsLessonSwitcherOpen(false);
-                    }}
-                    className={`w-full text-left px-3 py-2 text-body-ui flex items-center justify-between hover:bg-stone-50 transition-colors ${
-                      l.id === currentLesson.id ? 'bg-[#FBF4F5] text-[#7C2D37] font-medium' : 'text-[#292524]'
-                    }`}
-                  >
-                    <div>
-                      <div className="font-serif font-literary-inline">{l.title}</div>
-                      <div className="text-metadata text-[#78716C]">{l.author} · {l.grade}</div>
-                    </div>
-                    {l.id === currentLesson.id && (
-                      <Check className="w-4 h-4 text-[#7C2D37]" strokeWidth={2} />
-                    )}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Right: Autosave status, Preview, Export Menu, More */}
-        <div className="flex items-center gap-3">
-          {/* Autosave Indicator: Real lastUpdated timestamp */}
-          <span className="hidden sm:inline-block text-metadata text-[#78716C]">
-            Đã lưu · <span className="tabular-nums">{formatSavedTime(lastUpdated)}</span>
-          </span>
-
-        {/* Secondary: Xem trước */}
+  return (
+    <header className="h-14 bg-white border-b border-[#E5E0DA] px-4 md:px-5 flex items-center justify-between sticky top-0 z-30 select-none shrink-0 no-print">
+      {/* Left: Breadcrumb & Lesson Switcher */}
+      <div className="flex items-center gap-2.5 min-w-0">
         <button
-          onClick={onPreview}
-          className="btn-secondary btn-compact hidden sm:inline-flex"
+          onClick={onOpenSidebar}
+          className="lg:hidden p-1.5 rounded-lg text-[#706A65] hover:text-[#211E1C] hover:bg-[#FAF9F7] transition-colors"
+          aria-label="Mở menu điều hướng"
         >
-          Xem trước
+          <Menu className="w-5 h-5" strokeWidth={1.75} />
         </button>
 
-        {/* Xuất Menu Dropdown */}
+        {/* Lesson Switcher Dropdown */}
+        <div className="relative" ref={lessonSwitcherRef} data-tour-id="lesson-switcher">
+          <button
+            onClick={() => setIsLessonSwitcherOpen(!isLessonSwitcherOpen)}
+            className="flex items-center gap-1.5 py-1 px-2.5 -ml-1 rounded-lg hover:bg-[#FAF9F7] transition-colors text-left group"
+            title="Nhấp để đổi tác phẩm giảng dạy"
+          >
+            <span className="text-xs font-semibold uppercase tracking-wider text-[#99918A] shrink-0">
+              {currentLesson.grade || 'Ngữ văn 12'}
+            </span>
+            <span className="text-[#D6D0C8]">/</span>
+            <span className="font-serif font-bold text-[#211E1C] text-sm md:text-[15px] group-hover:text-[#7A2938] transition-colors truncate max-w-[180px] sm:max-w-[260px] md:max-w-none">
+              {currentLesson.title}
+            </span>
+            <span className="text-[#706A65] font-serif italic text-xs hidden sm:inline">
+              — {currentLesson.author}
+            </span>
+            <ChevronDown className="w-3.5 h-3.5 text-[#99918A] ml-0.5 shrink-0 transition-transform group-hover:text-[#706A65]" strokeWidth={1.75} />
+          </button>
+
+          {isLessonSwitcherOpen && (
+            <div className="absolute left-0 mt-1.5 w-72 bg-white border border-[#E5E0DA] rounded-xl shadow-[var(--shadow-md)] py-1.5 z-50 anim-dropdown">
+              <div className="px-3 py-1.5 text-[11px] font-semibold tracking-wider uppercase text-[#99918A] border-b border-[#EEEAE5] mb-1">
+                Tác phẩm giảng dạy ({lessons.length})
+              </div>
+              <div className="max-h-72 overflow-y-auto">
+                {lessons.map((l) => {
+                  const isSelected = l.id === currentLesson.id;
+                  return (
+                    <button
+                      key={l.id}
+                      onClick={() => {
+                        onSelectLesson(l.id);
+                        setIsLessonSwitcherOpen(false);
+                      }}
+                      className={`w-full text-left px-3 py-2 text-body-ui flex items-center justify-between hover:bg-[#FAF9F7] transition-colors ${
+                        isSelected ? 'bg-[#FCF3F4] text-[#7A2938] font-medium' : 'text-[#211E1C]'
+                      }`}
+                    >
+                      <div className="min-w-0 pr-2">
+                        <div className="font-serif font-semibold text-sm truncate">{l.title}</div>
+                        <div className="text-[12px] text-[#706A65] truncate">{l.author} · {l.grade}</div>
+                      </div>
+                      {isSelected && (
+                        <Check className="w-4 h-4 text-[#7A2938] shrink-0" strokeWidth={2} />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Right: Autosave status & Compact actions */}
+      <div className="flex items-center gap-2 md:gap-3 shrink-0">
+        {/* Autosave Status: Minimal semantic dot (Rule XI) */}
+        <div 
+          data-tour-id="autosave-status"
+          className="hidden sm:inline-flex items-center gap-1.5 text-[12px] text-[#706A65]"
+          title={`Tự động đồng bộ và lưu cục bộ lúc ${formatSavedTime(lastUpdated)}`}
+        >
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 shrink-0" />
+          <span>Đã lưu · <span className="tabular-nums font-medium text-[#302C29]">{formatSavedTime(lastUpdated)}</span></span>
+        </div>
+
+        <div className="h-4 w-px bg-[#EEEAE5] hidden sm:block" />
+
+        {/* Toggle Focus Mode */}
+        {onToggleFocusMode && (
+          <button
+            data-tour-id="focus-mode"
+            onClick={onToggleFocusMode}
+            className={`hidden md:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+              isFocusMode 
+                ? 'bg-[#FCF3F4] text-[#7A2938] border border-[#ECC2C9]' 
+                : 'text-[#706A65] hover:text-[#211E1C] hover:bg-[#FAF9F7]'
+            }`}
+            title={isFocusMode ? "Thoát chế độ tập trung" : "Chế độ tập trung (ẩn sidebar)"}
+          >
+            {isFocusMode ? (
+              <>
+                <Minimize2 className="w-3.5 h-3.5" strokeWidth={1.75} />
+                <span>Thoát</span>
+              </>
+            ) : (
+              <>
+                <Maximize2 className="w-3.5 h-3.5" strokeWidth={1.75} />
+                <span>Tập trung</span>
+              </>
+            )}
+          </button>
+        )}
+
+        {/* Guided Tour button */}
+        {onOpenTour && (
+          <button
+            onClick={onOpenTour}
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-[#706A65] hover:text-[#7A2938] hover:bg-[#FCF3F4] transition-colors"
+            title="Hướng dẫn sử dụng toàn hệ thống"
+            aria-label="Hướng dẫn sử dụng"
+          >
+            <HelpCircle className="w-3.5 h-3.5" strokeWidth={1.75} />
+            <span className="hidden md:inline">Hướng dẫn</span>
+          </button>
+        )}
+
+        {/* Print Preview Button */}
+        {onPreview && (
+          <button
+            onClick={onPreview}
+            className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-[#706A65] hover:text-[#211E1C] hover:bg-[#FAF9F7] transition-colors"
+            title="In hoặc Xem trước trang in A4"
+          >
+            <Printer className="w-3.5 h-3.5" strokeWidth={1.75} />
+            <span>In / Xem trước</span>
+          </button>
+        )}
+
+        {/* Export Dropdown */}
         <div className="relative" ref={exportRef}>
           <button
             onClick={() => setIsExportOpen(!isExportOpen)}
-            className="btn-secondary btn-compact flex items-center gap-1.5"
+            className="btn-secondary btn-compact gap-1.5"
+            title="Tải về tài liệu"
           >
-            <Download className="w-3.5 h-3.5 text-[#57534E]" strokeWidth={1.75} />
-            <span>Xuất</span>
-            <ChevronDown className="w-3.5 h-3.5 text-[#78716C]" strokeWidth={1.75} />
+            <Download className="w-3.5 h-3.5 text-[#706A65]" strokeWidth={1.75} />
+            <span className="hidden sm:inline">Xuất file</span>
+            <ChevronDown className="w-3 h-3 text-[#99918A]" strokeWidth={1.75} />
           </button>
 
           {isExportOpen && (
-            <div className="absolute right-0 mt-1 w-56 bg-white border border-[#E7E5E4] rounded-xl shadow-lg py-1 z-50">
-              <div className="px-3 py-1.5 text-metadata font-medium text-[#78716C]">
-                Xuất tài liệu giảng dạy
+            <div className="absolute right-0 mt-1.5 w-60 bg-white border border-[#E5E0DA] rounded-xl shadow-[var(--shadow-md)] py-1.5 z-50 anim-dropdown text-left">
+              <div className="px-3 py-1 text-[11px] font-semibold text-[#99918A] uppercase tracking-wider">
+                Giáo án & Trình chiếu
               </div>
               <button
                 onClick={() => {
                   exportDocxKHBD(khbd);
                   setIsExportOpen(false);
                 }}
-                className="w-full text-left px-3 py-2 text-body-ui text-[#292524] hover:bg-stone-50 transition-colors flex items-center gap-2.5 min-h-[38px]"
+                className="w-full text-left px-3 py-2 text-xs text-[#302C29] hover:bg-[#FAF9F7] flex items-center gap-2.5 transition-colors"
               >
-                <FileText className="w-4 h-4 text-[#7C2D37]" strokeWidth={1.75} />
-                <div>
-                  <div className="font-medium">Word KHBD 5512 (.docx)</div>
-                  <div className="text-[11px] text-stone-500">Chuẩn OpenXML A4</div>
-                </div>
+                <FileText className="w-4 h-4 text-[#1E40AF] shrink-0" strokeWidth={1.75} />
+                <span>Giáo án KHBD 5512 (DOCX)</span>
               </button>
+              <button
+                onClick={() => {
+                  exportPptxSlides(slides, khbd.info.lessonTitle);
+                  setIsExportOpen(false);
+                }}
+                className="w-full text-left px-3 py-2 text-xs text-[#302C29] hover:bg-[#FAF9F7] flex items-center gap-2.5 transition-colors"
+              >
+                <Presentation className="w-4 h-4 text-[#92400E] shrink-0" strokeWidth={1.75} />
+                <span>Bài giảng điện tử (PPTX)</span>
+              </button>
+
+              <div className="h-px bg-[#EEEAE5] my-1" />
+              <div className="px-3 py-1 text-[11px] font-semibold text-[#99918A] uppercase tracking-wider">
+                Khảo thí & Đánh giá
+              </div>
               <button
                 onClick={() => {
                   exportDocxExam(exam, khbd);
                   setIsExportOpen(false);
                 }}
-                className="w-full text-left px-3 py-2 text-body-ui text-[#292524] hover:bg-stone-50 transition-colors flex items-center gap-2.5 min-h-[38px]"
+                className="w-full text-left px-3 py-2 text-xs text-[#302C29] hover:bg-[#FAF9F7] flex items-center gap-2.5 transition-colors"
               >
-                <FileText className="w-4 h-4 text-[#15803D]" strokeWidth={1.75} />
-                <div>
-                  <div className="font-medium">Word Đề kiểm tra (.docx)</div>
-                  <div className="text-[11px] text-stone-500">Chuẩn CV 7991 & Barem</div>
-                </div>
+                <FileText className="w-4 h-4 text-[#7A2938] shrink-0" strokeWidth={1.75} />
+                <span>Đề thi & Hướng dẫn (DOCX)</span>
               </button>
               <button
                 onClick={() => {
                   exportDocxMatrix(exam, khbd);
                   setIsExportOpen(false);
                 }}
-                className="w-full text-left px-3 py-2 text-body-ui text-[#292524] hover:bg-stone-50 transition-colors flex items-center gap-2.5 min-h-[38px]"
+                className="w-full text-left px-3 py-2 text-xs text-[#302C29] hover:bg-[#FAF9F7] flex items-center gap-2.5 transition-colors"
               >
-                <FileSpreadsheet className="w-4 h-4 text-[#7C3AED]" strokeWidth={1.75} />
-                <div>
-                  <div className="font-medium">Word Ma trận & Đặc tả (.docx)</div>
-                  <div className="text-[11px] text-stone-500">Chuẩn CV 7991 2 chiều</div>
-                </div>
-              </button>
-              <button
-                onClick={() => {
-                  exportPptxSlides(slides, currentLesson.title);
-                  setIsExportOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 text-body-ui text-[#292524] hover:bg-stone-50 transition-colors flex items-center gap-2.5 min-h-[38px]"
-              >
-                <Presentation className="w-4 h-4 text-[#D97706]" strokeWidth={1.75} />
-                <div>
-                  <div className="font-medium">PowerPoint Slide (.pptx)</div>
-                  <div className="text-[11px] text-stone-500">Chuẩn 16:9 Nghệ thuật</div>
-                </div>
-              </button>
-              <button
-                onClick={() => {
-                  window.print();
-                  setIsExportOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 text-body-ui text-[#292524] hover:bg-stone-50 transition-colors flex items-center gap-2.5 min-h-[38px]"
-              >
-                <Printer className="w-4 h-4 text-[#57534E]" strokeWidth={1.75} />
-                <span>In A4 / Lưu PDF</span>
-              </button>
-              <button
-                onClick={() => {
-                  exportHtmlSlides(slides, currentLesson.title);
-                  setIsExportOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 text-body-ui text-[#292524] hover:bg-stone-50 transition-colors flex items-center gap-2.5 min-h-[38px]"
-              >
-                <FileCode2 className="w-4 h-4 text-[#B45309]" strokeWidth={1.75} />
-                <span>Xuất Slide HTML Offline</span>
-              </button>
-              <div className="my-1 border-t border-[#E7E5E4]" />
-              <button
-                onClick={() => {
-                  onOpenHandover();
-                  setIsExportOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 text-body-ui text-[#292524] hover:bg-stone-50 transition-colors flex items-center gap-2.5 min-h-[38px]"
-              >
-                <FileCode2 className="w-4 h-4 text-[#57534E]" strokeWidth={1.75} />
-                <span>JSON State Bàn giao</span>
+                <FileSpreadsheet className="w-4 h-4 text-[#166534] shrink-0" strokeWidth={1.75} />
+                <span>Ma trận & Bản đặc tả (DOCX)</span>
               </button>
             </div>
           )}
         </div>
 
-        {/* More Actions Dropdown (•••) */}
-        <div className="relative" ref={moreRef}>
-          <button
-            onClick={() => setIsMoreOpen(!isMoreOpen)}
-            className="p-2 text-[#57534E] hover:text-[#292524] hover:bg-stone-100 rounded-lg transition-colors"
-            title="Thao tác khác"
-            aria-label="Thao tác khác"
-          >
-            <MoreHorizontal className="w-4 h-4" strokeWidth={1.75} />
-          </button>
-
-          {isMoreOpen && (
-            <div className="absolute right-0 mt-1 w-52 bg-white border border-[#E7E5E4] rounded-xl shadow-lg py-1 z-50">
-              {onToggleFocusMode && (
-                <button
-                  onClick={() => {
-                    onToggleFocusMode();
-                    setIsMoreOpen(false);
-                  }}
-                  className="w-full text-left px-3 py-2 text-body-ui text-[#292524] hover:bg-stone-50 transition-colors flex items-center gap-2.5 min-h-[38px]"
-                >
-                  {isFocusMode ? (
-                    <>
-                      <Minimize2 className="w-4 h-4 text-[#78716C]" strokeWidth={1.75} />
-                      <span>Thoát Focus Mode</span>
-                    </>
-                  ) : (
-                    <>
-                      <Maximize2 className="w-4 h-4 text-[#78716C]" strokeWidth={1.75} />
-                      <span>Bật Focus Mode</span>
-                    </>
-                  )}
-                </button>
-              )}
-              <button
-                onClick={() => {
-                  onOpenHandover();
-                  setIsMoreOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 text-body-ui text-[#292524] hover:bg-stone-50 transition-colors flex items-center gap-2.5 min-h-[38px]"
-              >
-                <FileCode2 className="w-4 h-4 text-[#78716C]" strokeWidth={1.75} />
-                <span>Xem dữ liệu phiên (JSON)</span>
-              </button>
-            </div>
-          )}
-        </div>
+        {/* Handover / Xuất bản Center button */}
+        <button
+          onClick={onOpenHandover}
+          className="btn-primary btn-compact gap-1.5"
+          title="Mở Trung tâm Xuất bản & Chuyển giao"
+        >
+          <Share2 className="w-3.5 h-3.5" strokeWidth={1.75} />
+          <span className="hidden sm:inline">Xuất bản</span>
+        </button>
       </div>
     </header>
   );

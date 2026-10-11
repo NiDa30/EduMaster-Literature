@@ -29,6 +29,7 @@ interface SidebarProps {
   setIsSidebarOpen: (o: boolean) => void;
   onOpenHandover: () => void;
   onOpenSettings?: () => void;
+  onOpenTour?: () => void;
   lessons: LiteratureLesson[];
   currentLessonId: string;
   onSelectLesson: (id: string) => void;
@@ -37,12 +38,14 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({
   activeModule,
   setActiveModule,
+  khbd,
   isSidebarOpen,
   setIsSidebarOpen,
   onOpenHandover,
-  onOpenSettings
+  onOpenSettings,
+  onOpenTour
 }) => {
-  // 9 core teaching & assessment navigation items matching documentation
+  // 10 danh mục chuẩn nghiệp vụ giáo viên Ngữ văn THPT
   const mainNavItems = [
     { id: 'dashboard' as ActiveModule, label: 'Bàn làm việc', icon: Home },
     { id: 'workspace' as ActiveModule, label: 'Tác phẩm', icon: BookOpen },
@@ -53,23 +56,31 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'exam' as ActiveModule, label: 'Đề kiểm tra', icon: CheckSquare },
     { id: 'rubric' as ActiveModule, label: 'Rubric', icon: GraduationCap },
     { id: 'slides' as ActiveModule, label: 'Slide', icon: Presentation },
+    { id: 'export_handover' as ActiveModule, label: 'Xuất bản', icon: Share2 },
   ];
+
+  const teacherName = khbd.info.teacherName || 'Giáo viên Ngữ văn';
+  const schoolName = khbd.info.school || 'THPT Chuyên';
 
   return (
     <aside 
-      className={`fixed lg:static top-0 bottom-0 left-0 z-40 w-[248px] bg-white border-r border-[#E7E5E4] flex flex-col transition-transform duration-200 ease-in-out no-print ${
+      data-tour-id="sidebar"
+      className={`fixed lg:static top-0 bottom-0 left-0 z-40 w-[248px] bg-white border-r border-[#E5E0DA] flex flex-col transition-transform duration-[240ms] ease-[cubic-bezier(0.2,0,0,1)] no-print select-none ${
         isSidebarOpen ? 'translate-x-0 shadow-lg lg:shadow-none' : '-translate-x-full lg:translate-x-0'
       }`}
     >
-      {/* Brand Workspace Header */}
-      <div className="h-14 px-5 border-b border-[#E7E5E4] flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-md bg-[#7C2D37] flex items-center justify-center text-white">
-            <Feather className="w-4 h-4" strokeWidth={1.75} />
+      {/* Brand Header */}
+      <div className="h-14 px-4 border-b border-[#E5E0DA] flex items-center justify-between shrink-0 bg-white">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="w-8 h-8 rounded-lg bg-[#7A2938] flex items-center justify-center text-white shrink-0 shadow-xs">
+            <Feather className="w-4 h-4" strokeWidth={2} />
           </div>
-          <div>
-            <span className="font-semibold text-[15px] tracking-normal text-[#292524]">
+          <div className="min-w-0">
+            <span className="font-serif font-bold text-[15px] tracking-tight text-[#211E1C] block truncate">
               EduMaster Văn
+            </span>
+            <span className="text-[11px] text-[#706A65] block truncate leading-none mt-0.5">
+              Hệ thống Bài dạy & Khảo thí
             </span>
           </div>
         </div>
@@ -77,15 +88,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {/* Mobile close button */}
         <button 
           onClick={() => setIsSidebarOpen(false)}
-          className="lg:hidden p-1.5 text-[#78716C] hover:text-[#292524] rounded-md transition-colors"
+          className="lg:hidden p-1.5 text-[#706A65] hover:text-[#211E1C] rounded-md transition-colors"
           aria-label="Đóng thanh điều hướng"
         >
           <X className="w-4 h-4" strokeWidth={1.75} />
         </button>
       </div>
 
-      {/* Main Navigation (7 items) */}
-      <nav className="flex-1 py-3 px-2 space-y-1 overflow-y-auto">
+      {/* Main Navigation */}
+      <nav className="flex-1 py-3 px-2 space-y-0.5 overflow-y-auto">
+        <div className="px-2.5 pb-1.5 pt-0.5 text-[11px] font-semibold tracking-wider text-[#99918A] uppercase">
+          Nghiệp vụ Sư phạm
+        </div>
+
         {mainNavItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeModule === item.id;
@@ -93,74 +108,109 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <button
               key={item.id}
               onClick={() => {
-                setActiveModule(item.id);
+                if (item.id === 'export_handover') {
+                  onOpenHandover();
+                } else {
+                  setActiveModule(item.id);
+                }
                 setIsSidebarOpen(false);
               }}
-              className={`w-full text-left px-3 py-2 rounded-lg text-body-ui min-h-[40px] transition-colors flex items-center gap-3 ${
+              className={`w-full text-left px-3 py-2 rounded-lg text-body-ui min-h-[38px] transition-all duration-150 flex items-center gap-3 relative ${
                 isActive
-                  ? 'bg-[#FBF4F5] text-[#7C2D37] font-medium border-l-[3px] border-[#7C2D37] pl-[9px]'
-                  : 'text-[#57534E] hover:text-[#292524] hover:bg-stone-50 font-normal'
+                  ? 'bg-[#FCF3F4] text-[#7A2938] font-semibold shadow-[inset_0_1px_0_rgba(122,41,56,0.08)]'
+                  : 'text-[#706A65] hover:text-[#211E1C] hover:bg-[#FAF9F7] font-normal'
               }`}
             >
-              <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-[#7C2D37]' : 'text-[#78716C]'}`} strokeWidth={1.75} />
-              <span className="truncate-safe">{item.label}</span>
+              {/* Left Active Indicator Strip */}
+              {isActive && (
+                <span className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r bg-[#7A2938]" />
+              )}
+              <Icon 
+                className={`w-4 h-4 shrink-0 transition-colors ${isActive ? 'text-[#7A2938]' : 'text-[#99918A]'}`} 
+                strokeWidth={isActive ? 2 : 1.75} 
+              />
+              <span className="truncate-safe text-[13.5px]">{item.label}</span>
             </button>
           );
         })}
 
-        {/* Quiet divider */}
+        {/* Secondary Navigation Divider */}
         <div className="pt-3 pb-2 px-2">
-          <div className="h-px bg-[#E7E5E4] w-full" />
+          <div className="h-px bg-[#EEEAE5] w-full" />
         </div>
 
-        {/* Secondary Navigation */}
-        <button
-          onClick={() => {
-            onOpenHandover();
-            setIsSidebarOpen(false);
-          }}
-          className={`w-full text-left px-3 py-2 rounded-lg text-body-ui min-h-[40px] transition-colors flex items-center gap-3 ${
-            activeModule === 'export_handover'
-              ? 'bg-[#FBF4F5] text-[#7C2D37] font-medium border-l-[3px] border-[#7C2D37] pl-[9px]'
-              : 'text-[#57534E] hover:text-[#292524] hover:bg-stone-50 font-normal'
-          }`}
-        >
-          <Share2 className="w-4 h-4 text-[#78716C] shrink-0" strokeWidth={1.75} />
-          <span className="truncate-safe">Xuất bản</span>
-        </button>
+        <div className="px-2.5 pb-1 text-[11px] font-semibold tracking-wider text-[#99918A] uppercase">
+          Hệ thống
+        </div>
 
         <button
           onClick={() => {
             if (onOpenSettings) onOpenSettings();
             setIsSidebarOpen(false);
           }}
-          className="w-full text-left px-3 py-2 rounded-lg text-body-ui min-h-[40px] text-[#57534E] hover:text-[#292524] hover:bg-stone-50 transition-colors flex items-center gap-3 font-normal"
+          className="w-full text-left px-3 py-2 rounded-lg text-body-ui min-h-[38px] text-[#706A65] hover:text-[#211E1C] hover:bg-[#FAF9F7] transition-colors duration-150 flex items-center gap-3 font-normal"
         >
-          <Settings className="w-4 h-4 text-[#78716C] shrink-0" strokeWidth={1.75} />
-          <span className="truncate-safe">Cài đặt</span>
+          <Settings className="w-4 h-4 text-[#99918A] shrink-0" strokeWidth={1.75} />
+          <span className="truncate-safe text-[13.5px]">Cài đặt sư phạm</span>
         </button>
+
+        {onOpenTour && (
+          <button
+            onClick={() => {
+              onOpenTour();
+              setIsSidebarOpen(false);
+            }}
+            className="w-full text-left px-3 py-2 rounded-lg text-body-ui min-h-[38px] text-[#706A65] hover:text-[#7A2938] hover:bg-[#FCF3F4] transition-colors duration-150 flex items-center gap-3 font-normal"
+          >
+            <HelpCircle className="w-4 h-4 text-[#7A2938] shrink-0" strokeWidth={1.75} />
+            <span className="truncate-safe text-[13.5px]">Hướng dẫn sử dụng</span>
+          </button>
+        )}
 
         <button
           onClick={() => {
             setActiveModule('typography_test');
             setIsSidebarOpen(false);
           }}
-          className={`w-full text-left px-3 py-2 rounded-lg text-body-ui min-h-[40px] transition-colors flex items-center gap-3 ${
+          className={`w-full text-left px-3 py-2 rounded-lg text-body-ui min-h-[38px] transition-colors duration-150 flex items-center gap-3 relative ${
             activeModule === 'typography_test'
-              ? 'bg-[#FBF4F5] text-[#7C2D37] font-medium border-l-[3px] border-[#7C2D37] pl-[9px]'
-              : 'text-[#57534E] hover:text-[#292524] hover:bg-stone-50 font-normal'
+              ? 'bg-[#FCF3F4] text-[#7A2938] font-semibold'
+              : 'text-[#706A65] hover:text-[#211E1C] hover:bg-[#FAF9F7] font-normal'
           }`}
-          title="Màn hình kiểm thử Typography"
+          title="Kiểm thử Typography hệ thống"
         >
-          <HelpCircle className="w-4 h-4 text-[#78716C] shrink-0" strokeWidth={1.75} />
-          <span className="truncate-safe">Typography Test</span>
+          {activeModule === 'typography_test' && (
+            <span className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r bg-[#7A2938]" />
+          )}
+          <HelpCircle className="w-4 h-4 text-[#99918A] shrink-0" strokeWidth={1.75} />
+          <span className="truncate-safe text-[13.5px]">Typography Test</span>
         </button>
       </nav>
 
-      {/* Subtle Bottom Status */}
-      <div className="p-3 border-t border-[#E7E5E4] text-metadata flex items-center justify-between">
-        <span>THPT · GDPT 2018</span>
-        <span className="text-[#57534E] tabular-nums">5512 & 7991</span>
+      {/* Compact Teacher Identity (Bottom Area) */}
+      <div className="p-3 border-t border-[#EEEAE5] bg-[#FAF9F7] shrink-0">
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="w-7 h-7 rounded-full bg-[#FCF3F4] border border-[#ECC2C9] flex items-center justify-center text-[#7A2938] shrink-0 font-serif font-bold text-xs">
+              {teacherName.slice(0, 1).toUpperCase()}
+            </div>
+            <div className="min-w-0">
+              <span className="text-[12px] font-semibold text-[#211E1C] block truncate">
+                {teacherName}
+              </span>
+              <span className="text-[11px] text-[#706A65] block truncate leading-none mt-0.5">
+                {schoolName}
+              </span>
+            </div>
+          </div>
+          <button
+            onClick={() => onOpenSettings && onOpenSettings()}
+            className="p-1 rounded-md text-[#99918A] hover:text-[#211E1C] hover:bg-[#F5F3F0] transition-colors"
+            title="Sửa thông tin giáo viên"
+          >
+            <Settings className="w-3.5 h-3.5" strokeWidth={1.75} />
+          </button>
+        </div>
       </div>
     </aside>
   );

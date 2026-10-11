@@ -36,7 +36,7 @@ export const TypographyTestView: React.FC = () => {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
           <div>
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#7C2D37]/10 text-[#7C2D37] border border-[#7C2D37]/20 flex items-center gap-1">
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#7A2938]/10 text-[#7A2938] border border-[#7A2938]/20 flex items-center gap-1">
                 <Type className="w-3.5 h-3.5" />
                 Typography Verification Suite
               </span>
@@ -95,7 +95,7 @@ export const TypographyTestView: React.FC = () => {
               <h1 className="text-page-title">
                 {testStrings.test1}
               </h1>
-              <h1 className="text-page-title font-serif text-[#7C2D37]">
+              <h1 className="text-page-title font-serif text-[#7A2938]">
                 Tác phẩm: {testStrings.extra1}
               </h1>
             </div>
@@ -171,7 +171,7 @@ export const TypographyTestView: React.FC = () => {
                 Mixed Inline Font (Be Vietnam Pro + Lora cân đối thị giác)
               </div>
               <div className="text-body-ui">
-                <span className="font-medium text-[#7C2D37]">Bài giảng trực tuyến: </span>
+                <span className="font-medium text-[#7A2938]">Bài giảng trực tuyến: </span>
                 <span className="font-serif font-literary-inline font-medium text-[#292524]">
                   {testStrings.extra1}
                 </span>
@@ -197,7 +197,7 @@ export const TypographyTestView: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Chữ hoa đầy đủ dấu - Be Vietnam Pro */}
             <div className="p-4 rounded-xl border border-[#E7E5E4] bg-stone-50/40">
-              <span className="text-meta text-[#7C2D37] font-medium block mb-2">
+              <span className="text-meta text-[#7A2938] font-medium block mb-2">
                 UI Font: Be Vietnam Pro (Chữ hoa toàn bộ dấu phức tạp)
               </span>
               <p className="text-[17px] font-semibold leading-relaxed tracking-normal text-[#292524]">
@@ -207,7 +207,7 @@ export const TypographyTestView: React.FC = () => {
 
             {/* Chữ hoa đầy đủ dấu - Lora */}
             <div className="p-4 rounded-xl border border-[#E7E5E4] bg-stone-50/40">
-              <span className="text-meta text-[#7C2D37] font-medium block mb-2">
+              <span className="text-meta text-[#7A2938] font-medium block mb-2">
                 Literary Font: Lora (Chữ hoa toàn bộ dấu phức tạp)
               </span>
               <p className="font-serif text-[17px] font-semibold leading-relaxed tracking-normal text-[#292524]">
@@ -217,7 +217,7 @@ export const TypographyTestView: React.FC = () => {
 
             {/* Chữ thường đầy đủ dấu - Be Vietnam Pro */}
             <div className="p-4 rounded-xl border border-[#E7E5E4] bg-stone-50/40">
-              <span className="text-meta text-[#7C2D37] font-medium block mb-2">
+              <span className="text-meta text-[#7A2938] font-medium block mb-2">
                 UI Font: Be Vietnam Pro (Chữ thường ệ, ễ, ặ, ừ, ỡ, ự, ỳ, ỹ...)
               </span>
               <p className="text-[18px] leading-relaxed tracking-normal text-[#292524]">
@@ -227,7 +227,7 @@ export const TypographyTestView: React.FC = () => {
 
             {/* Chữ thường đầy đủ dấu - Lora */}
             <div className="p-4 rounded-xl border border-[#E7E5E4] bg-stone-50/40">
-              <span className="text-meta text-[#7C2D37] font-medium block mb-2">
+              <span className="text-meta text-[#7A2938] font-medium block mb-2">
                 Literary Font: Lora (Chữ thường ệ, ễ, ặ, ừ, ỡ, ự, ỳ, ỹ...)
               </span>
               <p className="font-serif text-[18px] leading-relaxed tracking-normal text-[#292524]">
@@ -238,7 +238,7 @@ export const TypographyTestView: React.FC = () => {
 
           {/* True Italic vs SemiBold on Lora */}
           <div className="p-4 rounded-xl border border-[#E7E5E4] bg-stone-50/40 space-y-3">
-            <span className="text-meta text-[#7C2D37] font-medium block">
+            <span className="text-meta text-[#7A2938] font-medium block">
               Kiểm tra Lora: True Italic (400) & SemiBold (600) — Không synthetic bold/italic
             </span>
             <div className="space-y-2">
@@ -299,7 +299,7 @@ export const TypographyTestView: React.FC = () => {
                 type="text"
                 value={inputVal}
                 onChange={(e) => setInputVal(e.target.value)}
-                className="w-full px-3 py-2 border border-[#E7E5E4] rounded-lg text-body-ui text-[#292524] focus:outline-none focus:border-[#7C2D37]"
+                className="w-full px-3 py-2 border border-[#E7E5E4] rounded-lg text-body-ui text-[#292524] focus:outline-none focus:border-[#7A2938]"
               />
             </div>
 
@@ -310,7 +310,7 @@ export const TypographyTestView: React.FC = () => {
               <select
                 value={selectVal}
                 onChange={(e) => setSelectVal(e.target.value)}
-                className="w-full px-3 py-2 border border-[#E7E5E4] rounded-lg text-body-ui text-[#292524] focus:outline-none focus:border-[#7C2D37]"
+                className="w-full px-3 py-2 border border-[#E7E5E4] rounded-lg text-body-ui text-[#292524] focus:outline-none focus:border-[#7A2938]"
               >
                 <option value="tay_tien">Tây Tiến — Quang Dũng</option>
                 <option value="tuyen_ngon">Tuyên ngôn Độc lập — Hồ Chí Minh</option>
@@ -327,7 +327,7 @@ export const TypographyTestView: React.FC = () => {
                 rows={3}
                 value={textareaVal}
                 onChange={(e) => setTextareaVal(e.target.value)}
-                className="w-full px-3 py-2 border border-[#E7E5E4] rounded-lg text-body-ui text-[#292524] focus:outline-none focus:border-[#7C2D37]"
+                className="w-full px-3 py-2 border border-[#E7E5E4] rounded-lg text-body-ui text-[#292524] focus:outline-none focus:border-[#7A2938]"
               />
             </div>
           </div>
@@ -385,7 +385,7 @@ export const TypographyTestView: React.FC = () => {
                     { name: 'Phần IV: Viết đoạn văn Nghị luận', pct: '30%', time: '50 phút', score: '3.00', saved: '18:43' },
                     { name: 'TỔNG CỘNG BÀI KIỂM TRA', pct: '100%', time: '90 phút', score: '10.00', saved: '18:44' }
                   ].map((row, idx) => (
-                    <tr key={idx} className={idx === 4 ? 'bg-[#FBF4F5] font-semibold text-[#7C2D37]' : ''}>
+                    <tr key={idx} className={idx === 4 ? 'bg-[#FCF3F4] font-semibold text-[#7A2938]' : ''}>
                       <td className="py-2.5 px-4">{row.name}</td>
                       <td className="py-2.5 px-3 text-right tabular-nums">{row.pct}</td>
                       <td className="py-2.5 px-3 text-right tabular-nums">{row.time}</td>
@@ -405,7 +405,7 @@ export const TypographyTestView: React.FC = () => {
         <section className="bg-white p-6 md:p-8 rounded-2xl border border-[#E7E5E4] shadow-xs space-y-6">
           <div className="border-b border-[#E7E5E4] pb-3">
             <h2 className="text-section-title flex items-center gap-2">
-              <Smartphone className="w-5 h-5 text-[#7C2D37]" />
+              <Smartphone className="w-5 h-5 text-[#7A2938]" />
               4. Responsive Typography (Ngưỡng tối thiểu trên Mobile)
             </h2>
             <p className="text-meta text-[#78716C] mt-0.5">
@@ -415,7 +415,7 @@ export const TypographyTestView: React.FC = () => {
 
           <div className="max-w-sm mx-auto border-4 border-stone-700 rounded-3xl p-5 bg-[#FAF8F5] shadow-lg space-y-4">
             <div className="text-center pb-2 border-b border-[#E7E5E4]">
-              <span className="text-[12px] font-medium text-[#7C2D37] uppercase">
+              <span className="text-[12px] font-medium text-[#7A2938] uppercase">
                 Mô phỏng Màn hình Mobile (375px)
               </span>
             </div>
@@ -443,7 +443,7 @@ export const TypographyTestView: React.FC = () => {
 
               <div className="flex items-center justify-between text-[12px] text-[#78716C] pt-2 border-t border-[#E7E5E4]">
                 <span>Tối thiểu Metadata: 12px</span>
-                <span className="tabular-nums font-medium text-[#7C2D37]">18:42</span>
+                <span className="tabular-nums font-medium text-[#7A2938]">18:42</span>
               </div>
             </div>
           </div>

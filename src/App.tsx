@@ -7,7 +7,8 @@ import {
   SlideItem, 
   LiteratureLesson, 
   LiteratureQuestionItem, 
-  RubricData 
+  RubricData,
+  WorkspaceSettings 
 } from './types';
 import { initialAppState } from './data/presets';
 import { Sidebar } from './components/Sidebar';
@@ -23,8 +24,12 @@ import { Exam7991View } from './components/Exam7991View';
 import { MatrixView } from './components/MatrixView';
 import { ExportHandoverView } from './components/ExportHandoverView';
 import { TypographyTestView } from './components/TypographyTestView';
+import { GuidedTourProvider, useTour } from './components/tour';
+import { PersonalWorkspaceCenter } from './components/PersonalWorkspaceCenter';
+import { DEFAULT_WORKSPACE_SETTINGS } from './config/defaultSettings';
+import { applyWorkspaceSettingsToDom } from './utils/themeManager';
 import { normalizeDeepNFC, normalizeVietnamese } from './utils/unicode';
-import { X, CheckCircle2 } from 'lucide-react';
+import { CheckCircle2 } from 'lucide-react';
 
 export const STORAGE_KEY = 'edumaster_app_state_v3';
 
@@ -95,6 +100,7 @@ const loadInitialState = (): AppState => {
           rubric: { ...initialAppState.rubric, ...(parsed.rubric || {}) },
           slides: parsed.slides && Array.isArray(parsed.slides) ? parsed.slides : initialAppState.slides,
           questions: parsed.questions && Array.isArray(parsed.questions) ? parsed.questions : initialAppState.questions,
+          workspaceSettings: parsed.workspaceSettings || DEFAULT_WORKSPACE_SETTINGS,
           lastUpdated: parsed.lastUpdated || new Date().toISOString()
         };
       }
@@ -104,9 +110,19 @@ const loadInitialState = (): AppState => {
   }
   return {
     ...initialAppState,
+    workspaceSettings: DEFAULT_WORKSPACE_SETTINGS,
     activeModule: initMod
   };
 };
+
+function TourConsumerShell({
+  children,
+}: {
+  children: (openTour: () => void) => React.ReactNode;
+}) {
+  const { openTour } = useTour();
+  return <>{children(openTour)}</>;
+}
 
 export default function App() {
   const [appState, setAppState] = useState<AppState>(loadInitialState);
@@ -156,7 +172,30 @@ export default function App() {
     return () => clearTimeout(timer);
   }, [appState]);
 
+  // Áp dụng cài đặt giao diện ra DOM realtime
+  useEffect(() => {
+    applyWorkspaceSettingsToDom(appState.workspaceSettings || DEFAULT_WORKSPACE_SETTINGS);
+  }, [appState.workspaceSettings]);
+
   // Updaters
+  const handleUpdateWorkspaceSettings = (settings: WorkspaceSettings) => {
+    setAppState(prev => ({
+      ...prev,
+      workspaceSettings: settings,
+      lastUpdated: new Date().toISOString()
+    }));
+  };
+
+  const handleUpdateKhbdInfo = (patch: Partial<LessonPlan5512['info']>) => {
+    setKhbd(prev => ({
+      ...prev,
+      info: {
+        ...prev.info,
+        ...patch
+      }
+    }));
+  };
+
   const setActiveModule = (mod: ActiveModule) => {
     setAppState(prev => ({
       ...prev,
@@ -358,53 +397,61 @@ export default function App() {
   };
 
   return (
-    <div className="h-screen w-screen overflow-hidden flex bg-[#FAF8F5] text-[#292524] antialiased app-shell">
-      {/* Mobile Backdrop */}
-      {isSidebarOpen && (
-        <div 
-          onClick={() => setIsSidebarOpen(false)}
-          className="fixed inset-0 z-30 bg-stone-900/40 backdrop-blur-2xs lg:hidden"
-        />
-      )}
+    <GuidedTourProvider
+      currentModule={appState.activeModule}
+      setActiveModule={setActiveModule}
+    >
+      <TourConsumerShell>
+        {(openTour) => (
+          <div className="h-screen w-screen overflow-hidden flex bg-[#FAF8F5] text-[#292524] antialiased app-shell">
+            {/* Mobile Backdrop */}
+            {isSidebarOpen && (
+              <div 
+                onClick={() => setIsSidebarOpen(false)}
+                className="fixed inset-0 z-30 bg-stone-900/40 backdrop-blur-2xs lg:hidden anim-modal-backdrop"
+              />
+            )}
 
-      {/* 248px Workspace Sidebar (hidden in Focus Mode) */}
-      {!isFocusMode && (
-        <Sidebar
-          activeModule={appState.activeModule}
-          setActiveModule={setActiveModule}
-          khbd={appState.khbd}
-          setKhbd={setKhbd}
-          exam={appState.exam}
-          setExam={setExam}
-          slides={appState.slides}
-          setSlides={setSlides}
-          isSidebarOpen={isSidebarOpen}
-          setIsSidebarOpen={setIsSidebarOpen}
-          onOpenHandover={() => setActiveModule('export_handover')}
-          onOpenSettings={() => setIsSettingsOpen(true)}
-          lessons={appState.lessons}
-          currentLessonId={appState.currentLessonId}
-          onSelectLesson={handleSelectLesson}
-        />
-      )}
+            {/* 248px Workspace Sidebar (hidden in Focus Mode) */}
+            {!isFocusMode && (
+              <Sidebar
+                activeModule={appState.activeModule}
+                setActiveModule={setActiveModule}
+                khbd={appState.khbd}
+                setKhbd={setKhbd}
+                exam={appState.exam}
+                setExam={setExam}
+                slides={appState.slides}
+                setSlides={setSlides}
+                isSidebarOpen={isSidebarOpen}
+                setIsSidebarOpen={setIsSidebarOpen}
+                onOpenHandover={() => setActiveModule('export_handover')}
+                onOpenSettings={() => setIsSettingsOpen(true)}
+                onOpenTour={openTour}
+                lessons={appState.lessons}
+                currentLessonId={appState.currentLessonId}
+                onSelectLesson={handleSelectLesson}
+              />
+            )}
 
-      {/* Flexible Literary Workspace Area (calc(100vh - 56px)) */}
-      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden workspace-viewport">
-        {/* Editorial TopBar (56px) */}
-        <TopBar
-          currentLesson={currentLesson}
-          lessons={appState.lessons}
-          onSelectLesson={handleSelectLesson}
-          onOpenSidebar={() => setIsSidebarOpen(true)}
-          isFocusMode={isFocusMode}
-          onToggleFocusMode={() => setIsFocusMode(!isFocusMode)}
-          onPreview={() => window.print()}
-          khbd={appState.khbd}
-          exam={appState.exam}
-          slides={appState.slides}
-          onOpenHandover={() => setActiveModule('export_handover')}
-          lastUpdated={appState.lastUpdated}
-        />
+            {/* Flexible Literary Workspace Area (calc(100vh - 56px)) */}
+            <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden workspace-viewport">
+              {/* Editorial TopBar (56px) */}
+              <TopBar
+                currentLesson={currentLesson}
+                lessons={appState.lessons}
+                onSelectLesson={handleSelectLesson}
+                onOpenSidebar={() => setIsSidebarOpen(true)}
+                isFocusMode={isFocusMode}
+                onToggleFocusMode={() => setIsFocusMode(!isFocusMode)}
+                onPreview={() => window.print()}
+                khbd={appState.khbd}
+                exam={appState.exam}
+                slides={appState.slides}
+                onOpenHandover={() => setActiveModule('export_handover')}
+                onOpenTour={openTour}
+                lastUpdated={appState.lastUpdated}
+              />
 
         {/* Workspace Body */}
         <main className="flex-1 min-h-0 overflow-hidden flex flex-col w-full relative">
@@ -475,6 +522,14 @@ export default function App() {
               slides={appState.slides}
               setSlides={setSlides}
               lessonTitle={appState.khbd.info.lessonTitle}
+              presentationSettings={appState.slidePresentationSettings}
+              onUpdatePresentationSettings={(settings) => {
+                setAppState(prev => ({
+                  ...prev,
+                  slidePresentationSettings: settings,
+                  lastUpdated: new Date().toISOString()
+                }));
+              }}
             />
           )}
 
@@ -506,109 +561,26 @@ export default function App() {
         </main>
       </div>
 
-      {/* Settings Modal (Cài đặt thông tin Giáo viên & Trường) */}
-      {isSettingsOpen && (
-        <div className="fixed inset-0 z-50 bg-stone-900/40 backdrop-blur-2xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl border border-[#E7E5E4] max-w-md w-full p-6 shadow-xl space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-[#E7E5E4]">
-              <h3 className="text-card-title text-[#292524]">
-                Cài đặt & Thông tin Giáo viên
-              </h3>
-              <button
-                onClick={() => setIsSettingsOpen(false)}
-                className="text-[#78716C] hover:text-[#292524] p-1.5 rounded-lg transition-colors"
-                aria-label="Đóng cài đặt"
-              >
-                <X className="w-4 h-4" strokeWidth={1.75} />
-              </button>
-            </div>
+      {/* Trung tâm Không gian Làm việc Cá nhân (Settings Hub) */}
+      <PersonalWorkspaceCenter
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        appState={appState}
+        onUpdateSettings={handleUpdateWorkspaceSettings}
+        onUpdateKhbdInfo={handleUpdateKhbdInfo}
+        onTriggerTour={openTour}
+      />
 
-            <div className="space-y-3 text-meta">
-              <div>
-                <label className="block font-medium text-[#57534E] mb-1">Sở Giáo dục & Đào tạo</label>
-                <input
-                  type="text"
-                  value={appState.khbd.info.department}
-                  onChange={(e) => {
-                    const val = normalizeVietnamese(e.target.value);
-                    setKhbd(prev => ({
-                      ...prev,
-                      info: { ...prev.info, department: val }
-                    }));
-                  }}
-                  className="w-full px-3 py-2 border border-[#E7E5E4] rounded-lg text-body-ui text-[#292524] focus:outline-none focus:border-[#7C2D37]"
-                />
-              </div>
-
-              <div>
-                <label className="block font-medium text-[#57534E] mb-1">Trường THPT</label>
-                <input
-                  type="text"
-                  value={appState.khbd.info.school}
-                  onChange={(e) => {
-                    const val = normalizeVietnamese(e.target.value);
-                    setKhbd(prev => ({
-                      ...prev,
-                      info: { ...prev.info, school: val }
-                    }));
-                  }}
-                  className="w-full px-3 py-2 border border-[#E7E5E4] rounded-lg text-body-ui text-[#292524] focus:outline-none focus:border-[#7C2D37]"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block font-medium text-[#57534E] mb-1">Giáo viên phụ trách</label>
-                  <input
-                    type="text"
-                    value={appState.khbd.info.teacherName}
-                    onChange={(e) => {
-                      const val = normalizeVietnamese(e.target.value);
-                      setKhbd(prev => ({
-                        ...prev,
-                        info: { ...prev.info, teacherName: val }
-                      }));
-                    }}
-                    className="w-full px-3 py-2 border border-[#E7E5E4] rounded-lg text-body-ui text-[#292524] focus:outline-none focus:border-[#7C2D37]"
-                  />
-                </div>
-                <div>
-                  <label className="block font-medium text-[#57534E] mb-1">Tổ chuyên môn</label>
-                  <input
-                    type="text"
-                    value={appState.khbd.info.subjectGroup}
-                    onChange={(e) => {
-                      const val = normalizeVietnamese(e.target.value);
-                      setKhbd(prev => ({
-                        ...prev,
-                        info: { ...prev.info, subjectGroup: val }
-                      }));
-                    }}
-                    className="w-full px-3 py-2 border border-[#E7E5E4] rounded-lg text-body-ui text-[#292524] focus:outline-none focus:border-[#7C2D37]"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="flex justify-end pt-2">
-              <button
-                onClick={() => setIsSettingsOpen(false)}
-                className="btn-primary"
-              >
-                Lưu và đóng
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Toast Notification */}
+      {/* Toast Notification (Mục 46 design_animation.md) */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 bg-[#292524] text-white px-4 py-3 rounded-xl shadow-xl text-body-ui border border-[#44403C] animate-in fade-in slide-in-from-bottom-2">
-          <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 bg-[#292524] text-white px-4 py-3 rounded-xl shadow-xl text-body-ui border border-[#44403C] anim-toast">
+          <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 anim-success-check" />
           <span>{toastMessage}</span>
         </div>
       )}
-    </div>
+          </div>
+        )}
+      </TourConsumerShell>
+    </GuidedTourProvider>
   );
 }

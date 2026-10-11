@@ -108,16 +108,16 @@ export const ExportHandoverView: React.FC<ExportHandoverViewProps> = ({ appState
   return (
     <div className="h-full min-h-0 flex flex-col p-4 md:p-6 space-y-3 overflow-hidden">
       {/* Top Banner (shrink-0) */}
-      <div className="bg-white p-3.5 md:p-4 rounded-2xl border border-stone-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0">
+      <div className="bg-white p-3.5 md:p-4 rounded-2xl border border-[#E5E0DA] shadow-[var(--shadow-xs)] flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0">
         <div>
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full text-metadata font-semibold bg-stone-900 text-white flex items-center gap-1">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+            <span className="px-2.5 py-0.5 rounded-full text-metadata font-semibold bg-[#FCF3F4] text-[#7A2938] border border-[#7A2938]/15 flex items-center gap-1">
+              <ShieldCheck className="w-3.5 h-3.5" />
               Bàn giao Phiên làm việc & Kiểm định chất lượng
             </span>
-            <span className="text-metadata text-stone-500 font-medium hidden sm:inline">Hệ thống Ngữ văn GDPT 2018</span>
+            <span className="text-metadata text-[#706A65] font-medium hidden sm:inline">Hệ thống Ngữ văn GDPT 2018</span>
           </div>
-          <h1 className="text-section md:text-page-title font-semibold text-stone-900 mt-1 leading-[1.3]">
+          <h1 className="text-section md:text-page-title font-semibold text-[#211E1C] mt-1 leading-[1.3]">
             Trung tâm Xuất bản & Khối JSON State Bàn giao
           </h1>
         </div>
@@ -125,14 +125,14 @@ export const ExportHandoverView: React.FC<ExportHandoverViewProps> = ({ appState
         <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={handleCopy}
-            className="btn-secondary min-h-[36px] px-3 py-1.5 bg-stone-900 hover:bg-stone-800 text-white rounded-xl text-metadata font-semibold flex items-center gap-1.5 shadow-sm transition"
+            className="btn-secondary min-h-[36px] px-3.5 py-1.5 rounded-xl text-metadata font-semibold flex items-center gap-1.5"
           >
-            {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+            {copied ? <Check className="w-3.5 h-3.5 text-[#166534]" /> : <Copy className="w-3.5 h-3.5 text-[#706A65]" />}
             <span>{copied ? 'Đã chép State' : 'Sao chép JSON'}</span>
           </button>
           <button
             onClick={handleDownloadJson}
-            className="btn-primary min-h-[36px] px-3 py-1.5 bg-[#7C2D37] hover:bg-[#68232D] text-white rounded-xl text-metadata font-semibold flex items-center gap-1.5 shadow-sm transition"
+            className="btn-primary min-h-[36px] px-3.5 py-1.5 rounded-xl text-metadata font-semibold flex items-center gap-1.5"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Tải file .JSON</span>
@@ -145,26 +145,26 @@ export const ExportHandoverView: React.FC<ExportHandoverViewProps> = ({ appState
         {/* Left Panel: Checklist + Export Office Suite (340-380px, shrink-0) */}
         <div className="w-full md:w-80 xl:w-96 shrink-0 flex flex-col gap-3 overflow-hidden">
           {/* Verification Checklist Box (shrink-0) */}
-          <div className="card-surface p-3.5 shrink-0 border-2 border-emerald-200">
-            <div className="flex items-center justify-between pb-2 border-b border-stone-100">
-              <h3 className="font-semibold text-metadata text-stone-900 flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+          <div className="bg-white rounded-2xl border border-emerald-200/80 shadow-[var(--shadow-xs)] p-3.5 shrink-0">
+            <div className="flex items-center justify-between pb-2 border-b border-[#EEEAE5]">
+              <h3 className="font-semibold text-metadata text-[#211E1C] flex items-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4 text-[#166534]" />
                 Kiểm định tiêu chuẩn đồng bộ
               </h3>
-              <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300 tabular-nums">
+              <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-[#166534] border border-emerald-200/60 tabular-nums">
                 4/4 Tiêu chuẩn
               </span>
             </div>
 
             <div className="space-y-1.5 pt-2">
               {checklistItems.map((item) => (
-                <div key={item.id} className="p-2 rounded-lg bg-emerald-50/50 border border-emerald-100/80 flex items-start gap-2">
-                  <div className="w-4 h-4 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">
+                <div key={item.id} className="p-2 rounded-lg bg-emerald-50/40 border border-emerald-100 flex items-start gap-2">
+                  <div className="w-4 h-4 rounded-full bg-[#166534] text-white flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">
                     ✓
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className="font-semibold text-xs text-stone-900 leading-tight">{item.title}</div>
-                    <div className="text-[11px] text-stone-600 leading-tight mt-0.5 line-clamp-1">{item.desc}</div>
+                    <div className="font-semibold text-xs text-[#211E1C] leading-tight">{item.title}</div>
+                    <div className="text-[11px] text-[#706A65] leading-tight mt-0.5 line-clamp-1">{item.desc}</div>
                   </div>
                 </div>
               ))}
@@ -172,27 +172,27 @@ export const ExportHandoverView: React.FC<ExportHandoverViewProps> = ({ appState
           </div>
 
           {/* Export Office Suite (flex-1 min-h-0 overflow-y-auto) */}
-          <div className="card-surface p-3.5 flex-1 min-h-0 flex flex-col overflow-hidden">
-            <h3 className="font-semibold text-metadata text-stone-900 mb-2 flex items-center gap-1.5 shrink-0">
-              <Download className="w-4 h-4 text-[#7C2D37]" />
+          <div data-tour-id="export-panel" className="bg-white rounded-2xl border border-[#E5E0DA] shadow-[var(--shadow-xs)] p-3.5 flex-1 min-h-0 flex flex-col overflow-hidden">
+            <h3 className="font-semibold text-metadata text-[#211E1C] mb-2 flex items-center gap-1.5 shrink-0">
+              <Download className="w-4 h-4 text-[#7A2938]" />
               Xuất bản File Văn phòng (Office Suite)
             </h3>
 
             <div className="flex-1 min-h-0 overflow-y-auto panel-scroll space-y-2 pr-0.5">
               {/* Word KHBD */}
-              <div className="p-2.5 rounded-xl border border-stone-200 bg-stone-50/70 hover:bg-white transition flex items-center justify-between gap-2">
+              <div className="p-2.5 rounded-xl border border-[#E5E0DA] bg-[#FAF9F7] hover:bg-white hover:border-[#D6D0C8] transition-colors flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="w-7 h-7 rounded-lg bg-[#7C2D37]/10 text-[#7C2D37] flex items-center justify-center shrink-0">
+                  <div className="w-7 h-7 rounded-lg bg-[#FCF3F4] text-[#7A2938] border border-[#7A2938]/15 flex items-center justify-center shrink-0">
                     <FileText className="w-3.5 h-3.5" />
                   </div>
                   <div className="min-w-0">
-                    <div className="font-semibold text-metadata text-stone-900 font-serif leading-tight">Word KHBD (5512)</div>
-                    <div className="text-[11px] text-stone-500 leading-tight">Chuẩn OpenXML 5512 A4</div>
+                    <div className="font-semibold text-metadata text-[#211E1C] font-serif leading-tight">Word KHBD (5512)</div>
+                    <div className="text-[11px] text-[#706A65] leading-tight">Chuẩn OpenXML 5512 A4</div>
                   </div>
                 </div>
                 <button
                   onClick={() => exportDocxKHBD(appState.khbd)}
-                  className="min-h-[32px] px-2.5 py-1 bg-[#7C2D37] hover:bg-[#68232D] text-white font-semibold text-xs rounded-lg flex items-center gap-1 shrink-0 transition"
+                  className="btn-primary min-h-[32px] px-2.5 py-1 text-xs font-semibold rounded-lg flex items-center gap-1 shrink-0"
                 >
                   <Download className="w-3 h-3" />
                   <span>Tải Word (.docx)</span>
@@ -200,81 +200,81 @@ export const ExportHandoverView: React.FC<ExportHandoverViewProps> = ({ appState
               </div>
 
               {/* Word Đề thi */}
-              <div className="p-2.5 rounded-xl border border-stone-200 bg-stone-50/70 hover:bg-white transition flex items-center justify-between gap-2">
+              <div className="p-2.5 rounded-xl border border-[#E5E0DA] bg-[#FAF9F7] hover:bg-white hover:border-[#D6D0C8] transition-colors flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                  <div className="w-7 h-7 rounded-lg bg-[#FCF3F4] text-[#7A2938] border border-[#7A2938]/15 flex items-center justify-center shrink-0">
                     <CheckCircle2 className="w-3.5 h-3.5" />
                   </div>
                   <div className="min-w-0">
-                    <div className="font-semibold text-metadata text-stone-900 font-serif leading-tight">Word Đề thi (7991)</div>
-                    <div className="text-[11px] text-stone-500 leading-tight">Chuẩn CV 7991 kèm Barem (.docx)</div>
+                    <div className="font-semibold text-metadata text-[#211E1C] font-serif leading-tight">Word Đề thi (7991)</div>
+                    <div className="text-[11px] text-[#706A65] leading-tight">Chuẩn CV 7991 kèm Barem (.docx)</div>
                   </div>
                 </div>
                 <button
                   onClick={() => exportDocxExam(appState.exam, appState.khbd)}
-                  className="min-h-[32px] px-2.5 py-1 bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-xs rounded-lg flex items-center gap-1 shrink-0 transition"
+                  className="btn-secondary min-h-[32px] px-2.5 py-1 text-xs font-semibold rounded-lg flex items-center gap-1 shrink-0"
                 >
-                  <Download className="w-3 h-3" />
+                  <Download className="w-3 h-3 text-[#706A65]" />
                   <span>Tải Đề thi (.docx)</span>
                 </button>
               </div>
 
               {/* Word Ma trận & Đặc tả */}
-              <div className="p-2.5 rounded-xl border border-stone-200 bg-stone-50/70 hover:bg-white transition flex items-center justify-between gap-2">
+              <div className="p-2.5 rounded-xl border border-[#E5E0DA] bg-[#FAF9F7] hover:bg-white hover:border-[#D6D0C8] transition-colors flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="w-7 h-7 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center shrink-0">
+                  <div className="w-7 h-7 rounded-lg bg-[#FCF3F4] text-[#7A2938] border border-[#7A2938]/15 flex items-center justify-center shrink-0">
                     <FileSpreadsheet className="w-3.5 h-3.5" />
                   </div>
                   <div className="min-w-0">
-                    <div className="font-semibold text-metadata text-stone-900 font-serif leading-tight">Word Ma trận & Đặc tả</div>
-                    <div className="text-[11px] text-stone-500 leading-tight">Khung ma trận 2 chiều CV 7991 (.docx)</div>
+                    <div className="font-semibold text-metadata text-[#211E1C] font-serif leading-tight">Word Ma trận & Đặc tả</div>
+                    <div className="text-[11px] text-[#706A65] leading-tight">Khung ma trận 2 chiều CV 7991 (.docx)</div>
                   </div>
                 </div>
                 <button
                   onClick={() => exportDocxMatrix(appState.exam, appState.khbd)}
-                  className="min-h-[32px] px-2.5 py-1 bg-purple-700 hover:bg-purple-800 text-white font-semibold text-xs rounded-lg flex items-center gap-1 shrink-0 transition"
+                  className="btn-secondary min-h-[32px] px-2.5 py-1 text-xs font-semibold rounded-lg flex items-center gap-1 shrink-0"
                 >
-                  <Download className="w-3 h-3" />
+                  <Download className="w-3 h-3 text-[#706A65]" />
                   <span>Tải Ma trận (.docx)</span>
                 </button>
               </div>
 
               {/* Slide PowerPoint */}
-              <div className="p-2.5 rounded-xl border border-stone-200 bg-stone-50/70 hover:bg-white transition flex items-center justify-between gap-2">
+              <div className="p-2.5 rounded-xl border border-[#E5E0DA] bg-[#FAF9F7] hover:bg-white hover:border-[#D6D0C8] transition-colors flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="w-7 h-7 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+                  <div className="w-7 h-7 rounded-lg bg-[#FCF3F4] text-[#7A2938] border border-[#7A2938]/15 flex items-center justify-center shrink-0">
                     <Presentation className="w-3.5 h-3.5" />
                   </div>
                   <div className="min-w-0">
-                    <div className="font-semibold text-metadata text-stone-900 font-serif leading-tight">PowerPoint Slide</div>
-                    <div className="text-[11px] text-stone-500 leading-tight">Bản trình chiếu 16:9 (.pptx)</div>
+                    <div className="font-semibold text-metadata text-[#211E1C] font-serif leading-tight">PowerPoint Slide</div>
+                    <div className="text-[11px] text-[#706A65] leading-tight">Bản trình chiếu 16:9 (.pptx)</div>
                   </div>
                 </div>
                 <button
-                  onClick={() => exportPptxSlides(appState.slides, appState.khbd.info.lessonTitle)}
-                  className="min-h-[32px] px-2.5 py-1 bg-amber-700 hover:bg-amber-800 text-white font-semibold text-xs rounded-lg flex items-center gap-1 shrink-0 transition"
+                  onClick={() => exportPptxSlides(appState.slides, appState.khbd.info.lessonTitle, appState.slidePresentationSettings)}
+                  className="btn-secondary min-h-[32px] px-2.5 py-1 text-xs font-semibold rounded-lg flex items-center gap-1 shrink-0"
                 >
-                  <Download className="w-3 h-3" />
+                  <Download className="w-3 h-3 text-[#706A65]" />
                   <span>Tải PPTX (.pptx)</span>
                 </button>
               </div>
 
               {/* Word Rubric */}
-              <div className="p-2.5 rounded-xl border border-stone-200 bg-stone-50/70 hover:bg-white transition flex items-center justify-between gap-2">
+              <div className="p-2.5 rounded-xl border border-[#E5E0DA] bg-[#FAF9F7] hover:bg-white hover:border-[#D6D0C8] transition-colors flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="w-7 h-7 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center shrink-0">
+                  <div className="w-7 h-7 rounded-lg bg-[#FCF3F4] text-[#7A2938] border border-[#7A2938]/15 flex items-center justify-center shrink-0">
                     <GraduationCap className="w-3.5 h-3.5" />
                   </div>
                   <div className="min-w-0">
-                    <div className="font-semibold text-metadata text-stone-900 font-serif leading-tight">Word Rubric Chấm</div>
-                    <div className="text-[11px] text-stone-500 leading-tight">Barem tự luận (.docx)</div>
+                    <div className="font-semibold text-metadata text-[#211E1C] font-serif leading-tight">Word Rubric Chấm</div>
+                    <div className="text-[11px] text-[#706A65] leading-tight">Barem tự luận (.docx)</div>
                   </div>
                 </div>
                 <button
                   onClick={() => exportDocxRubric(appState.rubric)}
-                  className="min-h-[32px] px-2.5 py-1 bg-purple-800 hover:bg-purple-900 text-white font-semibold text-xs rounded-lg flex items-center gap-1 shrink-0 transition"
+                  className="btn-secondary min-h-[32px] px-2.5 py-1 text-xs font-semibold rounded-lg flex items-center gap-1 shrink-0"
                 >
-                  <Download className="w-3 h-3" />
+                  <Download className="w-3 h-3 text-[#706A65]" />
                   <span>Tải Rubric (.docx)</span>
                 </button>
               </div>
@@ -283,11 +283,11 @@ export const ExportHandoverView: React.FC<ExportHandoverViewProps> = ({ appState
         </div>
 
         {/* Right Panel: JSON State Handover & Restore (Rule 29.18) */}
-        <div className="flex-1 min-h-0 bg-[#171413] text-stone-100 p-4 rounded-2xl border border-stone-800 shadow-xl flex flex-col overflow-hidden">
+        <div data-tour-id="backup-restore" className="flex-1 min-h-0 bg-[#171413] text-stone-100 p-4 rounded-2xl border border-stone-800 shadow-xl flex flex-col overflow-hidden">
           {/* Header row (shrink-0) */}
           <div className="flex items-center justify-between pb-2.5 border-b border-stone-800 shrink-0">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-[#7C2D37]/30 text-rose-400 flex items-center justify-center">
+              <div className="w-7 h-7 rounded-lg bg-[#7A2938]/30 text-rose-300 flex items-center justify-center">
                 <FileCode2 className="w-4 h-4" />
               </div>
               <div>
@@ -310,7 +310,7 @@ export const ExportHandoverView: React.FC<ExportHandoverViewProps> = ({ appState
 
           {/* Code container (flex-1 min-h-0 overflow-y-auto) */}
           <div className="flex-1 min-h-0 my-2 overflow-hidden flex flex-col">
-            <pre className="flex-1 min-h-0 overflow-auto panel-scroll p-3 rounded-xl bg-[#0D0B0A] font-mono text-xs text-amber-300 border border-stone-800/80 leading-relaxed selection:bg-[#7C2D37] selection:text-white">
+            <pre className="flex-1 min-h-0 overflow-auto panel-scroll p-3 rounded-xl bg-[#0D0B0A] font-mono text-xs text-amber-300 border border-stone-800/80 leading-relaxed selection:bg-[#7A2938] selection:text-white">
               {jsonString}
             </pre>
           </div>
@@ -327,12 +327,12 @@ export const ExportHandoverView: React.FC<ExportHandoverViewProps> = ({ appState
                 placeholder="Dán mã JSON State phiên trước vào đây để khôi phục..."
                 value={importJsonText}
                 onChange={(e) => setImportJsonText(e.target.value)}
-                className="flex-1 text-xs font-mono p-2 bg-stone-900 border border-stone-700 rounded-lg text-stone-200 focus:ring-1 focus:ring-[#7C2D37] resize-none min-h-[48px]"
+                className="flex-1 text-xs font-mono p-2 bg-stone-900 border border-stone-700 rounded-lg text-stone-200 focus:ring-2 focus:ring-[#7A2938]/40 resize-none min-h-[48px]"
               />
               <button
                 onClick={handleApplyImport}
                 disabled={!importJsonText.trim()}
-                className="btn-primary min-h-[48px] px-3.5 bg-[#7C2D37] hover:bg-[#68232D] disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-semibold rounded-lg flex items-center gap-1.5 transition shrink-0"
+                className="btn-primary min-h-[48px] px-3.5 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-semibold rounded-lg flex items-center gap-1.5 shrink-0"
               >
                 <Upload className="w-3.5 h-3.5" />
                 <span>Nạp lại State</span>

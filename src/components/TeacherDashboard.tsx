@@ -5,16 +5,18 @@ import {
   CheckSquare, 
   Compass, 
   ArrowRight,
-  Clock,
   PlusCircle,
   FileText,
   X,
   Sparkles,
-  Layers,
-  FileCheck2,
   Presentation,
   CheckCircle2,
-  AlertCircle
+  FileCheck2,
+  Calendar,
+  Layers,
+  Search,
+  Filter,
+  Check
 } from 'lucide-react';
 import { 
   ActiveModule, 
@@ -27,6 +29,7 @@ import {
   RubricData
 } from '../types';
 import { normalizeVietnamese } from '../utils/unicode';
+import { Badge } from './common/Badge';
 
 interface TeacherDashboardProps {
   lessons: LiteratureLesson[];
@@ -47,19 +50,22 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
 }) => {
   const currentLesson = lessons.find(l => l.id === currentLessonId) || lessons[0];
 
+  // Filter state for recent lessons table
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedGenreFilter, setSelectedGenreFilter] = useState<'all' | LiteratureGenre>('all');
+
   // Create Lesson Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formGrade, setFormGrade] = useState<'Lớp 10' | 'Lớp 11' | 'Lớp 12'>('Lớp 12');
   const [formTextbook, setFormTextbook] = useState<'Kết nối tri thức' | 'Cánh diều' | 'Chân trời sáng tạo'>('Kết nối tri thức');
   const [formGenre, setFormGenre] = useState<LiteratureGenre>('story');
-  const [formTheme, setFormTheme] = useState('Bài 1: Câu chuyện và điểm nhìn trong truyện kể');
+  const [formTheme, setFormTheme] = useState('Bài 1: Khát vọng và số phận con người trong tác phẩm văn học');
   const [formTitle, setFormTitle] = useState('');
   const [formAuthor, setFormAuthor] = useState('');
   const [formPeriods, setFormPeriods] = useState('2 tiết');
   const [formObjectives, setFormObjectives] = useState('');
   const [formCoreKnowledge, setFormCoreKnowledge] = useState('');
   const [formSourceText, setFormSourceText] = useState('');
-  const [formReferences, setFormReferences] = useState('');
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   const validateForm = () => {
@@ -158,46 +164,46 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
           content: 'Lớp chia nhóm tìm hiểu các nội dung trọng tâm của tác phẩm và nghệ thuật thể hiện.',
           product: 'Bảng tổng hợp kiến thức hoặc sơ đồ tư duy của các nhóm học sinh.',
           method: 'Dạy học hợp tác nhóm, phân tích ngữ liệu văn bản',
-          tools: 'Phiếu học tập, bút dạ, bảng phụ',
+          tools: 'Phiếu học tập số 1, văn bản trích đoạn',
           steps: {
-            step1: 'GV phát phiếu học tập và phân công nhiệm vụ cụ thể cho từng nhóm.',
-            step2: 'Các nhóm nghiên cứu ngữ liệu văn bản và thảo luận hoàn thành phiếu.',
-            step3: 'Đại diện các nhóm báo cáo kết quả thảo luận.',
-            step4: 'GV nhận xét, chuẩn hóa kiến thức trọng tâm.'
+            step1: 'GV chia lớp thành các nhóm, giao phiếu học tập phân tích đoạn trích.',
+            step2: 'HS làm việc nhóm: thảo luận, tìm dẫn chứng và lý giải ý nghĩa chi tiết.',
+            step3: 'Đại diện nhóm trình bày kết quả, các nhóm khác bổ sung phản biện.',
+            step4: 'GV nhận xét, chuẩn hóa kiến thức và chốt kết luận sư phạm.'
           }
         },
         {
           id: `act-${Date.now()}-3`,
-          name: 'Hoạt động 3: Luyện tập (Củng cố tri thức đọc hiểu)',
+          name: 'Hoạt động 3: Luyện tập (Củng cố và rèn luyện kỹ năng)',
           type: 'practice',
           time: '8 phút',
-          objective: 'Rèn luyện kỹ năng phân tích ngữ liệu và trả lời câu hỏi đọc hiểu.',
-          content: 'Học sinh làm việc cá nhân hoàn thành các bài tập đọc hiểu nhanh.',
-          product: 'Đáp án chính xác của học sinh trên phiếu luyện tập.',
-          method: 'Luyện tập thực hành, vấn đáp tương tác',
-          tools: 'Phiếu bài tập',
+          objective: 'Khắc sâu kiến thức trọng tâm và rèn luyện kỹ năng đọc hiểu.',
+          content: 'Giải quyết câu hỏi trắc nghiệm và câu hỏi mở ngắn liên quan đến đoạn trích.',
+          product: 'Câu trả lời đúng và lý giải thuyết phục của học sinh.',
+          method: 'Trò chơi học tập hoặc làm việc cá nhân',
+          tools: 'Hệ thống câu hỏi đọc hiểu trên Slide',
           steps: {
-            step1: 'GV chiếu các câu hỏi củng cố lên màn hình.',
-            step2: 'HS suy nghĩ và trả lời độc lập.',
-            step3: 'GV gọi HS chữa bài và giải thích phương án.',
-            step4: 'GV chốt đáp án chuẩn và biểu dương tinh thần học tập.'
+            step1: 'GV trình chiếu câu hỏi luyện tập trên slide.',
+            step2: 'HS suy nghĩ và trả lời trên bảng phụ hoặc giơ thẻ tín hiệu.',
+            step3: 'GV gọi HS giải thích lý do lựa chọn đáp án.',
+            step4: 'GV chốt đáp án đúng và biểu dương các câu trả lời sắc sảo.'
           }
         },
         {
           id: `act-${Date.now()}-4`,
-          name: 'Hoạt động 4: Vận dụng & Mở rộng (Chiêm nghiệm thực tiễn)',
+          name: 'Hoạt động 4: Vận dụng (Mở rộng & Liên hệ thực tiễn)',
           type: 'application',
           time: '5 phút',
-          objective: 'Kết nối thông điệp tác phẩm với đời sống thực tiễn của bản thân.',
-          content: `Viết đoạn văn ngắn chia sẻ bài học nhân sinh rút ra từ tác phẩm ${cleanTitle}.`,
-          product: 'Đoạn văn ngắn của học sinh thể hiện suy nghĩ chân thành.',
-          method: 'Dạy học nêu vấn đề, viết sáng tạo',
-          tools: 'Vở ghi / Sổ tay văn học',
+          objective: 'Phát triển năng lực tự học, bồi dưỡng nhân sinh quan tích cực.',
+          content: 'Viết đoạn văn ngắn bày tỏ suy nghĩ về thông điệp tư tưởng của tác phẩm.',
+          product: 'Đoạn văn ngắn của học sinh hoàn thành ở nhà.',
+          method: 'Dạy học dự án, viết sáng tạo',
+          tools: 'Sổ tay văn học cá nhân',
           steps: {
-            step1: 'GV nêu câu hỏi chiêm nghiệm kết nối thực tế.',
-            step2: 'HS lập dàn ý nhanh tại lớp.',
-            step3: 'GV gọi 1 HS trình bày ngắn gọn.',
-            step4: 'GV dặn dò hoàn thiện bài tập về nhà.'
+            step1: 'GV giao nhiệm vụ viết đoạn văn (khoảng 150 - 200 chữ).',
+            step2: 'GV hướng dẫn tiêu chí chấm điểm theo Rubric năng lực.',
+            step3: 'HS ghi nhận nhiệm vụ và nộp bài vào buổi học tiếp theo.',
+            step4: 'GV tổng kết tiết học và nhắc nhở nhiệm vụ chuẩn bị bài mới.'
           }
         }
       ]
@@ -207,42 +213,36 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
     const starterSlides: SlideItem[] = [
       {
         id: `slide-${Date.now()}-1`,
-        title: `${cleanTitle.toUpperCase()} - ${cleanAuthor.toUpperCase()}`,
+        title: cleanTitle.toUpperCase(),
+        subtitle: `Tác giả: ${cleanAuthor} · Chương trình Ngữ văn ${formGrade}`,
         phaseTag: 'Khởi động',
-        layout: 'single',
-        contentLeft: `Bài dạy chuẩn Chương trình GDPT 2018 môn Ngữ văn. Khám phá vẻ đẹp nội dung và nghệ thuật của tác phẩm.`,
-        bullets: [
-          `Môn học: Ngữ văn ${formGrade} (${formTextbook})`,
-          `Chủ đề: ${cleanTheme}`,
-          `Thời lượng: ${formPeriods}`,
-          `Mục tiêu: ${cleanObjectives}`
-        ],
-        speakerNotes: `GV mở đầu giới thiệu bối cảnh sáng tác và vị thế tác giả ${cleanAuthor}.`
+        layout: 'cover',
+        contentLeft: `Bài dạy thể loại: ${formGenre === 'poetry' ? 'Thơ' : formGenre === 'story' ? 'Truyện ngắn' : 'Văn nghị luận'}`,
+        speakerNotes: 'Slide mở đầu: Giới thiệu ấn tượng tác phẩm và truyền cảm hứng cho học sinh.'
       },
       {
         id: `slide-${Date.now()}-2`,
-        title: 'TRÍCH ĐOẠN NGỮ LIỆU TRỌNG TÂM',
-        phaseTag: 'Kiến thức mới',
-        layout: 'quote',
-        contentLeft: 'Đọc diễn cảm và định vị các chi tiết nghệ thuật đắt giá:',
-        quoteText: cleanSourceText.slice(0, 320) + (cleanSourceText.length > 320 ? '...' : ''),
-        quoteAuthor: `${cleanAuthor} - ${cleanTitle}`,
-        discussionQuestion: 'Chi tiết hoặc hình ảnh nào trong đoạn trích tạo cho em ấn tượng sâu sắc nhất? Vì sao?',
-        speakerNotes: 'Cho học sinh 2 phút đọc thầm và đánh dấu các từ ngữ gợi cảm.'
+        title: 'MỤC TIÊU BÀI HỌC (YCCĐ)',
+        phaseTag: 'Khởi động',
+        layout: 'objectives',
+        contentLeft: 'Yêu cầu cần đạt về năng lực và phẩm chất học sinh sau bài học:',
+        bulletPoints: [
+          cleanObjectives,
+          cleanCoreKnowledge || `Nắm vững đặc trưng thể loại trong tác phẩm ${cleanTitle}.`,
+          'Bồi dưỡng năng lực cảm thụ thẩm mỹ và phẩm chất nhân văn cao đẹp.'
+        ],
+        speakerNotes: 'Nêu rõ đích đến của tiết học giúp học sinh chủ động chiếm lĩnh tri thức.'
       },
       {
         id: `slide-${Date.now()}-3`,
-        title: 'TỔNG KẾT BÀI HỌC & CHIÊM NGHIỆM',
-        phaseTag: 'Tổng kết',
-        layout: 'single',
-        contentLeft: 'Khắc sâu những giá trị cốt lõi đọng lại từ tác phẩm:',
-        bullets: [
-          `Giá trị tư tưởng: Khẳng định thông điệp nhân văn cao đẹp của tác giả ${cleanAuthor}`,
-          `Nét đặc sắc nghệ thuật: Thể hiện sinh động đặc trưng thể loại ${formGenre === 'poetry' ? 'Thơ trữ tình' : formGenre === 'story' ? 'Truyện' : 'Văn nghị luận'}`,
-          'Bài học cuộc sống: Sống có lý tưởng, thấu cảm và trách nhiệm',
-          'Nhiệm vụ về nhà: Hoàn thành bài tập viết đoạn văn trên hệ thống LMS'
-        ],
-        speakerNotes: 'Dặn dò học sinh chuẩn bị bài cho tiết học tiếp theo.'
+        title: 'TRÍCH ĐOẠN NGỮ LIỆU TRỌNG TÂM',
+        phaseTag: 'Kiến thức mới',
+        layout: 'quote',
+        contentLeft: 'Phân tích vẻ đẹp ngôn từ và tư tưởng nghệ thuật:',
+        quoteText: cleanSourceText.slice(0, 260) + (cleanSourceText.length > 260 ? '...' : ''),
+        quoteAuthor: cleanAuthor,
+        discussionQuestion: 'Câu hỏi gợi mở: Cảm nhận của em về chi tiết nghệ thuật hoặc hình tượng trong đoạn trích?',
+        speakerNotes: 'Cho học sinh đọc diễn cảm đoạn trích và phát hiện từ ngữ then chốt.'
       }
     ];
 
@@ -250,53 +250,42 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
     const starterQuestions: LiteratureQuestionItem[] = [
       {
         id: `q-${Date.now()}-1`,
-        code: 'Câu 1 (Đọc hiểu)',
         type: 'doc_hieu',
         level: 'NB',
         skill: 'Nhận diện',
-        passageSnippet: cleanSourceText.slice(0, 200),
-        question: `Xác định thể loại và phương thức biểu đạt chính của đoạn trích trên.`,
-        answer: `- Thể loại: ${formGenre === 'poetry' ? 'Thơ trữ tình' : formGenre === 'story' ? 'Truyện' : 'Văn nghị luận'}.\n- Phương thức biểu đạt chính: ${formGenre === 'poetry' ? 'Biểu cảm' : formGenre === 'story' ? 'Tự sự' : 'Nghị luận'}.`,
-        guide: 'Học sinh trả lời đúng mỗi ý được 0.25 điểm (tổng 0.5 điểm).',
-        points: 0.5,
-        linkedPart: 'partI'
+        question: `Xác định thể loại và phương thức biểu đạt chính của văn bản "${cleanTitle}".`,
+        passage: cleanSourceText.slice(0, 200),
+        suggestedAnswer: `Thể loại: ${formGenre === 'poetry' ? 'Thơ trữ tình' : formGenre === 'story' ? 'Truyện' : 'Nghị luận'}. Phương thức biểu đạt chính: ${formGenre === 'poetry' ? 'Biểu cảm' : formGenre === 'story' ? 'Tự sự' : 'Nghị luận'}.`,
+        markingGuide: 'Học sinh xác định đúng cả hai yếu tố đạt 0.5 điểm.',
+        points: 0.5
       },
       {
         id: `q-${Date.now()}-2`,
-        code: 'Câu 2 (Tiếng Việt)',
-        type: 'tieng_viet',
+        type: 'doc_hieu',
         level: 'TH',
         skill: 'Phân tích',
-        passageSnippet: cleanSourceText.slice(0, 200),
-        question: 'Chỉ ra và phân tích tác dụng của một biện pháp tu từ nổi bật trong đoạn trích.',
-        answer: 'Chỉ ra đúng biện pháp tu từ và phân tích được hiệu quả tăng sức biểu cảm hoặc làm nổi bật tư tưởng hình tượng.',
-        guide: 'Chỉ đúng biện pháp: 0.25đ; phân tích hiệu quả: 0.5đ.',
-        points: 0.75,
-        linkedPart: 'partII'
-      },
-      {
-        id: `q-${Date.now()}-3`,
-        code: 'Câu 3 (Nghị luận văn học)',
-        type: 'nl_van_hoc',
-        level: 'VD',
-        skill: 'Sáng tạo',
-        passageSnippet: cleanSourceText.slice(0, 200),
-        question: `Phân tích vẻ đẹp nội dung và nghệ thuật của tác phẩm "${cleanTitle}". Từ đó nhận xét ngắn gọn về phong cách của nhà văn ${cleanAuthor}.`,
-        answer: 'Bài viết đảm bảo mở bài, thân bài với hệ thống luận điểm sáng rõ, dẫn chứng xác thực và kết bài khái quát.',
-        guide: 'Chấm theo khung Rubric bài văn nghị luận văn học chuẩn GDPT 2018 (4.0 điểm).',
-        points: 4.0,
-        linkedPart: 'partIV'
+        question: `Chỉ ra và nêu tác dụng của biện pháp nghệ thuật tiêu biểu trong đoạn trích.`,
+        passage: cleanSourceText.slice(0, 200),
+        suggestedAnswer: 'Học sinh chỉ ra đúng biện pháp nghệ thuật và phân tích tác dụng gợi hình, gợi cảm.',
+        markingGuide: 'Nêu tên biện pháp: 0.25đ. Phân tích tác dụng: 0.5đ.',
+        points: 0.75
       }
     ];
 
     // Starter Exam
     const starterExam: Exam7991Data = {
+      title: `ĐỀ KIỂM TRA ĐỊNH KỲ MÔN NGỮ VĂN ${formGrade.toUpperCase()}`,
+      timeLimit: '90 phút',
+      grade: formGrade,
+      semester: 'Học kỳ I',
+      academicYear: '2024 - 2025',
       examHeader: {
-        title: `ĐỀ KIỂM TRA ĐỊNH KỲ - NGỮ VĂN ${formGrade.toUpperCase().replace('LỚP ', '')}`,
-        duration: '90 phút (Không kể thời gian phát đề)',
-        examCode: `MÃ ĐỀ: ${Math.floor(100 + Math.random() * 900)}`
+        title: `ĐỀ KIỂM TRA ĐỊNH KỲ MÔN NGỮ VĂN ${formGrade.toUpperCase()}`,
+        duration: '90 phút',
+        examCode: 'MÃ ĐỀ: 101'
       },
-      passageRef: `ĐỌC NGỮ LIỆU SAU VÀ THỰC HIỆN CÁC YÊU CẦU:\n"${cleanSourceText.slice(0, 450)}${cleanSourceText.length > 450 ? '...' : ''}"\n(Trích "${cleanTitle}" - ${cleanAuthor}, SGK Ngữ văn ${formGrade})`,
+      passageRef: cleanSourceText,
+      totalPoints: 10.0,
       partI: [
         {
           id: `ep1-${Date.now()}-1`,
@@ -449,35 +438,47 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
           name: 'Hệ thống Luận điểm & Lập luận',
           weight: 30,
           maxPoints: 3.0,
-          description: 'Hệ thống luận điểm sáng rõ, lập luận chặt chẽ và thuyết phục.',
+          description: 'Triển khai luận điểm rõ ràng, lập luận chặt chẽ, dẫn chứng xác đáng.',
           levels: [
-            { label: 'Xuất sắc', score: 3.0, descriptor: 'Luận điểm toàn diện, lập luận sắc bén, chiều sâu tư duy cao.' },
-            { label: 'Đạt', score: 2.0, descriptor: 'Có đủ luận điểm cơ bản, lập luận tương đối vững.' },
-            { label: 'Cần cố gắng', score: 1.0, descriptor: 'Luận điểm sơ sài, lặp ý hoặc diễn xuôi.' }
+            { label: 'Xuất sắc', score: 3.0, descriptor: 'Luận điểm sâu sắc, lập luận chặt chẽ, dẫn chứng giàu sức thuyết phục.' },
+            { label: 'Đạt', score: 2.0, descriptor: 'Luận điểm rõ ràng, có dẫn chứng nhưng chưa phân tích sâu.' },
+            { label: 'Cần cố gắng', score: 1.0, descriptor: 'Luận điểm mờ nhạt hoặc dẫn chứng sơ sài.' }
           ]
         },
         {
           id: 'c-4',
-          name: 'Dẫn chứng & Phân tích nghệ thuật',
-          weight: 25,
-          maxPoints: 2.5,
-          description: 'Khai thác dẫn chứng đắc địa, phân tích chi tiết nghệ thuật sâu sắc.',
+          name: 'Phân tích Nghệ thuật & Cảm thụ thẩm mỹ',
+          weight: 30,
+          maxPoints: 3.0,
+          description: 'Khám phá đặc sắc thi pháp, ngôn từ, hình tượng và rung cảm thẩm mỹ.',
           levels: [
-            { label: 'Xuất sắc', score: 2.5, descriptor: 'Chọn dẫn chứng tinh tế, phân tích tỉ mỉ chi tiết nghệ thuật.' },
-            { label: 'Đạt', score: 1.75, descriptor: 'Có trích dẫn chứng và phân tích cơ bản.' },
-            { label: 'Cần cố gắng', score: 0.75, descriptor: 'Dẫn chứng thiếu chính xác, trích sai ngữ liệu.' }
+            { label: 'Xuất sắc', score: 3.0, descriptor: 'Cảm thụ tinh tế, phân tích sâu sắc các thủ pháp nghệ thuật.' },
+            { label: 'Đạt', score: 2.0, descriptor: 'Chỉ ra được nghệ thuật nhưng cảm thụ còn chung chung.' },
+            { label: 'Cần cố gắng', score: 1.0, descriptor: 'Ít chú ý đến phương diện nghệ thuật của tác phẩm.' }
           ]
         },
         {
           id: 'c-5',
-          name: 'Diễn đạt & Sáng tạo',
-          weight: 25,
-          maxPoints: 2.5,
-          description: 'Hành văn trong sáng, giàu cảm xúc, có phát hiện mới mẻ.',
+          name: 'Chính tả, Ngữ pháp & Diễn đạt',
+          weight: 10,
+          maxPoints: 1.0,
+          description: 'Đảm bảo chuẩn chính tả, dùng từ đúng nghĩa, ngữ pháp tiếng Việt chuẩn mực.',
           levels: [
-            { label: 'Xuất sắc', score: 2.5, descriptor: 'Hành văn truyền cảm, vốn từ dồi dào, góc nhìn độc đáo sáng tạo.' },
-            { label: 'Đạt', score: 1.75, descriptor: 'Diễn đạt rõ ý, có liên hệ mở rộng.' },
-            { label: 'Cần cố gắng', score: 0.75, descriptor: 'Diễn đạt lủng củng, mắc lỗi chính tả.' }
+            { label: 'Xuất sắc', score: 1.0, descriptor: 'Không mắc lỗi chính tả, diễn đạt trong sáng, giàu nhạc tính.' },
+            { label: 'Đạt', score: 0.75, descriptor: 'Mắc một vài lỗi chính tả nhỏ không ảnh hưởng đến nội dung.' },
+            { label: 'Cần cố gắng', score: 0.25, descriptor: 'Mắc nhiều lỗi câu hoặc dùng từ sai nghĩa.' }
+          ]
+        },
+        {
+          id: 'c-6',
+          name: 'Sáng tạo & Phong cách cá nhân',
+          weight: 10,
+          maxPoints: 1.0,
+          description: 'Có suy nghĩ mới mẻ, liên hệ so sánh văn học phong phú, giọng văn riêng.',
+          levels: [
+            { label: 'Xuất sắc', score: 1.0, descriptor: 'Có kiến giải độc đáo, liên hệ so sánh sâu sắc, hành văn truyền cảm.' },
+            { label: 'Đạt', score: 0.5, descriptor: 'Có ý thức sáng tạo nhưng chưa rõ nét.' },
+            { label: 'Cần cố gắng', score: 0.0, descriptor: 'Bài viết dập khuôn máy móc.' }
           ]
         }
       ]
@@ -487,16 +488,18 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
       id: `lesson-${Date.now()}`,
       title: cleanTitle,
       author: cleanAuthor,
-      authorBio: `${cleanAuthor} - Tác giả tiêu biểu trong chương trình Ngữ văn ${formGrade}.`,
-      historicalContext: `Tác phẩm học tập trong chủ đề: ${cleanTheme}.`,
-      genre: formGenre,
       grade: formGrade,
       textbook: formTextbook,
-      progress: 25,
-      lastModified: 'Vừa tạo',
+      genre: formGenre,
+      theme: cleanTheme,
+      periods: formPeriods,
+      authorBio: `Tác giả ${cleanAuthor} là một trong những gương mặt tiêu biểu của nền văn học Việt Nam hiện đại, ghi dấu ấn sâu đậm với phong cách nghệ thuật độc đáo.`,
+      historicalContext: `Tác phẩm ${cleanTitle} được sáng tác trong bối cảnh lịch sử - xã hội có nhiều chuyển biến quan trọng, phản ánh sâu sắc số phận con người và hơi thở thời đại.`,
+      progress: 60,
       khbdStatus: 'ready',
       slideStatus: 'ready',
       examStatus: 'ready',
+      lastModified: 'Vừa xong',
       textSections: [
         {
           id: `sec-${Date.now()}-1`,
@@ -522,7 +525,6 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
       rubric: starterRubric
     };
 
-    // If genre is poetry, add starter poetryAnalysis
     if (formGenre === 'poetry') {
       newLesson.poetryAnalysis = {
         theme: cleanObjectives,
@@ -590,178 +592,192 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
     }
 
     setIsModalOpen(false);
-    // Reset form
     setFormTitle('');
     setFormAuthor('');
     setFormObjectives('');
     setFormCoreKnowledge('');
     setFormSourceText('');
-    setFormReferences('');
     setFormErrors({});
   };
 
-  // 6 Quick Actions (matching UI spec)
+  // Quick Actions (6 Actions sư phạm)
   const quickActions = [
     {
       id: 'create_lesson',
       title: 'Tạo bài dạy mới',
-      desc: 'Thiết lập bài học theo chuẩn GDPT 2018',
+      desc: 'Khởi tạo bài học GDPT 2018',
       icon: PlusCircle,
       action: () => setIsModalOpen(true),
       isPrimary: true
     },
     {
       id: 'workspace',
-      title: 'Soạn bài & Đọc văn',
-      desc: 'Đọc tác phẩm, chú giải & trích dẫn ngữ liệu',
+      title: 'Đọc & Soạn văn',
+      desc: 'Đọc tác phẩm, chú giải & dẫn chứng',
       icon: BookOpen,
       action: () => setActiveModule('workspace')
     },
     {
       id: 'genre_analysis',
       title: 'Phân tích thể loại',
-      desc: 'Thi pháp Thơ, Truyện & Argument Map',
+      desc: 'Thi pháp & Bản đồ lập luận',
       icon: Compass,
       action: () => setActiveModule('genre_analysis')
     },
     {
       id: 'khbd',
       title: 'Soạn KHBD 5512',
-      desc: 'Tiến trình 4 bước chuẩn Bộ Giáo dục',
+      desc: 'Tiến trình 4 bước dạy học',
       icon: FileText,
       action: () => setActiveModule('khbd')
     },
     {
       id: 'question_builder',
       title: 'Tạo câu hỏi',
-      desc: 'Đọc hiểu, Tiếng Việt & Nghị luận',
+      desc: 'Đọc hiểu, Tiếng Việt & Đề 4 phần',
       icon: HelpCircle,
       action: () => setActiveModule('question_builder')
     },
     {
       id: 'exam',
       title: 'Đề kiểm tra 7991',
-      desc: 'Đề 4 phần, Ma trận & Đặc tả chuẩn',
+      desc: 'Đề chuẩn & Ma trận đặc tả',
       icon: CheckSquare,
       action: () => setActiveModule('exam')
     }
   ];
 
+  // Filter lessons
+  const filteredLessons = lessons.filter(l => {
+    if (selectedGenreFilter !== 'all' && l.genre !== selectedGenreFilter) return false;
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      return l.title.toLowerCase().includes(q) || l.author.toLowerCase().includes(q);
+    }
+    return true;
+  });
+
   return (
-    <div className="h-full min-h-0 flex flex-col p-4 md:p-6 max-w-6xl w-full mx-auto space-y-4 overflow-hidden">
-      {/* Editorial Page Greeting with Semester/Grade indicator */}
+    <div className="h-full min-h-0 flex flex-col p-4 md:p-6 max-w-7xl w-full mx-auto space-y-4 overflow-hidden">
+      {/* 1. Header Greeting & Context */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
         <div>
-          <h1 className="text-page-title text-[24px] md:text-[28px] font-serif font-bold text-[#292524]">
-            Bàn làm việc Giáo viên
-          </h1>
-          <p className="text-body-ui text-[#78716C] mt-0.5">
-            Không gian thiết kế bài giảng & khảo thí môn Ngữ văn · {khbd.info.teacherName || 'ThS. Lê Thị Lan Anh'}
+          <div className="flex items-center gap-2">
+            <h1 className="font-serif font-bold text-2xl md:text-[26px] text-[#211E1C] tracking-tight">
+              Bàn làm việc Giáo viên
+            </h1>
+            <Badge variant="burgundy" size="sm">
+              GDPT 2018
+            </Badge>
+          </div>
+          <p className="text-body-ui text-[#706A65] mt-0.5">
+            Không gian thiết kế bài dạy & khảo thí chuyên sâu · <span className="font-medium text-[#211E1C]">{khbd.info.teacherName || 'ThS. Lê Thị Lan Anh'}</span> ({khbd.info.school || 'THPT Chuyên'})
           </p>
         </div>
-        <div className="flex items-center gap-2.5 self-start sm:self-auto">
-          <span className="px-3 py-1 rounded-full text-metadata font-medium bg-stone-100 text-[#57534E] border border-stone-200">
-            Học kỳ II · Lớp 10, 11, 12
-          </span>
-          <span className="px-2.5 py-1 rounded-full text-metadata font-semibold bg-[#7C2D37]/10 text-[#7C2D37] border border-[#7C2D37]/20">
-            GDPT 2018
-          </span>
+
+        <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
+          <Badge variant="stone" size="md" icon={<Calendar className="w-3.5 h-3.5" />}>
+            Năm học 2024 - 2025 · Học kỳ II
+          </Badge>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="btn-primary py-1.5 px-3.5 text-metadata flex items-center gap-1.5 shadow-sm"
+            className="btn-primary py-1.5 px-3.5 text-xs font-semibold flex items-center gap-1.5 shadow-xs"
           >
             <PlusCircle className="w-4 h-4" />
-            <span>Tạo bài mới</span>
+            <span>Tạo bài dạy</span>
           </button>
         </div>
       </div>
 
-      {/* Row 1: 2-Column Split (Tiếp tục công việc + 6 Quick Actions in 3x2) */}
+      {/* 2. Top Row: Main Resume Card (60%) + 6 Quick Actions (40%) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 shrink-0">
-        {/* KHU VỰC 1: TIẾP TỤC CÔNG VIỆC (Col 6 / 12) */}
-        <section aria-labelledby="resume-heading" className="lg:col-span-6">
-          <div className="card-highlight p-5 md:p-6 h-full flex flex-col justify-between">
+        {/* Main Resume Card (7 / 12 cols) */}
+        <section data-tour-id="dashboard-resume" className="lg:col-span-7 flex flex-col">
+          <div className="p-5 h-full flex flex-col justify-between relative overflow-hidden bg-gradient-to-br from-white via-white to-[#FCF6F7] border border-[#E5E0DA] rounded-2xl shadow-[var(--shadow-xs)]">
+            {/* Top metadata */}
             <div>
-              <div className="flex items-center justify-between gap-2 mb-2">
-                <span className="text-metadata font-medium text-[#7C2D37] flex items-center gap-1.5">
+              <div className="flex items-center justify-between gap-2 mb-2.5">
+                <div className="flex items-center gap-1.5 text-xs font-semibold text-[#7A2938]">
                   <Sparkles className="w-3.5 h-3.5" />
-                  Tiếp tục công việc
-                </span>
-                <span className="text-metadata text-[#78716C] bg-white/70 px-2 py-0.5 rounded border border-stone-200">
-                  {currentLesson.grade} · {currentLesson.textbook}
-                </span>
+                  <span>Tác phẩm đang soạn thảo</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Badge variant="stone" size="sm">
+                    {currentLesson.grade}
+                  </Badge>
+                  <Badge variant="stone" size="sm">
+                    {currentLesson.textbook}
+                  </Badge>
+                  <Badge variant="burgundy" size="sm">
+                    {currentLesson.periods || '2 tiết'}
+                  </Badge>
+                </div>
               </div>
 
+              {/* Title & Author */}
               <div>
-                <h2 id="resume-heading" className="font-serif text-[22px] md:text-[24px] font-bold text-[#292524] tracking-normal">
+                <h2 className="font-serif text-2xl font-bold text-[#211E1C] tracking-tight">
                   {currentLesson.title}
                 </h2>
-                <p className="text-body-ui text-[#57534E] mt-0.5">
-                  Tác giả: {currentLesson.author} · Thể loại: {
-                    currentLesson.genre === 'poetry' ? 'Thơ trữ tình' :
-                    currentLesson.genre === 'story' ? 'Truyện ngắn' : 'Văn nghị luận'
-                  }
+                <p className="text-body-ui text-[#706A65] mt-1">
+                  Tác giả: <span className="font-medium text-[#211E1C]">{currentLesson.author}</span> · Thể loại:{' '}
+                  <span className="font-medium text-[#211E1C]">
+                    {currentLesson.genre === 'poetry' ? 'Thơ trữ tình' : currentLesson.genre === 'story' ? 'Truyện ngắn hiện đại' : 'Văn chính luận'}
+                  </span>
                 </p>
               </div>
 
-              {/* Package Status Breakdown Badges */}
-              <div className="grid grid-cols-3 gap-2 mt-4 pt-3 border-t border-stone-200/80">
-                <div className="bg-white/90 p-2 rounded-xl border border-stone-200/60 flex flex-col">
-                  <div className="flex items-center gap-1 text-[11px] text-[#78716C]">
-                    <FileCheck2 className="w-3 h-3 text-emerald-600" />
-                    <span>KHBD 5512</span>
+              {/* Package Status Badges (KHBD, Slide, Exam) */}
+              <div className="grid grid-cols-3 gap-2.5 mt-4 pt-3.5 border-t border-[#EEEAE5]">
+                <div className="bg-[#FAF9F7] p-2.5 rounded-xl border border-[#EEEAE5] flex flex-col">
+                  <div className="flex items-center gap-1.5 text-[11px] text-[#706A65]">
+                    <FileCheck2 className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>Giáo án 5512</span>
                   </div>
-                  <span className={`text-[12px] font-semibold mt-0.5 ${
-                    currentLesson.khbdStatus === 'ready' ? 'text-emerald-700' : 'text-amber-700'
-                  }`}>
-                    {currentLesson.khbdStatus === 'ready' ? 'Hoàn tất' : 'Đang soạn'}
+                  <span className="text-[12px] font-semibold mt-1 text-emerald-700">
+                    {currentLesson.khbdStatus === 'ready' ? 'Đã hoàn tất' : 'Đang soạn thảo'}
                   </span>
                 </div>
 
-                <div className="bg-white/90 p-2 rounded-xl border border-stone-200/60 flex flex-col">
-                  <div className="flex items-center gap-1 text-[11px] text-[#78716C]">
-                    <Presentation className="w-3 h-3 text-blue-600" />
+                <div className="bg-[#FAF9F7] p-2.5 rounded-xl border border-[#EEEAE5] flex flex-col">
+                  <div className="flex items-center gap-1.5 text-[11px] text-[#706A65]">
+                    <Presentation className="w-3.5 h-3.5 text-[#1E40AF]" />
                     <span>Slide bài giảng</span>
                   </div>
-                  <span className={`text-[12px] font-semibold mt-0.5 ${
-                    currentLesson.slideStatus === 'ready' ? 'text-blue-700' : 'text-stone-600'
-                  }`}>
-                    {currentLesson.slideStatus === 'ready' ? 'Sẵn sàng' : 'Bản thảo'}
+                  <span className="text-[12px] font-semibold mt-1 text-[#1E40AF]">
+                    {currentLesson.slideStatus === 'ready' ? 'Sẵn sàng dạy' : 'Bản thảo'}
                   </span>
                 </div>
 
-                <div className="bg-white/90 p-2 rounded-xl border border-stone-200/60 flex flex-col">
-                  <div className="flex items-center gap-1 text-[11px] text-[#78716C]">
-                    <CheckCircle2 className="w-3 h-3 text-[#7C2D37]" />
-                    <span>Đề 7991</span>
+                <div className="bg-[#FAF9F7] p-2.5 rounded-xl border border-[#EEEAE5] flex flex-col">
+                  <div className="flex items-center gap-1.5 text-[11px] text-[#706A65]">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#7A2938]" />
+                    <span>Đề & Ma trận</span>
                   </div>
-                  <span className={`text-[12px] font-semibold mt-0.5 ${
-                    currentLesson.examStatus === 'ready' ? 'text-[#7C2D37]' : 'text-stone-500'
-                  }`}>
-                    {currentLesson.examStatus === 'ready' ? 'Chuẩn hóa' : 'Chưa tạo'}
+                  <span className="text-[12px] font-semibold mt-1 text-[#7A2938]">
+                    {currentLesson.examStatus === 'ready' ? 'Chuẩn hóa 7991' : 'Đang hoàn thiện'}
                   </span>
                 </div>
               </div>
             </div>
 
-            <div className="pt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-auto">
-              {/* Progress bar */}
+            {/* Bottom: Progress bar & Primary CTA Button */}
+            <div className="pt-4 mt-4 flex items-center justify-between gap-4 border-t border-[#EEEAE5]">
               <div className="flex-1 flex items-center gap-3">
-                <div className="flex-1 bg-[#E7E5E4] h-2 rounded-full overflow-hidden">
+                <div className="flex-1 bg-[#F5F3F0] h-2 rounded-full overflow-hidden">
                   <div 
-                    className="bg-[#7C2D37] h-full rounded-full transition-all duration-300"
+                    className="bg-[#7A2938] h-full rounded-full transition-all duration-300"
                     style={{ width: `${currentLesson.progress || 75}%` }}
                   />
                 </div>
-                <span className="text-metadata font-bold text-[#57534E] tabular-nums">
-                  {currentLesson.progress || 75}%
+                <span className="text-xs font-semibold text-[#706A65] tabular-nums">
+                  {currentLesson.progress || 75}% hoàn thiện
                 </span>
               </div>
 
-              {/* The ONE Primary Action on the Dashboard */}
               <button
                 onClick={() => setActiveModule('workspace')}
-                className="btn-primary py-2 px-4 whitespace-nowrap self-end sm:self-auto shrink-0 shadow-sm"
+                className="btn-primary py-2 px-4 text-xs font-semibold whitespace-nowrap shrink-0 shadow-xs flex items-center gap-1.5"
               >
                 <span>Mở không gian soạn</span>
                 <ArrowRight className="w-4 h-4" strokeWidth={1.75} />
@@ -770,8 +786,8 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
           </div>
         </section>
 
-        {/* KHU VỰC 2: TẠO MỚI & TRUY CẬP NHANH (Col 6 / 12, 3x2 grid) */}
-        <section aria-labelledby="quick-actions-heading" className="lg:col-span-6 flex flex-col">
+        {/* 6 Quick Actions (5 / 12 cols, 3x2 grid) */}
+        <section className="lg:col-span-5 flex flex-col">
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 h-full">
             {quickActions.map((qa) => {
               const Icon = qa.icon;
@@ -779,25 +795,25 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                 <button
                   key={qa.id}
                   onClick={qa.action}
-                  className={`card-interactive p-3 text-left group flex flex-col justify-between min-h-[92px] transition ${
-                    qa.isPrimary ? 'border-[#7C2D37]/30 bg-[#FBF4F5]/40 hover:bg-[#FBF4F5]' : ''
+                  className={`card-interactive p-3 text-left group flex flex-col justify-between min-h-[96px] rounded-xl transition-all duration-150 ${
+                    qa.isPrimary ? 'border-[#ECC2C9] bg-[#FCF3F4]/60 hover:bg-[#FCF3F4]' : 'bg-white'
                   }`}
                 >
                   <div className="flex items-center gap-2">
-                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors shrink-0 ${
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors shrink-0 ${
                       qa.isPrimary 
-                        ? 'bg-[#7C2D37] text-white' 
-                        : 'bg-stone-100 group-hover:bg-[#FBF4F5] text-[#57534E] group-hover:text-[#7C2D37]'
+                        ? 'bg-[#7A2938] text-white' 
+                        : 'bg-[#FAF9F7] border border-[#EEEAE5] group-hover:bg-[#FCF3F4] text-[#706A65] group-hover:text-[#7A2938]'
                     }`}>
-                      <Icon className="w-3.5 h-3.5" strokeWidth={1.75} />
+                      <Icon className="w-4 h-4" strokeWidth={1.75} />
                     </div>
-                    <h3 className={`text-card-title text-[13px] font-semibold transition-colors line-clamp-1 ${
-                      qa.isPrimary ? 'text-[#7C2D37]' : 'text-stone-800 group-hover:text-[#7C2D37]'
+                    <h3 className={`text-[12.5px] font-semibold transition-colors truncate ${
+                      qa.isPrimary ? 'text-[#7A2938]' : 'text-[#211E1C] group-hover:text-[#7A2938]'
                     }`}>
                       {qa.title}
                     </h3>
                   </div>
-                  <p className="text-metadata text-[11px] text-[#78716C] line-clamp-2 mt-1">
+                  <p className="text-[11px] text-[#706A65] line-clamp-2 mt-1 leading-snug">
                     {qa.desc}
                   </p>
                 </button>
@@ -807,24 +823,49 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
         </section>
       </div>
 
-      {/* Row 2: BÀI HỌC GẦN ĐÂY (Compact rows table with local scroll) */}
-      <section aria-labelledby="recent-lessons-heading" className="flex-1 min-h-0 flex flex-col">
-        <div className="flex items-center justify-between mb-2 shrink-0">
+      {/* 3. Bottom Row: Danh mục bài dạy (Compact Table with Filter & Local Scroll) */}
+      <section className="flex-1 min-h-0 flex flex-col">
+        {/* Table Filter Bar (Screenshots 010, 025, 039) */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-2.5 shrink-0">
           <div className="flex items-center gap-2">
-            <h2 id="recent-lessons-heading" className="text-card-title font-bold text-[#292524] font-serif">
+            <h2 className="font-serif font-bold text-base text-[#211E1C]">
               Danh mục bài học
             </h2>
-            <span className="text-metadata text-[#78716C] bg-stone-100 px-2 py-0.5 rounded-full">
-              {lessons.length} bài đã khởi tạo
-            </span>
+            <Badge variant="stone" size="sm">
+              {lessons.length} bài
+            </Badge>
           </div>
-          <span className="text-metadata text-[#78716C]">
-            Bấm vào bài để chuyển đổi không gian giảng dạy
-          </span>
+
+          <div className="flex items-center gap-2">
+            {/* Search input */}
+            <div className="relative">
+              <Search className="w-3.5 h-3.5 text-[#99918A] absolute left-2.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Tìm tác phẩm, tác giả..."
+                className="pl-8 pr-3 py-1 text-xs border border-[#E5E0DA] rounded-lg bg-white focus:outline-none focus:border-[#7A2938] w-48 text-[#302C29]"
+              />
+            </div>
+
+            {/* Genre filter select */}
+            <select
+              value={selectedGenreFilter}
+              onChange={(e) => setSelectedGenreFilter(e.target.value as any)}
+              className="py-1 px-2.5 text-xs border border-[#E5E0DA] rounded-lg bg-white focus:outline-none focus:border-[#7A2938] text-[#706A65]"
+            >
+              <option value="all">Tất cả thể loại</option>
+              <option value="poetry">Thơ trữ tình</option>
+              <option value="story">Truyện ngắn</option>
+              <option value="argumentative">Văn nghị luận</option>
+            </select>
+          </div>
         </div>
 
-        <div className="card-surface divide-y divide-[#E7E5E4] rounded-2xl flex-1 min-h-0 overflow-y-auto">
-          {lessons.map((lesson) => {
+        {/* Data Table Container */}
+        <div className="card-surface divide-y divide-[#EEEAE5] rounded-xl flex-1 min-h-0 overflow-y-auto">
+          {filteredLessons.map((lesson) => {
             const isSelected = lesson.id === currentLessonId;
             return (
               <div
@@ -833,293 +874,218 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                   onSelectLesson(lesson.id);
                   setActiveModule('workspace');
                 }}
-                className={`px-4 py-3 flex items-center justify-between gap-4 cursor-pointer hover:bg-stone-50 transition-colors ${
-                  isSelected ? 'bg-[#FBF4F5]/70 border-l-4 border-l-[#7C2D37]' : ''
+                className={`px-4 py-3 flex items-center justify-between gap-4 cursor-pointer hover:bg-[#FAF9F7] transition-colors relative ${
+                  isSelected ? 'bg-[#FCF3F4]/70 font-medium' : ''
                 }`}
               >
+                {isSelected && (
+                  <span className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r bg-[#7A2938]" />
+                )}
                 <div className="min-w-0 flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-stone-100 flex items-center justify-center text-[#57534E] shrink-0 font-serif font-bold text-xs">
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center font-serif font-bold text-xs shrink-0 bg-[#FAF9F7] border border-[#E5E0DA] text-[#706A65]">
                     {lesson.genre === 'poetry' ? 'Thơ' : lesson.genre === 'story' ? 'Tr' : 'NL'}
                   </div>
+
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
-                      <h3 className="font-serif text-card-title font-semibold text-[#292524] truncate-safe">
+                      <h3 className="font-serif text-sm font-semibold text-[#211E1C] truncate">
                         {lesson.title}
                       </h3>
                       {isSelected && (
-                        <span className="text-metadata text-[11px] font-semibold text-[#7C2D37] bg-[#7C2D37]/10 px-2 py-0.5 rounded-full">
-                          Đang chọn
-                        </span>
+                        <Badge variant="burgundy" size="sm">
+                          Đang soạn
+                        </Badge>
                       )}
                     </div>
-                    <p className="text-metadata text-[12px] text-[#78716C] mt-0.5">
-                      {lesson.author} · {lesson.grade} ({lesson.textbook})
-                    </p>
+                    <div className="text-[12px] text-[#706A65] flex items-center gap-2 mt-0.5">
+                      <span>{lesson.author}</span>
+                      <span>·</span>
+                      <span>{lesson.grade} ({lesson.textbook})</span>
+                      <span>·</span>
+                      <span>{lesson.periods || '2 tiết'}</span>
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4 text-metadata text-[#57534E] shrink-0">
-                  <div className="hidden sm:flex items-center gap-2">
-                    <span className="px-2 py-0.5 rounded text-[11px] bg-stone-100 text-stone-600 font-medium">
-                      KHBD: {lesson.khbdStatus === 'ready' ? 'Đã có' : 'Bản thảo'}
-                    </span>
-                    <span className="px-2 py-0.5 rounded text-[11px] bg-stone-100 text-stone-600 font-medium">
-                      Đề 7991: {lesson.examStatus === 'ready' ? 'Đã có' : 'Bản thảo'}
-                    </span>
+                <div className="flex items-center gap-3 shrink-0">
+                  <div className="hidden md:flex items-center gap-1.5 text-xs text-[#706A65]">
+                    <Badge variant={lesson.khbdStatus === 'ready' ? 'emerald' : 'amber'} size="sm">
+                      KHBD
+                    </Badge>
+                    <Badge variant={lesson.slideStatus === 'ready' ? 'blue' : 'stone'} size="sm">
+                      Slide
+                    </Badge>
+                    <Badge variant={lesson.examStatus === 'ready' ? 'burgundy' : 'stone'} size="sm">
+                      Đề 7991
+                    </Badge>
                   </div>
 
-                  <div className="hidden md:flex items-center gap-1.5 text-metadata text-[#78716C]">
-                    <Clock className="w-3.5 h-3.5" strokeWidth={1.75} />
-                    <span className="tabular-nums">{lesson.lastModified || 'Chỉnh sửa gần đây'}</span>
+                  <div className="w-16 bg-[#F5F3F0] h-1.5 rounded-full overflow-hidden hidden sm:block">
+                    <div 
+                      className="bg-[#7A2938] h-full rounded-full" 
+                      style={{ width: `${lesson.progress || 70}%` }}
+                    />
                   </div>
 
-                  <ArrowRight className="w-4 h-4 text-[#A8A29E] hover:text-[#7C2D37] transition-colors" strokeWidth={1.5} />
+                  <ArrowRight className="w-4 h-4 text-[#99918A] group-hover:text-[#211E1C] transition-colors" />
                 </div>
               </div>
             );
           })}
+
+          {filteredLessons.length === 0 && (
+            <div className="py-8 text-center text-xs text-[#99918A] italic">
+              Không tìm thấy bài học nào phù hợp với bộ lọc.
+            </div>
+          )}
         </div>
       </section>
 
-      {/* CREATE LESSON MODAL (Theo quy chuẩn Section 5 của Flow) */}
+      {/* 4. Modal Tạo bài dạy mới */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-2xs flex items-center justify-center p-3 sm:p-4">
-          <div className="bg-white rounded-3xl border border-[#E7E5E4] max-w-2xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in duration-200">
-            {/* Modal Header */}
-            <div className="p-4 sm:p-5 border-b border-[#E7E5E4] flex items-center justify-between shrink-0 bg-stone-50">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-[#7C2D37]/10 text-[#7C2D37] flex items-center justify-center">
-                  <PlusCircle className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="font-serif font-bold text-card-title text-stone-900">
-                    Tạo bài dạy Ngữ văn mới
-                  </h3>
-                  <p className="text-metadata text-stone-500">
-                    Nhập dữ liệu theo chuẩn Chương trình GDPT 2018
-                  </p>
-                </div>
+        <div className="fixed inset-0 z-50 bg-[rgba(28,25,23,0.32)] backdrop-blur-[2px] flex items-center justify-center p-4 anim-modal-backdrop">
+          <div className="bg-white rounded-2xl border border-[#E5E0DA] max-w-2xl w-full p-6 shadow-[var(--shadow-lg)] space-y-4 max-h-[90vh] overflow-y-auto anim-modal-dialog">
+            <div className="flex items-center justify-between pb-3 border-b border-[#EEEAE5]">
+              <div>
+                <h3 className="font-serif font-bold text-lg text-[#211E1C]">
+                  Thiết lập Bài dạy Ngữ văn mới
+                </h3>
+                <p className="text-xs text-[#706A65] mt-0.5">
+                  Tự động đồng bộ sang KHBD 5512, Slide bài giảng, Ngân hàng câu hỏi và Đề 7991
+                </p>
               </div>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="p-1.5 text-stone-400 hover:text-stone-700 rounded-lg hover:bg-stone-200/50 transition"
+                className="text-[#99918A] hover:text-[#211E1C] p-1 rounded-lg transition-colors"
+                aria-label="Đóng hộp thoại"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            {/* Modal Scrollable Form */}
-            <form onSubmit={handleCreateSubmit} className="p-4 sm:p-5 flex-1 min-h-0 overflow-y-auto space-y-4">
-              {/* Row 1: Khối lớp & Bộ sách */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <form onSubmit={handleCreateSubmit} className="space-y-4 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-metadata font-semibold text-stone-700 mb-1">
-                    Khối / Lớp <span className="text-red-500">*</span>
-                  </label>
+                  <label className="block font-medium text-[#706A65] mb-1">Khối lớp</label>
                   <select
                     value={formGrade}
                     onChange={(e) => setFormGrade(e.target.value as any)}
-                    className="w-full px-3 py-2 border border-stone-200 rounded-xl text-body-ui bg-white focus:outline-none focus:border-[#7C2D37]"
+                    className="w-full px-3 py-2 border border-[#E5E0DA] rounded-lg bg-white focus:outline-none focus:border-[#7A2938] text-[#211E1C]"
                   >
-                    <option value="Lớp 10">Lớp 10 (THPT)</option>
-                    <option value="Lớp 11">Lớp 11 (THPT)</option>
-                    <option value="Lớp 12">Lớp 12 (THPT)</option>
+                    <option value="Lớp 10">Lớp 10</option>
+                    <option value="Lớp 11">Lớp 11</option>
+                    <option value="Lớp 12">Lớp 12</option>
                   </select>
                 </div>
-
                 <div>
-                  <label className="block text-metadata font-semibold text-stone-700 mb-1">
-                    Bộ sách giáo khoa <span className="text-red-500">*</span>
-                  </label>
+                  <label className="block font-medium text-[#706A65] mb-1">Bộ sách giáo khoa</label>
                   <select
                     value={formTextbook}
                     onChange={(e) => setFormTextbook(e.target.value as any)}
-                    className="w-full px-3 py-2 border border-stone-200 rounded-xl text-body-ui bg-white focus:outline-none focus:border-[#7C2D37]"
+                    className="w-full px-3 py-2 border border-[#E5E0DA] rounded-lg bg-white focus:outline-none focus:border-[#7A2938] text-[#211E1C]"
                   >
                     <option value="Kết nối tri thức">Kết nối tri thức với cuộc sống</option>
                     <option value="Cánh diều">Cánh diều</option>
                     <option value="Chân trời sáng tạo">Chân trời sáng tạo</option>
                   </select>
                 </div>
-              </div>
-
-              {/* Row 2: Thể loại & Số tiết */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-metadata font-semibold text-stone-700 mb-1">
-                    Thể loại văn học <span className="text-red-500">*</span>
-                  </label>
+                  <label className="block font-medium text-[#706A65] mb-1">Thể loại</label>
                   <select
                     value={formGenre}
-                    onChange={(e) => setFormGenre(e.target.value as LiteratureGenre)}
-                    className="w-full px-3 py-2 border border-stone-200 rounded-xl text-body-ui bg-white focus:outline-none focus:border-[#7C2D37]"
+                    onChange={(e) => setFormGenre(e.target.value as any)}
+                    className="w-full px-3 py-2 border border-[#E5E0DA] rounded-lg bg-white focus:outline-none focus:border-[#7A2938] text-[#211E1C]"
                   >
-                    <option value="poetry">Thơ trữ tình (Thất ngôn, Tự do, Lục bát)</option>
-                    <option value="story">Truyện & Kí (Truyện ngắn, Tiểu thuyết)</option>
-                    <option value="argumentative">Văn nghị luận (Chính luận, Xã hội)</option>
+                    <option value="poetry">Thơ trữ tình</option>
+                    <option value="story">Truyện ngắn hiện đại</option>
+                    <option value="argumentative">Văn nghị luận</option>
                   </select>
-                </div>
-
-                <div>
-                  <label className="block text-metadata font-semibold text-stone-700 mb-1">
-                    Thời lượng / Số tiết <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={formPeriods}
-                    onChange={(e) => setFormPeriods(e.target.value)}
-                    placeholder="VD: 2 tiết, 3 tiết..."
-                    className="w-full px-3 py-2 border border-stone-200 rounded-xl text-body-ui bg-white focus:outline-none focus:border-[#7C2D37]"
-                  />
                 </div>
               </div>
 
-              {/* Row 3: Tên tác phẩm & Tác giả */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-metadata font-semibold text-stone-700 mb-1">
-                    Tên tác phẩm / Bài dạy <span className="text-red-500">*</span>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="sm:col-span-2">
+                  <label className="block font-medium text-[#706A65] mb-1">
+                    Tên tác phẩm / Bài học <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
                     value={formTitle}
                     onChange={(e) => setFormTitle(e.target.value)}
-                    placeholder="VD: Chí Phèo, Vợ chồng A Phủ, Sóng..."
-                    className={`w-full px-3 py-2 border rounded-xl text-body-ui bg-white focus:outline-none ${
-                      formErrors.title ? 'border-red-500 bg-red-50/30' : 'border-stone-200 focus:border-[#7C2D37]'
-                    }`}
+                    placeholder="VD: Tây Tiến, Vợ nhặt, Tuyên ngôn Độc lập..."
+                    className="w-full px-3 py-2 border border-[#E5E0DA] rounded-lg focus:outline-none focus:border-[#7A2938] text-[#211E1C]"
                   />
-                  {formErrors.title && (
-                    <p className="text-[11px] text-red-600 mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" /> {formErrors.title}
-                    </p>
-                  )}
+                  {formErrors.title && <p className="text-red-500 mt-1">{formErrors.title}</p>}
                 </div>
-
                 <div>
-                  <label className="block text-metadata font-semibold text-stone-700 mb-1">
+                  <label className="block font-medium text-[#706A65] mb-1">
                     Tác giả <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
                     value={formAuthor}
                     onChange={(e) => setFormAuthor(e.target.value)}
-                    placeholder="VD: Nam Cao, Tô Hoài, Xuân Quỳnh..."
-                    className={`w-full px-3 py-2 border rounded-xl text-body-ui bg-white focus:outline-none ${
-                      formErrors.author ? 'border-red-500 bg-red-50/30' : 'border-stone-200 focus:border-[#7C2D37]'
-                    }`}
+                    placeholder="VD: Quang Dũng, Kim Lân..."
+                    className="w-full px-3 py-2 border border-[#E5E0DA] rounded-lg focus:outline-none focus:border-[#7A2938] text-[#211E1C]"
                   />
-                  {formErrors.author && (
-                    <p className="text-[11px] text-red-600 mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" /> {formErrors.author}
-                    </p>
-                  )}
+                  {formErrors.author && <p className="text-red-500 mt-1">{formErrors.author}</p>}
                 </div>
               </div>
 
-              {/* Row 4: Chủ đề / Tên bài học lớn */}
               <div>
-                <label className="block text-metadata font-semibold text-stone-700 mb-1">
-                  Chủ đề / Tên bài học lớn
-                </label>
+                <label className="block font-medium text-[#706A65] mb-1">Chủ đề bài học</label>
                 <input
                   type="text"
                   value={formTheme}
                   onChange={(e) => setFormTheme(e.target.value)}
-                  placeholder="VD: Bài 1: Câu chuyện và điểm nhìn trong truyện kể"
-                  className="w-full px-3 py-2 border border-stone-200 rounded-xl text-body-ui bg-white focus:outline-none focus:border-[#7C2D37]"
+                  className="w-full px-3 py-2 border border-[#E5E0DA] rounded-lg focus:outline-none focus:border-[#7A2938] text-[#211E1C]"
                 />
               </div>
 
-              {/* Row 5: Yêu cầu cần đạt (YCCĐ) */}
               <div>
-                <label className="block text-metadata font-semibold text-stone-700 mb-1">
-                  Yêu cầu cần đạt (YCCĐ chuẩn GDPT 2018) <span className="text-red-500">*</span>
+                <label className="block font-medium text-[#706A65] mb-1">
+                  Yêu cầu cần đạt trọng tâm (YCCĐ) <span className="text-red-500">*</span>
                 </label>
                 <textarea
-                  rows={3}
                   value={formObjectives}
                   onChange={(e) => setFormObjectives(e.target.value)}
-                  placeholder="VD: Phân tích được điểm nhìn trần thuật, nghệ thuật xây dựng nhân vật và thông điệp nhân đạo của văn bản..."
-                  className={`w-full px-3 py-2 border rounded-xl text-body-ui bg-white focus:outline-none ${
-                    formErrors.objectives ? 'border-red-500 bg-red-50/30' : 'border-stone-200 focus:border-[#7C2D37]'
-                  }`}
+                  rows={2}
+                  placeholder="Học sinh nhận biết và phân tích được đặc trưng thể loại, hình tượng trung tâm và tư tưởng thẩm mỹ..."
+                  className="w-full px-3 py-2 border border-[#E5E0DA] rounded-lg focus:outline-none focus:border-[#7A2938] text-[#211E1C]"
                 />
-                {formErrors.objectives && (
-                  <p className="text-[11px] text-red-600 mt-1 flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3" /> {formErrors.objectives}
-                  </p>
-                )}
+                {formErrors.objectives && <p className="text-red-500 mt-1">{formErrors.objectives}</p>}
               </div>
 
-              {/* Row 6: Trọng tâm kiến thức */}
               <div>
-                <label className="block text-metadata font-semibold text-stone-700 mb-1">
-                  Trọng tâm kiến thức bài dạy
-                </label>
-                <input
-                  type="text"
-                  value={formCoreKnowledge}
-                  onChange={(e) => setFormCoreKnowledge(e.target.value)}
-                  placeholder="VD: Nghệ thuật trần thuật và bi kịch tha hóa của nhân vật"
-                  className="w-full px-3 py-2 border border-stone-200 rounded-xl text-body-ui bg-white focus:outline-none focus:border-[#7C2D37]"
-                />
-              </div>
-
-              {/* Row 7: Ngữ liệu tác phẩm */}
-              <div>
-                <label className="block text-metadata font-semibold text-stone-700 mb-1">
-                  Ngữ liệu tác phẩm / Trích đoạn văn bản <span className="text-red-500">*</span>
+                <label className="block font-medium text-[#706A65] mb-1">
+                  Ngữ liệu tác phẩm (Trích đoạn hoặc toàn văn) <span className="text-red-500">*</span>
                 </label>
                 <textarea
-                  rows={4}
                   value={formSourceText}
                   onChange={(e) => setFormSourceText(e.target.value)}
-                  placeholder="Dán toàn văn tác phẩm hoặc các đoạn trích trọng tâm dùng để đọc, chú giải và ra đề..."
-                  className={`w-full px-3 py-2 border rounded-xl text-body-ui bg-white focus:outline-none font-serif ${
-                    formErrors.sourceText ? 'border-red-500 bg-red-50/30' : 'border-stone-200 focus:border-[#7C2D37]'
-                  }`}
+                  rows={5}
+                  placeholder="Dán toàn văn bài thơ hoặc đoạn trích truyện/nghị luận tại đây..."
+                  className="w-full px-3 py-2 border border-[#E5E0DA] rounded-lg font-serif text-sm focus:outline-none focus:border-[#7A2938] text-[#211E1C]"
                 />
-                {formErrors.sourceText && (
-                  <p className="text-[11px] text-red-600 mt-1 flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3" /> {formErrors.sourceText}
-                  </p>
-                )}
+                {formErrors.sourceText && <p className="text-red-500 mt-1">{formErrors.sourceText}</p>}
               </div>
 
-              {/* Row 8: Tài liệu tham khảo */}
-              <div>
-                <label className="block text-metadata font-semibold text-stone-700 mb-1">
-                  Tài liệu tham khảo (Tùy chọn)
-                </label>
-                <input
-                  type="text"
-                  value={formReferences}
-                  onChange={(e) => setFormReferences(e.target.value)}
-                  placeholder="VD: Sách giáo viên Ngữ văn 12, Tư liệu phê bình văn học..."
-                  className="w-full px-3 py-2 border border-stone-200 rounded-xl text-body-ui bg-white focus:outline-none focus:border-[#7C2D37]"
-                />
+              <div className="flex items-center justify-end gap-2 pt-3 border-t border-[#EEEAE5]">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="btn-secondary py-2 px-4"
+                >
+                  Hủy bỏ
+                </button>
+                <button
+                  type="submit"
+                  className="btn-primary py-2 px-4 font-semibold shadow-xs"
+                >
+                  Khởi tạo và Soạn bài ngay
+                </button>
               </div>
             </form>
-
-            {/* Modal Footer */}
-            <div className="p-4 border-t border-[#E7E5E4] flex items-center justify-end gap-3 shrink-0 bg-stone-50">
-              <button
-                type="button"
-                onClick={() => setIsModalOpen(false)}
-                className="px-4 py-2 border border-stone-300 text-stone-700 hover:bg-stone-200/60 rounded-xl text-metadata font-semibold transition"
-              >
-                Hủy bỏ
-              </button>
-              <button
-                type="button"
-                onClick={handleCreateSubmit}
-                className="btn-primary py-2 px-5 flex items-center gap-2 shadow-sm"
-              >
-                <span>Tạo bài dạy & Soạn bài</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
           </div>
         </div>
       )}

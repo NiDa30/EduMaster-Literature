@@ -3,7 +3,7 @@
 
 @layer base {
   :root {
-    /* 1. Font Stack */
+    /* 1. Font Stack (Mục 9 design_coler.md) */
     --font-ui: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
     --font-literary: "Lora", "Times New Roman", Georgia, serif;
     --font-mono: 'JetBrains Mono', monospace;
@@ -12,32 +12,90 @@
     --font-sans: var(--font-ui);
     --font-serif: var(--font-literary);
 
-    /* 2. Typography System Tokens */
-    --text-page-title-size: 28px;
+    /* 2. Warm Neutral Color Tokens (Mục 4 design_coler.md) */
+    --color-canvas: #F7F6F3;
+    --color-canvas-elevated: #FBFAF8;
+    --color-surface: #FFFFFF;
+    --color-surface-subtle: #FAF9F7;
+    --color-surface-muted: #F5F3F0;
+    --color-reader-paper: #FFFEFC;
+    
+    --color-border-subtle: #EEEAE5;
+    --color-border-default: #E5E0DA;
+    --color-border-strong: #D6D0C8;
+
+    --color-text-strong: #211E1C;
+    --color-text-primary: #302C29;
+    --color-text-secondary: #706A65;
+    --color-text-muted: #99918A;
+
+    /* 3. Brand Burgundy System Tokens (11-step scale - Mục 3.1 design_coler.md) */
+    --color-brand-25: #FDF8F8;
+    --color-brand-50: #FAF0F2;
+    --color-brand-100: #F5E0E4;
+    --color-brand-200: #ECC2C9;
+    --color-brand-300: #DE9EAA;
+    --color-brand-400: #CA7081;
+    --color-brand-500: #B04A5D;
+    --color-brand-600: #933647;
+    --color-brand-700: #7A2938;
+    --color-brand-800: #68222E;
+    --color-brand-900: #521B24;
+    --color-brand-soft: #FCF3F4;
+    --color-brand-border: rgba(122, 41, 56, 0.18);
+    --color-brand-focus: rgba(122, 41, 56, 0.22);
+
+    /* 4. Surface Elevation & Shadows (Mục 7 & 22 design_coler.md) */
+    --shadow-xs: 0 1px 2px rgba(41, 37, 36, 0.04);
+    --shadow-sm: 0 1px 3px rgba(41, 37, 36, 0.06), 0 1px 2px rgba(41, 37, 36, 0.04);
+    --shadow-md: 0 8px 24px rgba(41, 37, 36, 0.08);
+    --shadow-lg: 0 16px 40px rgba(41, 37, 36, 0.12);
+    --shadow-paper: 0 8px 30px rgba(41, 37, 36, 0.04);
+
+    /* 5. Motion Tokens (Mục 29, 30 & 79 design_animation.md) */
+    --motion-instant: 90ms;
+    --motion-fast: 120ms;
+    --motion-normal: 180ms;
+    --motion-smooth: 240ms;
+    --motion-slow: 300ms;
+    --motion-emphasis: 240ms;
+
+    --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+    --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-enter: cubic-bezier(0, 0, 0.2, 1);
+    --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+
+    /* Compatibility aliases */
+    --duration-fast: var(--motion-fast);
+    --duration-normal: var(--motion-normal);
+    --duration-slow: var(--motion-smooth);
+
+    /* 6. Typography System Tokens (Mục 10 design_coler.md) */
+    --text-page-title-size: 26px;
     --text-page-title-weight: 600;
     --text-page-title-line: 1.3;
 
-    --text-section-size: 20px;
+    --text-section-size: 19px;
     --text-section-weight: 600;
     --text-section-line: 1.4;
 
-    --text-card-title-size: 16px;
-    --text-card-title-weight: 500;
+    --text-card-title-size: 15px;
+    --text-card-title-weight: 600;
     --text-card-title-line: 1.4;
 
-    --text-body-size: 15px;
+    --text-body-size: 14px;
     --text-body-weight: 400;
     --text-body-line: 1.55;
 
-    --text-meta-size: 13px;
+    --text-meta-size: 12.5px;
     --text-meta-weight: 400;
     --text-meta-line: 1.5;
 
     --text-document-size: 18px;
     --text-document-weight: 400;
-    --text-document-line: 1.8;
+    --text-document-line: 1.85;
 
-    /* 3. Viewport-First Desktop Layout Tokens */
+    /* 7. Layout Tokens */
     --topbar-height: 56px;
     --sidebar-width: 248px;
   }
@@ -62,8 +120,8 @@
     font-family: var(--font-ui);
     font-size: var(--text-body-size);
     line-height: var(--text-body-line);
-    color: #292524; /* Charcoal */
-    background-color: #FAF8F5; /* Warm Ivory */
+    color: var(--color-text-primary);
+    background-color: var(--color-canvas);
     letter-spacing: normal;
     word-break: normal;
     overflow-wrap: break-word;
@@ -71,7 +129,7 @@
     font-feature-settings: "kern" 1, "liga" 1;
   }
 
-  /* Form & Interactive Controls Typography Inheritance */
+  /* Form & Interactive Controls Typography Inheritance & Focus Standard (Mục 16 & 34) */
   input,
   textarea,
   select,
@@ -82,29 +140,63 @@
     letter-spacing: normal;
   }
 
-  /* Text control minimum heights and safe vertical paddings for Vietnamese diacritics */
+  /* Safe vertical paddings and minimum dimensions for Vietnamese diacritics */
   input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
   select {
-    min-height: 40px;
-    padding-block: 8px;
+    min-height: 38px;
+    padding-block: 7px;
     line-height: 1.4;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border-default);
+    color: var(--color-text-primary);
+    border-radius: 8px;
+    transition: border-color var(--motion-fast) var(--ease-standard),
+                box-shadow var(--motion-fast) var(--ease-standard);
+  }
+
+  input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):hover,
+  select:hover {
+    border-color: var(--color-border-strong);
+  }
+
+  input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):focus,
+  select:focus {
+    outline: none;
+    border-color: var(--color-brand-700);
+    box-shadow: 0 0 0 3px var(--color-brand-focus);
   }
 
   textarea {
     line-height: 1.55;
     padding-block: 8px;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border-default);
+    color: var(--color-text-primary);
+    border-radius: 8px;
+    transition: border-color var(--motion-fast) var(--ease-standard),
+                box-shadow var(--motion-fast) var(--ease-standard);
   }
 
-  /* Custom Literary Selection Highlight (Warm Amber) */
+  textarea:hover {
+    border-color: var(--color-border-strong);
+  }
+
+  textarea:focus {
+    outline: none;
+    border-color: var(--color-brand-700);
+    box-shadow: 0 0 0 3px var(--color-brand-focus);
+  }
+
+  /* Gentle Editorial Selection Highlight */
   ::selection {
-    background-color: #FDE68A;
-    color: #292524;
+    background-color: rgba(122, 41, 56, 0.12);
+    color: var(--color-text-strong);
   }
 
-  /* Quiet Editorial Scrollbar */
+  /* Quiet Academic Scrollbar */
   ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
+    width: 6px;
+    height: 6px;
   }
 
   ::-webkit-scrollbar-track {
@@ -112,16 +204,16 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #E7E5E4;
+    background: var(--color-border-strong);
     border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #D6D3D1;
+    background: var(--color-text-muted);
   }
 }
 
-/* Font Family Utilities */
+/* Typography Family Utilities */
 .font-ui,
 .font-sans {
   font-family: var(--font-ui);
@@ -132,19 +224,16 @@
   font-family: var(--font-literary);
 }
 
-/* Inline mixed font compensation (balancing optical x-height between Be Vietnam Pro & Lora) */
 .font-literary-inline {
   font-family: var(--font-literary);
   font-size: 0.96em;
 }
 
-/* Numeric Typography (tabular nums for aligned scores, times, percentages, and matrix figures) */
 .tabular-nums,
 [data-tabular-nums] {
   font-variant-numeric: tabular-nums;
 }
 
-/* Safe Text Truncation with Vietnamese Diacritic Buffer */
 .truncate-safe,
 .truncate {
   overflow: hidden;
@@ -154,12 +243,12 @@
   line-height: max(1.4, inherit);
 }
 
-/* Typography Hierarchy Tokens & Helper Classes */
+/* Typography Hierarchy Helper Classes */
 .text-page-title {
   font-size: var(--text-page-title-size);
   font-weight: var(--text-page-title-weight);
   line-height: var(--text-page-title-line);
-  color: #292524;
+  color: var(--color-text-strong);
   letter-spacing: normal;
   text-wrap: balance;
 }
@@ -169,7 +258,7 @@
   font-size: var(--text-section-size);
   font-weight: var(--text-section-weight);
   line-height: var(--text-section-line);
-  color: #292524;
+  color: var(--color-text-strong);
   letter-spacing: normal;
   text-wrap: balance;
 }
@@ -178,7 +267,7 @@
   font-size: var(--text-card-title-size);
   font-weight: var(--text-card-title-weight);
   line-height: var(--text-card-title-line);
-  color: #292524;
+  color: var(--color-text-strong);
   letter-spacing: normal;
   text-wrap: balance;
 }
@@ -188,7 +277,7 @@
   font-size: var(--text-body-size);
   font-weight: var(--text-body-weight);
   line-height: var(--text-body-line);
-  color: #292524;
+  color: var(--color-text-primary);
   letter-spacing: normal;
   text-wrap: pretty;
 }
@@ -198,7 +287,7 @@
   font-size: var(--text-meta-size);
   font-weight: var(--text-meta-weight);
   line-height: var(--text-meta-line);
-  color: #57534E;
+  color: var(--color-text-secondary);
   letter-spacing: normal;
   text-wrap: pretty;
 }
@@ -208,135 +297,726 @@
   font-size: var(--text-document-size);
   font-weight: var(--text-document-weight);
   line-height: var(--text-document-line);
-  color: #292524;
+  color: var(--color-text-primary);
   max-width: 760px;
   letter-spacing: normal;
   text-wrap: pretty;
 }
 
-/* 3 Card Styles */
+/* ========================================================================= */
+/* CARD & ELEVATION SYSTEM (Mục 14 design_coler.md & Mục 31, 42 design_animation.md) */
+/* ========================================================================= */
+
 .card-surface {
-  background-color: #FFFFFF;
-  border: 1px solid #E7E5E4;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-default);
   border-radius: 12px;
+  box-shadow: var(--shadow-xs);
 }
 
 .card-highlight {
-  background-color: #FAF8F5;
-  border: 1px solid #E7E5E4;
-  border-left: 3px solid #7C2D37;
+  background-color: var(--color-surface-subtle);
+  border: 1px solid var(--color-border-default);
+  border-left: 3px solid var(--color-brand-700);
   border-radius: 12px;
+  box-shadow: var(--shadow-xs);
 }
 
 .card-interactive {
-  background-color: #FFFFFF;
-  border: 1px solid #E7E5E4;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-default);
   border-radius: 12px;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
-}
-.card-interactive:hover {
-  border-color: #A8A29E;
+  box-shadow: var(--shadow-xs);
+  transition: transform var(--motion-fast) var(--ease-standard),
+              box-shadow var(--motion-fast) var(--ease-standard),
+              border-color var(--motion-fast) var(--ease-standard),
+              background-color var(--motion-fast) var(--ease-standard);
 }
 
-/* 4 Button Styles - Standardized Safe Heights & Line Heights */
+.card-interactive:hover {
+  border-color: var(--color-brand-200);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+
+.card-interactive:active {
+  transform: translateY(0);
+}
+
+.card-interactive.is-selected {
+  background-color: var(--color-brand-25);
+  border-color: var(--color-brand-200);
+}
+
+/* Paper document surface for Literature Reader & KHBD A4 */
+.surface-paper {
+  background-color: var(--color-reader-paper);
+  border: 1px solid var(--color-border-default);
+  border-radius: 16px;
+  box-shadow: var(--shadow-paper);
+}
+
+/* ========================================================================= */
+/* BUTTON SYSTEM (Mục 13 design_coler.md & Mục 32, 33 design_animation.md)   */
+/* ========================================================================= */
+
 .btn-primary {
-  background-color: #7C2D37;
+  background-color: var(--color-brand-700);
   color: #FFFFFF;
   font-family: inherit;
   font-weight: 500;
   border-radius: 8px;
-  min-height: 40px;
-  padding: 8px 16px;
-  font-size: 14px;
+  min-height: 38px;
+  padding: 7px 16px;
+  font-size: 13.5px;
   line-height: 1.4;
   letter-spacing: normal;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: background-color 0.15s ease;
+  box-shadow: var(--shadow-xs);
+  transition: background-color var(--motion-normal) var(--ease-standard),
+              border-color var(--motion-normal) var(--ease-standard),
+              color var(--motion-normal) var(--ease-standard),
+              box-shadow var(--motion-normal) var(--ease-standard),
+              transform var(--motion-fast) var(--ease-standard);
+  user-select: none;
 }
+
 .btn-primary:hover {
-  background-color: #68232D;
+  background-color: var(--color-brand-800);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
 }
+
+.btn-primary:active {
+  background-color: var(--color-brand-900);
+  transform: translateY(0) scale(0.985);
+}
+
+/* Reusable Motion Helpers (design_animation_guid.md) */
+.btn-motion {
+  transition: background-color var(--motion-normal) var(--ease-standard),
+              border-color var(--motion-normal) var(--ease-standard),
+              color var(--motion-normal) var(--ease-standard),
+              box-shadow var(--motion-normal) var(--ease-standard),
+              transform var(--motion-fast) var(--ease-standard);
+}
+.btn-motion:hover {
+  transform: translateY(-1px);
+}
+.btn-motion:active {
+  transform: translateY(0) scale(0.985);
+}
+
+.btn-icon-motion {
+  transition: background-color var(--motion-fast) var(--ease-standard),
+              color var(--motion-fast) var(--ease-standard),
+              transform var(--motion-instant) var(--ease-standard);
+}
+.btn-icon-motion:hover {
+  background-color: var(--color-brand-50);
+  color: var(--color-brand-700);
+}
+.btn-icon-motion:active {
+  background-color: var(--color-brand-100);
+  transform: scale(0.96);
+}
+
 .btn-primary:focus-visible {
-  outline: 2px solid #7C2D37;
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 4px var(--color-brand-focus);
 }
 
 .btn-secondary {
-  background-color: #FFFFFF;
-  color: #292524;
-  border: 1px solid #E7E5E4;
+  background-color: var(--color-surface);
+  color: var(--color-text-strong);
+  border: 1px solid var(--color-border-default);
   font-family: inherit;
   font-weight: 500;
   border-radius: 8px;
-  min-height: 40px;
-  padding: 8px 16px;
-  font-size: 14px;
+  min-height: 38px;
+  padding: 7px 16px;
+  font-size: 13.5px;
   line-height: 1.4;
   letter-spacing: normal;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
+  box-shadow: var(--shadow-xs);
+  transition: background-color var(--motion-fast) var(--ease-standard),
+              border-color var(--motion-fast) var(--ease-standard),
+              color var(--motion-fast) var(--ease-standard),
+              transform var(--motion-instant) var(--ease-standard);
+  user-select: none;
 }
+
 .btn-secondary:hover {
-  background-color: #F5F5F4;
-  border-color: #D6D3D1;
+  background-color: var(--color-surface-subtle);
+  border-color: var(--color-border-strong);
+  color: var(--color-text-strong);
+}
+
+.btn-secondary:active {
+  transform: scale(0.985);
+}
+
+.btn-secondary:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 4px var(--color-brand-focus);
 }
 
 .btn-ghost {
   background-color: transparent;
-  color: #78716C;
+  color: var(--color-text-secondary);
   font-family: inherit;
   font-weight: 500;
   border-radius: 8px;
-  min-height: 40px;
-  padding: 8px 12px;
-  font-size: 14px;
+  min-height: 38px;
+  padding: 7px 12px;
+  font-size: 13.5px;
   line-height: 1.4;
   letter-spacing: normal;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: color 0.15s ease, background-color 0.15s ease;
+  transition: color var(--motion-fast) var(--ease-standard),
+              background-color var(--motion-fast) var(--ease-standard),
+              transform var(--motion-instant) var(--ease-standard);
+  user-select: none;
 }
+
 .btn-ghost:hover {
-  color: #292524;
-  background-color: #F5F5F4;
+  color: var(--color-text-strong);
+  background-color: var(--color-surface-subtle);
+}
+
+.btn-ghost:active {
+  transform: scale(0.985);
+}
+
+.btn-ghost:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 3px var(--color-brand-focus);
+}
+
+/* Icon Button (Mục 33 design_animation.md) */
+.btn-icon {
+  min-height: 34px;
+  min-width: 34px;
+  padding: 6px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  transition: background-color var(--motion-fast) var(--ease-standard),
+              color var(--motion-fast) var(--ease-standard),
+              transform var(--motion-instant) var(--ease-standard);
+}
+
+.btn-icon:hover {
+  background-color: var(--color-brand-50);
+  color: var(--color-brand-700);
+}
+
+.btn-icon:active {
+  background-color: var(--color-brand-100);
+  transform: scale(0.96);
 }
 
 .btn-danger {
   background-color: transparent;
-  color: #B91C1C;
+  color: #991B1B;
+  border: 1px solid #FECACA;
   font-family: inherit;
   font-weight: 500;
   border-radius: 8px;
-  min-height: 40px;
-  padding: 8px 12px;
-  font-size: 14px;
+  min-height: 38px;
+  padding: 7px 12px;
+  font-size: 13.5px;
   line-height: 1.4;
   letter-spacing: normal;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: background-color 0.15s ease;
-}
-.btn-danger:hover {
-  background-color: #FEF2F2;
+  transition: background-color var(--motion-fast) var(--ease-standard),
+              border-color var(--motion-fast) var(--ease-standard),
+              transform var(--motion-instant) var(--ease-standard);
 }
 
-/* Compact button for tight toolbars and dropdowns */
-.btn-compact {
-  min-height: 36px;
-  padding: 6px 12px;
-  font-size: 13px;
-  line-height: 1.4;
+.btn-danger:hover {
+  background-color: #FEF2F2;
+  border-color: #F87171;
 }
+
+.btn-danger:active {
+  transform: scale(0.985);
+}
+
+.btn-compact {
+  min-height: 34px !important;
+  padding: 5px 12px !important;
+  font-size: 12.5px !important;
+  line-height: 1.4 !important;
+}
+
+/* ========================================================================= */
+/* SOFT BADGES UTILITIES (Mục 15 design_coler.md)                            */
+/* ========================================================================= */
+
+.badge-soft-burgundy {
+  background-color: var(--color-brand-soft);
+  color: var(--color-brand-700);
+  border: 1px solid var(--color-brand-border);
+}
+
+.badge-soft-emerald {
+  background-color: #F0FDF4;
+  color: #166534;
+  border: 1px solid #BBF7D0;
+}
+
+.badge-soft-amber {
+  background-color: #FFFBEB;
+  color: #92400E;
+  border: 1px solid #FDE68A;
+}
+
+.badge-soft-rose {
+  background-color: #FEF2F2;
+  color: #991B1B;
+  border: 1px solid #FECACA;
+}
+
+.badge-soft-blue {
+  background-color: #EFF6FF;
+  color: #1E40AF;
+  border: 1px solid #BFDBFE;
+}
+
+.badge-soft-stone {
+  background-color: var(--color-surface-muted);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border-subtle);
+}
+
+/* Backward compatibility for purple -> soft slate/indigo */
+.badge-soft-purple {
+  background-color: #F1F5F9;
+  color: #334155;
+  border: 1px solid #E2E8F0;
+}
+
+/* ========================================================================= */
+/* TABS UTILITIES (Mục 40 design_animation.md)                               */
+/* ========================================================================= */
+
+.tab-underline-item {
+  padding-bottom: 8px;
+  font-size: 13.5px;
+  font-weight: 500;
+  border-bottom: 2px solid transparent;
+  color: var(--color-text-secondary);
+  transition: color var(--motion-fast) var(--ease-standard),
+              border-color var(--motion-fast) var(--ease-standard);
+}
+
+.tab-underline-item:hover {
+  color: var(--color-text-strong);
+  border-bottom-color: var(--color-border-strong);
+}
+
+.tab-underline-item.is-active {
+  color: var(--color-brand-700);
+  border-bottom-color: var(--color-brand-700);
+  font-weight: 600;
+}
+
+/* ========================================================================= */
+/* ANIMATIONS & KEYFRAMES (docs/design/design_animation.md)                 */
+/* ========================================================================= */
+
+@keyframes modalBackdropFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalDialogEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.98) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes dropdownEnter {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes toolbarEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.97) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes toastEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes tabContentEnter {
+  from {
+    opacity: 0.85;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Modal Exit (Mục 38 design_animation.md) */
+@keyframes modalBackdropFadeExit {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes modalDialogExit {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.98) translateY(4px);
+  }
+}
+
+/* Toast Exit (Mục 46 design_animation.md) */
+@keyframes toastExit {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+/* Slide Switch & Presentation Mode (Mục 60, 62 design_animation.md) */
+@keyframes slideSwitchEnter {
+  from {
+    opacity: 0.92;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Note Panel & Drawer (Mục 51 design_animation.md) */
+@keyframes notePanelEnter {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Success Micro-feedback (Mục 45, 70 design_animation.md) */
+@keyframes successCheckEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Tooltip Enter (Mục 71 design_animation.md) */
+@keyframes tooltipEnter {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Validation Shake (Mục 44 design_animation.md - 2-3px, 1 cycle) */
+@keyframes validationShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+
+/* Skeleton Loading Shimmer (Mục 64 design_animation.md) */
+@keyframes skeletonShimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Score / Total Flash (Mục 57, 59 design_animation.md) */
+@keyframes totalFlashSuccess {
+  0% { color: var(--color-text-primary); }
+  50% { color: #166534; }
+  100% { color: #166534; }
+}
+@keyframes totalFlashDanger {
+  0% { color: var(--color-text-primary); }
+  50% { color: #991B1B; }
+  100% { color: #991B1B; }
+}
+
+.anim-modal-backdrop {
+  animation: modalBackdropFade var(--motion-emphasis) var(--ease-enter) forwards;
+}
+
+.anim-modal-dialog {
+  animation: modalDialogEnter var(--motion-emphasis) var(--ease-enter) forwards;
+}
+
+.anim-modal-backdrop-exit {
+  animation: modalBackdropFadeExit 170ms var(--ease-exit) forwards;
+}
+
+.anim-modal-dialog-exit {
+  animation: modalDialogExit 170ms var(--ease-exit) forwards;
+}
+
+.anim-dropdown {
+  animation: dropdownEnter var(--motion-normal) var(--ease-enter) forwards;
+}
+
+.anim-selection-toolbar {
+  animation: toolbarEnter 150ms var(--ease-enter) forwards;
+}
+
+.anim-toast {
+  animation: toastEnter var(--motion-normal) var(--ease-enter) forwards;
+}
+
+.anim-toast-exit {
+  animation: toastExit 160ms var(--ease-exit) forwards;
+}
+
+.anim-tab-content {
+  animation: tabContentEnter var(--motion-fast) var(--ease-standard) forwards;
+}
+
+.anim-accordion-chevron {
+  transition: transform var(--motion-normal) var(--ease-standard);
+}
+
+.anim-slide-switch {
+  animation: slideSwitchEnter var(--motion-emphasis) var(--ease-enter) forwards;
+}
+
+.anim-note-panel {
+  animation: notePanelEnter var(--motion-normal) var(--ease-enter) forwards;
+}
+
+.anim-success-check {
+  animation: successCheckEnter 160ms var(--ease-enter) forwards;
+}
+
+.anim-tooltip {
+  animation: tooltipEnter var(--motion-fast) var(--ease-enter) forwards;
+}
+
+.anim-validation-shake {
+  animation: validationShake 140ms var(--ease-standard);
+}
+
+.anim-total-success {
+  animation: totalFlashSuccess 260ms var(--ease-standard);
+}
+
+.anim-total-danger {
+  animation: totalFlashDanger 260ms var(--ease-standard);
+}
+
+.anim-skeleton {
+  background: linear-gradient(90deg, var(--color-surface-muted) 25%, var(--color-surface-subtle) 50%, var(--color-surface-muted) 75%);
+  background-size: 200% 100%;
+  animation: skeletonShimmer 1.8s infinite ease-in-out;
+}
+
+/* Table Row Interaction (Mục 43 design_animation.md - 100-120ms) */
+.table-row-interactive {
+  transition: background-color var(--motion-fast) var(--ease-standard);
+}
+.table-row-interactive:hover {
+  background-color: var(--color-surface-subtle);
+}
+.table-row-interactive.is-selected {
+  background-color: var(--color-brand-25);
+}
+
+/* Modal slow motion enter (Mục 9 design_animation_guid.md) */
+.modal-motion-enter {
+  animation: modalMotionEnter var(--motion-smooth) var(--ease-smooth) forwards;
+}
+@keyframes modalMotionEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Panel fade enter (Mục 13 design_animation_guid.md) */
+.panel-fade-enter {
+  animation: panelFadeEnter var(--motion-normal) var(--ease-enter) forwards;
+}
+@keyframes panelFadeEnter {
+  from {
+    opacity: 0.88;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================================================= */
+/* MOTION PRESETS & GRANULAR TOGGLES (Mục 27-29 design_animation_guid.md)     */
+/* ========================================================================= */
+
+html[data-motion="off"] {
+  --motion-instant: 0ms;
+  --motion-fast: 0ms;
+  --motion-normal: 0ms;
+  --motion-smooth: 0ms;
+  --motion-slow: 0ms;
+  --motion-emphasis: 0ms;
+}
+
+html[data-motion="light"] {
+  --motion-instant: 60ms;
+  --motion-fast: 100ms;
+  --motion-normal: 140ms;
+  --motion-smooth: 180ms;
+  --motion-slow: 220ms;
+  --motion-emphasis: 180ms;
+}
+
+html[data-motion="smooth"] {
+  --motion-instant: 90ms;
+  --motion-fast: 130ms;
+  --motion-normal: 190ms;
+  --motion-smooth: 240ms;
+  --motion-slow: 280ms;
+  --motion-emphasis: 240ms;
+}
+
+html[data-motion="slow"] {
+  --motion-instant: 120ms;
+  --motion-fast: 160ms;
+  --motion-normal: 240ms;
+  --motion-smooth: 300ms;
+  --motion-slow: 360ms;
+  --motion-emphasis: 300ms;
+}
+
+/* Granular Feature Toggles */
+html[data-motion-hover="false"] .btn-motion,
+html[data-motion-hover="false"] .btn-primary,
+html[data-motion-hover="false"] .card-interactive {
+  transform: none !important;
+}
+
+html[data-motion-panel="false"] .anim-tab-content,
+html[data-motion-panel="false"] .panel-fade-enter,
+html[data-motion-panel="false"] .anim-slide-switch,
+html[data-motion-panel="false"] .anim-note-panel {
+  animation: none !important;
+}
+
+html[data-motion-modal="false"] .anim-modal-backdrop,
+html[data-motion-modal="false"] .anim-modal-dialog,
+html[data-motion-modal="false"] .modal-motion-enter,
+html[data-motion-modal="false"] .anim-toast {
+  animation: none !important;
+}
+
+html[data-motion-button="false"] .btn-motion:active,
+html[data-motion-button="false"] .btn-primary:active,
+html[data-motion-button="false"] .btn-icon-motion:active {
+  transform: none !important;
+}
+
+/* ========================================================================= */
+/* FLOATING TOOLBAR & POPOVER ELEVATION                                      */
+/* ========================================================================= */
+
+.floating-surface-dark {
+  background-color: #211E1C;
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-lg);
+  border-radius: 12px;
+}
+
+/* ========================================================================= */
+/* ACCESSIBILITY & REDUCED MOTION (Mục 76 design_animation.md)               */
+/* ========================================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+    transform: none !important;
+  }
+}
+
+/* ========================================================================= */
+/* PRINT OPTIMIZATIONS                                                       */
+/* ========================================================================= */
 
 @media print {
   .no-print {
@@ -377,7 +1057,7 @@
 }
 
 /* ========================================================================= */
-/* 29. VIEWPORT-FIRST DESKTOP LAYOUT UTILITIES                               */
+/* VIEWPORT-FIRST DESKTOP LAYOUT UTILITIES                                   */
 /* ========================================================================= */
 
 .app-shell {
@@ -404,23 +1084,18 @@
   overscroll-behavior: contain;
 }
 
-/* Height-based responsive rules: Optimized for 1366x768 and compact displays */
 @media (max-height: 800px) {
   .compact-hide-on-short {
     display: none !important;
   }
-
   .compact-short-p {
     padding: 0.75rem !important;
   }
-
   .compact-short-gap {
     gap: 0.5rem !important;
   }
-
   .compact-short-m {
     margin-top: 0.25rem !important;
     margin-bottom: 0.25rem !important;
   }
 }
-

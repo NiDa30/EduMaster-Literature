@@ -1,3 +1,5 @@
+import { WorkspaceSettings } from './settings';
+
 export type ActiveModule = 
   | 'dashboard'
   | 'workspace' 
@@ -123,6 +125,8 @@ export interface LiteratureLesson {
   khbdStatus: 'ready' | 'draft';
   slideStatus: 'ready' | 'draft';
   examStatus: 'ready' | 'draft';
+  theme?: string;
+  periods?: string;
   khbd?: LessonPlan5512;
   slides?: SlideItem[];
   exam?: Exam7991Data;
@@ -174,15 +178,121 @@ export interface LessonPlan5512 {
   activities: TeachingActivity[];
 }
 
-// ---------------- Slide bài giảng Storytelling ----------------
+// ---------------- Slide bài giảng Storytelling & Design System ----------------
+export type SlideFontFamily = 
+  | 'Lora'
+  | 'Georgia'
+  | 'Merriweather'
+  | 'Noto Serif'
+  | 'Be Vietnam Pro'
+  | 'Arial'
+  | 'Inter'
+  | 'Noto Sans';
+
+export interface SlideBackground {
+  type: 'solid' | 'gradient' | 'image' | 'vignette';
+  color?: string; // hex #RRGGBB
+  gradient?: {
+    from: string;
+    to: string;
+    angle?: number;
+  };
+  image?: string; // Data URL or safe image source
+  imageUrl?: string;
+  imageFit?: 'cover' | 'contain';
+  imagePosition?: 'center' | 'top' | 'bottom' | 'left' | 'right';
+  overlay?: {
+    color: string;
+    opacity: number; // 0.0 to 1.0
+  };
+  vignette?: {
+    id?: string;
+    name?: string;
+    baseColor?: string;
+    glowColor?: string;
+    description?: string;
+    cssBackground?: string;
+    fallbackColor?: string;
+  };
+}
+
+export interface SlideTextStyle {
+  fontFamily?: SlideFontFamily | string;
+  fontSize?: number; // Title: 20-64, Body: 14-40, Quote: 18-52
+  fontWeight?: number; // 400 | 500 | 600 | 700
+  color?: string;
+  italic?: boolean;
+  align?: 'left' | 'center' | 'right';
+  lineHeight?: number;
+}
+
+export interface SlideStyle {
+  themeId?: string;
+  background?: SlideBackground;
+  titleStyle?: SlideTextStyle;
+  bodyStyle?: SlideTextStyle;
+  quoteStyle?: SlideTextStyle;
+  accentColor?: string;
+}
+
+export interface SlideTheme {
+  id: string;
+  name: string;
+  description?: string;
+  background: SlideBackground;
+  colors: {
+    title: string;
+    text: string;
+    accent: string;
+    secondaryText: string;
+    quote?: string;
+    cardBackground?: string;
+    cardBorder?: string;
+  };
+  typography: {
+    titleFont: SlideFontFamily;
+    bodyFont: SlideFontFamily;
+    quoteFont: SlideFontFamily;
+    titleWeight?: number;
+    bodyWeight?: number;
+  };
+  radius?: number;
+  style: 'academic' | 'editorial' | 'cinematic' | 'minimal' | 'classic';
+}
+
+export interface SlidesPresentationSettings {
+  defaultThemeId: string;
+  defaultBackground?: SlideBackground;
+}
+
+export interface SlideTemplate {
+  id: string;
+  name: string;
+  category: 'all' | 'quote' | 'split' | 'cards' | 'quiz' | 'single';
+  categoryLabel: string;
+  description: string;
+  themeId: string;
+  suggestedLayout: SlideItem['layout'];
+  styleOverrides?: SlideStyle;
+  previewSnippet: {
+    title: string;
+    subtitle?: string;
+    quote?: string;
+    author?: string;
+    bullets?: string[];
+  };
+}
+
 export interface SlideItem {
   id: string;
   title: string;
+  subtitle?: string;
   phaseTag: 'Khởi động' | 'Kiến thức mới' | 'Luyện tập' | 'Vận dụng' | 'Tổng kết';
-  layout: 'single' | 'split' | 'quiz' | 'cards' | 'quote' | 'visual_map';
+  layout: 'single' | 'split' | 'quiz' | 'cards' | 'quote' | 'visual_map' | 'cover' | 'objectives';
   contentLeft: string;
   contentRight?: string;
   bullets?: string[];
+  bulletPoints?: string[];
   quoteText?: string;
   quoteAuthor?: string;
   discussionQuestion?: string;
@@ -196,6 +306,7 @@ export interface SlideItem {
   };
   cards?: { title: string; desc: string; icon?: string }[];
   speakerNotes: string;
+  styleOverrides?: SlideStyle;
 }
 
 // ---------------- Question Builder & Rubric ----------------
@@ -205,14 +316,17 @@ export type SkillType = 'Nhận diện' | 'Giải thích' | 'Phân tích' | 'So 
 
 export interface LiteratureQuestionItem {
   id: string;
-  code: string;
+  code?: string;
   type: QuestionType;
   level: CognitiveLevel;
   skill: SkillType;
-  passageSnippet: string; // Ngữ liệu trích dẫn
+  passage?: string; // Ngữ liệu tương thích
+  passageSnippet?: string; // Ngữ liệu trích dẫn
   question: string; // Câu hỏi
-  answer: string; // Đáp án
-  guide: string; // Hướng dẫn chấm
+  answer?: string; // Đáp án
+  suggestedAnswer?: string;
+  guide?: string; // Hướng dẫn chấm
+  markingGuide?: string;
   points: number; // Điểm số
   linkedPart?: 'partI' | 'partII' | 'partIII' | 'partIV';
 }
@@ -301,6 +415,13 @@ export interface PartIVEssayQuestion {
 }
 
 export interface Exam7991Data {
+  title?: string;
+  timeLimit?: string;
+  duration?: string;
+  grade?: string;
+  semester?: string;
+  academicYear?: string;
+  totalPoints?: number;
   examHeader: {
     title: string;
     duration: string;
@@ -332,4 +453,8 @@ export interface AppState {
   questions: LiteratureQuestionItem[];
   rubric: RubricData;
   checklist: VerificationChecklist;
+  slidePresentationSettings?: SlidesPresentationSettings;
+  workspaceSettings?: WorkspaceSettings;
 }
+
+export * from './settings';
