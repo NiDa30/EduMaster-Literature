@@ -325,7 +325,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
             <div className="exam-part-list space-y-1.5 pt-1">
               <button
                 onClick={() => setSelectedPart('all')}
-                className={`w-full text-left p-2.5 rounded-xl border transition-all duration-150 flex items-center justify-between text-metadata ${
+                className={`w-full text-left p-2.5 rounded-xl border motion-surface duration-[var(--motion-fast)] flex items-center justify-between text-metadata ${
                   selectedPart === 'all'
                     ? 'bg-[#FCF3F4] text-[#7A2938] border-[#ECC2C9] font-semibold shadow-xs'
                     : 'bg-white text-[#706A65] border-[#E5E0DA] hover:bg-[#FAF9F7] hover:text-[#211E1C]'
@@ -341,7 +341,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
 
               <button
                 onClick={() => setSelectedPart('partI')}
-                className={`w-full text-left p-2.5 rounded-xl border transition-all duration-150 flex items-center justify-between text-metadata ${
+                className={`w-full text-left p-2.5 rounded-xl border motion-surface duration-[var(--motion-fast)] flex items-center justify-between text-metadata ${
                   selectedPart === 'partI'
                     ? 'bg-[#FCF3F4] text-[#7A2938] border-[#ECC2C9] font-semibold shadow-xs'
                     : 'bg-white text-[#706A65] border-[#E5E0DA] hover:bg-[#FAF9F7] hover:text-[#211E1C]'
@@ -356,7 +356,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
 
               <button
                 onClick={() => setSelectedPart('partII')}
-                className={`w-full text-left p-2.5 rounded-xl border transition-all duration-150 flex items-center justify-between text-metadata ${
+                className={`w-full text-left p-2.5 rounded-xl border motion-surface duration-[var(--motion-fast)] flex items-center justify-between text-metadata ${
                   selectedPart === 'partII'
                     ? 'bg-[#FCF3F4] text-[#7A2938] border-[#ECC2C9] font-semibold shadow-xs'
                     : 'bg-white text-[#706A65] border-[#E5E0DA] hover:bg-[#FAF9F7] hover:text-[#211E1C]'
@@ -374,7 +374,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
 
               <button
                 onClick={() => setSelectedPart('partIII')}
-                className={`w-full text-left p-2.5 rounded-xl border transition-all duration-150 flex items-center justify-between text-metadata ${
+                className={`w-full text-left p-2.5 rounded-xl border motion-surface duration-[var(--motion-fast)] flex items-center justify-between text-metadata ${
                   selectedPart === 'partIII'
                     ? 'bg-[#FCF3F4] text-[#7A2938] border-[#ECC2C9] font-semibold shadow-xs'
                     : 'bg-white text-[#706A65] border-[#E5E0DA] hover:bg-[#FAF9F7] hover:text-[#211E1C]'
@@ -389,7 +389,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
 
               <button
                 onClick={() => setSelectedPart('partIV')}
-                className={`w-full text-left p-2.5 rounded-xl border transition-all duration-150 flex items-center justify-between text-metadata ${
+                className={`w-full text-left p-2.5 rounded-xl border motion-surface duration-[var(--motion-fast)] flex items-center justify-between text-metadata ${
                   selectedPart === 'partIV'
                     ? 'bg-[#FCF3F4] text-[#7A2938] border-[#ECC2C9] font-semibold shadow-xs'
                     : 'bg-white text-[#706A65] border-[#E5E0DA] hover:bg-[#FAF9F7] hover:text-[#211E1C]'
@@ -502,7 +502,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
 
                 <div className="space-y-4">
                   {exam.partI.map((q, idx) => (
-                    <div key={q.id} className="p-4 rounded-xl bg-white border border-[#E5E0DA] hover:border-[#D6D0C8] shadow-[var(--shadow-xs)] relative group transition-all duration-150">
+                    <div key={q.id} className="p-4 rounded-xl bg-white border border-[#E5E0DA] hover:border-[#D6D0C8] shadow-[var(--shadow-xs)] relative group motion-surface duration-[var(--motion-fast)]">
                       <div className="flex flex-col sm:flex-row items-start justify-between gap-2 mb-2">
                         <p className="text-body-ui text-[#211E1C] font-medium">
                           <span className="font-semibold text-[#7A2938] tabular-nums">{q.code || `Câu ${idx + 1}`}: </span>
@@ -674,7 +674,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
 
                 <div className="space-y-4">
                   {exam.partIII.map((q, idx) => (
-                    <div key={q.id} className="p-4 rounded-xl bg-white border border-[#E5E0DA] hover:border-[#D6D0C8] shadow-[var(--shadow-xs)] transition-all duration-150">
+                    <div key={q.id} className="p-4 rounded-xl bg-white border border-[#E5E0DA] hover:border-[#D6D0C8] shadow-[var(--shadow-xs)] motion-surface duration-[var(--motion-fast)]">
                       <div className="flex flex-col sm:flex-row items-start justify-between gap-2 mb-2">
                         <p className="text-body-ui font-medium text-[#211E1C]">
                           <span className="font-semibold text-[#7A2938] tabular-nums">{q.code || `Câu ${idx + 1}`}: </span>
@@ -750,7 +750,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
 
                 <div className="space-y-4">
                   {exam.partIV.map((q, idx) => (
-                    <div key={q.id} className="p-5 rounded-2xl bg-white border border-[#E5E0DA] hover:border-[#D6D0C8] shadow-[var(--shadow-xs)] transition-all duration-150">
+                    <div key={q.id} className="p-5 rounded-2xl bg-white border border-[#E5E0DA] hover:border-[#D6D0C8] shadow-[var(--shadow-xs)] motion-surface duration-[var(--motion-fast)]">
                       <div className="flex flex-col sm:flex-row items-start justify-between gap-2 mb-2">
                         <p className="text-body-ui font-medium text-stone-900 leading-[1.8] font-serif">
                           <span className="font-semibold text-amber-900 tabular-nums">{q.code || `Câu ${idx + 1}`}: </span>
@@ -1298,7 +1298,7 @@ export const Exam7991View: React.FC<Exam7991ViewProps> = ({ exam, setExam, khbd 
 
       {/* Floating Toast Notification */}
       {toastMsg && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 bg-stone-900 text-white px-4 py-3 rounded-xl shadow-xl text-body-ui border border-stone-700 animate-in fade-in slide-in-from-bottom-2">
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 bg-stone-900 text-white px-4 py-3 rounded-xl shadow-xl text-body-ui border border-stone-700 anim-toast">
           <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
           <span>{toastMsg}</span>
         </div>

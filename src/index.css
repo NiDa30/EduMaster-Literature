@@ -825,7 +825,7 @@
 }
 
 .anim-selection-toolbar {
-  animation: toolbarEnter min(var(--motion-normal), 160ms) var(--ease-enter) forwards;
+  animation: toolbarEnter var(--motion-fast) var(--ease-enter) forwards;
 }
 
 .anim-toast {
@@ -933,9 +933,9 @@ html[data-motion="off"] *::after {
 }
 
 /* Granular Feature Toggles */
-html[data-motion-hover="false"] .btn-motion,
-html[data-motion-hover="false"] .btn-primary,
-html[data-motion-hover="false"] .card-interactive {
+html[data-motion-hover="false"] .btn-motion:hover:not(:active),
+html[data-motion-hover="false"] .btn-primary:hover:not(:active),
+html[data-motion-hover="false"] .card-interactive:hover {
   transform: none !important;
 }
 
@@ -976,17 +976,16 @@ html[data-motion-button="false"] .btn-icon-motion:active {
 /* ========================================================================= */
 
 @media (prefers-reduced-motion: reduce) {
-  *,
-  ::before,
-  ::after {
+  html:not([data-respect-reduced-motion="false"]) *,
+  html:not([data-respect-reduced-motion="false"]) *::before,
+  html:not([data-respect-reduced-motion="false"]) *::after {
     animation: none !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
   /* Keep positioning transforms (drawers, centered dialogs, rotated chevrons). */
-  .btn-primary:hover, .btn-primary:active, .btn-motion:hover, .btn-motion:active,
-  .btn-icon-motion:active, .card-interactive:hover { transform: none !important; }
+  html:not([data-respect-reduced-motion="false"]) :is(.btn-primary, .btn-motion, .btn-icon-motion, .card-interactive, .about-button, .motion-hover-lift, .motion-hover-scale):is(:hover, :active) { transform: none !important; }
 }
 
 /* ========================================================================= */
@@ -1110,7 +1109,7 @@ html[data-motion-button="false"] .btn-icon-motion:active {
 .app-owner-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; padding: 10px 20px; border-top: 1px solid var(--color-border-default); background: var(--color-surface); font-size: 11px; color: var(--color-text-secondary); flex-shrink: 0; }
 @keyframes about-enter { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 @media (max-width: 767px) { .about-page { padding: 24px 18px; } .about-contact-grid, .about-legal-grid { grid-template-columns: 1fr; gap: 24px; } .about-owner-layout { grid-template-columns: 1fr; padding: 18px; gap: 16px; } .about-details > div { grid-template-columns: 1fr; gap: 3px; } }
-@media (prefers-reduced-motion: reduce) { .about-page { animation: none; } .about-button { transition: none; } .about-button:hover, .about-button:active { transform: none; } }
+
 :root[data-motion='off'] .about-page { animation: none; }
 :root[data-motion='off'] .about-button { transition: none; transform: none; }
 
@@ -1121,7 +1120,7 @@ html[data-motion-button="false"] .btn-icon-motion:active {
 html[data-motion="off"] .btn-primary:hover, html[data-motion="off"] .btn-primary:active,
 html[data-motion="off"] .btn-motion:hover, html[data-motion="off"] .btn-motion:active,
 html[data-motion="off"] .btn-icon-motion:active, html[data-motion="off"] .card-interactive:hover,
-html[data-motion-hover="false"] .about-button:hover,
+html[data-motion-hover="false"] .about-button:hover:not(:active),
 html[data-motion-button="false"] .about-button:active { transform: none !important; }
 html[data-motion-panel="false"] .about-page { animation: none !important; }
 html[data-motion-modal="false"] .anim-modal-backdrop-exit,
@@ -1129,7 +1128,7 @@ html[data-motion-modal="false"] .anim-modal-dialog-exit,
 html[data-motion-modal="false"] .anim-toast-exit { animation: none !important; }
 
 .btn-primary:active, .btn-motion:active { transition-duration: var(--motion-instant); }
-html[data-motion-hover="false"] .btn-icon-motion:hover { transform: none !important; }
+html[data-motion-hover="false"] .btn-icon-motion:hover:not(:active) { transform: none !important; }
 
 /* Usability: readable controls and workspaces that adapt without squeezing editors. */
 .app-shell { height: 100dvh; }
@@ -1208,4 +1207,25 @@ html[data-motion-hover="false"] .btn-icon-motion:hover { transform: none !import
   .slides-thumbnails > .panel-scroll > button { min-width: 150px; }
   .exam-workspace .workspace-header > :last-child { flex-wrap: wrap; }
   .exam-workspace .workspace-header > :last-child > button { flex-shrink: 0; }
+}
+
+/* Shared timing covers Tailwind transitions as well as semantic motion helpers. */
+:root { --default-transition-duration: var(--motion-fast); --default-transition-timing-function: var(--ease-standard); }
+.motion-surface { transition: opacity var(--motion-normal) var(--ease-standard), transform var(--motion-normal) var(--ease-standard), color var(--motion-fast) var(--ease-standard), background-color var(--motion-fast) var(--ease-standard), border-color var(--motion-fast) var(--ease-standard), box-shadow var(--motion-normal) var(--ease-standard); }
+.motion-hover-lift:hover { transform: translateY(-1px); }
+.motion-hover-scale:hover { transform: scale(1.06); }
+.workspace-view-enter { animation: workspaceViewEnter var(--motion-normal) var(--ease-enter); }
+@keyframes workspaceViewEnter { from { opacity: .7; } to { opacity: 1; } }
+html[data-motion-panel="false"] .workspace-view-enter,
+html[data-motion-panel="false"] .motion-progress { animation: none !important; transition: none !important; }
+html[data-motion-modal="false"] .motion-drawer { transition: none !important; }
+html[data-motion-modal="false"] .anim-dropdown,
+html[data-motion-modal="false"] .anim-selection-toolbar { animation: none !important; }
+html[data-motion-hover="false"] :is(.motion-hover-lift, .motion-hover-scale):hover,
+html[data-motion="off"] :is(.motion-hover-lift, .motion-hover-scale):hover { transform: none !important; }
+html[data-motion-hover="false"] :is(.card-interactive, .btn-primary, .about-button):hover,
+html[data-motion="off"] :is(.card-interactive, .btn-primary, .about-button):hover { box-shadow: var(--shadow-xs); }
+html[data-motion="light"] :is(.card-interactive, .btn-primary, .btn-motion, .about-button, .motion-hover-lift, .motion-hover-scale):hover:not(:active) { transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-respect-reduced-motion="false"]) :is(.card-interactive, .btn-primary, .about-button):hover { box-shadow: var(--shadow-xs); }
 }

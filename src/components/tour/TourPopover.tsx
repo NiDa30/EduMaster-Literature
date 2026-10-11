@@ -67,7 +67,7 @@ export const TourPopover: React.FC<TourPopoverProps> = ({
       aria-modal="true"
       aria-labelledby="tour-popover-title"
       aria-describedby="tour-popover-description"
-      className="fixed z-[9995] w-[360px] max-w-[calc(100vw-32px)] bg-white border border-[#E5E0DA] rounded-2xl p-4 sm:p-5 shadow-[0_16px_40px_rgba(41,37,36,0.12),0_4px_12px_rgba(41,37,36,0.06)] text-[#302C29] select-none transition-all"
+      className="fixed z-[9995] w-[360px] max-w-[calc(100vw-32px)] bg-white border border-[#E5E0DA] rounded-2xl p-4 sm:p-5 shadow-[0_16px_40px_rgba(41,37,36,0.12),0_4px_12px_rgba(41,37,36,0.06)] text-[#302C29] select-none motion-surface"
       style={{
         left: `${x}px`,
         top: `${y}px`,

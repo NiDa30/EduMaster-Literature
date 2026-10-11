@@ -7,6 +7,7 @@ afterEach(() => {
   document.documentElement.removeAttribute('data-motion');
   document.documentElement.removeAttribute('data-motion-scroll');
   document.documentElement.removeAttribute('style');
+  document.documentElement.removeAttribute('data-respect-reduced-motion');
   vi.restoreAllMocks();
 });
 
@@ -22,6 +23,18 @@ describe('Navigation motion policy', () => {
     document.documentElement.dataset.motion = 'smooth';
     vi.spyOn(window, 'matchMedia').mockReturnValue({ matches: true } as MediaQueryList);
     expect(getNavigationScrollBehavior()).toBe('auto');
+  });
+  it('allows an explicit reduced-motion override and keeps off mode authoritative', () => {
+    vi.spyOn(window, 'matchMedia').mockReturnValue({ matches: true } as MediaQueryList);
+    document.documentElement.dataset.respectReducedMotion = 'false';
+    expect(getNavigationScrollBehavior()).toBe('smooth');
+    document.documentElement.dataset.motion = 'off';
+    expect(getNavigationScrollBehavior()).toBe('auto');
+  });
+  it('applies the advertised slow transition timing', () => {
+    applyWorkspaceSettingsToDom({ ...DEFAULT_WORKSPACE_SETTINGS, appearance: { ...DEFAULT_WORKSPACE_SETTINGS.appearance, motionPreferences: { ...DEFAULT_MOTION_PREFERENCES, preset: 'slow' } } });
+    expect(document.documentElement.style.getPropertyValue('--motion-normal')).toBe('240ms');
+    expect(document.documentElement.style.getPropertyValue('--motion-emphasis')).toBe('320ms');
   });
   it('keeps default durations within the documented limits without global smooth scrolling', () => {
     applyWorkspaceSettingsToDom({ ...DEFAULT_WORKSPACE_SETTINGS, appearance: { ...DEFAULT_WORKSPACE_SETTINGS.appearance, motionPreferences: { ...DEFAULT_MOTION_PREFERENCES, preset: 'smooth' } } });

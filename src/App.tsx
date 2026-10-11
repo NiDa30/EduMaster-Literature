@@ -177,6 +177,12 @@ export default function App() {
   // Áp dụng cài đặt giao diện ra DOM realtime
   useEffect(() => {
     applyWorkspaceSettingsToDom(appState.workspaceSettings || DEFAULT_WORKSPACE_SETTINGS);
+    // Settings promise immediate persistence, including reloads before the autosave debounce.
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+    } catch (err) {
+      console.error('Lỗi khi lưu cài đặt không gian:', err);
+    }
   }, [appState.workspaceSettings]);
 
   // Updaters
@@ -456,7 +462,7 @@ export default function App() {
               />
 
         {/* Workspace Body */}
-        <main className="flex-1 min-h-0 overflow-hidden flex flex-col w-full relative">
+        <main key={appState.activeModule} className="workspace-view-enter flex-1 min-h-0 overflow-hidden flex flex-col w-full relative">
           {appState.activeModule === 'about' && <AboutPage />}
           {appState.activeModule === 'dashboard' && (
             <TeacherDashboard

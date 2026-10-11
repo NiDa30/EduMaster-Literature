@@ -225,7 +225,7 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
               setSelectedGenre('poetry');
               onUpdateLesson({ genre: 'poetry' });
             }}
-            className={`px-3 py-1.5 min-h-[34px] rounded-lg text-metadata font-medium transition-all flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 min-h-[34px] rounded-lg text-metadata font-medium motion-surface flex items-center gap-1.5 ${
               selectedGenre === 'poetry'
                 ? 'bg-white text-[#211E1C] shadow-[var(--shadow-xs)] font-semibold'
                 : 'text-[#706A65] hover:text-[#211E1C]'
@@ -240,7 +240,7 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
               setSelectedGenre('story');
               onUpdateLesson({ genre: 'story' });
             }}
-            className={`px-3 py-1.5 min-h-[34px] rounded-lg text-metadata font-medium transition-all flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 min-h-[34px] rounded-lg text-metadata font-medium motion-surface flex items-center gap-1.5 ${
               selectedGenre === 'story'
                 ? 'bg-white text-[#211E1C] shadow-[var(--shadow-xs)] font-semibold'
                 : 'text-[#706A65] hover:text-[#211E1C]'
@@ -255,7 +255,7 @@ export const GenreAnalysisView: React.FC<GenreAnalysisViewProps> = ({
               setSelectedGenre('argumentative');
               onUpdateLesson({ genre: 'argumentative' });
             }}
-            className={`px-3 py-1.5 min-h-[34px] rounded-lg text-metadata font-medium transition-all flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 min-h-[34px] rounded-lg text-metadata font-medium motion-surface flex items-center gap-1.5 ${
               selectedGenre === 'argumentative'
                 ? 'bg-white text-[#211E1C] shadow-[var(--shadow-xs)] font-semibold'
                 : 'text-[#706A65] hover:text-[#211E1C]'

@@ -332,7 +332,7 @@ export const PersonalWorkspaceCenter: React.FC<PersonalWorkspaceCenterProps> = (
           </div>
 
           {/* Tab Body Scrollable */}
-          <div className="flex-1 overflow-y-auto p-4 md:p-6 panel-scroll space-y-6 text-meta text-[#302C29]">
+          <div key={activeTab} className="workspace-view-enter flex-1 overflow-y-auto p-4 md:p-6 panel-scroll space-y-6 text-meta text-[#302C29]">
             {/* ---------------------------------------------------- */}
             {/* TAB 1: GIAO DIỆN                                     */}
             {/* ---------------------------------------------------- */}
@@ -350,7 +350,7 @@ export const PersonalWorkspaceCenter: React.FC<PersonalWorkspaceCenterProps> = (
                         <div
                           key={preset.id}
                           onClick={() => handleApplyThemePreset(preset.id)}
-                          className={`p-3 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
+                          className={`p-3 rounded-2xl border motion-surface cursor-pointer flex flex-col justify-between ${
                             isSelected
                               ? 'border-[#7A2938] ring-2 ring-[#7A2938]/15 bg-[#FCF3F4]/50 shadow-xs'
                               : 'border-[#E5E0DA] hover:border-[#D6D0C8] bg-white'
@@ -612,7 +612,7 @@ export const PersonalWorkspaceCenter: React.FC<PersonalWorkspaceCenterProps> = (
                           </span>
                         </div>
                         <span className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-[#FAF9F7] border border-[#E5E0DA] text-[#7A2938] font-semibold">
-                          Preset: {currentMotion.preset === 'off' ? 'Tắt (0ms)' : currentMotion.preset === 'light' ? 'Nhẹ (100–140ms)' : currentMotion.preset === 'smooth' ? 'Mượt (160–220ms)' : 'Chậm & êm (240–320ms)'}
+                          Preset: {currentMotion.preset === 'off' ? 'Tắt (0ms)' : currentMotion.preset === 'light' ? 'Nhẹ (140–180ms)' : currentMotion.preset === 'smooth' ? 'Mượt (180–240ms)' : 'Chậm & êm (240–320ms)'}
                         </span>
                       </div>
 
@@ -628,13 +628,13 @@ export const PersonalWorkspaceCenter: React.FC<PersonalWorkspaceCenterProps> = (
                           {
                             id: 'light' as MotionPreset,
                             label: 'Nhẹ',
-                            speed: '100–140ms',
+                            speed: '140–180ms',
                             desc: 'Chuyển động vi mô nhanh gọn, chủ yếu đổi màu và độ mờ êm ái'
                           },
                           {
                             id: 'smooth' as MotionPreset,
                             label: 'Mượt (Chuẩn)',
-                            speed: '160–220ms',
+                            speed: '180–240ms',
                             desc: 'Thiết lập mặc định: fade + nâng nhẹ, phản hồi nhanh nhạy cho việc dạy'
                           },
                           {
@@ -646,10 +646,13 @@ export const PersonalWorkspaceCenter: React.FC<PersonalWorkspaceCenterProps> = (
                         ].map(p => {
                           const isSelected = currentMotion.preset === p.id;
                           return (
-                            <div
+                            <button
+                              type="button"
+                              aria-label={`Chuyển động: ${p.label}`}
+                              aria-pressed={isSelected}
                               key={p.id}
                               onClick={() => handleUpdateMotion({ preset: p.id })}
-                              className={`p-3 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
+                              className={`p-3 rounded-2xl border motion-surface cursor-pointer flex flex-col justify-between ${
                                 isSelected
                                   ? 'border-[#7A2938] ring-2 ring-[#7A2938]/15 bg-[#FCF3F4]/60 shadow-xs'
                                   : 'border-[#E5E0DA] hover:border-[#D6D0C8] bg-white'
@@ -674,10 +677,15 @@ export const PersonalWorkspaceCenter: React.FC<PersonalWorkspaceCenterProps> = (
                                   <span className="text-stone-400 hover:text-stone-700">Chọn</span>
                                 )}
                               </div>
-                            </div>
+                            </button>
                           );
                         })}
                       </div>
+
+                      <p className="text-xs text-[#706A65] leading-relaxed">
+                        Thời gian trên dành cho chuyển cảnh và cửa sổ. Hover và click dùng nhịp ngắn hơn để phản hồi nhanh;
+                        thay đổi được áp dụng và lưu ngay. Nếu bật Giảm chuyển động trên thiết bị, hiệu ứng sẽ tắt khi chọn tôn trọng cài đặt này.
+                      </p>
 
                       {/* Granular Feature Toggles */}
                       <div className="p-3.5 bg-[#FAF9F7] rounded-2xl border border-[#EEEAE5] space-y-2.5">
@@ -740,6 +748,7 @@ export const PersonalWorkspaceCenter: React.FC<PersonalWorkspaceCenterProps> = (
                           </div>
                           <input
                             type="checkbox"
+                            aria-label="Tôn trọng cài đặt Giảm chuyển động"
                             checked={currentMotion.respectReducedMotion}
                             onChange={(e) => handleUpdateMotion({ respectReducedMotion: e.target.checked })}
                             className="w-4 h-4 accent-[#7A2938] cursor-pointer"
@@ -810,7 +819,7 @@ export const PersonalWorkspaceCenter: React.FC<PersonalWorkspaceCenterProps> = (
                               </button>
                             </div>
 
-                            <div className="text-[11px] text-stone-600 px-1 panel-fade-enter">
+                            <div key={previewTab} className="text-[11px] text-stone-600 px-1 panel-fade-enter">
                               {previewTab === 'intro' ? (
                                 <span>✓ Đang mở Tab 1: Cảm giác lướt êm ái không giật cục.</span>
                               ) : (
@@ -1381,7 +1390,7 @@ export const PersonalWorkspaceCenter: React.FC<PersonalWorkspaceCenterProps> = (
 
       {/* Toast notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-60 bg-[#211E1C] text-white px-4 py-2.5 rounded-xl shadow-lg border border-stone-700 text-xs font-medium flex items-center gap-2 animate-in fade-in">
+        <div className="fixed bottom-6 right-6 z-60 bg-[#211E1C] text-white px-4 py-2.5 rounded-xl shadow-lg border border-stone-700 text-xs font-medium flex items-center gap-2 anim-toast">
           <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
           <span>{toastMessage}</span>
         </div>

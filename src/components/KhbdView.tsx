@@ -129,7 +129,7 @@ export const KhbdView: React.FC<KhbdViewProps> = ({
           <div className="bg-[#F5F3F0] p-1 rounded-xl border border-[#E5E0DA] flex text-metadata font-semibold">
             <button
               onClick={() => setViewMode('visual_builder')}
-              className={`min-h-[36px] px-3.5 py-1 rounded-lg flex items-center gap-1.5 transition-all ${
+              className={`min-h-[36px] px-3.5 py-1 rounded-lg flex items-center gap-1.5 motion-surface ${
                 viewMode === 'visual_builder'
                   ? 'bg-white text-[#211E1C] shadow-[var(--shadow-xs)]'
                   : 'text-[#706A65] hover:text-[#211E1C]'
@@ -141,7 +141,7 @@ export const KhbdView: React.FC<KhbdViewProps> = ({
             <button
               data-tour-id="khbd-document-view"
               onClick={() => setViewMode('document')}
-              className={`min-h-[36px] px-3.5 py-1 rounded-lg flex items-center gap-1.5 transition-all ${
+              className={`min-h-[36px] px-3.5 py-1 rounded-lg flex items-center gap-1.5 motion-surface ${
                 viewMode === 'document'
                   ? 'bg-white text-[#211E1C] shadow-[var(--shadow-xs)]'
                   : 'text-[#706A65] hover:text-[#211E1C]'
@@ -299,7 +299,7 @@ export const KhbdView: React.FC<KhbdViewProps> = ({
               return (
                 <div
                   key={act.id}
-                  className={`bg-white rounded-2xl border transition-all ${
+                  className={`bg-white rounded-2xl border motion-surface ${
                     isExpanded ? 'border-[#7A2938]/60 shadow-[var(--shadow-sm)]' : 'border-[#E5E0DA] shadow-[var(--shadow-xs)] hover:border-[#D6D0C8]'
                   }`}
                 >

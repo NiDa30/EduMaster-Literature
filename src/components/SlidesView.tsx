@@ -494,7 +494,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
             /* QUOTE FOCUS LAYOUT */
             <div className="max-w-3xl mx-auto w-full space-y-5" style={{ textAlign: style.quoteStyle.align }}>
               <div 
-                className="p-6 md:p-8 rounded-2xl relative shadow-lg transition-all"
+                className="p-6 md:p-8 rounded-2xl relative shadow-lg motion-surface"
                 style={{ 
                   backgroundColor: style.cardBackground, 
                   borderColor: style.cardBorder,
@@ -508,7 +508,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                   style={{ color: style.accentColor }}
                 />
                 <blockquote 
-                  className="leading-[1.8] whitespace-pre-line px-2 transition-all"
+                  className="leading-[1.8] whitespace-pre-line px-2 motion-surface"
                   style={{
                     fontFamily: getSlideCssFontFamily(style.quoteStyle.fontFamily),
                     fontSize: `${Math.min(style.quoteStyle.fontSize, isFullscreenMode ? 28 : 22)}px`,
@@ -620,7 +620,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
               {currentSlide.cards.map((card, i) => (
                 <div 
                   key={i} 
-                  className="p-5 rounded-2xl flex flex-col justify-between shadow-md transition-all hover:translate-y-[-1px]"
+                  className="p-5 rounded-2xl flex flex-col justify-between shadow-md motion-surface motion-hover-lift"
                   style={{ 
                     backgroundColor: style.cardBackground, 
                     borderColor: style.cardBorder,
@@ -881,7 +881,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
           <button
             data-tour-id="slides-editor"
             onClick={() => setIsEditing(!isEditing)}
-            className={`min-h-[36px] px-3.5 py-1.5 rounded-xl text-metadata font-semibold flex items-center gap-1.5 transition-all border cursor-pointer ${
+            className={`min-h-[36px] px-3.5 py-1.5 rounded-xl text-metadata font-semibold flex items-center gap-1.5 motion-surface border cursor-pointer ${
               isEditing 
                 ? 'bg-[#7A2938] text-white border-[#7A2938] shadow-[var(--shadow-xs)]' 
                 : 'bg-white hover:bg-[#FAF9F7] text-[#302C29] border-[#E5E0DA]'
@@ -943,7 +943,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                 <div
                   key={s.id}
                   onClick={() => setCurrentIndex(idx)}
-                  className={`p-2 rounded-xl border cursor-pointer transition-all relative group ${
+                  className={`p-2 rounded-xl border cursor-pointer motion-surface relative group ${
                     isActive
                       ? 'border-[#7A2938] ring-2 ring-[#7A2938]/20 bg-[#FCF3F4]/60 shadow-xs'
                       : 'border-[#E5E0DA] hover:border-[#D6D0C8] bg-white'
@@ -1021,7 +1021,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
         {/* Center Main Slide Canvas */}
         <div 
           data-tour-id="slides-stage" 
-          className="slides-stage min-w-0 flex-1 min-h-0 rounded-2xl p-4 md:p-6 border border-stone-800 text-stone-100 flex flex-col justify-between overflow-hidden shadow-xl relative transition-all duration-300"
+          className="slides-stage min-w-0 flex-1 min-h-0 rounded-2xl p-4 md:p-6 border border-stone-800 text-stone-100 flex flex-col justify-between overflow-hidden shadow-xl relative motion-surface duration-[var(--motion-emphasis)]"
           style={getSlideCssBackground(resolvedStyle.background)}
         >
           {resolvedStyle.background.type === 'image' && resolvedStyle.background.overlay && (
@@ -1040,7 +1040,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
 
         {/* Right Curated Editorial & Design Drawer */}
         {isEditing && (
-          <div ref={inspectorRef} className="slides-inspector w-88 xl:w-96 shrink-0 bg-white rounded-2xl p-4 flex flex-col gap-3 overflow-hidden border border-[#E5E0DA] shadow-lg animate-in slide-in-from-right duration-200">
+          <div ref={inspectorRef} className="slides-inspector w-88 xl:w-96 shrink-0 bg-white rounded-2xl p-4 flex flex-col gap-3 overflow-hidden border border-[#E5E0DA] shadow-lg anim-note-panel duration-[var(--motion-normal)]">
             {/* Drawer Header */}
             <div className="flex items-center justify-between pb-2 border-b border-[#EEEAE5] shrink-0">
               <div className="flex items-center gap-2">
@@ -1361,7 +1361,7 @@ export const SlidesView: React.FC<SlidesViewProps> = ({
                         return (
                           <div
                             key={theme.id}
-                            className={`p-2.5 rounded-xl border transition-all ${
+                            className={`p-2.5 rounded-xl border motion-surface ${
                               isCurrentTheme
                                 ? 'border-[#7A2938] ring-2 ring-[#7A2938]/15 bg-[#FCF3F4]/50'
                                 : 'border-stone-200 hover:border-stone-300 bg-white'

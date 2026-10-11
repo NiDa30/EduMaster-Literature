@@ -48,3 +48,74 @@ test('Motion tokens: toolbar, exit, granular controls and off mode', async ({ pa
   expect(result.disabledExit.name).toBe('none');
   expect(result.off.name).toBe('none');
 });
+
+for (const [label, preset, normal, emphasis] of [
+  ['Tắt', 'off', 0, 0], ['Nhẹ', 'light', .14, .18],
+  ['Mượt (Chuẩn)', 'smooth', .18, .24], ['Chậm & êm', 'slow', .24, .32],
+] as const) {
+  test(`Settings motion ${preset}: live timing and persistence`, async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.addInitScript(() => localStorage.setItem('edumaster_tour_preferences', JSON.stringify({ hasSeenIntro: true, dismissedIntro: true })));
+    await page.goto('/#/dashboard');
+    await page.getByRole('button', { name: 'Mở cài đặt sư phạm', exact: true }).click();
+    await page.getByRole('button', { name: `Chuyển động: ${label}`, exact: true }).click();
+    await expect(page.locator('html')).toHaveAttribute('data-motion', preset);
+    const modal = page.getByRole('dialog');
+    expect(await modal.evaluate(el => parseFloat(getComputedStyle(el).animationDuration))).toBeCloseTo(emphasis, 3);
+    await page.getByRole('button', { name: 'Tab 2 (Chi tiết)', exact: true }).click();
+    expect(await page.locator('.panel-fade-enter').evaluate(el => parseFloat(getComputedStyle(el).animationDuration))).toBeCloseTo(normal, 3);
+    await page.getByRole('button', { name: 'Đóng cài đặt (Esc)' }).click();
+    await page.reload();
+    await expect(page.locator('html')).toHaveAttribute('data-motion', preset);
+    await page.goto('/#/matrix');
+    expect(await page.locator('main').evaluate(el => parseFloat(getComputedStyle(el).animationDuration))).toBeCloseTo(normal, 3);
+    const button = page.locator('main .btn-primary').first();
+    if (await button.count()) {
+      const durations = await button.evaluate(el => getComputedStyle(el).transitionDuration.split(',').map(Number.parseFloat));
+      expect(Math.max(...durations)).toBeLessThanOrEqual(Math.max(normal, .01));
+    }
+  });
+}
+
+test('Settings switches independently control hover, click, panels, drawer, scrolling and reduced motion', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.addInitScript(() => localStorage.setItem('edumaster_tour_preferences', JSON.stringify({ hasSeenIntro: true, dismissedIntro: true })));
+  await page.goto('/#/dashboard');
+  await page.getByRole('button', { name: 'Mở cài đặt sư phạm', exact: true }).click();
+  await page.getByRole('button', { name: 'Chuyển động: Chậm & êm', exact: true }).click();
+  const preview = page.getByRole('button', { name: 'Hover & Bấm thử', exact: true });
+  await page.getByRole('checkbox', { name: /Hiệu ứng hover mềm mại/ }).uncheck();
+  await preview.hover();
+  await expect.poll(() => preview.evaluate(el => getComputedStyle(el).transform)).toBe('none');
+  await page.mouse.down();
+  await expect.poll(() => preview.evaluate(el => getComputedStyle(el).transform)).not.toBe('none');
+  await page.mouse.up();
+  await page.getByRole('checkbox', { name: /Hiệu ứng nén nhẹ/ }).uncheck();
+  await preview.hover(); await page.mouse.down();
+  await expect.poll(() => preview.evaluate(el => getComputedStyle(el).transform)).toBe('none');
+  await page.mouse.up();
+  await page.getByRole('checkbox', { name: /Chuyển cảnh giữa/ }).uncheck();
+  await page.getByRole('button', { name: 'Tab 2 (Chi tiết)', exact: true }).click();
+  expect(await page.locator('.panel-fade-enter').evaluate(el => getComputedStyle(el).animationName)).toBe('none');
+  await page.getByRole('checkbox', { name: /Animation khi mở modal/ }).uncheck();
+  expect(await page.getByRole('dialog').evaluate(el => getComputedStyle(el).animationName)).toBe('none');
+  await page.getByRole('checkbox', { name: /Cuộn trang mượt mà/ }).uncheck();
+  await expect(page.locator('html')).toHaveAttribute('data-motion-scroll', 'false');
+  await page.getByRole('checkbox', { name: /Animation khi mở modal/ }).check();
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  expect(await page.getByRole('dialog').evaluate(el => getComputedStyle(el).animationName)).toBe('none');
+  await page.getByRole('checkbox', { name: 'Tôn trọng cài đặt Giảm chuyển động', exact: true }).uncheck();
+  expect(await page.getByRole('dialog').evaluate(el => parseFloat(getComputedStyle(el).animationDuration))).toBeCloseTo(.32, 3);
+  await page.getByRole('checkbox', { name: /Animation khi mở modal/ }).uncheck();
+  await page.getByRole('button', { name: 'Đóng cài đặt (Esc)' }).click();
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('data-motion-hover', 'false');
+  await expect(page.locator('html')).toHaveAttribute('data-motion-panel', 'false');
+  await expect(page.locator('html')).toHaveAttribute('data-motion-button', 'false');
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByRole('button', { name: 'Mở menu điều hướng' }).click();
+  const drawer = page.locator('aside[data-tour-id="sidebar"]');
+  expect(await drawer.evaluate(el => parseFloat(getComputedStyle(el).transitionDuration))).toBe(0);
+  expect(await page.locator('main').evaluate(el => getComputedStyle(el).animationName)).toBe('none');
+  await expect.poll(() => drawer.evaluate(el => el.getBoundingClientRect().left)).toBeCloseTo(0, 0);
+});

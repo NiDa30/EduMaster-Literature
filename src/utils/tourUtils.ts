@@ -1,4 +1,4 @@
-import { getNavigationScrollBehavior } from './motionUtils';
+import { getNavigationScrollBehavior, isReducedMotionEnabled } from './motionUtils';
 import { TourPreferences, TourPlacement } from '../types/tour';
 
 export const TOUR_STORAGE_KEY = 'edumaster_tour_preferences';
@@ -43,7 +43,7 @@ export function saveTourPreferences(prefs: Partial<TourPreferences>): void {
 
 export function getPrefersReducedMotion(): boolean {
   if (typeof window === 'undefined' || !window.matchMedia) return false;
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  return isReducedMotionEnabled();
 }
 
 export function isElementVisible(el: HTMLElement): boolean {

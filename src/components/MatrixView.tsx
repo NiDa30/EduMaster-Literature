@@ -155,7 +155,7 @@ export const MatrixView: React.FC<MatrixViewProps> = ({ exam, khbd }) => {
           <div className="bg-[#F5F3F0] p-1 rounded-xl border border-[#E5E0DA] flex text-metadata font-semibold">
             <button
               onClick={() => setActiveMatrixTab('matrix_table')}
-              className={`min-h-[36px] px-3.5 py-1 rounded-lg flex items-center gap-1.5 transition-all ${
+              className={`min-h-[36px] px-3.5 py-1 rounded-lg flex items-center gap-1.5 motion-surface ${
                 activeMatrixTab === 'matrix_table'
                   ? 'bg-white text-[#211E1C] shadow-[var(--shadow-xs)]'
                   : 'text-[#706A65] hover:text-[#211E1C]'
@@ -166,7 +166,7 @@ export const MatrixView: React.FC<MatrixViewProps> = ({ exam, khbd }) => {
             </button>
             <button
               onClick={() => setActiveMatrixTab('spec_table')}
-              className={`min-h-[36px] px-3.5 py-1 rounded-lg flex items-center gap-1.5 transition-all ${
+              className={`min-h-[36px] px-3.5 py-1 rounded-lg flex items-center gap-1.5 motion-surface ${
                 activeMatrixTab === 'spec_table'
                   ? 'bg-white text-[#211E1C] shadow-[var(--shadow-xs)]'
                   : 'text-[#706A65] hover:text-[#211E1C]'

@@ -795,7 +795,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                 <button
                   key={qa.id}
                   onClick={qa.action}
-                  className={`card-interactive p-3 text-left group flex flex-col justify-between min-h-[96px] rounded-xl transition-all duration-150 ${
+                  className={`card-interactive p-3 text-left group flex flex-col justify-between min-h-[96px] rounded-xl motion-surface duration-[var(--motion-fast)] ${
                     qa.isPrimary ? 'border-[#ECC2C9] bg-[#FCF3F4]/60 hover:bg-[#FCF3F4]' : 'bg-white'
                   }`}
                 >

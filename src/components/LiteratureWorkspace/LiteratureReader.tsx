@@ -189,7 +189,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
         {/* ========================================================================= */}
         {!isFocusMode && (
           <aside 
-            className={`reader-outline shrink-0 h-full min-h-0 flex flex-col card-surface p-3 overflow-hidden transition-all duration-200 ${
+            className={`reader-outline shrink-0 h-full min-h-0 flex flex-col card-surface p-3 overflow-hidden motion-surface duration-[var(--motion-normal)] ${
               isOutlineOpen ? 'flex' : 'hidden'
             } hidden lg:flex`}
           >
@@ -306,7 +306,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
                   showToast('Đã lưu các thay đổi vào bài dạy!');
                 }
               }}
-              className={`min-h-[34px] px-3.5 py-1.5 rounded-lg text-metadata font-semibold flex items-center gap-1.5 transition-all ${
+              className={`min-h-[34px] px-3.5 py-1.5 rounded-lg text-metadata font-semibold flex items-center gap-1.5 motion-surface ${
                 isEditingDoc
                   ? 'btn-primary text-white shadow-xs'
                   : 'btn-secondary text-[#302C29]'
@@ -337,7 +337,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
             ref={documentContainerRef}
             data-tour-id="reader-content"
             onMouseUp={handleSelection}
-            className={`w-full max-w-[760px] bg-[#FFFEFC] border border-[#EEEAE5] rounded-2xl p-6 md:p-10 transition-all duration-200 select-text my-auto md:my-0 shadow-[var(--shadow-paper)] ${
+            className={`w-full max-w-[760px] bg-[#FFFEFC] border border-[#EEEAE5] rounded-2xl p-6 md:p-10 motion-surface duration-[var(--motion-normal)] select-text my-auto md:my-0 shadow-[var(--shadow-paper)] ${
               isFocusMode ? 'shadow-md' : ''
             }`}
           >
@@ -560,7 +560,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
         {/* ========================================================================= */}
         {!isFocusMode && (
           <aside 
-            className={`reader-insights shrink-0 h-full min-h-0 flex flex-col card-surface p-4 overflow-hidden transition-all duration-200 ${
+            className={`reader-insights shrink-0 h-full min-h-0 flex flex-col card-surface p-4 overflow-hidden motion-surface duration-[var(--motion-normal)] ${
               isAnalysisOpen ? 'flex' : 'hidden'
             } hidden lg:flex`}
           >
@@ -921,7 +921,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
               <button
                 key={c.id}
                 onClick={() => handleSaveAnnotation('highlight', `Đánh dấu (${c.label})`, c.id as any)}
-                className={`w-4 h-4 rounded-full ${c.bg} border ${c.border} hover:scale-110 transition-transform duration-120`}
+                className={`w-4 h-4 rounded-full ${c.bg} border ${c.border} motion-hover-scale transition-transform duration-[var(--motion-fast)]`}
                 title={`Đánh dấu màu ${c.label}`}
               />
             ))}
@@ -932,7 +932,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
           {/* Action 2: Ghi chú */}
           <button
             onClick={() => setShowAnnotationModal(true)}
-            className="px-2 py-1 min-h-[30px] hover:bg-white/8 active:bg-white/12 text-[#FAF9F7] rounded-lg flex items-center gap-1.5 transition-colors duration-120"
+            className="px-2 py-1 min-h-[30px] hover:bg-white/8 active:bg-white/12 text-[#FAF9F7] rounded-lg flex items-center gap-1.5 transition-colors duration-[var(--motion-fast)]"
             title="Thêm ghi chú sư phạm"
           >
             <MessageSquarePlus className="w-3.5 h-3.5 text-rose-300" strokeWidth={1.75} />
@@ -946,7 +946,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
               setToolbarPos(null);
               showToast('Đã tạo Slide trích đoạn từ ngữ liệu!');
             }}
-            className="px-2 py-1 min-h-[30px] hover:bg-white/8 active:bg-white/12 text-[#FAF9F7] rounded-lg flex items-center gap-1.5 transition-colors duration-120"
+            className="px-2 py-1 min-h-[30px] hover:bg-white/8 active:bg-white/12 text-[#FAF9F7] rounded-lg flex items-center gap-1.5 transition-colors duration-[var(--motion-fast)]"
             title="Tạo Slide trích đoạn khám phá"
           >
             <Presentation className="w-3.5 h-3.5 text-amber-300" strokeWidth={1.75} />
@@ -959,7 +959,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
               onAddQuestionFromPassage(selectedText);
               setToolbarPos(null);
             }}
-            className="px-2 py-1 min-h-[30px] hover:bg-white/8 active:bg-white/12 text-[#FAF9F7] rounded-lg flex items-center gap-1.5 transition-colors duration-120"
+            className="px-2 py-1 min-h-[30px] hover:bg-white/8 active:bg-white/12 text-[#FAF9F7] rounded-lg flex items-center gap-1.5 transition-colors duration-[var(--motion-fast)]"
             title="Tạo câu hỏi từ ngữ liệu này"
           >
             <HelpCircle className="w-3.5 h-3.5 text-blue-300" strokeWidth={1.75} />
@@ -973,7 +973,7 @@ export const LiteratureReader: React.FC<LiteratureReaderProps> = ({
               setToolbarPos(null);
               showToast('Đã đặt đoạn trích làm ngữ liệu Đề kiểm tra!');
             }}
-            className="px-2 py-1 min-h-[30px] hover:bg-white/8 active:bg-white/12 text-[#FAF9F7] rounded-lg flex items-center gap-1.5 transition-colors duration-120"
+            className="px-2 py-1 min-h-[30px] hover:bg-white/8 active:bg-white/12 text-[#FAF9F7] rounded-lg flex items-center gap-1.5 transition-colors duration-[var(--motion-fast)]"
             title="Đặt làm ngữ liệu Đề 7991"
           >
             <CheckSquare className="w-3.5 h-3.5 text-emerald-300" strokeWidth={1.75} />

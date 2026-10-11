@@ -351,7 +351,7 @@ export const QuestionBuilderView: React.FC<QuestionBuilderViewProps> = ({
                       setIsCreatingNew(false);
                       revealEditor();
                     }}
-                    className={`block w-full text-left p-3 rounded-xl border cursor-pointer transition-all ${
+                    className={`block w-full text-left p-3 rounded-xl border cursor-pointer motion-surface ${
                       isSelected
                         ? 'bg-[#FCF3F4] border-[#7A2938] shadow-[var(--shadow-xs)]'
                         : 'bg-white border-[#E5E0DA] hover:border-[#D6D0C8] hover:bg-[#FAF9F7]'
