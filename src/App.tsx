@@ -1,3 +1,4 @@
+import { migrateOwnerMetadata } from './utils/ownerMetadata';
 import React, { useState, useEffect } from 'react';
 import { 
   ActiveModule, 
@@ -82,14 +83,14 @@ const loadInitialState = (): AppState => {
             return {
               ...presetMatch,
               ...l,
-              khbd: l.khbd || presetMatch.khbd,
+              khbd: (l.khbd || presetMatch.khbd) ? migrateOwnerMetadata((l.khbd || presetMatch.khbd)!) : undefined,
               slides: l.slides || presetMatch.slides,
               exam: l.exam || presetMatch.exam,
               questions: l.questions || presetMatch.questions,
               rubric: l.rubric || presetMatch.rubric
             };
           }
-          return l;
+          return l.khbd ? { ...l, khbd: migrateOwnerMetadata(l.khbd) } : l;
         });
 
         return {
@@ -97,7 +98,7 @@ const loadInitialState = (): AppState => {
           ...parsed,
           activeModule: initMod,
           lessons: mergedLessons,
-          khbd: { ...initialAppState.khbd, ...(parsed.khbd || {}) },
+          khbd: migrateOwnerMetadata({ ...initialAppState.khbd, ...(parsed.khbd || {}) }),
           exam: { ...initialAppState.exam, ...(parsed.exam || {}) },
           rubric: { ...initialAppState.rubric, ...(parsed.rubric || {}) },
           slides: parsed.slides && Array.isArray(parsed.slides) ? parsed.slides : initialAppState.slides,
@@ -277,7 +278,7 @@ export default function App() {
             rubric: prev.rubric
           };
         }
-        return l;
+        return l.khbd ? { ...l, khbd: migrateOwnerMetadata(l.khbd) } : l;
       });
 
       // 2. Tìm bài học mục tiêu từ danh sách đã cập nhật
@@ -329,7 +330,7 @@ export default function App() {
             rubric: prev.rubric
           };
         }
-        return l;
+        return l.khbd ? { ...l, khbd: migrateOwnerMetadata(l.khbd) } : l;
       });
 
       return {
@@ -400,6 +401,8 @@ export default function App() {
     const normalized = normalizeDeepNFC(newState);
     setAppState({
       ...normalized,
+      khbd: migrateOwnerMetadata(normalized.khbd),
+      lessons: normalized.lessons.map(lesson => lesson.khbd ? { ...lesson, khbd: migrateOwnerMetadata(lesson.khbd) } : lesson),
       lastUpdated: new Date().toISOString()
     });
   };

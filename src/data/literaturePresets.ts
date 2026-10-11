@@ -1,3 +1,4 @@
+import { ownerProfile } from '../config/ownerProfile';
 import { 
   LiteratureLesson, 
   LessonPlan5512, 
@@ -504,10 +505,10 @@ Nước Việt Nam có quyền hưởng tự do và độc lập, và sự thậ
 // =========================================================================
 export const literatureKhbd5512: LessonPlan5512 = {
   info: {
-    department: 'SỞ GD&ĐT THÀNH PHỐ HỒ CHÍ MINH',
-    school: 'TRƯỜNG THPT CHUYÊN LÊ HỒNG PHONG',
+    department: 'SỞ GD&ĐT VĨNH LONG',
+    school: ownerProfile.institution,
     subjectGroup: 'TỔ NGỮ VĂN',
-    teacherName: 'ThS. Trần Thị Thanh Tâm',
+    teacherName: ownerProfile.fullName,
     subject: 'Ngữ văn',
     grade: 'Lớp 12',
     textbook: 'Kết nối tri thức với cuộc sống',
@@ -1239,10 +1240,10 @@ Sông Mã gầm lên khúc độc hành."
 // =========================================================================
 export const voNhatKhbd5512: LessonPlan5512 = {
   info: {
-    department: 'SỞ GD&ĐT THÀNH PHỐ HỒ CHÍ MINH',
-    school: 'TRƯỜNG THPT CHUYÊN LÊ HỒNG PHONG',
+    department: 'SỞ GD&ĐT VĨNH LONG',
+    school: ownerProfile.institution,
     subjectGroup: 'TỔ NGỮ VĂN',
-    teacherName: 'ThS. Trần Thị Thanh Tâm',
+    teacherName: ownerProfile.fullName,
     subject: 'Ngữ văn',
     grade: 'Lớp 12',
     textbook: 'Kết nối tri thức với cuộc sống',
@@ -1967,10 +1968,10 @@ export const voNhatRubric: RubricData = {
 // =========================================================================
 export const tuyenNgonKhbd5512: LessonPlan5512 = {
   info: {
-    department: 'SỞ GD&ĐT THÀNH PHỐ HỒ CHÍ MINH',
-    school: 'TRƯỜNG THPT CHUYÊN LÊ HỒNG PHONG',
+    department: 'SỞ GD&ĐT VĨNH LONG',
+    school: ownerProfile.institution,
     subjectGroup: 'TỔ NGỮ VĂN',
-    teacherName: 'ThS. Trần Thị Thanh Tâm',
+    teacherName: ownerProfile.fullName,
     subject: 'Ngữ văn',
     grade: 'Lớp 12',
     textbook: 'Kết nối tri thức với cuộc sống',

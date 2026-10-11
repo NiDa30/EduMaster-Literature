@@ -30,6 +30,7 @@ import {
 } from '../types';
 import { normalizeVietnamese } from '../utils/unicode';
 import { Badge } from './common/Badge';
+import { ownerProfile } from '../config/ownerProfile';
 
 interface TeacherDashboardProps {
   lessons: LiteratureLesson[];
@@ -92,10 +93,10 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
     // Generate starter KHBD for this lesson
     const starterKhbd: LessonPlan5512 = {
       info: {
-        department: khbd.info.department || 'SỞ GD&ĐT THÀNH PHỐ HỒ CHÍ MINH',
-        school: khbd.info.school || 'TRƯỜNG THPT CHUYÊN LÊ HỒNG PHONG',
+        department: khbd.info.department || 'SỞ GD&ĐT VĨNH LONG',
+        school: khbd.info.school || ownerProfile.institution,
         subjectGroup: 'TỔ NGỮ VĂN',
-        teacherName: khbd.info.teacherName || 'ThS. Lê Thị Lan Anh',
+        teacherName: khbd.info.teacherName || ownerProfile.fullName,
         subject: 'Ngữ văn',
         grade: formGrade,
         textbook: formTextbook === 'Kết nối tri thức' ? 'Kết nối tri thức với cuộc sống' : formTextbook,
@@ -671,7 +672,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
             </Badge>
           </div>
           <p className="text-body-ui text-[#706A65] mt-0.5">
-            Không gian thiết kế bài dạy & khảo thí chuyên sâu · <span className="font-medium text-[#211E1C]">{khbd.info.teacherName || 'ThS. Lê Thị Lan Anh'}</span> ({khbd.info.school || 'THPT Chuyên'})
+            Không gian thiết kế bài dạy & khảo thí chuyên sâu · <span className="font-medium text-[#211E1C]">{ownerProfile.fullName}</span> · {ownerProfile.role} ({ownerProfile.institution})
           </p>
         </div>
 
